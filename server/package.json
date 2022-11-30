@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "tsnd server.ts --respawn  --transpile-only --exit-child",
+    "start": "tsnd ./src/server.ts --respawn  --transpile-only --exit-child",
     
     "prod": "tsc &&node dist/server.js"
   },

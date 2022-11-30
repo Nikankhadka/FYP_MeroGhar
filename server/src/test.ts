@@ -5,10 +5,14 @@ interface Person {
     age: number;
   }
    
-  function greet(person: Person):string {
+   export function greet(person: Person):string {
     return "Hello " + person.name;
   }
 
+
+  export function gteet(person: Person):string {
+    return "Hello " + person.name;
+  }
 
     const user:Person = { name: "Jane User", age: 20 };
 

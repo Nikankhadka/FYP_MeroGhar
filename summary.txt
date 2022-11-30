@@ -2,3 +2,11 @@
 use npx create-next-app meroghar --typescript
 
 setup eslint and prettier configuration for the application  https://paulintrognon.fr/blog/typescript-prettier-eslint-next-js
+
+
+
+//for nodejs ts setup its a long process 
+
+in scripts tsnd works like nodemon it compiles ts into js and and excutes the code every time there is changes made
+
+for production tsc command compiles then to run another command is mixed
