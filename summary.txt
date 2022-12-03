@@ -10,3 +10,5 @@ setup eslint and prettier configuration for the application  https://paulintrogn
 in scripts tsnd works like nodemon it compiles ts into js and and excutes the code every time there is changes made
 
 for production tsc command compiles then to run another command is mixed
+
+

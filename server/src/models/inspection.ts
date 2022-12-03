@@ -10,4 +10,4 @@ const inspectionSchema=new Schema({
 
 })
 
-const inspection
+export const inspectionModel=model("inspection",inspectionSchema)

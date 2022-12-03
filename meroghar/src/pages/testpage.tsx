@@ -30,4 +30,7 @@ const ChildComponent=(props:obj):JSX.Element=>{
 
 
 
+
+
+
 export default Nikan
