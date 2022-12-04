@@ -43,6 +43,8 @@ app.use(session({
     //can store session data in db incase server crash the data is not lost
 //  store:
 }))
+
+//attaches cookie from header to req object
 app.use(cookieParser())
 
 //imp middleware for using passport 

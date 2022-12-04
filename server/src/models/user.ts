@@ -1,4 +1,4 @@
-import {schema,model} from "mongoose"
+import {Schema,model} from "mongoose"
 
 const userSchema=new Schema({
 
@@ -20,25 +20,27 @@ const userSchema=new Schema({
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
             mail:{type:String},
-            verified:{type:Boolean,default:false}
+            //verfication code to verify email
+            vCode:String,
+            is_verified:{type:Boolean,default:false}
         },
         two_FA:{
             type:Boolean,
             default:false
         },
-        created_at:{
+        created_At:{
             type:Date,
             default:Date.now,
             immutable:true
         },
         //will be provided on update
-        updated_at:Date,
+        updated_At:Date,
         //will contain the token value for token rotation
         token:[String],
         is_Admin:{type:Boolean,default:false},
 
         //userid__profile
-        profile_img:{
+        profile_Img:{
             img_id:String,
             img_url:String
         },
@@ -50,10 +52,11 @@ const userSchema=new Schema({
             // if email is verified then this will be automatically updated
             email:String,
             phoneNumber:Number,
-            location:{
+            address:{
                 country:String,
                 city:String,  
             },
+            //multiple images of user, citizenship for manual verification
             img:[{
                 //userId_img1/2
                 img_id:String,
@@ -63,14 +66,17 @@ const userSchema=new Schema({
         },
         
         //kyc verification status
-        verified:Boolean,
+        kyc_Verified:Boolean,
 
-        listing:{type: Number,default:0},
-        recieved_Ratingcount:{type: Number,default:0}, //when user listed property recieves a rating
+        //no of property posted by user
+        listing_Count:{type: Number,default:0},
+
+        //rating and review count will be updated on write every time user property is reviewd
+        avg_rating:{type: Number,default:0}, 
         recieved_Reviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
-        wishList:[String],
+        wishList:[{type:Schema.Types.ObjectId,ref:"property"}],
 
         //can be modified by admin to ban user for certain time or permanently
         is_banned:{type:Number},

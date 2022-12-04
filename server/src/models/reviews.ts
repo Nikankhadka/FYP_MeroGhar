@@ -10,8 +10,8 @@ const reviewSchema=new Schema({
 
         //this will allow adming to review and ban the user if possible
         report:{type:Boolean,required:true},
-
-
+        created_At:{type:Date,default:Date.now},
+      
 })
 
 //export the model instance for performing Query operations

@@ -2,8 +2,10 @@ import {Schema,model} from "mongoose"
 
 
 const conversationSchema=new Schema({
+
+    //id will be used in message model to fetch all message betn user for the property
     user1:String,
-    user2:String,
+    hostId:String,
     created_at:{
         type:Date,
         default:Date.now,
