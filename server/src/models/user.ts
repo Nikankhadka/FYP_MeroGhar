@@ -28,6 +28,7 @@ const userSchema=new Schema({
             type:Boolean,
             default:false
         },
+        two_FA_token:String,
         created_At:{
             type:Date,
             default:Date.now,

@@ -12,3 +12,8 @@ in scripts tsnd works like nodemon it compiles ts into js and and excutes the co
 for production tsc command compiles then to run another command is mixed
 
 
+
+
+
+//i think external library whose funciton is short to use can be directly embeded into the controller rather than 
+creating hassle
