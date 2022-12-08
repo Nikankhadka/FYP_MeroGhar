@@ -7,16 +7,12 @@ import{registerUser} from "../services/auth"
 export const registerUserC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
-        const queryStatus=await registerUser(userId,password);
-        if(queryStatus){
-            res.status(200).json({
-            message:"User created successfully",
-            user:userId
-            })
-        }
-        res.status(400).json({ message:"User already exist"})
+        const newUser=await registerUser(userId,password);
+        if(newUser) return res.status(200).json({ message:`user ${userId} successfully registered`})
+        
+        return res.status(409).json({ message:"user with id already exist"})
         
     }catch(err){
-        console.log(err)
+        res.status(400).json({ message:err})
     }
 }
