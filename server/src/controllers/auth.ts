@@ -16,3 +16,15 @@ export const registerUserC=async(req:Request,res:Response)=>{
         res.status(400).json({ message:err})
     }
 }
+
+export const localLoginC=async(req:Request,res:Response)=>{
+    try{
+        const {userId,password}=req.body;
+        
+
+    }catch(e){
+        console.log(e)
+    }
+
+
+}

@@ -28,3 +28,14 @@ export const registerUser=async(userId:string,password:string):Promise<boolean|u
         console.log(e)
     }
 }
+
+
+export const localLogin=async(userId:string,password:string)=>{
+    try{
+        const user
+
+
+    }catch(e){
+        console.log(e)
+    }
+}

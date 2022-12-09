@@ -4,7 +4,7 @@ import{Request,Response,NextFunction} from 'express'
 import joi from 'joi'
 
 
-export const validateRegister=async(req:Request,res:Response,next:NextFunction)=>{
+export const validateAuth=async(req:Request,res:Response,next:NextFunction)=>{
     try{
         //defined joi schema for input validation of requet body
         const registerSchema=joi.object({
