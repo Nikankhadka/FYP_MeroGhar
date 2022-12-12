@@ -21,7 +21,7 @@ const propertySchema=new Schema({
 
     //id of previus tennats
     tennants:[String],
-
+    current_tennant:String,
    
     rating_count:{type:Number,default:0},
     viewCount:{type:Number,default:0},

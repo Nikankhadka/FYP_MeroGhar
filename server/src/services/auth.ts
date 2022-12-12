@@ -1,5 +1,5 @@
 import { userModel } from "../models/user";
-import {hash} from "bcrypt"
+import {hash,compare} from "bcrypt"
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -30,12 +30,32 @@ export const registerUser=async(userId:string,password:string):Promise<boolean|u
 }
 
 
-export const localLogin=async(userId:string,password:string)=>{
-    try{
-        const user
+//define type of data this function is going to return 
 
+type tokenData={
+    userId:string,
+    is_Admin:boolean
+}
+
+
+
+
+export const Login=async(userId:string,password:string):Promise<boolean|tokenData|undefined>=>{
+    try{
+        console.log("inside login service");
+        const foundUser=await userModel.findOne({userId:userId});
+        if(!foundUser) return false;
+        //if string variable does not take Strig\undefined then use ! to tell typescript that it will not be undefined
+        const verifiedUser=await compare(password,foundUser.password!);
+        if(!verifiedUser) return false;
+        const data:tokenData={
+            userId:foundUser.userId,
+            is_Admin:foundUser.is_Admin
+        }
+        return data;
 
     }catch(e){
         console.log(e)
+        return false;
     }
 }

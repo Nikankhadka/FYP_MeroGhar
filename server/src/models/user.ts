@@ -15,7 +15,7 @@ const userSchema=new Schema({
             required:true,
         },
         //only necessary for local login
-        password:String,
+        password:{type:String},
         
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
@@ -82,7 +82,7 @@ const userSchema=new Schema({
         //can be modified by admin to ban user for certain time or permanently
         is_banned:{type:Number},
 
-        
+        rented_property:[{type:Schema.Types.ObjectId,ref:"property"}],
 
         //for recommendation colloborative information data will be rating and review 
         recommendation:[String],
