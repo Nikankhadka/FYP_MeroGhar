@@ -37,7 +37,7 @@ const userSchema=new Schema({
         //will be provided on update
         updated_At:Date,
         //will contain the token value for token rotation
-        token:[String],
+        refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
 
         //userid__profile

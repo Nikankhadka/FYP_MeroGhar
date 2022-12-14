@@ -34,6 +34,10 @@ export const LoginC=async(req:Request,res:Response)=>{
             verifiedUser
         },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
 
+        //now append refresh token to user 
+        
+
+
 
     }catch(e){
         console.log(e)
