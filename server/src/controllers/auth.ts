@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {Request,Response} from "express"
-import{registerUser,Login} from "../services/auth"
+import{registerUser,Login,storeToken} from "../services/auth"
 import {sign} from "jsonwebtoken"
 import dotenv from "dotenv";
 dotenv.config();
@@ -35,9 +35,14 @@ export const LoginC=async(req:Request,res:Response)=>{
         },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
 
         //now append refresh token to user 
+        const tokenStored=await storeToken(refreshToken,userId);
+        if(!tokenStored) return res.status(500).json({message:"token could not be stored"})
+
+        //now attach the token to cookie and send it to client
+        res.cookie("accessToken",accessToken,{maxAge:9000,httpOnly:true})
+        .cookie("refreshToken",refreshToken,{maxAge:9000000,httpOnly:true})
+        .status(200).json({message:"user successfully logged in",loginStatus:true})
         
-
-
 
     }catch(e){
         console.log(e)

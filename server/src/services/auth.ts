@@ -62,3 +62,15 @@ export const Login=async(userId:string,password:string):Promise<boolean|tokenDat
 }
 
 //service to evaluate refresh token rotation 
+
+ export const storeToken=async(token:string,userId:string):Promise<boolean|undefined>=>{
+    try{
+        const queryStatus=await userModel.updateOne({userId},{$push:{refreshToken:token}});
+        console.log("token successfully stored");
+        if(queryStatus) return true;
+
+    }catch(e){  
+        console.log(e)
+        return false;
+    }
+ }
