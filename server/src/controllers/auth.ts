@@ -34,7 +34,7 @@ export const LoginC=async(req:Request,res:Response)=>{
             verifiedUser
         },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
 
-        //now append refresh token to user 
+        //now append refresh token to userdocument 
         const tokenStored=await storeToken(refreshToken,userId);
         if(!tokenStored) return res.status(500).json({message:"token could not be stored"})
 
@@ -42,10 +42,11 @@ export const LoginC=async(req:Request,res:Response)=>{
         res.cookie("accessToken",accessToken,{maxAge:9000,httpOnly:true})
         .cookie("refreshToken",refreshToken,{maxAge:9000000,httpOnly:true})
         .status(200).json({message:"user successfully logged in",loginStatus:true})
-        
+
 
     }catch(e){
-        console.log(e)
+       return res.status(400).json({message:"request could not be processed"})
+    
     }
 
 

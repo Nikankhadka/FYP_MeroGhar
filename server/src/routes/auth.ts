@@ -15,6 +15,8 @@ router.use(dbConnect)
 router.post("/registerUser",validateAuth,registerUserC)
 router.post("/Login",validateAuth,LoginC)
 
+//this will be used to refresh the access token and also authenticate user on each page request
+router.post("/refreshToken",)
 
 
 
