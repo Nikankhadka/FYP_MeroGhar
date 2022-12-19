@@ -13,18 +13,21 @@ export const registerUserC=async(req:Request,res:Response)=>{
         const newUser=await registerUser(userId,password);
         if(newUser) return res.status(200).json({ message:`user ${userId} successfully registered`})
         
-        return res.status(409).json({ message:"user with id already exist"})
+        return res.status(409).json({ success:false,message:"user with id already exist"})
         
     }catch(err){
-        res.status(400).json({ message:err})
+        res.status(400).json({success:false, message:err})
     }
 }
+
+
+
 
 export const LoginC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
         const verifiedUser=await Login(userId,password);
-        if(!verifiedUser) return res.status(401).json({message:"invalid credentials"});
+        if(!verifiedUser) return res.status(401).json({success:false,message:"invalid credentials"});
         //generate acess and refresh token 
         const accessToken=await sign({
             verifiedUser
@@ -36,18 +39,29 @@ export const LoginC=async(req:Request,res:Response)=>{
 
         //now append refresh token to userdocument 
         const tokenStored=await storeToken(refreshToken,userId);
-        if(!tokenStored) return res.status(500).json({message:"token could not be stored"})
+        if(!tokenStored) return res.status(500).json({ success:false,message:"token could not be stored"})
 
         //now attach the token to cookie and send it to client
-        res.cookie("accessToken",accessToken,{maxAge:9000,httpOnly:true})
-        .cookie("refreshToken",refreshToken,{maxAge:9000000,httpOnly:true})
-        .status(200).json({message:"user successfully logged in",loginStatus:true})
+        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+        .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
+        .status(200).json({success:true, message:"user successfully logged in"})
 
 
     }catch(e){
-       return res.status(400).json({message:"request could not be processed"})
-    
+       return res.status(400).json({success:false,message:e})
     }
+}
 
 
+export const refreshTokenC=async(req:Request,res:Response)=>{
+    try{
+
+
+
+
+
+
+    }catch(e){
+        return res.status(400).json({success:false,message:e})
+    }
 }

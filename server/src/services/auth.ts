@@ -67,7 +67,7 @@ export const Login=async(userId:string,password:string):Promise<boolean|tokenDat
     try{
         const queryStatus=await userModel.updateOne({userId},{$push:{refreshToken:token}});
         console.log("token successfully stored");
-        if(queryStatus) return true;
+        if(queryStatus.acknowledged) return true;
 
     }catch(e){  
         console.log(e)

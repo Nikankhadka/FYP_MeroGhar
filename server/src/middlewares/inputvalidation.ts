@@ -16,12 +16,12 @@ export const validateAuth=async(req:Request,res:Response,next:NextFunction)=>{
         const{error,value}=registerSchema.validate(req.body,{abortEarly:false})
         if(error){
             console.log(error.details)
-            return res.status(400).json(error.details)
+            return res.status(400).json({success:false,message:error.message})
         }
         console.log(value)
         next()
 
     }catch(err){
-            console.log(err)
+        return res.status(400).json(err)
     }
 }
