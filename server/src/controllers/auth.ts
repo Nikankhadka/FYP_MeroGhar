@@ -2,7 +2,7 @@
 
 import {Request,Response} from "express"
 import{registerUser,Login,storeToken} from "../services/auth"
-import {sign} from "jsonwebtoken"
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,20 +26,11 @@ export const registerUserC=async(req:Request,res:Response)=>{
 export const LoginC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
-        const verifiedUser=await Login(userId,password);
-        if(!verifiedUser) return res.status(401).json({success:false,message:"invalid credentials"});
-        //generate acess and refresh token 
-        const accessToken=await sign({
-            verifiedUser
-        },"ss@3%&*HHJJ**",{expiresIn:"1800s"})
-
-        const refreshToken=await sign({
-            verifiedUser
-        },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
-
-        //now append refresh token to userdocument 
-        const tokenStored=await storeToken(refreshToken,userId);
-        if(!tokenStored) return res.status(500).json({ success:false,message:"token could not be stored"})
+        const {success,message,accessToken,refreshToken}=await Login(userId,password)!;
+        
+        if(!success) return res.status(401).json({success:false,message:`${message}`})
+       
+      
 
         //now attach the token to cookie and send it to client
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
