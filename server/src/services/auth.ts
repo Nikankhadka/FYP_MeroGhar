@@ -1,13 +1,23 @@
 import { userModel } from "../models/user";
-import { sign,verify } from "jsonwebtoken";
+declare module 'jsonwebtoken' {
+    export interface JwtPayload {
+       userId: string,
+       is_Admin:boolean
+   }
+}
+import * as jwt from "jsonwebtoken"
+
 import {hash,compare} from "bcrypt"
 import dotenv from "dotenv";
+
 dotenv.config();
 
 
 
 
-export const registerUser=async(userId:string,password:string):Promise<boolean|undefined>=>{
+
+
+export const registerUser=async(userId:string,password:string):Promise<boolean>=>{
     try{
         
         const userExist=await userModel.findOne({userId:userId});
@@ -26,6 +36,7 @@ export const registerUser=async(userId:string,password:string):Promise<boolean|u
         return true;
 
     }catch(e){
+        return false;
         console.log(e)
     }
 }
@@ -50,11 +61,11 @@ export const Login=async(userId:string,password:string):Promise<{success:boolean
         
         //since user is been verfied 
         
-         const accessToken=await sign({
+         const accessToken=await jwt.sign({
             userId, is_Admin:foundUser.is_Admin
         },"ss@3%&*HHJJ**",{expiresIn:"1800s"})
 
-        const refreshToken=await sign({
+        const refreshToken=await jwt.sign({
             userId,is_Admin:foundUser.is_Admin
         },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
 
@@ -73,3 +84,28 @@ export const Login=async(userId:string,password:string):Promise<{success:boolean
     }
 }
 
+
+
+
+
+
+
+//service layer to verify token along with user in db
+export const verifyAccessTokenS=async(token:string,tokenSecret:string):Promise<{success:boolean,tokendata:jwt.JwtPayload}>=>{
+    try{
+        
+        //if token is expire or error here it will be cathced and handled
+       const {userId,is_Admin}=await <jwt.JwtPayload>jwt.verify(token,tokenSecret)
+        const isValid=await userModel.findOne({userId,is_Admin});
+        if(!isValid) throw new Error("invalid token data")
+    
+        //now since tokenn data is validated just return query status and token data
+        return {success:true,tokendata:{userId,is_Admin}}
+
+    }catch(e){
+        return {success:false,tokendata:{
+            userId:"",
+            is_Admin:false
+        }}
+    }
+}

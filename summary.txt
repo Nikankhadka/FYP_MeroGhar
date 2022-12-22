@@ -36,3 +36,10 @@ req.headers.cookie will give access to array of cookie passed into the header
 req.cookies will gives acess to indvidual cookie as property cookies{acess:...,refresh:...} use req.cookies.acess to get value 
 
 No need to setup token extractor middle are createa single middle ware which will extratc and verify token according use 
+
+
+
+//create custom middle ware in ts and custoimize req obj req.token to store token data since jwt payload is unknow
+
+once tokenpayload is stored in req.token 
+then get user information and store req.user.userId and role or just store entire token infor in req.user

@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {Request,Response} from "express"
-import{registerUser,Login,storeToken} from "../services/auth"
+import{registerUser,Login} from "../services/auth"
 
 import dotenv from "dotenv";
 dotenv.config();
