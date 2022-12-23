@@ -43,3 +43,5 @@ No need to setup token extractor middle are createa single middle ware which wil
 
 once tokenpayload is stored in req.token 
 then get user information and store req.user.userId and role or just store entire token infor in req.user
+
+declaration merging

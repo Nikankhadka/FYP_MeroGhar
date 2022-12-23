@@ -17,7 +17,7 @@ router.post("/registerUser",validateInput,registerUserC)
 router.post("/Login",validateInput,LoginC)
 
 //route to verify user on each page load and also provide new refresh and access token
-router.post("/refreshToken",verifyaccessToken,verifyRole(true))
+router.post("/refreshToken",verifyaccessToken,verifyRole(false))
 
 
 

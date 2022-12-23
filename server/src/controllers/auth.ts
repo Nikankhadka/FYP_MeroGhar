@@ -44,15 +44,15 @@ export const LoginC=async(req:Request,res:Response)=>{
 }
 
 
-export const refreshTokenC=async(req:Request,res:Response)=>{
-    try{
+// export const refreshTokenC=async(req:Request,res:Response)=>{
+//     try{
 
 
 
 
 
 
-    }catch(e){
-        return res.status(400).json({success:false,message:e})
-    }
-}
+//     }catch(e){
+//         return res.status(400).json({success:false,message:e})
+//     }
+// }

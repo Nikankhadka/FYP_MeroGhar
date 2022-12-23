@@ -16,6 +16,7 @@ import passport from "passport"
 //importing routes
 import authRoutes from "./routes/auth"
 
+  
 
 //app level middleware setup
 dotenv.config() 
