@@ -1,4 +1,6 @@
 import { userModel } from "../models/user";
+
+//needs to be declared before the use case
 declare module 'jsonwebtoken' {
     export interface JwtPayload {
        userId: string,
