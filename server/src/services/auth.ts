@@ -10,16 +10,14 @@ declare module 'jsonwebtoken' {
 import * as jwt from "jsonwebtoken"
 
 import {hash,compare} from "bcrypt"
-import dotenv from "dotenv";
-
+import * as dotenv from "dotenv"
 dotenv.config();
 
 
 
 
 
-
-export const registerUser=async(userId:string,password:string):Promise<boolean>=>{
+export const registerUserS=async(userId:string,password:string):Promise<boolean>=>{
     try{
         
         const userExist=await userModel.findOne({userId:userId});
@@ -52,7 +50,7 @@ export const registerUser=async(userId:string,password:string):Promise<boolean>=
 
 
 
-export const Login=async(userId:string,password:string):Promise<{success:boolean,message:string,accessToken:string,refreshToken:string}>=>{
+export const LoginS=async(userId:string,password:string):Promise<{success:boolean,message:string,accessToken:string,refreshToken:string}>=>{
     try{
         console.log("inside login service");
         const foundUser=await userModel.findOne({userId});
@@ -65,11 +63,11 @@ export const Login=async(userId:string,password:string):Promise<{success:boolean
         
          const accessToken=await jwt.sign({
             userId, is_Admin:foundUser.is_Admin
-        },"ss@3%&*HHJJ**",{expiresIn:"1800s"})
+        },process.env.accessToken!,{expiresIn:"1800s"})
 
         const refreshToken=await jwt.sign({
             userId,is_Admin:foundUser.is_Admin
-        },"ss@3%&*H%%BBHH&&**",{expiresIn:"30 days"})
+        },process.env.refreshToken!,{expiresIn:"30 days"})
 
         //now append refresh token to userdocument 
        const tokenStored=await foundUser.refreshToken.push(refreshToken);
@@ -93,11 +91,11 @@ export const Login=async(userId:string,password:string):Promise<{success:boolean
 
 
 //service layer to verify token along with user in db
-export const verifyAccessTokenS=async(token:string,tokenSecret:string):Promise<{success:boolean,tokendata:jwt.JwtPayload}>=>{
+export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:jwt.JwtPayload}>=>{
     try{
         
         //if token is expire or error here it will be cathced and handled
-       const {userId,is_Admin}=await <jwt.JwtPayload>jwt.verify(token,tokenSecret)
+       const {userId,is_Admin}=await <jwt.JwtPayload>jwt.verify(token,process.env.accessToken!)
         const isValid=await userModel.findOne({userId,is_Admin});
         if(!isValid) throw new Error("invalid token data")
     

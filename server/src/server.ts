@@ -4,7 +4,8 @@ const app=express()
 
 
 //necessary imports 
-import dotenv from  "dotenv"
+import * as dotenv from "dotenv"
+
 
 import session from "express-session"
 import cookieParser from "cookie-parser"
@@ -30,7 +31,7 @@ app.use(cors({
 }))
 
 app.use(session({
-    secret:"sadfsa323@@&&CC%%",
+    secret:process.env.sessionSecret!,
     resave:false,
     saveUninitialized:false,
     cookie:{    

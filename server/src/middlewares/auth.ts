@@ -40,7 +40,8 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         const {accessToken}=req.cookies;
         
         //call service to verify access token
-        const {success,tokendata}=await verifyAccessTokenS(accessToken,"ss@3%&*HHJJ**");
+        console.log("middle are to very token")
+        const {success,tokendata}=await verifyAccessTokenS(accessToken);
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
         //store the token data req.user

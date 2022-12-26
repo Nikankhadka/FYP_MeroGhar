@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {Request,Response} from "express"
-import{registerUser,Login} from "../services/auth"
+import{registerUserS, LoginS} from "../services/auth"
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -10,7 +10,7 @@ dotenv.config();
 export const registerUserC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
-        const newUser=await registerUser(userId,password);
+        const newUser=await registerUserS(userId,password);
         if(newUser) return res.status(200).json({ message:`user ${userId} successfully registered`})
         
         return res.status(409).json({ success:false,message:"user with id already exist"})
@@ -26,7 +26,7 @@ export const registerUserC=async(req:Request,res:Response)=>{
 export const LoginC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
-        const {success,message,accessToken,refreshToken}=await Login(userId,password)!;
+        const {success,message,accessToken,refreshToken}=await LoginS(userId,password)!;
         
         if(!success) return res.status(401).json({success:false,message:`${message}`})
        
