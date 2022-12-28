@@ -1,29 +1,11 @@
 
 import { Request,Response,NextFunction } from "express";
-
-
-
 import { verifyAccessTokenS } from "../services/auth";
 
 
 
 
-//middle ware to verify refreh token
-// export const verifyrefreshToken=async(req:Request,res:Response,next:NextFunction)=>{
-//             try{
-//                 //get refresh token from cookie 
-//                 if(!req.cookies.refreshToken) return res.status(401).json({success:false,message:" refresh token not found"});
 
-//                 //now check the refresh token in database to find user for token reuse detection
-//                 const refreshToken=req.cookies.refreshToken;
-                
-
-
-//             }catch(e){
-//                 console.log(e);
-//                 res.status(401).json({success:false,message:"invalid request credential"})
-//             }  
-//          }
 
        
        

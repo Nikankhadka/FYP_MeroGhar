@@ -44,15 +44,19 @@ export const LoginC=async(req:Request,res:Response)=>{
 }
 
 
-// export const refreshTokenC=async(req:Request,res:Response)=>{
-//     try{
+//dont need middle ware just verify and send response back to client 
+export const refreshTokenC=async(req:Request,res:Response)=>{
+    try{
+        //get refresh token from cookie 
+        if(!req.cookies.refreshToken) return res.status(401).json({success:false,message:" refresh token not found"});
+
+        //now check the refresh token in database to find user for token reuse detection
+       const refreshToken=req.cookies.refreshToken;
+        
 
 
-
-
-
-
-//     }catch(e){
-//         return res.status(400).json({success:false,message:e})
-//     }
-// }
+    }catch(e){
+        console.log(e);
+        res.status(401).json({success:false,message:"invalid request credential"})
+    }  
+}
