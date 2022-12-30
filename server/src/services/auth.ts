@@ -114,7 +114,7 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
 
 
 //service to verify token and give new tokens back 
-export const VerifyrefreshTokenS=async(refreshToken:string):Promise<{success:boolean,message:string,tokens:{newaccessToken:string,newrefreshToken:string}}>=>{
+export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boolean,message:string,tokens:{newaccessToken:string,newrefreshToken:string}}>=>{
         try{
             //find user with token
             const foundUser=await userModel.findOne({refreshToken})
@@ -144,7 +144,7 @@ export const VerifyrefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     
                     const {userId,is_Admin}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
                     //validate token data
-                    if (foundUser.userId !==userId) return {success:false,message:"invalid token use detected",tokens:{newaccessToken:"",newrefreshToken:""}};
+                    if (foundUser.userId !==userId) return {success:false,message:"invalid token use detected,data mismatched",tokens:{newaccessToken:"",newrefreshToken:""}};
 
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
