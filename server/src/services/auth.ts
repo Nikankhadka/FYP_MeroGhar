@@ -11,6 +11,7 @@ import * as jwt from "jsonwebtoken"
 
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
+
 dotenv.config();
 
 
@@ -71,7 +72,7 @@ export const LoginS=async(userId:string,password:string):Promise<{success:boolea
 
         //now append refresh token to userdocument 
        const tokenStored=await foundUser.refreshToken.push(refreshToken);
-        foundUser.save();
+        await foundUser.save();
 
         //throw error or return false 
         if(!tokenStored) throw new Error("token not stored in database")
@@ -109,3 +110,74 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
         }}
     }
 }
+
+
+
+//service to verify token and give new tokens back 
+export const VerifyrefreshTokenS=async(refreshToken:string):Promise<{success:boolean,message:string,tokens:{newaccessToken:string,newrefreshToken:string}}>=>{
+        try{
+            //find user with token
+            const foundUser=await userModel.findOne({refreshToken})
+
+            //if user not found token is reused or invalid 
+            if(!foundUser){
+                try{
+                    //hacked user
+                    const {userId,is_Admin} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
+                    const hackedUser=await userModel.findOne({userId,is_Admin})
+                    if(!hackedUser) throw new Error("Invalid token data, user not valid")
+                    //if user is hacked
+                    hackedUser.refreshToken=[]
+                    await hackedUser.save();
+                    return {success:false,message:"invalid token use detected,user hacked",tokens:{newaccessToken:"",newrefreshToken:""}};
+                }
+                
+                catch(e){
+                    console.log(e);
+                    return {success:false,message:"invalid token use detected",tokens:{newaccessToken:"",newrefreshToken:""}};
+                }}
+
+                //array to store tokens except the current token
+                const newRefreshTokenArray = foundUser.refreshToken.filter(rt => rt !== refreshToken);
+                //since refreh token was found in userdb verify token data
+                try{
+                    
+                    const {userId,is_Admin}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
+                    //validate token data
+                    if (foundUser.userId !==userId) return {success:false,message:"invalid token use detected",tokens:{newaccessToken:"",newrefreshToken:""}};
+
+                    //since token was valid perfect now create new tokens
+                    const newaccessToken=await jwt.sign({
+                        userId, is_Admin
+                    },process.env.accessToken!,{expiresIn:"1800s"})
+            
+                    const newrefreshToken=await jwt.sign({
+                        userId,is_Admin
+                    },process.env.refreshToken!,{expiresIn:"30 days"})
+            
+                    //store refrehtoken 
+                    foundUser.refreshToken = [...newRefreshTokenArray, newrefreshToken];
+                    await foundUser.save();
+                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken}};
+
+
+                }catch(e){
+                    //if token invalid then filter and get other token except then current token 
+                    
+                    foundUser.refreshToken=newRefreshTokenArray;
+                    await foundUser.save();
+                    return {success:false,message:"Token expired Login again",tokens:{newaccessToken:"",newrefreshToken:""}};
+                }
+             
+
+        }catch(e){
+            console.log(e)
+            return {success:false,message:"invalid token use detected,Token expired",tokens:{newaccessToken:"",newrefreshToken:""}};
+        }
+       
+
+
+}
+
+        
+

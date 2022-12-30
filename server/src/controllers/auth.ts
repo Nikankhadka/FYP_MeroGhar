@@ -52,7 +52,11 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
 
         //now check the refresh token in database to find user for token reuse detection
        const refreshToken=req.cookies.refreshToken;
-        
+
+       //both token be cleared since new token is going to be generated if failed then hackers token will be deleted
+        res.clearCookie("refreshToken").clearCookie("accessToken")
+
+        //servive for refresh token verification
 
 
     }catch(e){
