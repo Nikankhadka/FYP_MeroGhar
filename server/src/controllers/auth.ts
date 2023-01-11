@@ -26,14 +26,14 @@ export const registerUserC=async(req:Request,res:Response)=>{
 export const LoginC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
-        const {success,message,accessToken,refreshToken}=await LoginS(userId,password)!;
+        const result=await LoginS(userId,password);
         
-        if(!success) return res.status(401).json({success:false,message:`${message}`})
+        if(!result.success) return res.status(401).json({success:false,message:`${result.message!}`})
        
       
 
         //now attach the token to cookie and send it to client
-        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+        res.cookie("accessToken",result.accessToken,{maxAge:1800000,httpOnly:true})
         .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
         .status(200).json({success:true, message:"user successfully logged in"})
 
