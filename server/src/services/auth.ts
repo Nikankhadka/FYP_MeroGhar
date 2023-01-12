@@ -8,14 +8,19 @@ declare module 'jsonwebtoken' {
    }
 }
 import * as jwt from "jsonwebtoken"
-
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
+import {LSR1} from "../interfaces/Auth"
 
+
+
+
+
+
+
+//*********************************** */
 dotenv.config();
-
-
-
+// *******************************register user service************************************
 
 
 export const registerUserS=async(userId:string,password:string):Promise<boolean>=>{
@@ -50,18 +55,16 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
 
 
 
-
-export const LoginS=async(userId:string,password:string):Promise<{success:boolean,accessToken:string,refreshToken:string,user:{userId:string,is_Admin:boolean}}|{success:boolean,message:string}>=>{
+export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
     try{
         console.log("inside login service");
         const foundUser=await userModel.findOne({userId});
-        if(!foundUser) return {success:false,message:"user not regsitered"};
+         if(!foundUser)  throw new Error("User Not Found")
         //if string variable does not take Strig\undefined then use ! to tell typescript that it will not be undefined
         const verifiedUser=await compare(password,foundUser.password!);
-        if(!verifiedUser) return {success:false,message:"invalid password"};
+        if(!verifiedUser) throw new Error("Invalid User Credentials")
         
         //since user is been verfied 
-        
          const accessToken=await jwt.sign({
             userId, is_Admin:foundUser.is_Admin
         },process.env.accessToken!,{expiresIn:process.env.accessTokenExpire})
@@ -71,17 +74,17 @@ export const LoginS=async(userId:string,password:string):Promise<{success:boolea
         },process.env.refreshToken!,{expiresIn:process.env.refreshTokenExpire})
 
         //now append refresh token to userdocument 
-       const tokenStored=await foundUser.refreshToken.push(refreshToken);
+         const tokenStored=await foundUser.refreshToken.push(refreshToken);
         await foundUser.save();
 
         //throw error or return false 
-        if(!tokenStored) throw new Error("token not stored in database")
+        if(!tokenStored) throw new Error("Token storage failed")
 
         return {success:true,accessToken,refreshToken,user:{userId,is_Admin:foundUser.is_Admin}}
 
     }catch(e){
         console.log(e)
-        return {success:false,message:"service query error"}
+        throw e;
     }
 }
 

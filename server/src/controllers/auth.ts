@@ -23,24 +23,25 @@ export const registerUserC=async(req:Request,res:Response)=>{
 
 
 
+
 export const LoginC=async(req:Request,res:Response)=>{
-    try{
+   
         const {userId,password}=req.body;
-        const result=await LoginS(userId,password);
-        
-        if(!result.success) return res.status(401).json({success:false,message:`${result.message!}`})
-       
-      
+        try{
+            const {success,accessToken,refreshToken,user}=await LoginS(userId,password);
 
-        //now attach the token to cookie and send it to client
-        res.cookie("accessToken",result.accessToken,{maxAge:1800000,httpOnly:true})
-        .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-        .status(200).json({success:true, message:"user successfully logged in"})
+            if(success)  return res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
+            .status(200).json({success:true, message:"user successfully logged in",user})
 
+             //now attach the token to cookie and send it to clien
+          
 
-    }catch(e){
-       return res.status(400).json({success:false,message:e})
-    }
+        }catch(e:any){{
+            console.log(e)
+            return res.status(400).json({success:false,message:e.message})
+        }} 
+    
 }
 
 
