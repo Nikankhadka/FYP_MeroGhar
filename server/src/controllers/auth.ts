@@ -30,8 +30,8 @@ export const LoginC=async(req:Request,res:Response)=>{
         try{
             const {success,accessToken,refreshToken,user}=await LoginS(userId,password);
 
-            if(success)  return res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
-            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
+            if(success)  return res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true,sameSite:"strict"})
+            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true,sameSite:"strict"})
             .status(200).json({success:true, message:"user successfully logged in",user})
 
              //now attach the token to cookie and send it to clien

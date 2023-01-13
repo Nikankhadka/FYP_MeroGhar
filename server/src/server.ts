@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors({
     //defines the origin of the request
     origin:"http://localhost:3000",
-    //headers can be accessed and modified
+    //headers can be accessed and modified else cant
     credentials:true
 }))
 
@@ -69,7 +69,7 @@ app.use("/auth/v1",authRoutes);
 
 //listen to server on ports
 app.listen(2900,
-    async()=>console.log("server started at port 3000")
+    async()=>console.log("server started at port 2900")
 )
 
 
