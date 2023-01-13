@@ -11,6 +11,7 @@ const dbConnect=async(req:Request,res:Response,next:NextFunction)=>{
          await connect('mongodb://localhost:27017/FypMeroghar')
          console.log("Database Connected")
          next()
+         console.log("Next Called")
           
     }catch(e){
         console.log(e);
