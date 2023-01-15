@@ -69,8 +69,8 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
 
 
 
-    }catch(e){
+    }catch(e:any){
         console.log(e);
-        res.status(401).json({success:false,message:"invalid request credential"})
+        res.status(401).json({success:false,message:e.message})
     }  
 }

@@ -3,39 +3,25 @@ import { Request,Response,NextFunction } from "express";
 import { verifyAccessTokenS } from "../services/auth";
 
 
-
-
-
-
-       
-       
-
-        
-   
-
-
-
 //to verify access token
 export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)=>{
-    try{
+  
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
-        
-        //call service to verify access token
-        console.log("middle are to very token")
+
+        try{
         const {success,tokendata}=await verifyAccessTokenS(accessToken);
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
         //store the token data req.user
         req.user=tokendata
-        
-        next()
-        
+        next()  
     }catch(e){
         console.log(e)
         return res.status(401).json({success:false,message:"invalid request credential"})
     }
 }
+
 
 
 //custom middleware to verify roles

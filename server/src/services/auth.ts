@@ -107,10 +107,8 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
         return {success:true,tokendata:{userId,is_Admin}}
 
     }catch(e){
-        return {success:false,tokendata:{
-            userId:"",
-            is_Admin:false
-        }}
+        console.log(e)
+        throw e;
     }
 }
 
@@ -124,7 +122,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
 
             //if user not found token is reused or invalid 
             if(!foundUser){
-                try{
+               
                     //hacked user
                     const {userId,is_Admin} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
                     const hackedUser=await userModel.findOne({userId,is_Admin})
@@ -132,13 +130,8 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     //if user is hacked
                     hackedUser.refreshToken=[]
                     await hackedUser.save();
-                    return {success:false,message:"invalid token use detected,user hacked",tokens:{newaccessToken:"",newrefreshToken:""}};
+                    throw new Error("Invalid token use detected,User hacked")
                 }
-                
-                catch(e){
-                    console.log(e);
-                    return {success:false,message:"invalid token use detected",tokens:{newaccessToken:"",newrefreshToken:""}};
-                }}
 
                 //array to store tokens except the current token
                 const newRefreshTokenArray = foundUser.refreshToken.filter(rt => rt !== refreshToken);
@@ -147,7 +140,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     
                     const {userId,is_Admin}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
                     //validate token data
-                    if (foundUser.userId !==userId) return {success:false,message:"invalid token use detected,data mismatched",tokens:{newaccessToken:"",newrefreshToken:""}};
+                    if (foundUser.userId !==userId) throw new Error("invalid token use detected,data mismatched");
 
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
@@ -159,7 +152,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     },process.env.refreshToken!,{expiresIn:"30 days"})
             
                     //store refrehtoken 
-                    foundUser.refreshToken = [...newRefreshTokenArray, newrefreshToken];
+                    foundUser.refreshToken = await [...newRefreshTokenArray, newrefreshToken];
                     await foundUser.save();
                     return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken}};
 
@@ -169,13 +162,13 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     
                     foundUser.refreshToken=newRefreshTokenArray;
                     await foundUser.save();
-                    return {success:false,message:"Token expired Login again",tokens:{newaccessToken:"",newrefreshToken:""}};
+                    throw e;
                 }
              
 
         }catch(e){
             console.log(e)
-            return {success:false,message:"invalid token use detected,Token expired",tokens:{newaccessToken:"",newrefreshToken:""}};
+            throw e;
         }
        
 
