@@ -2,15 +2,19 @@
 
 
 
+
 //global type declaration merging for express 
 declare namespace Express {
   export interface Request {
-    user:{
+    user:import("../../interfaces/Auth").googleProfile,
+    userData:{
       userId:string,
       is_Admin:boolean
     }
   }    
 }
+
+
 
 /*
 declare module is module based it does not declare merge in global scope 

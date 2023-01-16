@@ -1,9 +1,10 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {Request,Response} from "express"
-import{registerUserS, LoginS,verifyRefreshTokenS} from "../services/auth"
+import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS} from "../services/auth"
 
 import dotenv from "dotenv";
+
 dotenv.config();
 
 
@@ -73,4 +74,40 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
         console.log(e);
         res.status(401).json({success:false,message:e.message})
     }  
+}
+
+
+
+//conroller for google login
+export const googleLoginC=async(req:Request,res:Response)=>{
+    try{
+       
+        console.log(req.user);
+        const {accessToken,refreshToken}=await googleLoginS(req.user)
+        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
+      .status(200).redirect("http://localhost:3000/testpage")
+
+    }catch(e:any){
+        console.log(e);
+        res.status(401).redirect("http://localhost:3000")
+    }
+
+}
+
+
+export const facebookLoginC=async(req:Request,res:Response)=>{
+    try{
+       
+        console.log(req.user);
+        const {accessToken,refreshToken}=await facebookLoginS(req.user)
+        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
+      .status(200).redirect("http://localhost:3000/testpage")
+
+    }catch(e:any){
+        console.log(e);
+        res.status(401).redirect("http://localhost:3000")
+    }
+
 }

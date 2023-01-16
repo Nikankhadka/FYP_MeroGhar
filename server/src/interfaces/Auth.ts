@@ -9,7 +9,12 @@
     user:{userId:string,is_Admin:boolean}
 }
 
-//  export interface LSR2{
-//     failure:boolean,
-//     message:string
-// }
+
+
+
+export interface googleProfile{
+    userName:string,
+    email:string,
+    profile_Img:string,
+}
+

@@ -14,7 +14,7 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
         //store the token data req.user
-        req.user=tokendata
+        req.userData=tokendata
         next()  
     }catch(e){
         console.log(e)
@@ -30,7 +30,7 @@ export const verifyRole=(is_Admin:boolean)=>{
    return(req:Request,res:Response,next:NextFunction)=>{
         try{
             console.log("inside verify role",req.user)
-            if(!is_Admin==req.user.is_Admin) return res.status(400).json({success:false,message:"authorization role not valid"})
+            if(!is_Admin==req.userData.is_Admin) return res.status(400).json({success:false,message:"authorization role not valid"})
             
             //else
             next()

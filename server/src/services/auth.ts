@@ -11,6 +11,8 @@ import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
 import {LSR1} from "../interfaces/Auth"
+import { googleProfile } from "../interfaces/Auth";
+import { generateTokens } from "../configs/token";
 
 
 
@@ -176,4 +178,78 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
 }
 
         
+export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string}>=>{
+    try{
+        
+        const{userName,email,profile_Img}=profileData
+        const userExist=await userModel.findOne({userId:email})
+        if(userExist){ 
+            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin);
+            //push refresh token into userdb
+            const tokenStored=await userExist.refreshToken.push(refreshToken);
+            await userExist.save();
+            return {accessToken,refreshToken};
+        }
 
+        //since no user create new user
+        const newUser=await userModel.create({
+            userId:email,
+            userName,
+            email:{
+                mail:email,
+                is_verified:true
+            },
+            profile_Img:{
+                img_id:"",
+                img_url:profile_Img
+            }
+        })
+        await newUser.save();
+        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin);
+            //push refresh token into userdb
+        const tokenStored=await newUser.refreshToken.push(refreshToken);
+        await newUser.save();
+        return {accessToken,refreshToken};
+        
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string}>=>{
+    try{
+         //here email will contain facebook id
+        const{userName,email,profile_Img}=profileData
+        const userExist=await userModel.findOne({userId:email})
+        if(userExist){ 
+            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin);
+            //push refresh token into userdb
+            const tokenStored=await userExist.refreshToken.push(refreshToken);
+            await userExist.save();
+            return {accessToken,refreshToken};
+        }
+
+        //since no user create new user
+        const newUser=await userModel.create({
+            userId:email,
+            userName,
+            profile_Img:{
+                img_id:"",
+                img_url:profile_Img
+            }
+        })
+        await newUser.save();
+        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin);
+            //push refresh token into userdb
+        const tokenStored=await newUser.refreshToken.push(refreshToken);
+        await newUser.save();
+        return {accessToken,refreshToken};
+        
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
