@@ -1,7 +1,13 @@
 //this controller will contain necessary request handler for authentication and authorization
 
-import {Request,Response} from "express"
-import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS} from "../services/auth"
+import {NextFunction, Request,Response} from "express"
+import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS} from "../services/auth"
+import {
+	ReasonPhrases,
+	StatusCodes,
+	getReasonPhrase,
+	getStatusCode,
+} from 'http-status-codes';
 
 import dotenv from "dotenv";
 
@@ -86,7 +92,7 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken}=await googleLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(200).redirect("http://localhost:3000/testpage")
+      .status(StatusCodes.OK).redirect("http://localhost:3000/testpage")
 
     }catch(e:any){
         console.log(e);
@@ -110,4 +116,18 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
         res.status(401).redirect("http://localhost:3000")
     }
 
+}
+
+export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+    if(!req.cookies.refreshToken) return res.status(204).json({success:false,err:"Invalid logout credential"})
+    const{refreshToken}=req.cookies
+    const verifyToken=await logOutS(refreshToken);
+   if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true,sameSite:"none",secure:true})
+
+    }catch(e:any){
+        //if invalid token use detected clear cookie from imposter
+        console.log(e)
+        res.status(204).clearCookie("refreshToken",{httpOnly:true,sameSite:"none",secure:true})
+    }
 }

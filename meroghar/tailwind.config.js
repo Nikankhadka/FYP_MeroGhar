@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 //the purgr property is used to remove unused css from the final build
-  purge: [
+  content: [
     './src/pages/**/*.tsx',
     // add more paths
     './src/components/**/*.tsx',
