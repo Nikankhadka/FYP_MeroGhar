@@ -1,11 +1,13 @@
 
 import {Router} from "express"
-import { registerUserC,LoginC,refreshTokenC,googleLoginC,facebookLoginC} from "../controllers/auth"
+import { registerUserC,LoginC,refreshTokenC,googleLoginC,facebookLoginC,logOutC} from "../controllers/auth"
 import { validateInput } from "../middlewares/inputvalidation"
 import dbConnect from "../configs/db"
 import passport from "passport"
 
 import "../configs/strategy"
+import internal from "stream"
+import { number } from "joi"
 
 
 
@@ -30,7 +32,9 @@ router.get("/facebook-callback",passport.authenticate("facebook",{session:false}
 
 //userVerification + Token rotation
 router.post("/refreshToken",refreshTokenC)
-router.delete("/logout")
+router.delete("/logout",logOutC)
+
+
 
 
 

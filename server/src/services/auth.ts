@@ -253,3 +253,21 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
         throw e;
     }
 }
+
+
+export const logOutS=async(refreshToken:string):Promise<boolean>=>{
+   try{
+    const user=await userModel.findOne({refreshToken});
+    if(!user) throw new Error("Invalid token use detected")
+
+    //since user with token exist
+    user.refreshToken=await user.refreshToken.filter(token=>token!==refreshToken)
+    await user.save()
+    return true;
+
+
+   }catch(e){
+    console.log(e)
+    throw e;
+   }
+}
