@@ -67,13 +67,7 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
         if(!verifiedUser) throw new Error("Invalid User Credentials")
         
         //since user is been verfied 
-         const accessToken=await jwt.sign({
-            userId, is_Admin:foundUser.is_Admin
-        },process.env.accessToken!,{expiresIn:process.env.accessTokenExpire})
-
-        const refreshToken=await jwt.sign({
-            userId,is_Admin:foundUser.is_Admin
-        },process.env.refreshToken!,{expiresIn:process.env.refreshTokenExpire})
+         const {accessToken,refreshToken}=await generateTokens(userId,foundUser.is_Admin);
 
         //now append refresh token to userdocument 
          const tokenStored=await foundUser.refreshToken.push(refreshToken);
@@ -136,7 +130,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                 }
 
                 //array to store tokens except the current token
-                const newRefreshTokenArray = foundUser.refreshToken.filter(rt => rt !== refreshToken);
+                const newRefreshTokenArray = foundUser.refreshToken.filter(token => token !== refreshToken);
                 //since refreh token was found in userdb verify token data
                 try{
                     
