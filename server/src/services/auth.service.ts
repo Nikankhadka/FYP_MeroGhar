@@ -196,6 +196,9 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             profile_Img:{
                 img_id:"",
                 img_url:profile_Img
+            },
+            kyc:{
+                email:email
             }
         })
         await newUser.save();

@@ -3,6 +3,7 @@
 declare namespace NodeJS {
       interface ProcessEnv {
         mail:string
+        sendgridApiKey:string
       }
  }
   

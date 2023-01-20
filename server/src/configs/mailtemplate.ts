@@ -4,7 +4,7 @@ dotenv.config()
 
 
 //create function which takes basic information and returns mail template 
-export const signupMail=(userEmail:string,userName:string):mailBody=>{
+export const signupMail=(userName:string,userEmail:string):mailBody=>{
     return {
         from:process.env.mail,
         to:userEmail,
@@ -15,6 +15,6 @@ export const signupMail=(userEmail:string,userName:string):mailBody=>{
         <p>if u have not Verified Yourself by filling kyc form here it is ... </P>
         <br>
         <a href="http://localhost:2900/user/v1/kycVerification">Kyc Form </a>
-            `
+         `
     }
 }
