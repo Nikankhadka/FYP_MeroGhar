@@ -12,7 +12,7 @@ import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
 import {LSR1} from "../interfaces/Auth"
 import { googleProfile } from "../interfaces/Auth";
-import { generateTokens } from "../configs/token";
+import { generateTokens } from "../utils/token";
 
 
 
@@ -196,6 +196,9 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             profile_Img:{
                 img_id:"",
                 img_url:profile_Img
+            },
+            kyc:{
+                email:email
             }
         })
         await newUser.save();

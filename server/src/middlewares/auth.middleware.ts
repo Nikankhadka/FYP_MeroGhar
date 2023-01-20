@@ -1,6 +1,6 @@
 
 import { Request,Response,NextFunction } from "express";
-import { verifyAccessTokenS } from "../services/auth";
+import { verifyAccessTokenS } from "../services/auth.service";
 
 
 //to verify access token

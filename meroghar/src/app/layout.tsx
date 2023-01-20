@@ -1,12 +1,12 @@
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
+
+
   return (
     <html>
       <head />
-      <body>{children}</body>
+      <body>
+        <nav> this is global nav bar that will be used i application</nav>
+        {children}</body>
     </html>
   )
 }

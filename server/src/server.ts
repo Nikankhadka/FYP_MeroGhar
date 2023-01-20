@@ -15,7 +15,7 @@ import passport from "passport"
 
 
 //importing routes
-import authRoutes from "./routes/auth"
+import authRoutes from "./routes/auth.routes"
 
   
 

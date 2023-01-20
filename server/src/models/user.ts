@@ -35,7 +35,10 @@ const userSchema=new Schema({
             immutable:true
         },
         //will be provided on update
-        updated_At:Date,
+        updated_At:{
+            type:Date,
+            default:Date.now
+        },
         //will contain the token value for token rotation
         refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
@@ -77,7 +80,10 @@ const userSchema=new Schema({
         recieved_Reviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
-        wishList:[{type:Schema.Types.ObjectId,ref:"property"}],
+        wishList:{
+            type:[{type:Schema.Types.ObjectId,ref:"property"}],
+            default:[]
+        },
 
         //can be modified by admin to ban user for certain time or permanently
         is_banned:{type:Number},
