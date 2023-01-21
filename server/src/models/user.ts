@@ -70,19 +70,19 @@ const userSchema=new Schema({
         },
         
         //kyc verification status
-        kyc_Verified:Boolean,
+        kyc_Verified:{type:Boolean,default:false},
 
         //no of property posted by user
-        listing_Count:{type: Number,default:0},
+        listing_Count:{type: Number},
 
         //rating and review count will be updated on write every time user property is reviewd
-        avg_rating:{type: Number,default:0}, 
-        recieved_Reviewcount:{type: Number,default:0},
+        avg_rating:{type: Number}, 
+        recieved_Reviewcount:{type: Number},
 
         //document id of refrenced product donot create new document in different collection
         wishList:{
             type:[{type:Schema.Types.ObjectId,ref:"property"}],
-            default:[]
+           
         },
 
         //can be modified by admin to ban user for certain time or permanently
