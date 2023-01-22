@@ -13,6 +13,7 @@ import * as dotenv from "dotenv"
 import {LSR1} from "../interfaces/Auth"
 import { googleProfile } from "../interfaces/Auth";
 import { generateTokens } from "../utils/token";
+import { sendMail } from "../utils/sendgrid";
 
 
 
@@ -206,6 +207,9 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
+
+        //send welcome email to user
+        const mail=await sendMail(userName,email)
         return {accessToken,refreshToken};
         
 
