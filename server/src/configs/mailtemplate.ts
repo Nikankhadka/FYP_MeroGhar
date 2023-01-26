@@ -6,8 +6,8 @@ dotenv.config()
 //create function which takes basic information and returns mail template 
 export const signupMail=(userName:string,userEmail:string):mailBody=>{
     return {
-        from:process.env.mail,
         to:userEmail,
+        from:"nikantest@zohomail.com",
         subject:"New User Signup/Registration",
         text:"",
         html:`<h1> Welcome to MeroGahr 👋 ${userName}</h1>

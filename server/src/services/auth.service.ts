@@ -13,7 +13,8 @@ import * as dotenv from "dotenv"
 import {LSR1} from "../interfaces/Auth"
 import { googleProfile } from "../interfaces/Auth";
 import { generateTokens } from "../utils/token";
-import { sendMail } from "../utils/sendgrid";
+import { signupMail } from "../configs/mailtemplate";
+import { sendMail } from "../utils/zohoMailer";
 
 
 
@@ -45,8 +46,8 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
         return true;
 
     }catch(e){
-        return false;
-        console.log(e)
+        throw e
+        
     }
 }
 
@@ -179,6 +180,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         const{userName,email,profile_Img}=profileData
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
+            console.log("user with email exist")
             const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin);
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
@@ -209,7 +211,9 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         await newUser.save();
 
         //send welcome email to user
-        const mail=await sendMail(userName,email)
+        console.log("before mail send function or template is passed",userName,email)
+        //dont need to wait as it takes time to send mail
+        sendMail(signupMail(userName,email))
         return {accessToken,refreshToken};
         
 
