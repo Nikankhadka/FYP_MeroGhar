@@ -20,10 +20,13 @@ const userSchema=new Schema({
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
             mail:{type:String},
-            //verfication code to verify email
-            vCode:String,
             is_verified:{type:Boolean,default:false}
         },
+        Token:{
+            token:String,
+            tokenExpiry:Date
+        },
+
         two_FA:{
             type:Boolean,
             default:false
@@ -94,8 +97,7 @@ const userSchema=new Schema({
         recommendation:[String],
 
 
-        //for reset password to store and validate token thorugh email
-        resetPassowrdToken:String,
+        
 
 })
 

@@ -18,12 +18,12 @@ export const registerUserC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
         const newUser=await registerUserS(userId,password);
-        if(newUser) return res.status(200).json({ message:`user ${userId} successfully registered`})
+        if(newUser) return res.status(200).json({success:true, message:`user ${userId} successfully registered`})
         
-        return res.status(409).json({ success:false,message:"user with id already exist"})
+        return res.status(409).json({ success:false,error:"user with id already exist"})
         
-    }catch(err){
-        res.status(400).json({success:false, message:err})
+    }catch(err:any){
+        res.status(400).json({success:false, error:err.message})
     }
 }
 
@@ -92,7 +92,7 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken}=await googleLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(StatusCodes.OK).redirect("http://localhost:3000/testpage")
+      .status(StatusCodes.OK).redirect("http://localhost:3000/test")
 
     }catch(e:any){
         console.log(e);
