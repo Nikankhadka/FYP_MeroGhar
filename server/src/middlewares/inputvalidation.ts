@@ -15,7 +15,6 @@ export const validateInput=async(req:Request,res:Response,next:NextFunction)=>{
         //calls the validate method to check the value with schema  and validates both property to generate error response
         const{error,value}=registerSchema.validate(req.body,{abortEarly:false})
         if(error){
-            console.log(error.details)
             return res.status(400).json({success:false,message:error.message})
         }
         console.log(value)

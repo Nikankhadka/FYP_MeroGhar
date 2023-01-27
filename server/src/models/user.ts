@@ -64,11 +64,14 @@ const userSchema=new Schema({
                 city:String,  
             },
             //multiple images of user, citizenship for manual verification
-            img:[{
-                //userId_img1/2
-                img_id:String,
-                img_url:String
-            }]
+            img:{
+                type:[{
+                    //userId_img1/2
+                    img_id:String,
+                    img_url:String
+                }],
+                default:undefined
+            }
 
         },
         
@@ -84,17 +87,29 @@ const userSchema=new Schema({
 
         //document id of refrenced product donot create new document in different collection
         wishList:{
-            type:[{type:Schema.Types.ObjectId,ref:"property"}],
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            default:undefined
+        }
+        ,
            
-        },
+        
 
         //can be modified by admin to ban user for certain time or permanently
-        is_banned:{type:Number},
+        is_banned:{
+            strikes:Number,
+            banTime:Date
+        },
 
-        rented_property:[{type:Schema.Types.ObjectId,ref:"property"}],
+        rented_property:{
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            default:undefined
+        },
 
         //for recommendation colloborative information data will be rating and review 
-        recommendation:[String],
+        recommendation:{
+            type:[String],
+            default:undefined
+        },
 
 
         

@@ -1,14 +1,15 @@
 import Link from 'next/link'
-
+import { TestbuttonComponent } from '../components/test'
 
 export default function Home(){
 
 
 
     return(
-        <div>
-            <Link href="http://localhost:2900/auth/v1/google-login">google</Link>
-        </div>
+        <main className=''>
+           
+            <TestbuttonComponent />
+        </main>
 
 
 
