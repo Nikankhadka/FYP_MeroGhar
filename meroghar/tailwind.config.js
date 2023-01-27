@@ -1,13 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
 module.exports = {
   mode:"jit",
 //the purgr property is used to remove unused css from the final build
-  content: [
-    './src/app/**/*.tsx',
-    // add more paths
-    './src/components/**/*.tsx',
-],
-
 
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx}",

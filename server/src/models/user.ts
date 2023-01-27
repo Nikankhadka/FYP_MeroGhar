@@ -87,7 +87,7 @@ const userSchema=new Schema({
 
         //document id of refrenced product donot create new document in different collection
         wishList:{
-            type:[{type:Schema.Types.ObjectId,ref:"property"}],
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
             default:undefined
         }
         ,
@@ -101,7 +101,7 @@ const userSchema=new Schema({
         },
 
         rented_property:{
-            type:[{type:Schema.Types.ObjectId,ref:"property"}],
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
             default:undefined
         },
 
