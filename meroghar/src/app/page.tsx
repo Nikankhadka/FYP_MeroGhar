@@ -1,17 +1,21 @@
-import Link from 'next/link'
-import { TestbuttonComponent } from '../components/test'
+// this is basically the home page any foulder created within the app with page.tsx module will be set as a page 
 
-export default function Home(){
 
+
+const HomePage=()=>{
+
+    //hooks and logics
 
 
     return(
-        <main className=''>
-           
-            <TestbuttonComponent />
+        <main>
+            this is home page 
         </main>
 
 
-
     )
+
 }
+
+
+export default HomePage;
