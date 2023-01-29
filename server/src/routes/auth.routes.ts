@@ -33,7 +33,7 @@ router.get("/facebook-callback",passport.authenticate("facebook",{session:false}
 //userVerification + Token rotation
 router.post("/refreshToken",refreshTokenC)
 router.delete("/logout",logOutC)
-router.post("")
+
 
 
 

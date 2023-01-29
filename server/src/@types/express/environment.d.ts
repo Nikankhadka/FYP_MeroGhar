@@ -3,7 +3,8 @@
 declare namespace NodeJS {
       interface ProcessEnv {
           user:string,
-          pass:string
+          pass:string,
+          mailupdateSecret:string,
       }
  }
   

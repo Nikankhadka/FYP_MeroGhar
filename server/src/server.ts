@@ -16,7 +16,7 @@ import passport from "passport"
 
 //importing routes
 import authRoutes from "./routes/auth.routes"
-
+import userRoutes from "./routes/user.routes"
   
 
 //app level middleware setup
@@ -61,7 +61,7 @@ app.use(passport.initialize())
 
 //define prefix else nothing but the routepath should be uniqe
 app.use("/auth/v1",authRoutes);
-
+app.use("/user/v1",userRoutes)
 
 
 
