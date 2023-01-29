@@ -4,7 +4,7 @@ dotenv.config()
 
 
 //create function which takes basic information and returns mail template 
-export const signupMail=(userName:string,userEmail:string):mailBody=>{
+export const signupMailTemplate=(userName:string,userEmail:string):mailBody=>{
     return {
         to:userEmail,
         from:"nikantest@zohomail.com",
