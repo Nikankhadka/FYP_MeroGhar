@@ -22,16 +22,14 @@ const userSchema=new Schema({
             mail:{type:String},
             is_verified:{type:Boolean,default:false}
         },
-        Token:{
-            token:String,
-            tokenExpiry:Date
-        },
 
+        //since i will be usig jwt for most of the verificaion purpose rather than generate own token
+        Token:String,
         two_FA:{
             type:Boolean,
             default:false
         },
-        two_FA_token:String,
+        
         created_At:{
             type:Date,
             default:Date.now,
@@ -76,7 +74,7 @@ const userSchema=new Schema({
         },
         
         //kyc verification status
-        kyc_Verified:{type:Boolean,default:false},
+        kyc_Verified:Boolean,
 
         //no of property posted by user
         listing_Count:{type: Number},

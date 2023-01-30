@@ -1,19 +1,13 @@
 import { userModel } from "../models/user";
 
-//needs to be declared before the use case
-declare module 'jsonwebtoken' {
-    export interface JwtPayload {
-       userId: string,
-       is_Admin:boolean
-   }
-}
+
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
 import {LSR1} from "../interfaces/Auth"
 import { googleProfile } from "../interfaces/Auth";
 import { generateTokens } from "../utils/token";
-import { signupMail } from "../configs/mailtemplate";
+import {signupMailTemplate } from "../configs/mailtemplate";
 import { sendMail } from "../utils/zohoMailer";
 
 
@@ -213,7 +207,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         //send welcome email to user
         console.log("before mail send function or template is passed",userName,email)
         //dont need to wait as it takes time to send mail
-        sendMail(signupMail(userName,email))
+        sendMail(signupMailTemplate(userName,email))
         return {accessToken,refreshToken};
         
 
