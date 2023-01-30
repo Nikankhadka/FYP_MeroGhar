@@ -1,6 +1,6 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS } from "../services/user.service"
+import { updateEmailS,addEmailS, verifyEmailS } from "../services/user.service"
 
 
 export const addEmailC=async(req:Request,res:Response)=>{
@@ -21,6 +21,17 @@ export const addEmailC=async(req:Request,res:Response)=>{
     }
 }
 
+
+export const verifyEmailC=async(req:Request,res:Response)=>{
+    try{
+        const emailVerified=await verifyEmailS(req.params.token);
+        if(emailVerified) return res.status(200).redirect("http://localhost:3000/user")
+
+    }catch(e:any){
+        console.log(e)
+        return res.status(400).json({success:false,error:e.message})
+    }
+}
 
 
 

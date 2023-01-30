@@ -1,12 +1,6 @@
 import { userModel } from "../models/user";
 
-//needs to be declared before the use case
-declare module 'jsonwebtoken' {
-    export interface JwtPayload {
-       userId: string,
-       is_Admin:boolean
-   }
-}
+
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
