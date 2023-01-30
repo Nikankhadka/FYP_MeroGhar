@@ -1,6 +1,6 @@
 import {Schema,model} from "mongoose"
 
-const userSchema=new Schema({
+export const userSchema=new Schema({
 
     //the length and pattern for the properties below will be validated in the client side so no need for server side error handling
 
@@ -16,6 +16,11 @@ const userSchema=new Schema({
         },
         //only necessary for local login
         password:{type:String},
+        //userid__profile
+        profile_Img:{
+            img_id:String,
+            img_url:String
+        },
         
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
@@ -44,11 +49,7 @@ const userSchema=new Schema({
         refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
 
-        //userid__profile
-        profile_Img:{
-            img_id:String,
-            img_url:String
-        },
+        
         kyc:{
             firstName:String,
             lastName:String,

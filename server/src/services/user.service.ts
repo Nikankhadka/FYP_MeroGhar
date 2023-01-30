@@ -1,17 +1,10 @@
 import { userModel } from "../models/user"
-
-
 import * as jwt from "jsonwebtoken";
-
-
-
-
 import * as dotenv from "dotenv"
-
-
-
 import { sendMail } from "../utils/zohoMailer";
 import { updateEmailTemplate,postEmailTemplate } from "../configs/mailtemplate";
+import { updateProfile } from "../interfaces/inputInterface";
+import { compare, hash } from "bcrypt";
 dotenv.config()
 
 
@@ -77,6 +70,27 @@ export const verifyEmailS=async(Token:string):Promise<boolean>=>{
     }
 }
 
+
+export const updateProfileS=async(userId:string,profileData:Partial<updateProfile>):Promise<boolean>=>{
+    try{
+
+        //special condition for password cant change into old password and also hash password before saving into db
+        if(profileData.password){
+            const user=await userModel.findOne({userId});
+            if(await compare(profileData.password,user?.password!)) throw new Error("Please Enter New password to  Update,Same Password used")
+
+            //since password is new need to hash the password 
+            profileData.password=await hash(profileData.password,process.env.salt_rounds);
+        }
+
+        const updatedUserProfile=await userModel.updateOne({userId},{...profileData},{new:true});
+        return true
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+}
 
 
 

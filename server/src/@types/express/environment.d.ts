@@ -5,6 +5,7 @@ declare namespace NodeJS {
           user:string,
           pass:string,
           mailSecret:string,
+          salt_rounds:number
       }
  }
   
