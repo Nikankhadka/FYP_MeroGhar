@@ -5,12 +5,13 @@ import { validateKyc, validateUpdateProfile } from "../middlewares/inputvalidati
 
 const router=Router();
 
-
-router.post("/addEmail",verifyaccessToken,addEmailC)
 router.get("/verifyEmail/:token",verifyEmailC)
-router.patch("/updateProfile",verifyaccessToken,validateUpdateProfile,updateProfileC)
-router.post("/postKyc",verifyaccessToken,verifyRole(false),validateKyc,postKycC)
 
+router.use(verifyaccessToken)
+router.post("/addEmail",addEmailC)
+
+router.patch("/updateProfile",validateUpdateProfile,updateProfileC)
+router.post("/postKyc",verifyRole(false),validateKyc,postKycC)
 router.patch("/updateUser",verifyaccessToken,)
 
 

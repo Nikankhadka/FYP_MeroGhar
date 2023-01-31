@@ -11,7 +11,8 @@ export interface updateProfile{
 
 
 export interface KycData{
-    firstName:string,
+    kyc:{
+        firstName:string,
     lastName:string,
     gender:string,
     email?:string,
@@ -24,4 +25,6 @@ export interface KycData{
         img_id:string,
         img_url:string
     }[]
+    }
+    
 }
