@@ -57,7 +57,7 @@ export const userSchema=new Schema({
 
             // if email is verified then this will be automatically updated
             email:String,
-            phoneNumber:Number,
+            phoneNumber:String,
             address:{
                 country:String,
                 city:String,  
@@ -110,8 +110,10 @@ export const userSchema=new Schema({
             default:undefined
         },
 
-
-        
+        viewed_property:{
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            default:undefined
+        },
 
 })
 

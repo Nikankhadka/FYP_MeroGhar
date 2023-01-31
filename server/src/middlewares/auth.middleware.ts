@@ -15,7 +15,7 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
         //store the token data req.user
-        req.userData=tokendata
+         req.userData=tokendata
         next()  
     }catch(e:any){
         console.log(e)
@@ -26,7 +26,7 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
 }
 
 //verify roles for speciific api end points
-export const verifyRole=async(is_Admin:boolean)=>{
+export const verifyRole=(is_Admin:boolean)=>{
 
 
     return async(req:Request,res:Response,next:NextFunction)=>{
@@ -34,8 +34,9 @@ export const verifyRole=async(is_Admin:boolean)=>{
             console.log("token verified now verify role",req.user)
         if(!is_Admin==req.userData.is_Admin) return res.status(400).json({success:false,error:"authorization role not valid"})
         next()
-        }catch(e){
+        }catch(e:any){
             console.log(e)
+            return res.status(400).json({success:false,error:e.message})
         }
     }
 }

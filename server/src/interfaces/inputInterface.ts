@@ -8,3 +8,20 @@ export interface updateProfile{
     }
 }
 
+
+
+export interface KycData{
+    firstName:string,
+    lastName:string,
+    gender:string,
+    email?:string,
+    phoneNumber:string,
+    address:{
+        country:string,
+        city:string
+    },
+    img:{
+        img_id:string,
+        img_url:string
+    }[]
+}
