@@ -48,3 +48,38 @@ export const validateUpdateProfile=async(req:Request,res:Response,next:NextFunct
         return res.status(400).json(err)
     }
 }
+
+
+export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        //defined joi schema for input validation of requet body
+        const KycSchema=joi.object({
+            firstName:joi.string().required(),
+            lastName:joi.string().required(),
+            gender:joi.string().required(),
+            email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+            phoneNumber:joi.string().min(10).max(10).required(),
+            address:{
+                country:joi.string().min(4).max(4).required(),
+                city:joi.string().min(4).max(4).required()
+            },
+
+            //when defining complex tyope can use joi.object to define schema,or can simply create object and nest 
+            //or like below define array and for its items pass object schema , or direct obj property
+            img:joi.array().items({
+                img_id:joi.string().required(),
+                img_url:joi.string().required()
+            }).required()
+        })
+
+        //calls the validate method to check the value with schema  and validates both property to generate error response
+        const{error,value}=KycSchema.validate(req.body,{abortEarly:false})
+        if(error) return res.status(400).json({success:false,message:error.message})
+        
+        console.log(value)
+        next()
+
+    }catch(err){
+        return res.status(400).json(err)
+    }
+}

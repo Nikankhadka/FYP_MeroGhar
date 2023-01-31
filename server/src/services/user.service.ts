@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv"
 import { sendMail } from "../utils/zohoMailer";
 import { updateEmailTemplate,postEmailTemplate } from "../configs/mailtemplate";
-import { updateProfile } from "../interfaces/inputInterface";
+import { KycData, updateProfile } from "../interfaces/inputInterface";
 import { compare, hash } from "bcrypt";
 dotenv.config()
 
@@ -33,9 +33,6 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
              "email.is_verified":false,
              "Token":token
         }})
-        
-       
-       
 
         //now pass this token to mail and send it to verify the userMail Update request
         const updateMailRequest=sendMail(postEmailTemplate(Email,token))
@@ -49,6 +46,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
     }
 }
 
+
 export const verifyEmailS=async(Token:string):Promise<boolean>=>{
     try{
         //first match the token in db 
@@ -61,7 +59,10 @@ export const verifyEmailS=async(Token:string):Promise<boolean>=>{
         if(tokenMatch.userId!==userId) throw new Error("Token Data not matched with acutal users Token")
         
         //since user token is verified now update document and verify email 
-        const emailUpdate=await userModel.updateOne({userId},{ "$set": {"email.is_verified":true}})
+        const emailUpdate=await userModel.updateOne({userId},{ "$set": {
+            "email.is_verified":true,
+            "kyc.email":tokenMatch.email?.mail
+            }})
         return true;
 
     }catch(e){
@@ -92,7 +93,15 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
     }
 }
 
+export const postKycS=async(userId:string,KycData:KycData)=>{
+    try{
+        
 
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
 
 
 

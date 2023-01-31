@@ -45,6 +45,17 @@ export const updateProfileC=async(req:Request,res:Response)=>{
 }
 
 
+export const postKycC=async(req:Request,res:Response)=>{
+    try{
+        const profileUpdated=await updateProfileS(req.userData.userId,req.body);
+        if(profileUpdated) return res.status(200).json({success:true,message:"Profile data successfully updated"})
+
+    }catch(e:any){
+        console.log(e)
+        return res.status(400).json({success:false,error:e.message})
+    }
+}
+
 
 
 
