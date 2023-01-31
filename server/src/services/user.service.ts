@@ -93,9 +93,18 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
     }
 }
 
-export const postKycS=async(userId:string,KycData:KycData)=>{
+export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
     try{
-        
+        //first validate email input 
+        if(KycData.kyc.email){
+            const addEmail=await addEmailS(userId,KycData.kyc.email);
+            //since email is not verified needs to go through verification as above email property in the KycData will be deleted
+            if(addEmail) delete KycData.kyc.email;
+        }
+
+        const postKyc=await userModel.updateOne({userId},{...KycData},{new:true})
+        if(!postKyc) throw new Error("Kyc post failed")
+        return true;
 
     }catch(e){
         console.log(e);

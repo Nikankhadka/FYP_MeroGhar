@@ -115,6 +115,12 @@ export const userSchema=new Schema({
             default:undefined
         },
 
+        //now going to add some propertis utilized by admin only 
+        kycVerificationRequests:{
+            type:[{type:Schema.Types.ObjectId,ref:"Users"}],
+            default:undefined
+        }
+
 })
 
 

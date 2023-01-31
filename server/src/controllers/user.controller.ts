@@ -1,6 +1,6 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS, verifyEmailS,updateProfileS } from "../services/user.service"
+import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS} from "../services/user.service"
 
 
 export const addEmailC=async(req:Request,res:Response)=>{
@@ -33,6 +33,8 @@ export const verifyEmailC=async(req:Request,res:Response)=>{
     }
 } 
 
+
+
 export const updateProfileC=async(req:Request,res:Response)=>{
     try{
         const profileUpdated=await updateProfileS(req.userData.userId,req.body);
@@ -47,14 +49,17 @@ export const updateProfileC=async(req:Request,res:Response)=>{
 
 export const postKycC=async(req:Request,res:Response)=>{
     try{
-        const profileUpdated=await updateProfileS(req.userData.userId,req.body);
-        if(profileUpdated) return res.status(200).json({success:true,message:"Profile data successfully updated"})
+        const kycPosted=await postKycS(req.userData.userId,req.body);
+        if(kycPosted) return res.status(200).json({success:true,message:"User Kyc infromation successfully added wait for admin verification"})
 
     }catch(e:any){
         console.log(e)
         return res.status(400).json({success:false,error:e.message})
     }
 }
+
+
+
 
 
 
