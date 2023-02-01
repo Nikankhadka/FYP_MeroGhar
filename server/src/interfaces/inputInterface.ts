@@ -11,7 +11,7 @@ export interface updateProfile{
 
 
 export interface KycData{
-    kyc:{
+    kycInfo:{
         firstName:string,
     lastName:string,
     gender:string,

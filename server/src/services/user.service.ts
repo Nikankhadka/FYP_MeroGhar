@@ -61,7 +61,7 @@ export const verifyEmailS=async(Token:string):Promise<boolean>=>{
         //since user token is verified now update document and verify email 
         const emailUpdate=await userModel.updateOne({userId},{ "$set": {
             "email.is_verified":true,
-            "kyc.email":tokenMatch.email?.mail
+            "kycInfo.email":tokenMatch.email?.mail
             }})
         return true;
 
@@ -95,15 +95,27 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
 
 export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
     try{
-        //first validate email input 
-        if(KycData.kyc.email){
-            const addEmail=await addEmailS(userId,KycData.kyc.email);
+        //check if user has already verified kyc or not 
+        const kycVerified=await userModel.findOne({userId,kyc:{is_verified:true}})
+        if(kycVerified) throw new Error("kyc is already verified cant post new kyc information")
+
+        //first validate email input
+         if(KycData.kycInfo.email){
+            const addEmail=await addEmailS(userId,KycData.kycInfo.email);
             //since email is not verified needs to go through verification as above email property in the KycData will be deleted
-            if(addEmail) delete KycData.kyc.email;
+            if(addEmail) delete KycData.kycInfo.email;
         }
 
-        const postKyc=await userModel.updateOne({userId},{...KycData},{new:true})
+        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData},{new:true})
         if(!postKyc) throw new Error("Kyc post failed")
+
+        //now update admin notification setting 
+        const adminRequest=await userModel.updateMany({is_Admin:true},{
+            "$push":{
+                "kycVerificationRequests":postKyc._id,
+            }
+        })
+        if(!adminRequest) throw new Error("Failed to push kyc for admin approval")
         return true;
 
     }catch(e){

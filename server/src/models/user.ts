@@ -1,3 +1,5 @@
+
+
 import {Schema,model} from "mongoose"
 
 export const userSchema=new Schema({
@@ -50,7 +52,7 @@ export const userSchema=new Schema({
         is_Admin:{type:Boolean,default:false},
 
         
-        kyc:{
+        kycInfo:{
             firstName:String,
             lastName:String,
             gender:String,
@@ -75,7 +77,10 @@ export const userSchema=new Schema({
         },
         
         //kyc verification status
-        kyc_Verified:Boolean,
+        kyc:{
+            is_verified:Boolean,
+            approvedBy:String,
+        },
 
         //no of property posted by user
         listing_Count:{type: Number},
@@ -117,7 +122,7 @@ export const userSchema=new Schema({
 
         //now going to add some propertis utilized by admin only 
         kycVerificationRequests:{
-            type:[{type:Schema.Types.ObjectId,ref:"Users"}],
+            type:[ {type:Schema.Types.ObjectId,ref:"Users"}],
             default:undefined
         }
 

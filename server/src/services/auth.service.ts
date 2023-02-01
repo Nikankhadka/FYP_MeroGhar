@@ -194,7 +194,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
                 img_id:"",
                 img_url:profile_Img
             },
-            kyc:{
+            kycInfo:{
                 email:email
             }
         })
