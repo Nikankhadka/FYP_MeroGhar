@@ -1,6 +1,6 @@
 
 import '../styles/globals.css'
-
+import NavBar from '../components/navbar'
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
 
@@ -9,11 +9,11 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html>
       <head />
       {/* body sets the root layout for entire application */}
-      <body className='bg-green-400'>
-        
+      <body className='bg-white'>
+        <NavBar />
         {/* this children represents each page component  that is rendered */}
         {children}
-        <p> this is footer which will be applied to all pages</p>
+      
         </body>
     </html>
   )

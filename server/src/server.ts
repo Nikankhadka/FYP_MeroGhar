@@ -5,8 +5,6 @@ const app=express()
 
 //necessary imports 
 import * as dotenv from "dotenv"
-
-
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
@@ -17,7 +15,8 @@ import passport from "passport"
 //importing routes
 import authRoutes from "./routes/auth.routes"
 import userRoutes from "./routes/user.routes"
-  
+import adminRoutes from "./routes/admin.routes"  
+
 
 //app level middleware setup
 dotenv.config() 
@@ -62,7 +61,7 @@ app.use(passport.initialize())
 //define prefix else nothing but the routepath should be uniqe
 app.use("/auth/v1",authRoutes);
 app.use("/user/v1",userRoutes)
-
+app.use("/admin/v1",adminRoutes)
 
 
 

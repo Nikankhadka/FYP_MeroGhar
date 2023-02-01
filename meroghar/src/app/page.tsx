@@ -9,7 +9,7 @@ const HomePage=()=>{
 
     return(
         <main>
-            this is home page 
+            this is home page which will apply the styles and component applied in root layout
         </main>
 
 

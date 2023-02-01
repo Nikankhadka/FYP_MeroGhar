@@ -1,10 +1,10 @@
-
+import Image from "next/image"
 
  const NavBar=()=>{
 
     return(
         <nav>
-            <h1> this is going to be navbar</h1>
+        <img src="house.png" alt="logo" height="38px" width="38px"></img>
         </nav>
     )
 
