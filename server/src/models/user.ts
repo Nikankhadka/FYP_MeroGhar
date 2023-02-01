@@ -79,6 +79,7 @@ export const userSchema=new Schema({
         //kyc verification status
         kyc:{
             is_verified:Boolean,
+            message:String,
             approvedBy:String,
         },
 
