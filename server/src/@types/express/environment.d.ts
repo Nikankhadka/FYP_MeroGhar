@@ -5,7 +5,17 @@ declare namespace NodeJS {
           user:string,
           pass:string,
           mailSecret:string,
-          salt_rounds:number
+          salt_rounds:number,
+          sessionSecret:string,
+          accessToken:string,
+          refreshToken:string,
+          accessTokenExpire:string,
+          refreshTokenExpire:string,
+          dbPassword:string
+          googleClientId:string
+          googleClientSecret:string
+          facebookClientId:string
+          facebookClientSecret:string
       }
  }
   

@@ -1,4 +1,12 @@
 import { userModel } from "../models/user"
+declare module 'jsonwebtoken' {
+    export interface verifyEmailPayload extends JwtPayload {
+        userId: string,
+        Email:string
+}
+}
+
+
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv"
 import { sendMail } from "../utils/zohoMailer";
@@ -26,7 +34,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
         const token=await jwt.sign({
             userId,
             Email,  
-        },process.env.mailSecret,{expiresIn:"1h"});
+    },process.env.mailSecret!,{expiresIn:"1h"});
 
         const emailUpdate=await userModel.updateOne({userId},{ "$set": {
              "email.mail":Email,
@@ -54,7 +62,7 @@ export const verifyEmailS=async(Token:string):Promise<boolean>=>{
         if(!tokenMatch) throw new Error("Invalid Token,Token not found in db")
 
         
-        const {userId,Email}= <jwt.verifyEmailPayload>jwt.verify(Token,process.env.mailSecret)
+        const {userId,Email}= <jwt.verifyEmailPayload>jwt.verify(Token,process.env.mailSecret!)
         //if token expired error is throw catched and send back 
         if(tokenMatch.userId!==userId) throw new Error("Token Data not matched with acutal users Token")
         
@@ -81,7 +89,7 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
             if(await compare(profileData.password,user?.password!)) throw new Error("Please Enter New password to  Update,Same Password used")
 
             //since password is new need to hash the password 
-            profileData.password=await hash(profileData.password,process.env.salt_rounds);
+            profileData.password=await hash(profileData.password,process.env.salt_rounds!);
         }
 
         const updatedUserProfile=await userModel.updateOne({userId},{...profileData},{new:true});
@@ -144,7 +152,7 @@ export const updateEmailS=async(userId:string,newEmail:string)=>{
                 userId,
                 newEmail,
                 email:userEmailVerfied.email?.mail
-            },process.env.mailSecret,{expiresIn:"1h"});
+        },process.env.mailSecret!,{expiresIn:"1h"});
 
             //now pass this token to mail and send it to verify the userMail Update request
             const updateMailRequest=sendMail(updateEmailTemplate(userEmailVerfied.email?.mail!,token,newEmail))

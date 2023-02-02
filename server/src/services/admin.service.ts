@@ -12,7 +12,7 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
         const newUser=await userModel.create({
             userId:userId,
             userName:userId,
-            password:await hash(password,process.env.salt_rounds),
+            password:await hash(password,process.env.salt_rounds!),
             is_Admin:true
         })
 
