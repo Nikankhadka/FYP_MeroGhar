@@ -11,7 +11,7 @@ router.use(verifyRole(true))
 
 
 router.post("/registerAdmin",validateInput,registerAdminC)
-
+router.get("/kycRequests")
 
 
 

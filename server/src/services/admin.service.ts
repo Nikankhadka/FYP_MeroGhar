@@ -1,5 +1,6 @@
 import { userModel } from "../models/user";
 import {hash} from "bcrypt"
+import { IUser } from "../interfaces/dbInterface";
 
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
@@ -25,5 +26,23 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
         console.log(e)
         throw e
         
+    }
+}
+
+
+export const getKycRequestsS=async(userId:string):Promise<IUser>=>{
+    try{
+        //chekck if array of request exist and there are post requests to be verified
+        
+        const checkRequests=await userModel.findOne({userId});
+        if(checkRequests?.kycVerificationRequests==undefined||checkRequests.kycVerificationRequests.length==0) throw new Error("No kyc request in the present")
+
+        //since not empty or undefined
+        const kycRequests=await userModel.findOne({userId},"_id kycVerificationRequests").populate("kycVerificationRequests",{path:"Users",select:"kycInfo"})
+        if(!kycRequests) throw new Error("Failed to Fetch Kyc requests")
+        return kycRequests;
+    }catch(e){
+        console.log(e)
+        throw e
     }
 }

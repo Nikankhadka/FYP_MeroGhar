@@ -1,5 +1,11 @@
 import { userModel } from "../models/user";
 
+declare module "jsonwebtoken" {
+     interface JwtPayload {
+       userId: string,
+       is_Admin:boolean
+   }
+}
 
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
@@ -87,7 +93,7 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
 
 
 //service layer to verify token along with user in db
-export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:jwt.JwtPayload}>=>{
+export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{userId:string,is_Admin:boolean}}>=>{
     try{
         
         //if token is expire or error here it will be cathced and handled
