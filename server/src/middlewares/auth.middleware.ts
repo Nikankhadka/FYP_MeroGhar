@@ -15,7 +15,7 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
         //store the token data req.user
-         req.userData=tokendata
+         req.userData=tokendata;
         next()  
     }catch(e:any){
         console.log(e)

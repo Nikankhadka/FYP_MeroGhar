@@ -11,7 +11,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        appBackground:'#C4C4C4',
+        appBackground:'#D4E5E6',
+        mainColor:"#22546D",
         green: colors.emerald,
         yellow: colors.amber,
         purple: colors.violet,

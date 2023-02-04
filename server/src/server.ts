@@ -9,6 +9,10 @@ import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import passport from "passport"
+import morgan from "morgan"
+import swaggerUi from "swagger-ui-express"
+import swaggerJsDoc from "swagger-jsdoc"
+import YAML from "yamljs"
 
 
 
@@ -16,6 +20,7 @@ import passport from "passport"
 import authRoutes from "./routes/auth.routes"
 import userRoutes from "./routes/user.routes"
 import adminRoutes from "./routes/admin.routes"  
+
 
 
 //app level middleware setup
@@ -54,10 +59,18 @@ app.use(passport.initialize())
 //this is not needed since i am using token based authentication 
 //app.use(passport.session())
 
+//basic logging will only log request to thr console
+app.use(morgan('dev'))
+
+
+
+//for swagger APi documentation 
+const apiDocumentation = YAML.load("./src/utils/swagger.yml")
+app.use("/apiDocs",swaggerUi.serve,swaggerUi.setup(apiDocumentation)) //the obj returned by docs using option will  be used ot loap apiDocumentation
+
 
 
 //routes registration  before defning any routes 
-
 //define prefix else nothing but the routepath should be uniqe
 app.use("/auth/v1",authRoutes);
 app.use("/user/v1",userRoutes)

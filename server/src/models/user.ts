@@ -1,6 +1,7 @@
 
 
 import {Schema,model} from "mongoose"
+import { IUser } from "../interfaces/dbInterface";
 
 export const userSchema=new Schema({
 
@@ -78,7 +79,7 @@ export const userSchema=new Schema({
         
         //kyc verification status
         kyc:{
-            is_verified:Boolean,
+            is_verified:{type:Boolean,default:false},
             message:String,
             approvedBy:String,
         },
@@ -112,7 +113,7 @@ export const userSchema=new Schema({
 
         //for recommendation colloborative information data will be rating and review 
         recommendation:{
-            type:[String],
+            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
             default:undefined
         },
 
@@ -131,4 +132,4 @@ export const userSchema=new Schema({
 
 
 
-export const userModel=model("Users",userSchema);
+export const userModel=model<IUser>("Users",userSchema);

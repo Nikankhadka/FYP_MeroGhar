@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { registerAdminC } from "../controllers/admin.controller";
+import { getKycRequestsC, registerAdminC, verifyKycRequestsC } from "../controllers/admin.controller";
 import { verifyaccessToken, verifyRole } from "../middlewares/auth.middleware";
 import { validateInput } from "../middlewares/inputvalidation";
 
@@ -11,8 +11,8 @@ router.use(verifyRole(true))
 
 
 router.post("/registerAdmin",validateInput,registerAdminC)
-
-
+router.get("/kycRequests",getKycRequestsC)
+router.patch("/kycRequests/:id",verifyKycRequestsC)
 
 
 
