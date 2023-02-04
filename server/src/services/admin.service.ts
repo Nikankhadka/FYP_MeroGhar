@@ -1,6 +1,7 @@
 import { userModel } from "../models/user";
 import {hash} from "bcrypt"
 import { IUser } from "../interfaces/dbInterface";
+import { verifyKyc } from "../interfaces/admin";
 
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
@@ -38,11 +39,59 @@ export const getKycRequestsS=async(userId:string):Promise<IUser>=>{
         if(checkRequests?.kycVerificationRequests==undefined||checkRequests.kycVerificationRequests.length==0) throw new Error("No kyc request in the present")
 
         //since not empty or undefined
-        const kycRequests=await userModel.findOne({userId},"_id kycVerificationRequests").populate("kycVerificationRequests",{path:"Users",select:"kycInfo"})
+        const kycRequests=await userModel.findOne({userId},"_id kycVerificationRequests").populate("kycVerificationRequests",{path:"Users",select:"_id userName profile_Img kycInfo"})
         if(!kycRequests) throw new Error("Failed to Fetch Kyc requests")
         return kycRequests;
     }catch(e){
         console.log(e)
         throw e
+    }
+}
+
+
+export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc):Promise<boolean>=>{
+    try{
+        //perform action according to verification status 
+        if(kycData.isVerified){
+            //check if the user has kyc info and not empty
+            const checkKycData=userModel.findOne({_id:id,kycInfo:{$exist:true,$ne:{}}});
+            if(!checkKycData) throw new Error("Invalid id and Misuse of admin detected")
+
+            //since admin has verified and data is also valid now update the userDocument 
+            const verifyUser=await userModel.updateOne({_id:id},{
+                "$set":{
+                    "kyc.is_Verified":true,
+                    "kyc.message":"KYC information valid",
+                    "kyc.approvedBy":adminId
+                }
+            })
+            if(!verifyUser) throw new Error("user not able to verify")
+        }
+
+        
+        if(!kycData.isVerified){
+            //since admin deemed kyc info to be invalid just provide the message to the user 
+            const declineUser=await userModel.updateOne({_id:id},{
+                "$set":{
+                    "kyc.is_Verified":false,
+                    "kyc.message":kycData.message,
+                    "kyc.approvedBy":adminId
+                }
+            })
+            if(!declineUser) throw new Error("User kyc Decline failed")
+        }
+
+        //the default task would be clear admin kyc request either way 
+        const deleteKycRequests=await userModel.updateMany({is_Admin:true},{
+            "$pull":{
+                "kycVerificationRequests":id
+            }
+        })
+
+        return true;
+
+    }catch(e){
+        console.log(e);
+        throw e;
     }
 }
