@@ -6,7 +6,10 @@
 //global type declaration merging for express 
 declare namespace Express {
   export interface Request {
+    //this is set during google login so that main controller has access to user information for further processing
     user:import("../../interfaces/Auth").googleProfile,
+
+    // this data is set after the token is verified
     userData:{
       userId:string,
       is_Admin:boolean

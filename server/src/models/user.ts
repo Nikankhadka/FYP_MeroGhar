@@ -103,22 +103,23 @@ export const userSchema=new Schema({
         //can be modified by admin to ban user for certain time or permanently
         is_banned:{
             strikes:Number,
-            banTime:Date
+            banTime:Date,
+            message:String
         },
 
         rented_property:{
-            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },
 
         //for recommendation colloborative information data will be rating and review 
         recommendation:{
-            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },
 
         viewed_property:{
-            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
+            type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },
 

@@ -11,6 +11,8 @@ router.use(verifyaccessToken)
 router.post("/addEmail",addEmailC)
 
 router.patch("/updateProfile",validateUpdateProfile,updateProfileC)
+
+//use the same api end point to update kyc information
 router.post("/postKyc",verifyRole(false),validateKyc,postKycC)
 router.patch("/updateUser",verifyaccessToken,)
 

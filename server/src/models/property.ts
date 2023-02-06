@@ -1,13 +1,18 @@
-import {Schema,model} from "mongoose"
+import {Schema,model, Types} from "mongoose"
 
 
 const propertySchema=new Schema({
+    _id:Types.ObjectId,
     userId:{type:String,required:true},
+
     //this will be default generated
-    _id:{type:String,required:true},
     name:{type:String,required:true},
     url:String,
-    location:[String],
+    location:{
+        city:String,
+        area:String,
+        required:true,
+    },
     discription:{type:String,required:true},
     property_type:{type:String,required:true},
     
@@ -20,7 +25,10 @@ const propertySchema=new Schema({
     }],
 
     //id of previus tennats
-    tennants:[String],
+    tennants:{
+        type:[{type:Schema.Types.ObjectId,ref:"Users"}],
+        default:undefined
+    },
     current_tennant:String,
    
     rating_count:{type:Number,default:0},
@@ -29,16 +37,20 @@ const propertySchema=new Schema({
 
 
     //admin can bacn the post
- is_banned:{type:Boolean,default:false},
+    is_banned:{type:Boolean,default:false},
 
- //admin verification check
- is_verified:{type:Boolean,default:false},
+    //admin verification check
+    is_verified:{
+        status:Boolean,
+        message:String,
+        approvedBy:String
+    },
 
     //for recommendation it will be updated on write operation of simialr product content based
- recommendation:[String] //store refrenced similar product
+    recommendation:[String] //store refrenced similar product
 })
 
 
 //export the model instance for performing Query operations
- export const propertyModel=model("properties",propertySchema);
+ export const propertyModel=model("Properties",propertySchema);
 
