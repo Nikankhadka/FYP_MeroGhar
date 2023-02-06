@@ -20,6 +20,7 @@ import YAML from "yamljs"
 import authRoutes from "./routes/auth.routes"
 import userRoutes from "./routes/user.routes"
 import adminRoutes from "./routes/admin.routes"  
+import { clearUser } from "./middlewares/auth.middleware"
 
 
 
@@ -69,6 +70,8 @@ const apiDocumentation = YAML.load("./src/utils/swagger.yml")
 app.use("/apiDocs",swaggerUi.serve,swaggerUi.setup(apiDocumentation)) //the obj returned by docs using option will  be used ot loap apiDocumentation
 
 
+//custom middle ware function which will clear req obj on evry api request before storing the actual data 
+ app.use(clearUser)
 
 //routes registration  before defning any routes 
 //define prefix else nothing but the routepath should be uniqe

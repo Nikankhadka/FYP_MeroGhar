@@ -120,7 +120,7 @@ paths:
      response:
       200:
         description: OK
-      requestBody:
+    requestBody:
        required: true
        content:
             application/json:
@@ -130,7 +130,7 @@ paths:
                   :id:
                     type: string
                     description: ID of the brand
-      responses:
+       responses:
         200:
           description: Successful response
         400:
