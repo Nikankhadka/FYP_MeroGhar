@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getKycRequestsS, registerAdminS, verifyKycRequestsS} from "../services/admin.service";
+import { getKycRequestsS, registerAdminS, verifyKycRequestsS} from "../../services/admin/admin.service";
 import joi from "joi"
 
 

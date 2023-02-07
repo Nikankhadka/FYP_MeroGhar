@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { updateViewCountS } from "../services/property.service";
+import { updateViewCountS } from "../../services/property/property.service";
 
 export const updateViewCountC=async(req:Request,res:Response)=>{
     try{

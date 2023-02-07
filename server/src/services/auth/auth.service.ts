@@ -1,4 +1,4 @@
-import { userModel } from "../models/user";
+import { userModel } from "../../models/user";
 
 declare module "jsonwebtoken" {
      interface JwtPayload {
@@ -10,11 +10,11 @@ declare module "jsonwebtoken" {
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
-import {LSR1} from "../interfaces/Auth"
-import { googleProfile } from "../interfaces/Auth";
-import { generateTokens } from "../utils/token";
-import {signupMailTemplate } from "../configs/mailtemplate";
-import { sendMail } from "../utils/zohoMailer";
+import {LSR1} from "../../interfaces/Auth"
+import { googleProfile } from "../../interfaces/Auth";
+import { generateTokens } from "../../utils/token";
+import {signupMailTemplate } from "../../configs/mailtemplate";
+import { sendMail } from "../../utils/zohoMailer";
 
 
 

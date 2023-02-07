@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {NextFunction, Request,Response} from "express"
-import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS} from "../services/auth.service"
+import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS} from "../../services/auth/auth.service"
 import {
 	ReasonPhrases,
 	StatusCodes,

@@ -1,5 +1,5 @@
-import { propertyModel } from "../models/property";
-import { userModel } from "../models/user";
+import { propertyModel } from "../../models/property";
+import { userModel } from "../../models/user";
 
 export const updateViewCountS=async(userId:string,propertyId:string):Promise<boolean>=>{
     try{

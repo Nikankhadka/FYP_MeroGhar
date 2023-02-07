@@ -1,7 +1,7 @@
-import { userModel } from "../models/user";
+import { userModel } from "../../models/user";
 import {hash} from "bcrypt"
-import { IUser } from "../interfaces/dbInterface";
-import { verifyKyc } from "../interfaces/admin";
+import { IUser } from "../../interfaces/dbInterface";
+import { verifyKyc } from "../../interfaces/admin";
 
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{

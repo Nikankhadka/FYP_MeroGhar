@@ -17,9 +17,9 @@ import YAML from "yamljs"
 
 
 //importing routes
-import authRoutes from "./routes/auth.routes"
-import userRoutes from "./routes/user.routes"
-import adminRoutes from "./routes/admin.routes"  
+import authRoutes from "./routes/auth/auth.routes"
+import userRoutes from "./routes/user/user.routes"
+import adminRoutes from "./routes/admin/admin.routes"  
 import { clearUser } from "./middlewares/auth.middleware"
 
 

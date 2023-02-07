@@ -1,8 +1,8 @@
 
 import { Router } from "express";
-import { getKycRequestsC, registerAdminC, verifyKycRequestsC } from "../controllers/admin.controller";
-import { verifyaccessToken, verifyRole } from "../middlewares/auth.middleware";
-import { validateInput } from "../middlewares/inputvalidation";
+import { getKycRequestsC, registerAdminC, verifyKycRequestsC } from "../../controllers/admin/admin.controller";
+import { verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
+import { validateInput } from "../../middlewares/inputvalidation";
 
 const router=Router();
 

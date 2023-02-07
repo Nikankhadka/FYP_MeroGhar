@@ -1,4 +1,4 @@
-import { userModel } from "../models/user"
+import { userModel } from "../../models/user"
 declare module 'jsonwebtoken' {
     export interface verifyEmailPayload extends JwtPayload {
         userId: string,
@@ -9,9 +9,9 @@ declare module 'jsonwebtoken' {
 
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv"
-import { sendMail } from "../utils/zohoMailer";
-import { updateEmailTemplate,postEmailTemplate } from "../configs/mailtemplate";
-import { KycData, updateProfile } from "../interfaces/inputInterface";
+import { sendMail } from "../../utils/zohoMailer";
+import { updateEmailTemplate,postEmailTemplate } from "../../configs/mailtemplate";
+import { KycData, updateProfile } from "../../interfaces/inputInterface";
 import { compare, hash } from "bcrypt";
 dotenv.config()
 

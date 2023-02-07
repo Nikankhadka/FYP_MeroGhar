@@ -1,6 +1,6 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS} from "../services/user.service"
+import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS} from "../../services/user/user.service"
 
 
 export const addEmailC=async(req:Request,res:Response)=>{

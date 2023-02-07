@@ -1,11 +1,11 @@
 
 import {Router} from "express"
-import { registerUserC,LoginC,refreshTokenC,googleLoginC,facebookLoginC,logOutC} from "../controllers/auth.controller"
-import { validateInput } from "../middlewares/inputvalidation"
-import dbConnect from "../configs/db"
+import { registerUserC,LoginC,refreshTokenC,googleLoginC,facebookLoginC,logOutC} from "../../controllers/auth/auth.controller"
+import { validateInput } from "../../middlewares/inputvalidation"
+import dbConnect from "../../configs/db"
 import passport from "passport"
 
-import "../configs/strategy"
+import "../../configs/strategy"
 
 
 

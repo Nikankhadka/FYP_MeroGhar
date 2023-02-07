@@ -1,6 +1,6 @@
 
 import { Request,Response,NextFunction } from "express";
-import { verifyAccessTokenS } from "../services/auth.service";
+import { verifyAccessTokenS } from "../services/auth/auth.service";
 
 
 //combined verify token+role in single middle ware 
