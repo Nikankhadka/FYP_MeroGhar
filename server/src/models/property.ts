@@ -1,4 +1,5 @@
 import {Schema,model, Types} from "mongoose"
+import { Property } from "../interfaces/dbInterface";
 
 
 const propertySchema=new Schema({
@@ -29,7 +30,7 @@ const propertySchema=new Schema({
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
         default:undefined
     },
-    current_tennant:String,
+    current_tennant:Types.ObjectId,
    
     rating_count:{type:Number,default:0},
     viewCount:{type:Number,default:0},
@@ -37,7 +38,7 @@ const propertySchema=new Schema({
 
 
     //admin can bacn the post
-    is_banned:{type:Boolean,default:false},
+    is_banned:{type:Boolean,default:false,message:String},
 
     //admin verification check
     is_verified:{
@@ -47,10 +48,13 @@ const propertySchema=new Schema({
     },
 
     //for recommendation it will be updated on write operation of simialr product content based
-    recommendation:[String] //store refrenced similar product
+    recommendation:{
+        type:[Types.ObjectId],
+        default:undefined
+    } //store refrenced similar product
 })
 
 
 //export the model instance for performing Query operations
- export const propertyModel=model("Properties",propertySchema);
+ export const propertyModel=model<Property>("Properties",propertySchema);
 

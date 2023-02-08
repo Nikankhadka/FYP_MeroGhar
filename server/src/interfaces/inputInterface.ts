@@ -1,4 +1,4 @@
-
+import { Types } from "mongoose"
 export interface updateProfile{
     userName:string,
     password:string,
@@ -28,3 +28,4 @@ export interface KycData{
     }
     
 }
+

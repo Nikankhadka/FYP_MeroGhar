@@ -63,3 +63,35 @@ import { Types } from "mongoose"
   
  }
  
+
+ export interface Property{
+  _id:Types.ObjectId;
+  userId: string;
+  name: string;
+  url: string;
+  location: {
+      city: string;
+      area: string;
+  };
+  discription: string;
+  property_type: string;
+  rules: string[];
+  amenities: string[];
+  price: number;
+  images: {
+      img_id: string;
+      img_url: string;
+  }[];
+  tennants: Types.ObjectId[];
+  current_tennant: Types.ObjectId;
+  rating_count: number;
+  viewCount: number;
+  avg_Rating: number;
+  is_banned: boolean;
+  is_verified: {
+      status: boolean;
+      message: string;
+      approvedBy: string;
+  };
+  recommendation:Types.ObjectId[];
+}

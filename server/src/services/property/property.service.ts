@@ -1,5 +1,29 @@
+import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
+
+
+
+export const createPropertyS=async(userId:string,propertyData:Partial<Property>)=>{
+    try{
+        
+    }catch(e){
+        console.log(e);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const updateViewCountS=async(userId:string,propertyId:string):Promise<boolean>=>{
     try{
