@@ -4,6 +4,7 @@ import { userModel } from "../../models/user";
 
 
 
+//property is not crated only request is send to admin for property post verification
 export const createPropertyS=async(userId:string,propertyData:Partial<Property>)=>{
     try{
         
