@@ -43,6 +43,7 @@ const propertySchema=new Schema({
     //admin verification check
     is_verified:{
         status:Boolean,
+        pending:Boolean,
         message:String,
         approvedBy:String
     },
