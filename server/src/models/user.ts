@@ -127,6 +127,11 @@ export const userSchema=new Schema({
         kycVerificationRequests:{
             type:[ {type:Schema.Types.ObjectId,ref:"Users"}],
             default:undefined
+        },
+
+        propertyVerificationRequests:{
+            type:[ {type:Schema.Types.ObjectId,ref:"Properties"}],
+            default:undefined
         }
 
 })

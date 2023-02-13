@@ -3,7 +3,8 @@ import { userModel } from "../../models/user";
 declare module "jsonwebtoken" {
      interface JwtPayload {
        userId: string,
-       is_Admin:boolean
+       is_Admin:boolean,
+       kycVerified:boolean
    }
 }
 
@@ -69,7 +70,7 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
         if(!verifiedUser) throw new Error("Invalid User Credentials")
         
         //since user is been verfied 
-         const {accessToken,refreshToken}=await generateTokens(userId,foundUser.is_Admin);
+         const {accessToken,refreshToken}=await generateTokens(userId,foundUser.is_Admin,foundUser.kyc.is_verified);
 
         //now append refresh token to userdocument 
          const tokenStored=await foundUser.refreshToken.push(refreshToken);
@@ -93,16 +94,16 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
 
 
 //service layer to verify token along with user in db
-export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{userId:string,is_Admin:boolean}}>=>{
+export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{userId:string,is_Admin:boolean,kycVerified:boolean}}>=>{
     try{
         
         //if token is expire or error here it will be cathced and handled
-       const {userId,is_Admin}=await <jwt.JwtPayload>jwt.verify(token,process.env.accessToken!)
-        const isValid=await userModel.findOne({userId,is_Admin});
+       const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload>jwt.verify(token,process.env.accessToken!)
+        const isValid=await userModel.findOne({userId,is_Admin,kyc:{is_verified:kycVerified}});
         if(!isValid) throw new Error("invalid token data")
     
         //now since tokenn data is validated just return query status and token data
-        return {success:true,tokendata:{userId,is_Admin}}
+        return {success:true,tokendata:{userId,is_Admin,kycVerified}}
 
     }catch(e){
         console.log(e)
@@ -122,8 +123,8 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
             if(!foundUser){
                
                     //hacked user
-                    const {userId,is_Admin} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
-                    const hackedUser=await userModel.findOne({userId,is_Admin})
+                    const {userId,is_Admin,kycVerified} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
+                    const hackedUser=await userModel.findOne({userId,is_Admin,kyc:{is_verified:kycVerified}})
                     if(!hackedUser) throw new Error("Invalid token data, user not valid")
                     //if user is hacked
                     hackedUser.refreshToken=[]
@@ -136,17 +137,17 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                 //since refreh token was found in userdb verify token data
                 try{
                     
-                    const {userId,is_Admin}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
+                    const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
                     //validate token data
                     if (foundUser.userId !==userId) throw new Error("invalid token use detected,data mismatched");
 
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
-                        userId, is_Admin
+                        userId, is_Admin,kycVerified
                     },process.env.accessToken!,{expiresIn:"1800s"})
             
                     const newrefreshToken=await jwt.sign({
-                        userId,is_Admin
+                        userId,is_Admin,kycVerified
                     },process.env.refreshToken!,{expiresIn:"30 days"})
             
                     //store refrehtoken 
@@ -181,7 +182,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
             console.log("user with email exist")
-            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin);
+            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin,userExist.kyc.is_verified);
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
@@ -205,7 +206,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             }
         })
         await newUser.save();
-        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin);
+        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
@@ -229,7 +230,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
         const{userName,email,profile_Img}=profileData
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
-            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin);
+            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin,userExist.kyc.is_verified);
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
@@ -246,7 +247,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             }
         })
         await newUser.save();
-        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin);
+        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();

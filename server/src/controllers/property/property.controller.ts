@@ -1,5 +1,34 @@
 import { Request,Response } from "express";
-import { updateViewCountS } from "../../services/property/property.service";
+import { updateViewCountS,createPropertyS } from "../../services/property/property.service";
+
+
+
+
+
+export const createPropertyC=async(req:Request,res:Response)=>{
+    try{
+        //check kyc verifcation 
+        if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});
+        const newProperty=await createPropertyS(req.userData.userId,req.body)
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const updateViewCountC=async(req:Request,res:Response)=>{
     try{
