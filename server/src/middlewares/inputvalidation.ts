@@ -85,10 +85,9 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
 }
 
 
-export const validateProperty = async (req: Request, res: Response, next: NextFunction) => {
+export const validatePropertyInput = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const PropertySchema = joi.object({
-            
             name: joi.string().required(),
             location:{
                 city: joi.string().min(4).required(),

@@ -42,9 +42,14 @@ const propertySchema=new Schema({
 
     //admin verification check
     is_verified:{
-        status:Boolean,
+        status:{
+            type:Boolean,
+            default:false
+        },
         pending:Boolean,
         message:String,
+
+        //can be string or obj id can modify later
         approvedBy:String
     },
 
