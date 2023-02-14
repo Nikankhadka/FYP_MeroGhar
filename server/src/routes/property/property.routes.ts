@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createPropertyC, updateViewCountC } from "../../controllers/property/property.controller";
 import { checkCookie, verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
-import { validateProperty } from "../../middlewares/inputvalidation";
+import { validatePropertyInput } from "../../middlewares/inputvalidation";
 
 
 
@@ -9,7 +9,7 @@ import { validateProperty } from "../../middlewares/inputvalidation";
 const router=Router()
 
 //view count sepeerate api for more accurate view count of the product
-router.post("/createProperty",verifyaccessToken,verifyRole(false),validateProperty,createPropertyC)
+router.post("/createProperty",verifyaccessToken,verifyRole(false),validatePropertyInput,createPropertyC)
 router.patch("/updateViewCount/:id",checkCookie,verifyaccessToken,verifyRole(false),updateViewCountC)
 
 

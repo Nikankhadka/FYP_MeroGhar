@@ -90,6 +90,7 @@ import { Types } from "mongoose"
   is_banned: boolean;
   is_verified: {
       status: boolean;
+      pending:boolean
       message: string;
       approvedBy: string;
   };
