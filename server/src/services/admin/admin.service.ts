@@ -1,7 +1,8 @@
 import { userModel } from "../../models/user";
 import {hash} from "bcrypt"
-import { IUser } from "../../interfaces/dbInterface";
+import { IUser, Property } from "../../interfaces/dbInterface";
 import { verifyKyc } from "../../interfaces/admin";
+import { propertyModel } from "../../models/property";
 
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
@@ -94,4 +95,20 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
         console.log(e);
         throw e;
     }
+}
+
+
+
+export const getPropertyRequestsS=async():Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending 
+        const propertyRequests=await propertyModel.find({is_verified:{status:false,pending:true}})
+        if(!propertyRequests) throw new Error("No property to be verified right now")
+        return propertyRequests
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
 }

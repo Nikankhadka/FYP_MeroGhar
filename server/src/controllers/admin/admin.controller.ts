@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getKycRequestsS, registerAdminS, verifyKycRequestsS} from "../../services/admin/admin.service";
+import { getKycRequestsS, getPropertyRequestsS, registerAdminS, verifyKycRequestsS} from "../../services/admin/admin.service";
 import joi from "joi"
 
 
@@ -40,6 +40,17 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
 
     }catch(e:any){
         console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+
+export const getPropertyRequestsC=async(req:Request,res:Response)=>{
+    try{   
+        const propertyRequests=await getPropertyRequestsS()
+        return res.status(200).json({success:true,propertyRequests})
+    }catch(e:any){
+        console.log(e)
         res.status(400).json({success:false,error:e.message})
     }
 }

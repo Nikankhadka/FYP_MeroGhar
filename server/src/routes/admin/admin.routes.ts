@@ -13,6 +13,8 @@ router.use(verifyRole(true))
 router.post("/registerAdmin",validateInput,registerAdminC)
 router.get("/kycRequests",getKycRequestsC)
 router.patch("/kycRequests/:id",verifyKycRequestsC)
+router.get("/propertyRequests")
+
 
 
 
