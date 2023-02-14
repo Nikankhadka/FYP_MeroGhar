@@ -4,7 +4,7 @@ import { Property } from "../interfaces/dbInterface";
 
 const propertySchema=new Schema({
     _id:Types.ObjectId,
-    userId:{type:String,required:true},
+    userId:{type:String,required:true,immutable:true},
 
     //this will be default generated
     name:{type:String,required:true},

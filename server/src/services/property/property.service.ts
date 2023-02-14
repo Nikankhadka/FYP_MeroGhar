@@ -1,7 +1,7 @@
 import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
-
+import throwOnEmpty from "mongoose"
 
 
 //property is not crated only request is send to admin for property post verification
@@ -34,7 +34,29 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
 }
 
 
+export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Property>):Promise<Property>=>{
+    try{
+        //check property ownership before modification 
+        const checkProperty=await propertyModel.findOne({_id:id,userId})
+        if(!checkProperty) throw new Error("Invalid request credential/unAuthorized user");
 
+        //now update the property information 
+        const updatedProperty=await propertyModel.findOneAndUpdate({_id:id,userId},{...updateData,
+            is_verified:{status:false,pending:true,message:"Update needs reverification"}},{new:true});
+        
+        
+       /* updatedProperty!.is_verified.status=false,
+        updatedProperty!.is_verified.pending=true,
+        updatedProperty!.is_verified.message="Property updated so need Reverification"**/
+
+        if(!updatedProperty) throw new Error("Property Update Failed")
+        return updatedProperty
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
 
 
 
