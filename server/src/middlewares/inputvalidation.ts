@@ -85,7 +85,7 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
 }
 
 
-export const validatePropertyInput = async (req: Request, res: Response, next: NextFunction) => {
+export const validatePropertyInput = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const PropertySchema = joi.object({
             name: joi.string().required(),
@@ -114,4 +114,36 @@ export const validatePropertyInput = async (req: Request, res: Response, next: N
         return res.status(400).json(err);
     }
 };
+
+export const validatePropertyUpdate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const PropertySchema = joi.object({
+            name: joi.string().optional(),
+            location:{
+                city: joi.string().min(4).optional(),
+                area: joi.string().min(4).optional(),
+            },
+            discription: joi.string().min(15).optional(),
+            property_type: joi.string().optional(),
+            rules: joi.array().items(joi.string()).optional(),
+            amenities: joi.array().items(joi.string()).optional(),
+            price: joi.number().optional(),
+            images: joi.array().items(
+                {
+                    img_id: joi.string().required(),
+                    img_url: joi.string().required(),
+                }
+            ).optional()
+        });
+
+        const { error, value } = PropertySchema.validate(req.body, { abortEarly: false });
+        if (error) return res.status(400).json({ success: false, message: error.message });
+
+        next();
+    } catch (err) {
+        return res.status(400).json(err);
+    }
+};
+
+
 

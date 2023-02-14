@@ -17,9 +17,7 @@ import YAML from "yamljs"
 
 
 //importing routes
-import authRoutes from "./routes/auth/auth.routes"
-import userRoutes from "./routes/user/user.routes"
-import adminRoutes from "./routes/admin/admin.routes"  
+import indexRouter from "./routes/index.routes"
 import { clearUser } from "./middlewares/auth.middleware"
 
 
@@ -75,9 +73,7 @@ app.use("/apiDocs",swaggerUi.serve,swaggerUi.setup(apiDocumentation)) //the obj 
 
 //routes registration  before defning any routes 
 //define prefix else nothing but the routepath should be uniqe
-app.use("/auth/v1",authRoutes);
-app.use("/user/v1",userRoutes)
-app.use("/admin/v1",adminRoutes)
+app.use(indexRouter)
 
 
 
