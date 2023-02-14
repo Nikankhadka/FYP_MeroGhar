@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getKycRequestsS, getPropertyRequestsS, registerAdminS, verifyKycRequestsS} from "../../services/admin/admin.service";
+import { getKycRequestsS, getPropertyRequestsS, registerAdminS, verifyKycRequestsS,verifyPropertyRequestsS} from "../../services/admin/admin.service";
 import joi from "joi"
 
 
@@ -51,6 +51,28 @@ export const getPropertyRequestsC=async(req:Request,res:Response)=>{
         return res.status(200).json({success:true,propertyRequests})
     }catch(e:any){
         console.log(e)
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+
+
+export const verifyPropertyRequestsC=async(req:Request,res:Response)=>{
+    try{
+        const propertyVerify=joi.object({
+            isVerified:joi.boolean().required(),
+            message:joi.string().min(5).optional(),
+        })
+
+        const{error,value}=propertyVerify.validate(req.body,{abortEarly:false})
+        if(error) return res.status(400).json({success:false,message:error.message})
+
+        const requestVerified=await verifyPropertyRequestsS(req.userData.userId,req.params.id,req.body.isVerified,req.body.message);
+        //since error thrown is the failure otherwise verified or not is part of the query so its ok
+        if(requestVerified)return res.status(200).json({success:true,message:`property successfully ${req.body.isVerified}`})
+
+    }catch(e:any){
+        console.log(e);
         res.status(400).json({success:false,error:e.message})
     }
 }
