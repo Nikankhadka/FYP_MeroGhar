@@ -34,6 +34,24 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
     }
 }
 
+export const getPropertyS=async(id:string,userId:string):Promise<Property>=>{
+    try{
+        if(userId!==""){
+            //check whether it is the property owner 
+            const ownedProperty=await propertyModel.findOne({_id:id,userId});
+            if(ownedProperty) return ownedProperty
+        }
+        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+        if(!propertyData) throw new Error("Proper data fetching failed")
+        return propertyData;
+        
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+}
+
+
 
 export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Property>):Promise<Property>=>{
     try{
