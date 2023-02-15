@@ -43,7 +43,7 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
 
         //not necessary to call but call
         await newUser.save();
-        console.log(newUser._id);
+        if(!newUser) throw new Error("User registration failed")
         return true;
 
     }catch(e){
@@ -206,6 +206,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             }
         })
         await newUser.save();
+        if(!newUser) throw new Error("new user creation failed")
         const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
@@ -247,6 +248,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             }
         })
         await newUser.save();
+        if(!newUser) throw new Error("new user registration failed")
         const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);

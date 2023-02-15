@@ -26,6 +26,7 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
         })
 
         await newProperty.save(); 
+        if(!newProperty) throw new Error("Property post failed")
         return true;
     }catch(e){
         console.log(e);
@@ -78,9 +79,9 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
 
             //now append the product
             const updateViewedProperty= await userModel.findOneAndUpdate({userId},{$push:{viewed_property:propertyId}},{new:true})
-
+            if(!updateViewedProperty) throw new Error("view update failed")
             //now since appended check the array size of morethan 10 remove first property
-            if(updateViewedProperty?.viewed_property.length!>10) {
+            if(updateViewedProperty?.viewed_property.length! >10) {
                 updateViewedProperty?.viewed_property.shift() 
                 await updateViewedProperty?.save()
             }
@@ -92,7 +93,7 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
                 viewCount:1
             }
         })
-
+        if(!updateViewCount) throw new Error("update view count failed")
         return true;
 
     }catch(e){

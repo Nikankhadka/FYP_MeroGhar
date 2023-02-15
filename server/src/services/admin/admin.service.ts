@@ -20,7 +20,8 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
         })
 
         //not necessary to call but call
-        await newUser.save();
+        await newUser.save(); 
+        if(!newUser) throw new Error("User failed to register")
         console.log(newUser._id);
         return true;
 
@@ -94,6 +95,7 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             }
         })
 
+        if(!deleteKycRequests) throw new Error("Kyc Request delete failed")
         return true;
 
     }catch(e){
