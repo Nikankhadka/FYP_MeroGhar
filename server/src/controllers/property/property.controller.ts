@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { updateViewCountS,createPropertyS,updatePropertyS} from "../../services/property/property.service";
+import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyS} from "../../services/property/property.service";
 
 
 
@@ -16,6 +16,21 @@ export const createPropertyC=async(req:Request,res:Response)=>{
         res.status(400).json({success:false,error:e.message})
     }
 }
+
+export const getPropertyC=async(req:Request,res:Response)=>{
+    try{
+        if(req.userData.userId==""){
+            const propertyData=await getPropertyS(req.params.id,"");
+            return res.status(200).json({success:true,propertyData})
+        }
+        const propertyData=await getPropertyS(req.params.id,req.userData.userId);
+        return res.status(200).json({success:true,propertyData})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
 
 
 export const updatePropertyC=async(req:Request,res:Response)=>{

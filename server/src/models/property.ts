@@ -10,6 +10,7 @@ const propertySchema=new Schema({
     name:{type:String,required:true},
     url:String,
     location:{
+        country:String,
         city:String,
         area:String,
         required:true,
@@ -30,12 +31,15 @@ const propertySchema=new Schema({
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
         default:undefined
     },
-    current_tennant:Types.ObjectId,
-   
+    //this can be used to set the current property status for booking
+    currentStatus:{
+        availability:Boolean,
+        availableAfter:Date
+    },
+    tennantId:Schema.Types.ObjectId,
     rating_count:{type:Number,default:0},
     viewCount:{type:Number,default:0},
     avg_Rating:{type:Number,default:0},
-
 
     //admin can bacn the post
     is_banned:{type:Boolean,default:false,message:String},

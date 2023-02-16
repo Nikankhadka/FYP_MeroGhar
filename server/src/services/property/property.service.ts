@@ -26,12 +26,31 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
         })
 
         await newProperty.save(); 
+        if(!newProperty) throw new Error("Property post failed")
         return true;
     }catch(e){
         console.log(e);
         throw e;
     }
 }
+
+export const getPropertyS=async(id:string,userId:string):Promise<Property>=>{
+    try{
+        if(userId!==""){
+            //check whether it is the property owner 
+            const ownedProperty=await propertyModel.findOne({_id:id,userId});
+            if(ownedProperty) return ownedProperty
+        }
+        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+        if(!propertyData) throw new Error("Proper data fetching failed")
+        return propertyData;
+        
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+}
+
 
 
 export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Property>):Promise<Property>=>{
@@ -78,9 +97,9 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
 
             //now append the product
             const updateViewedProperty= await userModel.findOneAndUpdate({userId},{$push:{viewed_property:propertyId}},{new:true})
-
+            if(!updateViewedProperty) throw new Error("view update failed")
             //now since appended check the array size of morethan 10 remove first property
-            if(updateViewedProperty?.viewed_property.length!>10) {
+            if(updateViewedProperty?.viewed_property.length! >10) {
                 updateViewedProperty?.viewed_property.shift() 
                 await updateViewedProperty?.save()
             }
@@ -92,7 +111,7 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
                 viewCount:1
             }
         })
-
+        if(!updateViewCount) throw new Error("update view count failed")
         return true;
 
     }catch(e){

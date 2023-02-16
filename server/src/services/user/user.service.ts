@@ -42,6 +42,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
              "Token":token
         }})
 
+        if(!emailUpdate) throw new Error("Email update failed")
         //now pass this token to mail and send it to verify the userMail Update request
         const updateMailRequest=sendMail(postEmailTemplate(Email,token))
         
@@ -71,6 +72,8 @@ export const verifyEmailS=async(Token:string):Promise<boolean>=>{
             "email.is_verified":true,
             "kycInfo.email":tokenMatch.email?.mail
             }})
+        
+        if(!emailUpdate) throw new Error("Email verification failed")
         return true;
 
     }catch(e){
@@ -93,6 +96,7 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
         }
 
         const updatedUserProfile=await userModel.updateOne({userId},{...profileData},{new:true});
+        if(!updatedUserProfile) throw new Error("User profile update failed")
         return true
 
     }catch(e){
