@@ -85,7 +85,7 @@ export const userSchema=new Schema({
         },
 
         //no of property posted by user
-        listing_Count:{type: Number},
+        listing_Count:{type: Number,default:0},
 
         //rating and review count will be updated on write every time user property is reviewd
         avg_rating:{type: Number}, 

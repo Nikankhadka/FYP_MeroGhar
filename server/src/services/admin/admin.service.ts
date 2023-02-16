@@ -138,7 +138,7 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
         }
 
         
-        const verifyProperty=await propertyModel.updateOne({_id:propertyId},{
+        const verifyProperty=await propertyModel.findOneAndUpdate({_id:propertyId},{
             "$set":{
                 "is_verified.status":status,
                 "is_verified.pending":false,
@@ -147,6 +147,15 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
             }})
 
         if(!verifyProperty) throw new Error("Property verification failed");
+
+        //increase the property post count for user
+          const updateCount=await userModel.updateOne({userId:verifyProperty.userId},{
+            "$inc":{
+                listing_Count:1
+            }
+          })
+
+          if(!updateCount) throw new Error("Property verified but failed to update user posting count")
         return true;
 
     }catch(e){
