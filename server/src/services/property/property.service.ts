@@ -1,7 +1,7 @@
 import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
-import throwOnEmpty from "mongoose"
+
 
 
 //property is not crated only request is send to admin for property post verification
@@ -41,7 +41,7 @@ export const getPropertyS=async(id:string,userId:string):Promise<Property>=>{
             const ownedProperty=await propertyModel.findOne({_id:id,userId});
             if(ownedProperty) return ownedProperty
         }
-        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+        const propertyData=await propertyModel.findOne({_id:id,is_verified:{status:true}}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
         if(!propertyData) throw new Error("Proper data fetching failed")
         return propertyData;
         
@@ -61,7 +61,7 @@ export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Pr
 
         //now update the property information 
         const updatedProperty=await propertyModel.findOneAndUpdate({_id:id,userId},{...updateData,
-            is_verified:{status:false,pending:true,message:"Update needs reverification"}},{new:true});
+        is_verified:{status:false,pending:true,message:"Update needs reverification"}},{new:true});
         
         
        /* updatedProperty!.is_verified.status=false,
@@ -81,7 +81,30 @@ export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Pr
 
 
 
+export const deletePropertyS=async(userId:string,propertyId:string):Promise<boolean>=>{
+    try{
+        const checkProperty=await propertyModel.findOne({_id:propertyId,userId});
+        if(!checkProperty) throw new Error("Invalid Delete Request/No property with the User exist");
 
+        //now delete
+        const deleteProperty=await propertyModel.findOneAndDelete({_id:propertyId,userId});
+        if(!deleteProperty) throw new Error("Propery Delete failed");
+
+        //now property delete so decrease listing count from user profile
+        const decreaseCount=await userModel.updateOne({userId},{
+            $inc:{
+                listing_Count:-1
+            }
+        })
+
+        if(!decreaseCount) throw new Error("Propety deleted failed to decrease listing count");
+
+        return true;
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
 
 
 
