@@ -51,8 +51,6 @@ export const userSchema=new Schema({
         //will contain the token value for token rotation
         refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
-
-        
         kycInfo:{
             firstName:String,
             lastName:String,

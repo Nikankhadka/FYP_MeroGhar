@@ -1,5 +1,23 @@
 import { Types } from "mongoose"
 
+
+
+interface kycSchema{
+    firstName: string
+    lastName: string
+    gender: string
+    email: string
+    phoneNumber: string
+    address: {
+      country: string
+      city: string
+    };
+    img: {
+      img_id: string
+      img_url: string
+    }[];
+  
+}
  export interface IUser {
     userId: string
     userName: string
@@ -18,21 +36,7 @@ import { Types } from "mongoose"
     updated_At: Date
     refreshToken: string[]
     is_Admin: boolean
-    kycInfo: {
-      firstName: string
-      lastName: string
-      gender: string
-      email: string
-      phoneNumber: string
-      address: {
-        country: string
-        city: string
-      };
-      img: {
-        img_id: string
-        img_url: string
-      }[];
-    };
+    kycInfo:kycSchema,
     kyc: {
       is_verified: boolean
       message: string
@@ -49,18 +53,7 @@ import { Types } from "mongoose"
     rented_property: Types.ObjectId[]
     recommendation: Types.ObjectId[]
     viewed_property: Types.ObjectId[]
-    kycVerificationRequests: Types.ObjectId[]|{
-            firstName: string
-            lastName: string
-            gender: string
-            email: string
-            phoneNumber: string
-            address: {
-              country: string
-              city: string
-            }
-    }[]
-  
+    kycVerificationRequests: Types.ObjectId[]|kycSchema[]
  }
  
 

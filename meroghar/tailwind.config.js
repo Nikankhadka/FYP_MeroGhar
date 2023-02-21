@@ -17,6 +17,9 @@ module.exports = {
         yellow: colors.amber,
         purple: colors.violet,
         gray: colors.neutral
+      },
+      width:{
+        '568':'142rem'
       }
     },
   },
