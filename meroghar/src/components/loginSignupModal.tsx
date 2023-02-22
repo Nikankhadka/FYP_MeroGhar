@@ -6,6 +6,22 @@ interface LoginRegister{
     password:string
 }
 
+interface SocialLoginProps{
+    placeholder:string,
+    url:string,
+    img:string
+}
+
+function SocialLogin({placeholder,url,img}:SocialLoginProps):JSX.Element{
+    return(
+        <a href={url} className='group w-[95%] my-1 border-2 border-gray-500  rounded-md  p-3 flex  items-center text-md text-mainColor hover:bg-mainColor' >
+                <img src={img} alt="google" className='h-5 w-5 rounded' />
+                <span className=' w-[90%] text-center group-hover:text-white'>{placeholder}</span>
+        </a>
+    )
+}
+
+
 const inputStyle='w-[95%] h-11 border-2 border-gray-400  my-1 rounded-md  text-gray-700 text-md p-2 hover:bg-hoverColor'
 export default function LoginSignupModal():JSX.Element{
     const{register,handleSubmit,watch,formState:{errors}}=useForm()
@@ -42,15 +58,9 @@ export default function LoginSignupModal():JSX.Element{
             <hr className='w-[44%] my-4 border-[1px] border-gray-400'  />
             </div>
 
-            <a href="#" className='group w-[95%] my-1 border-2 border-gray-500  rounded-md  p-3 flex  items-center text-md text-mainColor hover:bg-mainColor' >
-                <img src="facebook.png" alt="google" className='h-5 w-5 rounded' />
-                <span className=' w-[90%] text-center group-hover:text-white'>Continue with Facebook</span>
-            </a>
-            <a href="#" className='group w-[95%] my-1 border-2 border-gray-500  rounded-md  p-3 flex  items-center text-md text-mainColor hover:bg-mainColor' >
-                <img src="google.png" alt="google" className='h-5 w-5 rounded' />
-                <span className=' w-[90%] text-center group-hover:text-white'>Continue with Google</span>
-            </a>
-
+            
+            <SocialLogin placeholder='Continue with Google' url='#' img='google.png'/>
+            <SocialLogin placeholder='Continue with Facebook' url='#' img='facebook.png'/>
             <div className='w-full  my-1 flex justify-center items-center'>     
             
             <span className='text-md my-2'>Dont Have Account? <a href="#" className='text-md text-mainColor hover:underline'>Sign Up</a></span>
