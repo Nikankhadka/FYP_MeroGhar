@@ -11,12 +11,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        appBackground:'#D4E5E6',
         mainColor:"#22546D",
+        themeColor:"#54A2C9",
+        hoverColor:'#cee4ef',
         green: colors.emerald,
         yellow: colors.amber,
         purple: colors.violet,
         gray: colors.neutral
+      },
+      width:{
+        '568':'142rem'
       }
     },
   },

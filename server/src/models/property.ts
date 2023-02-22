@@ -13,7 +13,7 @@ const propertySchema=new Schema({
         country:String,
         city:String,
         area:String,
-        required:true,
+
     },
     discription:{type:String,required:true},
     property_type:{type:String,required:true},
@@ -59,7 +59,7 @@ const propertySchema=new Schema({
 
     //for recommendation it will be updated on write operation of simialr product content based
     recommendation:{
-        type:[Types.ObjectId],
+        type:[{type:Types.ObjectId}],
         default:undefined
     } //store refrenced similar product
 })
