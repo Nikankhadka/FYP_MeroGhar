@@ -122,6 +122,11 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
     try{
         //if not empty append the product into viewed product
         if(userId!==""){
+
+            //check if its property owner then dont count 
+            const propertyOwner=await propertyModel.findOne({_id:propertyId,userId});
+            if(propertyOwner) return false;
+            
             const checkViewed=await userModel.findOne({userId,viewed_property:propertyId});
             //donot update view if same user views the property
             if(checkViewed) return false;
@@ -130,7 +135,7 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
             const updateViewedProperty= await userModel.findOneAndUpdate({userId},{$push:{viewed_property:propertyId}},{new:true})
             if(!updateViewedProperty) throw new Error("view update failed")
             //now since appended check the array size of morethan 10 remove first property
-            if(updateViewedProperty?.viewed_property.length! >10) {
+            if(updateViewedProperty.viewed_property.length! >10) {
                 updateViewedProperty?.viewed_property.shift() 
                 await updateViewedProperty?.save()
             }

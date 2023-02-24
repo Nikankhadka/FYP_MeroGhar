@@ -90,10 +90,12 @@ export const userSchema=new Schema({
         recieved_Reviewcount:{type: Number},
 
         //document id of refrenced product donot create new document in different collection
-        wishList:{
-            type:[{type:Schema.Types.ObjectId,ref:"properties"}],
-            default:undefined
-        }
+        wishList:[
+            {
+                listName:String,
+                properties:[{type:Schema.Types.ObjectId,ref:"properties"}]
+            }
+        ]
         ,
            
         
