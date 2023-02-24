@@ -1,66 +1,115 @@
 'use client'
-import {useForm,SubmitHandler} from 'react-hook-form'
-
-interface LoginRegister{
-    userId:string,
-    password:string
-}
-
-const inputStyle='w-[95%] h-11 border-2 border-gray-400  my-1 rounded-md  text-gray-700 text-md p-2 hover:bg-hoverColor'
-export default function LoginSignupModal():JSX.Element{
-    const{register,handleSubmit,watch,formState:{errors}}=useForm()
-
-    // const onSubmit:SubmitHandler<LoginRegister>=(data)=>{
-    //     console.log(formData)
-    // }
-
-    return(
-        <div className="w-4/5   md:w-[540px] mx-auto my-5 shadow-lg rounded-lg flex flex-col justify-center items-center">
-      
-            <div className=' w-full border-b-2 border-gray-200  p-3 flex items-center'>
-                <p className='w-11/12 text-mainColor text-lg text-center font-semibold '>Log in or Sign up</p>
-                <button className='p-1 rounded-full hover:bg-hoverColor'><img src="close.png" alt="cros" className='h-4 w-4 ' /></button>
-            </div>
-
-            <div className='w-full p-2 flex justify-center'>
-
-            <form  className='w-11/12  flex flex-col justify-center items-center gap-1 '>
-
-            <p className=' w-[95%] text-xl font-semibold my-3 text-mainColor text-left'>Welcome to MeroGhar</p>
-
-            <input type="text" placeholder='userId' className='w-[95%] h-11 border-2 border-gray-400  my-1 rounded-md  text-gray-700 text-md p-2 hover:bg-hoverColor' {...register("userId",{required:true,minLength:4,maxLength:10})} />
-           
-            <input type='password' placeholder='password' className={inputStyle}{...register("password",{required:true,minLength:4,pattern:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/})} />
-           
-            <a href="#" className='text-md text-mainColor mr-6 my-1 self-end hover:underline'>Forgot Password?</a>
-            <input type="submit" className='w-[95%] my-1 rounded-md text-md text-white p-3 bg-themeColor hover:bg-mainColor cursor-pointer' value="Login" />
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { SocialLogin } from './buttons'
+import { inputStyle } from '../styles/variants'
+import { loginSignupModal } from '../interface/buttons'
+import { LoginRegisterInput } from '../interface/inputs'
+import { ErrorText } from './random'
 
 
-            <div className='w-full flex justify-center items-center'>     
-            <hr className='w-[44%] my-4 border-[1px] border-gray-400'  />
-            <span className='text-md mx-1'>or</span>
-            <hr className='w-[44%] my-4 border-[1px] border-gray-400'  />
-            </div>
 
-            <a href="#" className='group w-[95%] my-1 border-2 border-gray-500  rounded-md  p-3 flex  items-center text-md text-mainColor hover:bg-mainColor' >
-                <img src="facebook.png" alt="google" className='h-5 w-5 rounded' />
-                <span className=' w-[90%] text-center group-hover:text-white'>Continue with Facebook</span>
+
+
+export default function LoginSignupModal({ login }: loginSignupModal): JSX.Element {
+  const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
+
+  const onSubmit: SubmitHandler<LoginRegisterInput> = (data) => {
+    console.log('inside on submit')
+    console.log(data)
+  }
+
+  return (
+    <div className="mx-auto   my-5 flex w-4/5 flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]">
+     
+      <div className=" flex w-full items-center  border-b-2 border-gray-200 p-3">
+        <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
+          {login ? 'Log in' : 'Sign up'}
+        </p>
+        <button className="rounded-full p-1 hover:bg-hoverColor">
+          <img src="close.png" alt="cros" className="h-4 w-4 " />
+        </button>
+      </div>
+
+      <div className="flex w-full justify-center p-2">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex  w-11/12 flex-col items-center justify-center gap-1 "
+        >
+          <p className=" my-3 w-[95%] text-left text-xl font-semibold text-mainColor">
+            Welcome to MeroGhar
+          </p>
+
+          <input
+            type="text"
+            placeholder="userId"
+            className="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor"
+            {...register('userId', { required: true, minLength: 4 })}
+          />
+
+          {errors.userId && ( <ErrorText text='Please Enter Valid UserId'/>)}
+          <input
+            type="password"
+            placeholder="password"
+            className={inputStyle}
+            {...register('password', {
+              required: true,
+              minLength: 4,
+              pattern:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+            })}
+          />
+          {errors.password && (
+          <ErrorText text="Please Enter Valid Password" />
+          )}
+
+          {login && (
+            <a
+              href="#"
+              className="text-md my-1 mr-6 self-end text-mainColor hover:underline"
+            >
+              Forgot Password?
             </a>
-            <a href="#" className='group w-[95%] my-1 border-2 border-gray-500  rounded-md  p-3 flex  items-center text-md text-mainColor hover:bg-mainColor' >
-                <img src="google.png" alt="google" className='h-5 w-5 rounded' />
-                <span className=' w-[90%] text-center group-hover:text-white'>Continue with Google</span>
-            </a>
+          )}
 
-            <div className='w-full  my-1 flex justify-center items-center'>     
-            
-            <span className='text-md my-2'>Dont Have Account? <a href="#" className='text-md text-mainColor hover:underline'>Sign Up</a></span>
-           
-            </div>
+          <input
+            type="submit"
+            className="text-md my-1 w-[95%] cursor-pointer rounded-md bg-themeColor p-2 text-white hover:bg-mainColor"
+            value={login ? 'Log in' : 'Sign up'}
+          />
+
+          <div className="flex w-full items-center justify-center">
+            <hr className="my-4 w-[44%] border-[1px] border-gray-400" />
+            <span className="text-md mx-1">or</span>
+            <hr className="my-4 w-[44%] border-[1px] border-gray-400" />
+          </div>
+
+          <SocialLogin
+            placeholder="Continue with Google"
+            url="#"
+            img="google.png"
+          />
+          <SocialLogin
+            placeholder="Continue with Facebook"
+            url="#"
+            img="facebook.png"
+          />
+          <div className="my-1  flex w-full items-center justify-center">
+            <span className="text-md my-2">
+              {login ? 'Dont Have Account ?' : 'Have Account ?'}{' '}
+              <a
+                href={
+                  login
+                    ? 'http://localhost:3000/signup'
+                    : 'http://localhost:3000/login'
+                }
+                className="text-md text-mainColor hover:underline"
+              >
+                {login ? 'Sign Up' : 'Login'}
+              </a>
+            </span>
+          </div>
         </form>
-            </div>
-
-      
-        </div>
-
-    )
-}   
+      </div>
+    </div>
+  )
+}
