@@ -11,7 +11,7 @@ import cors from "cors"
 import passport from "passport"
 import morgan from "morgan"
 import swaggerUi from "swagger-ui-express"
-import swaggerJsDoc from "swagger-jsdoc"
+
 import YAML from "yamljs"
 
 

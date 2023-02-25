@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from 'next/legacy/image'
+import { Search } from "./svgs"
 
 export default function Footer(){
     return(
@@ -25,9 +26,7 @@ interface footerprops{
 function FooterChild({url,img,text}:footerprops){
         return(
             <Link href={url} className=' text-xs  flex flex-col gap-2'>
-                <svg>
-                    
-                </svg>
+                <Search  className='text-red-600'/>
                 <span>{text}</span>
             </Link>
         )

@@ -109,7 +109,7 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken}=await facebookLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(200).redirect("http://localhost:3000/testpage")
+      .status(200).redirect("http://localhost:3000/test")
 
     }catch(e:any){
         console.log(e);
