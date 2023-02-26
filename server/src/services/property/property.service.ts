@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
@@ -34,24 +35,34 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
     }
 }
 
-export const getPropertyS=async(id:string,userId:string):Promise<{property:Property,user:string}>=>{
+export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:Property,user:string,inWishList:boolean}>=>{
     try{
         if(userId!==""){
+            
+            //check whether its a previous tennent 
+            const userdocument=await userModel.findOne({userId});
+
+
+            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+            if(!propertyData) throw new Error("No property with the given id")
+            
+            //check whether property is in wishlist of the user
+            const inWishList=userdocument!.wishList.some((wish)=> wish.properties.includes(id))
+
+            if(propertyData.tennants.includes(userdocument!._id)) return {property:propertyData,user:"tennant",inWishList}
+
             //check whether it is the property owner 
             const ownedProperty=await propertyModel.findOne({_id:id,userId});
-            if(ownedProperty) return {property:ownedProperty,user:"owner"};
+            if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
 
-            //check whether its a previous tennent 
-            const userdocumentId=await userModel.findOne({userId});
-            const previousTennant=await propertyModel.findOne({_id:id,tennants:userdocumentId!._id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");;
-            if(!previousTennant) return {property:previousTennant!,user:"user"};
-            //else
-            return {property:previousTennant!,user:"tennant"}
+            //now for normal user 
+            return {property:propertyData,user:"user",inWishList}
 
+            
         }
         const propertyData=await propertyModel.findOne({_id:id,is_verified:{status:true}}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
         if(!propertyData) throw new Error("Proper data fetching failed")
-        return {property:propertyData,user:""};
+        return {property:propertyData,user:"",inWishList:false};
         
     }catch(e){
         console.log(e)

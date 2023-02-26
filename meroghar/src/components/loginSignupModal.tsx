@@ -85,12 +85,12 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
 
           <SocialLogin
             placeholder="Continue with Google"
-            url="#"
+            url="http://localhost:2900/auth/v1/google-login"
             img="google.png"
           />
           <SocialLogin
             placeholder="Continue with Facebook"
-            url="#"
+            url="http://localhost:2900/auth/v1/facebook-login"
             img="facebook.png"
           />
           <div className="my-1  flex w-full items-center justify-center">

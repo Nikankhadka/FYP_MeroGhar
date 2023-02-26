@@ -19,7 +19,7 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         next()  
     }catch(e:any){
         console.log(e)
-        return res.status(401).json({success:false,error:e.message})
+        return res.status(401).json({authState:false,error:e.message})
     }
     
         

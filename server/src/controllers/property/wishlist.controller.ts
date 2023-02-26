@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { addPropertyWishS } from "../../services/property/wishlist.service";
+import { addPropertyWishS, getWishListS,getWishPropertyListS } from "../../services/property/wishlist.service";
 
 
 export const addPropertyWishC=async(req:Request,res:Response)=>{
@@ -12,11 +12,24 @@ export const addPropertyWishC=async(req:Request,res:Response)=>{
     }
 }
 
-export const getPropertyWishListC=async(req:Request,res:Response)=>{
+export const getWishListC=async(req:Request,res:Response)=>{
     try{
-
+        const wishList=await getWishListS(req.userData.userId);
+        if(wishList) return res.status(200).json({success:true,wishList})
     }catch(e:any){
         console.log(e);
-        res.status(200).json({success:false,error:e.message})
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+export const getWishPropertyListC=async(req:Request,res:Response)=>{
+    try{
+        const page:string=req.query.page as string
+        const limit:string=req.query.limit as string
+        const wishList=await getWishPropertyListS(req.userData.userId,req.params.wishId,page,limit);
+        if(wishList) return res.status(200).json({success:true,wishList})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
     }
 }

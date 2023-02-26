@@ -14,7 +14,7 @@ export const signupMailTemplate=(userName:string,userEmail:string):mailBody=>{
         <h3>We are excited to have You with us in your Journey of renting and Renting out property </h3>
         <p>if u have not Verified Yourself by filling kyc form here it is ... </P>
         <br>
-        <a href="http://localhost:2900/user/v1/kycVerification">Kyc Form </a>
+        <a href="http://localhost:3000/kyc">Kyc Form </a>
          `
     }
 }
