@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPropertyC, deletePropertyC, getPropertyC, updatePropertyC, updateViewCountC } from "../../controllers/property/property.controller";
+import { createPropertyC, deletePropertyC, getPropertyByIdC, updatePropertyC, updateViewCountC } from "../../controllers/property/property.controller";
 import { checkCookie, verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
 import { validatePropertyInput, validatePropertyUpdate } from "../../middlewares/inputvalidation";
 
@@ -14,7 +14,7 @@ router.use("/review",reviewRoutes);
 router.use("/wishList",wishlistRoutes);
 
 //view count sepeerate api for more accurate view count of the product
-router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyC)
+router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyByIdC)
 router.post("/createProperty",verifyaccessToken,verifyRole(false),validatePropertyInput,createPropertyC)
 router.patch("/updateProperty/:id",verifyaccessToken,verifyRole(false),validatePropertyUpdate,updatePropertyC)
 
