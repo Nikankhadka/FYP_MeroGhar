@@ -102,3 +102,23 @@ interface kycSchema{
     recommendation: Types.ObjectId[];
   
 }
+
+
+
+export interface IReview{
+  userId:string,
+  propertyId:Types.ObjectId,
+  rating:{
+    property:number,
+    host:number,
+    value:number
+  },
+  overallRating:number,
+  review:string,
+  report:{
+    status:boolean,
+    message:string,
+    admin:string,
+    adminReview:string
+  }
+}

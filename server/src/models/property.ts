@@ -37,6 +37,8 @@ const propertySchema=new Schema({
         availableAfter:Date
     },
     tennantId:Schema.Types.ObjectId,
+
+    //calculate these on write
     rating_count:{type:Number,default:0},
     viewCount:{type:Number,default:0},
     avg_Rating:{type:Number,default:0},
