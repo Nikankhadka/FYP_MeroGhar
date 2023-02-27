@@ -86,7 +86,7 @@ export const userSchema=new Schema({
         listing_Count:{type: Number,default:0},
 
         //rating and review count will be updated on write every time user property is reviewd
-        avg_rating:{type: Number}, 
+        avg_rating:{type: Number,default:0}, 
         recieved_Reviewcount:{type: Number},
 
         //document id of refrenced product donot create new document in different collection

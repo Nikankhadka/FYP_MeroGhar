@@ -131,8 +131,8 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
             price: joi.number().optional(),
             images: joi.array().items(
                 {
-                    img_id: joi.string().required(),
-                    img_url: joi.string().required(),
+                    img_id: joi.string().optional(),
+                    img_url: joi.string().optional(),
                 }
             ).optional()
         });
@@ -148,3 +148,51 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
 
 
 
+export const validateReviewInput=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        //defined joi schema for input validation of requet body
+        const reviewSchema=joi.object({
+            rating:{
+                property:joi.number().min(1).max(5).optional(),
+                host:joi.number().min(1).max(5).optional(),
+                value:joi.number().min(1).max(5).optional()
+            },
+            overallRating:joi.number().min(1).max(5).optional(),
+            review:joi.string().min(5).max(50).optional()  
+        }).xor('rating','review')
+
+        const{error,value}=reviewSchema.validate(req.body,{abortEarly:false})
+        if(error) return res.status(422).json({success:false,message:error.message})
+        
+        console.log(value)
+        next()
+
+    }catch(err){
+        return res.status(400).json(err)
+    }
+}
+
+
+export const validateReviewUpdate=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        //defined joi schema for input validation of requet body
+        const reviewSchema=joi.object({
+            rating:{
+                property:joi.number().min(1).max(5).optional(),
+                host:joi.number().min(1).max(5).optional(),
+                value:joi.number().min(1).max(5).optional()
+            },
+            overallRating:joi.number().min(1).max(5).optional(),
+            review:joi.string().min(5).max(50).optional()  
+        }).xor('rating','overallRating','review')
+
+        const{error,value}=reviewSchema.validate(req.body,{abortEarly:false})
+        if(error) return res.status(422).json({success:false,message:error.message})
+        
+        console.log(value)
+        next()
+
+    }catch(err){
+        return res.status(400).json(err)
+    }
+}
