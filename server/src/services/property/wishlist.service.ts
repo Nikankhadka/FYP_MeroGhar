@@ -77,3 +77,25 @@ export const getWishPropertyListS=async(userId:string,wishId:string,page:string,
 
 
 //for get property by id use same as property but return the wishlist status on response to highlight the status
+
+export const removePropertyS=async(userId:string,id:string):Promise<boolean>=>{
+    try{
+        //validate property id 
+        const propertyExist =await propertyModel.findOne({_id:id})
+        if(!propertyExist) throw new Error("Invalid property Id/Property with the given id does not Exist!")
+
+        //now find and remove property from the user document 
+        const removeProperty=await userModel.findOneAndUpdate({userId,'wishList.properties':id},{
+            $pull:{
+                'wishList.$.properties':id
+            }
+        },{new:true});
+
+        if(!removeProperty) throw new Error("Property remove Failed/Invalid property Credential for the user!");
+        return true
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
