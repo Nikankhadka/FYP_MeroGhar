@@ -2,6 +2,8 @@
 
 
 
+
+
 const HomePage=()=>{
 
     //hooks and logics
@@ -9,7 +11,8 @@ const HomePage=()=>{
 
     return(
        
-            <h1>Home Page</h1>
+        <h1>homepgae</h1>
+        
        
 
 
