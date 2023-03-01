@@ -1,53 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/legacy/image'
-import { Search } from './svgs'
+import FooterChild from './Svg/footerchild'
 
-export default function Footer() {
+
+
+
+
+//footer is going to be server render
+export default function Footer(): JSX.Element {
+  //check get auth state from initail root layout then conditionally render footerchild
+  //path=router.patth
+
   return (
-    <footer className="fixed bottom-0 flex w-full justify-around border-2 border-gray-200 p-3 md:hidden">
-      <FooterChild
-        url="http://localhost:3000"
-        img="/search.png"
-        text="Search"
-      />
-      <FooterChild
-        url="http://localhost:3000"
-        img="/search.png"
-        text="Search"
-      />
-      <FooterChild
-        url="http://localhost:3000"
-        img="/search.png"
-        text="Search"
-      />
-      <FooterChild
-        url="http://localhost:3000"
-        img="/search.png"
-        text="Search"
-      />
-      <FooterChild
-        url="http://localhost:3000"
-        img="/search.png"
-        text="Search"
-      />
-    </footer>
-  )
-}
-
-interface footerprops {
-  url: string
-  img: string
-  text: string
-}
-
-function FooterChild({ url, img, text }: footerprops) {
-  return (
-    <Link href={url} className=" flex  flex-col gap-2 text-xs">
-        <Search className='w-5 h-5 fill-gray-100 stroke-3' />
-
-      <span>{text}</span>
-    </Link>
+    <main className="fixed bottom-0 z-50 w-full border-gray-200 p-3 flex justify-center items-center border-2  md:hidden">
+      <FooterChild page="Explore" active={false} />
+      <FooterChild page="WishList" active={false} />
+      <FooterChild page="Trips" active={false} />
+      <FooterChild page="Inbox" active={false} />
+      <FooterChild page="Profile" active={false} />
+    </main>
   )
 }
