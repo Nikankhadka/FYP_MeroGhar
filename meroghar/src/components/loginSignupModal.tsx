@@ -5,6 +5,8 @@ import { inputStyle } from '../styles/variants'
 import { loginSignupModal } from '../interface/buttons'
 import { LoginRegisterInput } from '../interface/inputs'
 import { ErrorText } from './random'
+import axios from 'axios'
+import { redirect } from 'next/dist/server/api-utils'
 
 
 
@@ -14,9 +16,21 @@ import { ErrorText } from './random'
 export default function LoginSignupModal({ login }: loginSignupModal): JSX.Element {
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
 
-  const onSubmit: SubmitHandler<LoginRegisterInput> = (data) => {
-    console.log('inside on submit')
+  const onSubmit: SubmitHandler<LoginRegisterInput> = async(data) => {
     console.log(data)
+    const {userId,password}=data
+    if(login){
+      const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
+      if(res.data.success){
+        window.location.href="/test"
+      }
+      
+    }
+    const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
+    if(res.data.success){
+      window.alert("New user successfully registered")
+    }
+   
   }
 
   return (
@@ -59,6 +73,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
             })}
           />
+          <p className='text-sm text-gray-500'>minimum 6 Letters  A capital small A number and Special character</p>
           {errors.password && (
           <ErrorText text="Please Enter Valid Password" />
           )}

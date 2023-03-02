@@ -30,7 +30,7 @@ dotenv.config();
 
 export const registerUserS=async(userId:string,password:string):Promise<boolean>=>{
     try{
-        
+        console.log("registerService",userId)
         const userExist=await userModel.findOne({userId:userId});
         if(userExist) return false;
        
@@ -38,7 +38,7 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
         const newUser=await userModel.create({
             userId:userId,
             userName:userId,
-            password:await hash(password,process.env.salt_rounds!)
+            password:await hash(password,8)
         })
 
         //not necessary to call but call

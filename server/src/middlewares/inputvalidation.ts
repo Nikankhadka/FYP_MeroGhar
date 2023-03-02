@@ -10,7 +10,8 @@ export const validateInput=async(req:Request,res:Response,next:NextFunction)=>{
         const registerSchema=joi.object({
             userId:joi.string().required(),
             // Minimum six characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-            password:joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')).required(),
+            password:joi.string().required(),
+            // .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$'))
         })
 
         //calls the validate method to check the value with schema  and validates both property to generate error response

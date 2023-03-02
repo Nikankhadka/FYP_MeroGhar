@@ -4,12 +4,13 @@ import NavBar from '../components/navbar'
 import InititailModal from '../components/navmodel'
 import LoginSignupModal from '../components/loginSignupModal'
 import Footer from '../components/footer'
+import { verifyAuth } from '../api/auth'
 
 
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
 
-  console.log("sever layout rendered")
+  verifyAuth()
   
   return (
     <html>

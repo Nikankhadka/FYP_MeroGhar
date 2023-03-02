@@ -17,6 +17,7 @@ dotenv.config();
 export const registerUserC=async(req:Request,res:Response)=>{
     try{
         const {userId,password}=req.body;
+        console.log("inside register user controller")
         const newUser=await registerUserS(userId,password);
         if(newUser) return res.status(200).json({success:true, message:`user ${userId} successfully registered`})
         
@@ -56,6 +57,8 @@ export const LoginC=async(req:Request,res:Response)=>{
 export const refreshTokenC=async(req:Request,res:Response)=>{
     try{
         //get refresh token from cookie 
+        console.log(req.headers)
+        console.log(req.cookies)
         if(!req.cookies.refreshToken) return res.status(401).json({success:false,message:" refresh token not found"});
 
         //now check the refresh token in database to find user for token reuse detection
