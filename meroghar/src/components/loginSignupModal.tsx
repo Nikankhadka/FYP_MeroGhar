@@ -6,7 +6,7 @@ import { loginSignupModal } from '../interface/buttons'
 import { LoginRegisterInput } from '../interface/inputs'
 import { ErrorText } from './random'
 import axios from 'axios'
-import { redirect } from 'next/dist/server/api-utils'
+
 
 
 
@@ -22,7 +22,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
     if(login){
       const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
-        window.location.href="/test"
+        window.location.href="/user"
       }
       
     }

@@ -39,7 +39,7 @@ export const LoginC=async(req:Request,res:Response)=>{
             const {success,accessToken,refreshToken,user}=await LoginS(userId,password);
 
             if(success)  return res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true,sameSite:"strict"})
-            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true,sameSite:"strict"})
+            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true,sameSite:"strict"}).cookie("session",'valid',{maxAge:840000,httpOnly:true,sameSite:"strict"})
             .status(200).json({success:true, message:"user successfully logged in",user})
 
              //now attach the token to cookie and send it to clien
@@ -57,8 +57,8 @@ export const LoginC=async(req:Request,res:Response)=>{
 export const refreshTokenC=async(req:Request,res:Response)=>{
     try{
         //get refresh token from cookie 
-        console.log(req.headers)
-        console.log(req.cookies)
+        console.log(req.headers.cookie)
+        
         if(!req.cookies.refreshToken) return res.status(401).json({success:false,message:" refresh token not found"});
 
         //now check the refresh token in database to find user for token reuse detection
@@ -74,8 +74,7 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
       //now attach the token to cookie and send it to client
     
       res.cookie("accessToken",tokens.newaccessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(200).json({success:true, message:"user successfully verified"})
+      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:2592000000,httpOnly:true}).status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken})
 
 
 
