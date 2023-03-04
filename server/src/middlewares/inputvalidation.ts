@@ -10,7 +10,8 @@ export const validateInput=async(req:Request,res:Response,next:NextFunction)=>{
         const registerSchema=joi.object({
             userId:joi.string().required(),
             // Minimum six characters, at least one uppercase letter, one lowercase letter, one number and one special character:
-            password:joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')).required(),
+            password:joi.string().required(),
+            // .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$'))
         })
 
         //calls the validate method to check the value with schema  and validates both property to generate error response
@@ -96,7 +97,7 @@ export const validatePropertyInput = async(req: Request, res: Response, next: Ne
             },
             discription: joi.string().min(15).required(),
             property_type: joi.string().required(),
-            rules: joi.array().items(joi.string()).required(),
+            rules: joi.string().required(),
             amenities: joi.array().items(joi.string()).required(),
             price: joi.number().required(),
             images: joi.array().items(

@@ -17,8 +17,10 @@ router.use("/wishList",wishlistRoutes);
 router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyByIdC)
 router.post("/createProperty",verifyaccessToken,verifyRole(false),validatePropertyInput,createPropertyC)
 router.patch("/updateProperty/:id",verifyaccessToken,verifyRole(false),validatePropertyUpdate,updatePropertyC)
-
 router.delete("/deleteProperty/:id",verifyaccessToken,verifyRole(false),deletePropertyC)
+
+//api to fetch user previously viwed property 
+router.get('/getViewedProperty',verifyaccessToken,verifyRole(false))
 router.patch("/updateViewCount/:id",checkCookie,verifyaccessToken,verifyRole(false),updateViewCountC)
 
 

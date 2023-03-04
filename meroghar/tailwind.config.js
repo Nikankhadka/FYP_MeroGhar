@@ -5,8 +5,13 @@ module.exports = {
 //the purgr property is used to remove unused css from the final build
 
   content: [
+    "./node_modules/flowbite-react/**/*.{js,ts,jsx,tsx}",
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}"
+  ],
+  plugins: [
+    require("flowbite")
   ],
   theme: {
     extend: {

@@ -1,4 +1,4 @@
-'use client'
+
 import LoginSignupModal from "../../components/loginSignupModal";
 
 
