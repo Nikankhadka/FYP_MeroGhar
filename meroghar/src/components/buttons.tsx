@@ -16,3 +16,15 @@ export function SocialLogin({ placeholder, url, img }: SocialLoginProps): JSX.El
   }
 
 
+interface ArrowProps{
+  next:boolean
+}
+export function Arrow({next}:ArrowProps){
+
+
+  return(
+    <button className=" rounded-full p-3  bg-gray-100 bg-opacity-70 transition-all  hover:bg-opacity-100 hover:drop-shadow-lg hover:bg-white">
+      <img src={next? '/arrow.png':'/left.png'} alt="arrow" height={9}  width={9}/>
+    </button>
+  )
+}

@@ -97,7 +97,7 @@ export const validatePropertyInput = async(req: Request, res: Response, next: Ne
             },
             discription: joi.string().min(15).required(),
             property_type: joi.string().required(),
-            rules: joi.array().items(joi.string()).required(),
+            rules: joi.string().required(),
             amenities: joi.array().items(joi.string()).required(),
             price: joi.number().required(),
             images: joi.array().items(
