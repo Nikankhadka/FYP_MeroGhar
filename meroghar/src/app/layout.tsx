@@ -18,12 +18,11 @@ export default async function RootLayout({children}: {children: React.ReactNode}
       {/* body sets the root layout for entire application */}
       <body className='bg-white flex flex-col'>
         
-        <NavBar />
-        <InititailModal authState={true} />
+
        
         {/* this children represents each page component  that is rendered */}
         {children}
-        <Footer />
+        \
         
         </body>
     </html>

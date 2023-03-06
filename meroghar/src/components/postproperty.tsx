@@ -137,6 +137,7 @@ export default function PropertyForm(){
                      index!=0&&<button type='button' onClick={()=>remove(index)} className='p-2 text-white border-2 bg-red-400 rounded-lg hover:bg-red-700'>Delete</button>
                      }  
                         </div>
+                      {errors?.images?.[index]?.image && ( <ErrorText text='Please Upload Atleast One image'/>)}
                        
                     </div>
                     )

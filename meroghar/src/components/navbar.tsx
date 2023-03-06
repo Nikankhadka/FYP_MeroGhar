@@ -1,13 +1,17 @@
 'use client';
 import Image from "next/image"
+import { useState } from "react";
+import InititailModal from "./navmodel";
 
 
 
 
  const NavBar=():JSX.Element=>{
-
+    //get auth state and pass into the initial model
+    const[open,setopen]=useState(false)
+    
     return(
-        <nav className="shadow-none md:shadow-md p-3 w-full flex justify-around items-center ">
+        <nav className="shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
             {/* logoName */}
             
             <div className=" hidden md:flex items-center gap-1">
@@ -31,14 +35,22 @@ import Image from "next/image"
             
 
            {/* post and Profile */}
-            <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
             <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md hover:bg-hoverColor">Postroom</a>
 
-                <button className="px-2 py-1 rounded-lg  flex items-center gap-1  border-2 border-gray-200 hover:shadow-lg ">
+                <div>
+                <button className="px-2 py-1 rounded-lg  flex items-center gap-1  border-2 border-gray-200 hover:shadow-lg " onClick={(e)=>setopen(!open)}>
                     <img src="menu.png" alt="user" className="h-5 w-5 "  />
                     <img src="user.png" alt="user" className="h-8 w-8 rounded-full "  />
                 </button> 
+
+               {
+                open&&<InititailModal  authState={false}/>
+               }
             </div>
+               
+
+        </div>
            
         </nav>
     )

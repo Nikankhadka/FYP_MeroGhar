@@ -11,7 +11,7 @@ declare module "jsonwebtoken" {
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
 import * as dotenv from "dotenv"
-import {LSR1} from "../../interfaces/Auth"
+import {LSR1, refreshTService} from "../../interfaces/Auth"
 import { googleProfile } from "../../interfaces/Auth";
 import { generateTokens } from "../../utils/token";
 import {signupMailTemplate } from "../../configs/mailtemplate";
@@ -114,7 +114,7 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
 
 
 //service to verify token and give new tokens back 
-export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boolean,message:string,tokens:{newaccessToken:string,newrefreshToken:string}}>=>{
+export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTService>=>{
         try{
             //find user with token
             const foundUser=await userModel.findOne({refreshToken})
@@ -144,16 +144,16 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<{success:boo
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
                         userId, is_Admin,kycVerified
-                    },process.env.accessToken!,{expiresIn:"1800s"})
+                    },process.env.accessToken!,{expiresIn:"900s"})
             
                     const newrefreshToken=await jwt.sign({
                         userId,is_Admin,kycVerified
-                    },process.env.refreshToken!,{expiresIn:"30 days"})
+                    },process.env.refreshToken!,{expiresIn:"7 days"})
             
                     //store refrehtoken 
                     foundUser.refreshToken = await [...newRefreshTokenArray, newrefreshToken];
                     await foundUser.save();
-                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken}};
+                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken},user:{userId,is_Admin}};
 
 
                 }catch(e){
