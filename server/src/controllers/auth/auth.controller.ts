@@ -56,25 +56,25 @@ export const LoginC=async(req:Request,res:Response)=>{
 //dont need middle ware just verify and send response back to client 
 export const refreshTokenC=async(req:Request,res:Response)=>{
     try{
-        //get refresh token from cookie 
-        console.log(req.headers.cookie)
         
         if(!req.cookies.refreshToken) return res.status(401).json({success:false,message:" refresh token not found"});
 
         //now check the refresh token in database to find user for token reuse detection
        const refreshToken=req.cookies.refreshToken;
+       console.log(req.cookies)
 
        //both token be cleared since new token is going to be generated if failed then hackers token will be deleted
         res.clearCookie("refreshToken").clearCookie("accessToken")
 
       //service for refresh token verification
-      const {success,message,tokens}=await verifyRefreshTokenS(refreshToken);
+      const {success,message,tokens,user}=await verifyRefreshTokenS(refreshToken);
       if(!success) return res.status(401).json({success:false,message})
 
       //now attach the token to cookie and send it to client
     
+      //if client side request then set else use response data to set in Nextjs middleware
       res.cookie("accessToken",tokens.newaccessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:2592000000,httpOnly:true}).status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken})
+      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:2592000000,httpOnly:true}).status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken,user})
 
 
 

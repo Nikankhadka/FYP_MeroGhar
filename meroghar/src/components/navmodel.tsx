@@ -13,7 +13,7 @@ export default function InititailModal({authState}:InititailModal):JSX.Element{
 
   if(!authState){
     return(
-        <div className=" w-60 p-1 shadow-xl rounded-lg z-90 flex flex-col gap-2 md:fixed left-2/4  lg:left-[76%]   ">
+        <div className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2 transition-all  ">
             <button className={`${btnstyle} font-semibold`}>Log in</button>
             <button className={btnstyle}>Sign Up</button>
             <hr />
@@ -25,7 +25,7 @@ export default function InititailModal({authState}:InititailModal):JSX.Element{
   }  
 
   return(
-    <div className=" w-60 p-1 shadow-xl rounded-lg z-90 flex flex-col gap-2 md:fixed left-2/4  lg:left-[76%]   ">
+    <div className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2 transition-all    ">
         <Link  href='/user/messages' className={`${btnstyle} font-semibold`}>Messages</Link>
         <Link  href='/user/wishList' className={`${btnstyle} font-semibold`}>WishLists</Link>
         <Link  href='/user/booking' className={`${btnstyle} font-semibold`}>Bookings</Link>

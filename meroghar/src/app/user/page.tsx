@@ -1,14 +1,15 @@
-import { cookies } from "next/headers"
 
+import { headers } from 'next/headers';
 
-export default function UserView(){
-    //since use has been validated 
-    const cookieStore=cookies()
-    console.log(cookieStore.getAll())
+export default async function User(){
 
-
+    //simple validation setup 
+    const headersInstance = headers()
+    console.log(headersInstance.get('cookie'))
+    
     return(
-
-        <h2>this is user view</h2>
+        <div>
+            hello this is user
+        </div>
     )
 }

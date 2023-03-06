@@ -20,6 +20,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
     console.log(data)
     const {userId,password}=data
     if(login){
+      
       const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
         window.location.href="/user"

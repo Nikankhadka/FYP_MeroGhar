@@ -18,6 +18,7 @@
     "eslint-config-prettier": "^8.5.0",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
+    "http": "^0.0.1-security",
     "iron-session": "^6.3.1",
     "next": "^13.1.2",
     "react": "^18.2.0",
