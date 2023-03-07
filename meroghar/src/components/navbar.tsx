@@ -11,7 +11,7 @@ import InititailModal from "./navmodel";
     const[open,setopen]=useState(false)
     
     return(
-        <nav className="shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
+        <nav className=" fixed z-50 bg-white shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
             {/* logoName */}
             
             <div className=" hidden md:flex items-center gap-1">

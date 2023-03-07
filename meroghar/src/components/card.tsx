@@ -11,12 +11,12 @@ export default function Card() {
         </Link>
         
       </div>
-       <div className='flex justify-center gap-3'>
+       <div className='my-2 flex  justify-center gap-3'>
         <Arrow next={false}/>
         <Arrow next={true}/>
        </div>
 
-      <div className=" flex w-[95%] items-center justify-between">
+      <div className=" flex px-2 items-center justify-between">
         <Wish active={false} />
         <p className="flex items-center">
           <img src="/rate.png" alt="rate" width={20} height={20} />

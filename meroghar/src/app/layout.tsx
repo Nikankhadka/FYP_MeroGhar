@@ -19,12 +19,12 @@ export default async function RootLayout({children}: {children: React.ReactNode}
       <body className='bg-white flex flex-col'>
         
 
-       
+        <NavBar />
         {/* this children represents each page component  that is rendered */}
         {children}
-        \
+        <Footer />
         
-        </body>
+      </body>
     </html>
   )
 }

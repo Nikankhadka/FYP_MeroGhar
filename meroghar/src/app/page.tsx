@@ -14,7 +14,7 @@ const HomePage=()=>{
     return(
        
         <main>
-            <MyAlert/>
+            hello
         </main>
         
        
