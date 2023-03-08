@@ -1,19 +1,23 @@
 'use client'
 
 import Link from "next/link"
+import { forwardRef} from "react"
+
 
 const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover:bg-hoverColor"
 
- interface InititailModal{
+ interface InitiailModal{
     authState:boolean
+   
  }
 
+ type Ref = HTMLDivElement;
 
-export default function InititailModal({authState}:InititailModal):JSX.Element{
+ const InititailModalC =forwardRef<Ref,InitiailModal>((props,ref):JSX.Element=>{
 
-  if(!authState){
+  if(!props.authState){
     return(
-        <div className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2 transition-all  ">
+        <div ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2   ">
             <button className={`${btnstyle} font-semibold`}>Log in</button>
             <button className={btnstyle}>Sign Up</button>
             <hr />
@@ -25,7 +29,7 @@ export default function InititailModal({authState}:InititailModal):JSX.Element{
   }  
 
   return(
-    <div className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2 transition-all    ">
+    <div  ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2    ">
         <Link  href='/user/messages' className={`${btnstyle} font-semibold`}>Messages</Link>
         <Link  href='/user/wishList' className={`${btnstyle} font-semibold`}>WishLists</Link>
         <Link  href='/user/booking' className={`${btnstyle} font-semibold`}>Bookings</Link>
@@ -38,4 +42,7 @@ export default function InititailModal({authState}:InititailModal):JSX.Element{
     </div>
 )
 
-}
+})
+
+
+export default  InititailModalC

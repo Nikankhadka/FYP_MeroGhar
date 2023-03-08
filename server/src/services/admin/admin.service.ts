@@ -3,7 +3,7 @@ import {hash} from "bcrypt"
 import { IUser, Property } from "../../interfaces/dbInterface";
 import { verifyKyc } from "../../interfaces/admin";
 import { propertyModel } from "../../models/property";
-gg
+
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
     try{
