@@ -28,3 +28,11 @@ export function Arrow({next}:ArrowProps){
     </button>
   )
 }
+
+
+
+const toggleButton=()=>{
+  return(
+    <button>change theme</button>
+  )
+}
