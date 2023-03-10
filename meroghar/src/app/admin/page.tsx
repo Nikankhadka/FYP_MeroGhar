@@ -13,7 +13,7 @@ export default function AdminPage(){
 
     return(
         <main className='my-24'>
-            <h1>Hello this is admin page</h1>
+            hello
         </main>
     )
 }

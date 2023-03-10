@@ -5,9 +5,12 @@ import InititailModalC from "./navmodel";
 import InititailModal from "./navmodel";
 
 import { createRef } from "react";
+import { ToggleButton } from "./buttons";
 
-
- const NavBar=():JSX.Element=>{
+interface NavProps{
+    theme:string
+}
+ const NavBar=({theme}:NavProps):JSX.Element=>{
     //get auth state and pass into the initial model
     const[open,setopen]=useState(false)
 
@@ -54,6 +57,7 @@ import { createRef } from "react";
 
            {/* post and Profile */}
         <div className="hidden md:flex items-center gap-2">
+             <ToggleButton  theme={theme}/>
             <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md hover:bg-hoverColor">Postroom</a>
 
                 <div>
@@ -69,7 +73,7 @@ import { createRef } from "react";
                
 
         </div>
-           
+        
         </nav>
     )
 
