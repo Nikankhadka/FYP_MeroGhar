@@ -276,6 +276,6 @@ export const logOutS=async(refreshToken:string):Promise<boolean>=>{
 
    }catch(e){
     console.log(e)
-    throw e;
+    return false;
    }
 }

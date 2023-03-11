@@ -1,15 +1,27 @@
 import 'server-only'
-// lib/getRequestCookie.ts
-
-import { cookies } from 'next/headers'
-
-import axios from 'axios'
-import { NextResponse } from 'next/server'
 
 
-export async function verifyAuth(): Promise<boolean> {
-  const res=new NextResponse()
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
-
-  return true
+export const authCheck=async(is_Admin:boolean)=>{
+  try{
+    const cookieStore = cookies();
+    const session = cookieStore.get('session')?.value
+    console.log('sessioninpage',session)
+    if(!session){
+        return redirect('/')
+    }
+    const sessionObj=await JSON.parse(session!)
+    console.log("poagesobj",sessionObj)
+    if(sessionObj.is_Admin!==is_Admin) {
+      console.log(is_Admin)
+        if(is_Admin)  return redirect('/admin');
+        return redirect('/')
+    }
+  }catch(e){
+    console.log(e)
+  }
 }
+
+//for common routes

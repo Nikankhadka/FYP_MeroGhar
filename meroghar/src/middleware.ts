@@ -10,15 +10,7 @@ export default async function checkAuth(req: NextRequest) {
 
     const cookieStore = req.cookies
     //gets path name for the request current page
-    const {pathname}=req.nextUrl
 
-    //setup condition for admin first 
-    if(pathname.startsWith('/admin')) return refreshTokenS(req,res,true)
-    
-
-    //now for user as well as non user basically for all the paths other the
-    
-    if(pathname.startsWith('/user')) return refreshTokenS(req,res,false)
     
 
     //now for property routes which can be accessed by  both user and non user 
@@ -27,7 +19,8 @@ export default async function checkAuth(req: NextRequest) {
     if(!refreshToken)  return res;
 
     //if he has refresh token means we might need check token status role and other
-    return refreshTokenS(req,res,false)
+    console.log('inside user')
+   return await refreshTokenS(req,res)
     
 
 
@@ -37,16 +30,10 @@ export default async function checkAuth(req: NextRequest) {
   }
 }
 
-// export const config = {
-//   matcher:['/user','/user/property'],
-// }
-
-
-
 
 //token refresh function which is used by both admin and user to check token expiry and get new tokens 
 
-const refreshTokenS=async(req:NextRequest,res:NextResponse,is_Admin:boolean)=>{
+const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
   try{
     //res can be instance of new Next but the problem is afer cookie set the page stucks so use this flow
     
@@ -57,12 +44,10 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse,is_Admin:boolean)=>{
 
     //since cookie accessed does not match the format of cookie passed in header modify it then pass as cookie so it can be parse by cookie parser
     const cookies=`refreshToken=${refreshToken}`
-
+    console.log('sessionin middleware',session)
     if(!refreshToken) return NextResponse.redirect('http://localhost:3000/login')
     if(session){
-      const sessionObj=JSON.parse(session!)
-      console.log('sesObj',sessionObj)
-      if (sessionObj.is_Admin==is_Admin) return res;
+    return res;  
     }
    
 
@@ -81,8 +66,12 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse,is_Admin:boolean)=>{
       )
 
       //token has expired
-      if (!response.ok)
+      if (!response.ok){
+        //clear cookie in client side since token is refresh is failed the old token will be unauthorized
+        await res.cookies.delete('accessToken').delete('refreshToken').delete('session')
         return NextResponse.redirect('http://localhost:3000/login')
+      }
+       
 
       const jsonData = await response.json()
       console.log(jsonData)

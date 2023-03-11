@@ -1,8 +1,9 @@
 
 import { headers } from 'next/headers';
+import { authCheck } from '../../Api/auth';
 
 export default async function User(){
-
+await authCheck(false)
 
     
     return(

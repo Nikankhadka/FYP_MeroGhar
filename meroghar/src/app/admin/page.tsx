@@ -1,19 +1,15 @@
-import { redirect } from 'next/navigation';
-
-import { cookies } from 'next/headers';
+import { authCheck } from "../../Api/auth"
 
 
-export default function AdminPage(){
-    const cookieStore = cookies();
-    const session = cookieStore.get('session')?.value
-    console.log('session',session)
-    const sessionObj=JSON.parse(session!)
-    
-     if(!sessionObj.is_Admin) return redirect('/user')
+
+
+
+export default async function AdminPage(){
+    await authCheck(true)
 
     return(
         <main className='my-24'>
-            hello
+            hello admin here
         </main>
     )
 }
