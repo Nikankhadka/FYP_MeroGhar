@@ -38,9 +38,13 @@ export const LoginC=async(req:Request,res:Response)=>{
         try{
             const {success,accessToken,refreshToken,user}=await LoginS(userId,password);
 
-            if(success)  return res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true,sameSite:"strict"})
-            .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true,sameSite:"strict"}).cookie("session",'valid',{maxAge:840000,httpOnly:true,sameSite:"strict"})
-            .status(200).json({success:true, message:"user successfully logged in",user})
+            if(success) {
+               
+           return  res.cookie("accessToken",accessToken,{maxAge:900000 ,httpOnly:true})
+            .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true})
+            .cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true})
+            .status(200).send({success:true, message:"user successfully logged in",user});
+            } 
 
              //now attach the token to cookie and send it to clien
           
@@ -73,8 +77,9 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
       //now attach the token to cookie and send it to client
     
       //if client side request then set else use response data to set in Nextjs middleware
-      res.cookie("accessToken",tokens.newaccessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:2592000000,httpOnly:true}).status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken,user})
+      res.cookie("accessToken",tokens.newaccessToken,{maxAge:900000,httpOnly:true})
+      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+      .status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken,user});
 
 
 
@@ -125,11 +130,11 @@ export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
     if(!req.cookies.refreshToken) return res.status(204).json({success:false,err:"Invalid logout credential"})
     const{refreshToken}=req.cookies
     const verifyToken=await logOutS(refreshToken);
-   if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true,sameSite:"none",secure:true})
-
+   if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:true,message:'user logged out'})
+   res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:false})
     }catch(e:any){
         //if invalid token use detected clear cookie from imposter
         console.log(e)
-        res.status(204).clearCookie("refreshToken",{httpOnly:true,sameSite:"none",secure:true})
+        
     }
 }

@@ -1,11 +1,15 @@
+import { authCheck } from "../../Api/auth"
 
 
 
 
-export default function AdminPage(){
+
+export default async function AdminPage(){
+    await authCheck(true)
+
     return(
-        <main>
-            <h1>Hello this is admin page</h1>
+        <main className='my-24'>
+            hello admin here
         </main>
     )
 }

@@ -13,6 +13,7 @@ module.exports = {
   plugins: [
     require("flowbite")
   ],
+  darkMode:'class',
   theme: {
     extend: {
       colors: {
@@ -23,9 +24,6 @@ module.exports = {
         yellow: colors.amber,
         purple: colors.violet,
         gray: colors.neutral
-      },
-      width:{
-        '568':'142rem'
       }
     },
   },

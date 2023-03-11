@@ -24,6 +24,7 @@ export const addPropertyWishS=async(userId:string,id:string,wish:string):Promise
         //now add property in the users wishlist
         const updateWishList=await userModel.findOneAndUpdate({userId,"wishList.listName":wish},{
             $addToSet:{
+                //$ is positional operator gives index 
                 "wishlist.$[wishlistObj].properties":id
             }
         },{arrayFilters: [{ "wishlistObj.listName":wish}]})

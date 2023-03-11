@@ -6,6 +6,7 @@ import { loginSignupModal } from '../interface/buttons'
 import { LoginRegisterInput } from '../interface/inputs'
 import { ErrorText } from './random'
 import axios from 'axios'
+import { redirect } from 'next/navigation'
 
 
 
@@ -23,10 +24,14 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
       
       const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
-        window.location.href="/user"
+        console.log('login succesful')
+        if(res.data.user.is_Admin) return window.location.href='/admin'
+       return  window.location.href='/user'
       }
-      
+     return  window.location.href='/'
     }
+
+    //for signup
     const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
       window.alert("New user successfully registered")

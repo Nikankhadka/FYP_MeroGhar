@@ -1,14 +1,13 @@
 
 import { headers } from 'next/headers';
+import { authCheck } from '../../Api/auth';
 
 export default async function User(){
+await authCheck(false)
 
-    //simple validation setup 
-    const headersInstance = headers()
-    console.log(headersInstance.get('cookie'))
     
     return(
-        <div>
+        <div className='my-24'>
             hello this is user
         </div>
     )

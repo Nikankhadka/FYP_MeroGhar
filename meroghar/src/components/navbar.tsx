@@ -1,17 +1,38 @@
 'use client';
 import Image from "next/image"
-import { useState } from "react";
+import { useState,useEffect,useRef } from "react";
+import InititailModalC from "./navmodel";
 import InititailModal from "./navmodel";
 
+import { createRef } from "react";
+import { ToggleButton } from "./buttons";
 
-
-
- const NavBar=():JSX.Element=>{
+interface NavProps{
+    theme:string
+}
+ const NavBar=({theme}:NavProps):JSX.Element=>{
     //get auth state and pass into the initial model
     const[open,setopen]=useState(false)
+
+    //ref obj/e obj for menu we doing this since we forwarding the ref
+    const menuRef=createRef<HTMLDivElement>()
     
+    useEffect(()=>{
+        const clickHandler=(e:any)=>{
+            //if event click is outsise the div ref of the modal clsoe modal
+            if(!menuRef.current?.contains(e.target)){
+                setopen(false)
+            }}
+        document.addEventListener('mousedown',clickHandler);
+
+        return()=>{
+            document.removeEventListener('mousedown',clickHandler);
+        }
+    })
+
+
     return(
-        <nav className="shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
+        <nav className=" fixed z-50 bg-white shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
             {/* logoName */}
             
             <div className=" hidden md:flex items-center gap-1">
@@ -36,6 +57,7 @@ import InititailModal from "./navmodel";
 
            {/* post and Profile */}
         <div className="hidden md:flex items-center gap-2">
+             <ToggleButton  theme={theme}/>
             <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md hover:bg-hoverColor">Postroom</a>
 
                 <div>
@@ -45,13 +67,13 @@ import InititailModal from "./navmodel";
                 </button> 
 
                {
-                open&&<InititailModal  authState={false}/>
+                open&&<InititailModalC authState={false} ref={menuRef}/>
                }
             </div>
                
 
         </div>
-           
+        
         </nav>
     )
 
