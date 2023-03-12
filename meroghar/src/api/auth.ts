@@ -25,3 +25,10 @@ export const authCheck=async(is_Admin:boolean)=>{
 }
 
 //for common routes
+const checkSession=async():Promise<boolean>=>{
+  const cookieStore=cookies();
+  const session=cookieStore.get("session")?.value;
+  if(!session) return false;
+  return true;
+    
+}
