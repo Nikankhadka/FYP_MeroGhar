@@ -29,6 +29,8 @@ const checkSession=async():Promise<boolean>=>{
   const cookieStore=cookies();
   const session=cookieStore.get("session")?.value;
   if(!session) return false;
-  return true;
+  const sessionObj=await JSON.parse(session);
+  if(sessionObj.is_Admin) return redirect("/admin");
+  return true
     
 }
