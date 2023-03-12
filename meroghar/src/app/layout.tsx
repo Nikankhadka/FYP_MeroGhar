@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import Footer from '../components/footer'
 
 
-
+//seup conditional root layout for admin and normal user so only url for somethings might differ
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
 
