@@ -4,6 +4,8 @@ import 'server-only'
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
+
+//for protected routes that canbe acessed by user/admin
 export const authCheck=async(is_Admin:boolean)=>{
   try{
     const cookieStore = cookies();
@@ -24,7 +26,7 @@ export const authCheck=async(is_Admin:boolean)=>{
   }
 }
 
-//for common routes
+//for common routes can only be accessed by user/non user
 const checkSession=async():Promise<boolean>=>{
   const cookieStore=cookies();
   const session=cookieStore.get("session")?.value;
