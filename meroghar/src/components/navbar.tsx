@@ -32,7 +32,7 @@ interface NavProps{
 
 
     return(
-        <nav className=" fixed z-50 bg-white shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center ">
+        <nav className=" fixed z-50 bg-white shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center  dark:bg-slate-700">
             {/* logoName */}
             
             <div className=" hidden md:flex items-center gap-1">
@@ -40,7 +40,7 @@ interface NavProps{
                 <img src="airbnb.png" alt="logo" className="h-10 w-10 block" />
             </a>
 
-            <a href="http://localhost:3000" className="block md:text-lg text-mainColor font-semibold drop-shadow-xl ">MeroGhar
+            <a href="http://localhost:3000" className="block md:text-lg text-mainColor font-semibold drop-shadow-xl dark:text-themeColor">MeroGhar
                 </a>
             </div>
                 
@@ -58,10 +58,10 @@ interface NavProps{
            {/* post and Profile */}
         <div className="hidden md:flex items-center gap-2">
              <ToggleButton  theme={theme}/>
-            <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md hover:bg-hoverColor">Postroom</a>
+            <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md  border-2 border-gray-300 hover:border-themeColor dark:text-gray-300">Postroom</a>
 
                 <div>
-                <button className="px-2 py-1 rounded-lg  flex items-center gap-1  border-2 border-gray-200 hover:shadow-lg " onClick={(e)=>setopen(!open)}>
+                <button className="px-2 py-1 rounded-lg  flex items-center gap-1  border-2 border-gray-100 hover:border-themeColor dark:bg-slate-300 " onClick={(e)=>setopen(!open)}>
                     <img src="menu.png" alt="user" className="h-5 w-5 "  />
                     <img src="user.png" alt="user" className="h-8 w-8 rounded-full "  />
                 </button> 

@@ -58,7 +58,7 @@ export const ToggleButton = ({ theme }: ThemeToggle) => {
         cookies.set('theme', 'light')
         return router.refresh()
       }}
-      className="rounded-lg border-2 p-2 hover:border-mainColor dark:bg-slate-400"
+      className="rounded-lg border-2 p-2 hover:border-themeColor dark:bg-slate-400"
     >
       {theme == 'light' ? (
         <svg

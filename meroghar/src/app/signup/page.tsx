@@ -6,6 +6,8 @@ export default function Signup(){
 
     return (
 
-        <LoginSignupModal login={false} />
+        <main className="my-20">
+            <LoginSignupModal login={false} />
+        </main>
     )
 }
