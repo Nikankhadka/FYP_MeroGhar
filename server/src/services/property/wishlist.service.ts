@@ -67,7 +67,7 @@ export const getWishPropertyListS=async(userId:string,wishId:string,page:string,
         },
       })
 
-      if(!properties) throw new Error("Properties failed to fetch")
+      if(!properties) throw new Error("Properties failed to fetch/Invalid WishList for the Given User")
       return properties;
       
     }catch(e){
