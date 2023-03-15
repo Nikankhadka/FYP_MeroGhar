@@ -28,16 +28,16 @@ export default function Footer(): JSX.Element {
     </span>
     <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
         <li>
-            <Link href="#" className="mr-4 hover:underline md:mr-6 text-gray-300">About</Link>
+            <Link href="#" className="mr-4 hover:underline md:mr-6 text-gray-700 dark:text-gray-300">About</Link>
         </li>
         <li>
-            <Link href="#" className="mr-4 hover:underline md:mr-6 text-gray-300">Privacy Policy</Link>
+            <Link href="#" className="mr-4 hover:underline md:mr-6 text-gray-700 dark:text-gray-300">Privacy Policy</Link>
         </li>
         <li>
-            <Link href="#" className="mr-4 hover:underline md:mr-6 text-gray-300">Licensing</Link>
+            <Link href="#" className="mr-4 hover:underline md:mr-6t ext-gray-700 dark:text-gray-300">Licensing</Link>
         </li>
         <li>
-            <Link href="#" className="hover:underline text-gray-300">Contact</Link>
+            <Link href="#" className="hover:underline text-gray-700 dark:text-gray-300">Contact</Link>
         </li>
     </ul>
 </footer>
