@@ -5,8 +5,8 @@ interface Etext{
 
 export function ErrorText({text}:Etext){
     return(
-        <span className="block w-[95%] text-left text-sm text-red-700">
+        <p className="block w-[95%] text-left text-sm text-red-700">
         {text}
-      </span>
+      </p>
     )
 }

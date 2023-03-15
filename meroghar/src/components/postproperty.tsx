@@ -4,32 +4,57 @@ import { useState } from 'react'
 import {useForm,useFieldArray,useWatch,Control} from 'react-hook-form'
 import { SubmitHandler } from 'react-hook-form'
 import { ErrorText } from './random'
+import useFilePreview from '../customHoooks/previewImage'
+
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
-interface PropertyForm{
-name:string,
-city:string,
-area:string,
-discription:string,
-property_type:string,
-rule:string,
-price:number,
-images:{
-  image:any
-}[]
+    interface PropertyForm{
+    name:string,
+    city:string,
+    area:string,
+    discription:string,
+    property_type:string,
+    rule:string,
+    price:number,
+    images:any[],
+    amenities:string[]
 }
 
-export default function PropertyForm(){
-    const {register,handleSubmit,watch,formState: { errors },control} = useForm<PropertyForm>({defaultValues:{
-      images:[{image:'image'}]
-    },mode:'onChange'})
-    const { fields, append, remove } = useFieldArray({name:'images',control});
 
+
+//checck image function 
+
+
+
+export default function PropertyForm(){
+
+
+    const {register,handleSubmit,watch,formState: { errors },control} = useForm<PropertyForm>({
+      defaultValues:{
+        images:['default']
+      },mode:'onChange'
+    })
+
+    const { fields, append, remove } = useFieldArray({name:'images',control});
+    
+    // every change detected is recorded here we want to fetch the image information only 
+    const images=watch('images')
+    console.log(images)
+
+    const imageUrl=(index:number)=>{
+      try{
+        return  URL.createObjectURL(images[index][0])
+
+      }catch(e){
+        console.log(e)
+        return ''
+      }
+    }
    
     
 
     const propertyOptions=['Hotel','Room','Apartment',]
-   
+    const amenities = ["Wifi", "Air conditioning", "Heating", "TV", "Mini fridge", "Safe", "Hairdryer", "Iron", "Coffee maker", "Toiletries"];
 
     const onSubmit: SubmitHandler<PropertyForm> =async(data)=>{
         console.log(data)
@@ -39,33 +64,59 @@ export default function PropertyForm(){
     return(
         <main className='w-full my-2 flex flex-col items-center'>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='w-[80%]  border-2 border-gray-300 rounded-lg shadow-lg p-3 grid grid-cols-1 md:grid-cols-1'>
+        <form onSubmit={handleSubmit(onSubmit)} className='w-[95%] border-none shadow-none md:w-[80%]  md:border-2 border-gray-300 rounded-lg md:shadow-lg p-3 flex flex-col items-center'>
         
-        <div>
-                {
+        <div className='w-full p-2'>
+
+                        
+                { 
                   fields.map((field,index)=>{
                     return(
-                      <div className='w-full border-2 border-red-500 ' key={field.id} >
+                      <div className='w-full my-1  flex flex-col items-center gap-2 ' key={field.id} >
+
+                             
+                      
+                         <img src={imageUrl(index)} alt="ImagePreviewHere" className='w-full h-auto md:w-[60%] md:h-80 rounded-lg' />
                         
-                        <label className='block text-sm font-bold'>Upload Image :</label>
-                        <div className='flex items-center'>
-                        <input className='text-md my-1 h-11 w-[50%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor' type="file" {...register(`images.${index}.image` as const)}></input>
+                        
+
+
+                        {/* for input and label */}
+                        <div className='w-full p-2 flex-col items-start md:w-[60%] flex md:flex-row justify-around md:items-center shadow-md border-2 border-gray-300 rounded-lg'>
+                        <label className='text-sm font-bold'>Upload Image :</label>
+                        <input  type="file" key={field.id} {...register(`images.${index}` as const,{required:true})} ></input>
+
+    
 
                        {/* donot render this button for 1st index */}
+                     
                      {
-                     index!=0&&<button type='button' onClick={()=>remove(index)} className='p-2 text-sm h-10 text-white border-2 bg-red-400 rounded-lg hover:bg-red-700'>Delete</button>
-                     }  
+                      index!=0&& <button type='button' onClick={()=>remove(index)} className='border-2 border-gray-400 rounded-lg hover:bg-red-300' >
+                      <img src="minus.png" alt="delete" />
+                     </button>
+                     }
+                    
+                       
                         </div>
-                      {errors?.images?.[index]?.image && ( <ErrorText text='Please Upload Atleast One image'/>)}
+                        {errors?.images?.[index] && ( <p className="block w-[95%] text-center text-sm text-red-700">Please Upload image for the Field</p>)}
                        
                     </div>
                     )
                   })
                 }
             
-            <button type='button' onClick={()=>append({image:"newImage"})} className='p-2 text-sm text-white  bg-themeColor rounded-lg hover:bg-mainColor'>AddImage</button>
+            <button type='button' onClick={()=>append({image:"newImage"})} className='border-2 border-gray-400 rounded-lg hover:bg-hoverColor  '>
+                          <img src="add.png" alt="add" />
+            </button>
+
+           
         </div>
-        
+
+
+
+        {/* grid div */}
+
+        <div className='w-full grid grid-cols-1 md:grid-cols-2'>
         <div className='w-full'>
         <label className=' block text-sm font-bold'>Property Name/Id :</label>
         <input
@@ -78,6 +129,19 @@ export default function PropertyForm(){
         </div>
 
         <div className='w-full'>
+        <label className='text-sm font-bold'>Property Type :</label>
+            <select className={inputStyle} {...register('property_type', { required: true})}>
+                {
+                    propertyOptions.map((type)=><option value={type}>{type}</option>)
+                }
+            </select>
+            
+          {errors.property_type && ( <ErrorText text='Select Property Type Pls'/>)}
+          </div>
+
+  {/* div for city and area  */}
+      
+      <div className='w-full'>
         <label className='text-sm font-bold'>City  :</label>
             <input
             type="text"
@@ -98,6 +162,8 @@ export default function PropertyForm(){
           />
           {errors.area && ( <ErrorText text='Please Enter Valid Area'/>)}
         </div>
+      
+       
 
         <div className='w-full'>
         <label className='text-sm font-bold'>Property Description :</label>
@@ -114,16 +180,7 @@ export default function PropertyForm(){
 
        
 
-        <div className='w-full'>
-        <label className='text-sm font-bold'>Property Type :</label>
-            <select className={inputStyle} {...register('property_type', { required: true})}>
-                {
-                    propertyOptions.map((type)=><option value={type}>{type}</option>)
-                }
-            </select>
-            
-          {errors.property_type && ( <ErrorText text='Select Property Type Pls'/>)}
-          </div>
+
 
 
         <div className='w-full'>
@@ -138,7 +195,29 @@ export default function PropertyForm(){
           
           {errors.rule && ( <ErrorText text='Please Enter Rules/Criteria'/>)}
         </div>
+
+
+        {/* checkBox */}
+        <div className='w-full '>
+          <div className='w-[95%] border-2 border-gray-400 rounded-lg p-2 hover:bg-hoverColor'>
+          <span className='block text-sm font-bold'>Amenities</span>
+            {
+              amenities.map((items,index)=>{
+                return(
+                  <div key={index}>
+                    <input type="checkbox" value={items} {...register(`amenities.${index}` as const)} className='cursor-pointer'/>
+                    <label className='mx-1 text-sm'>{items}</label>
+                  </div>
+                )
+              })
+            }
+          </div>
+          
+        </div>
        
+
+
+
         <div className='w-full'>
         <label className='text-sm font-bold'>Price :</label>
             <input
@@ -148,6 +227,8 @@ export default function PropertyForm(){
             {...register('price', { required: true, minLength:1 })}
           />
           {errors.price && ( <ErrorText text='Please Enter Valid Price'/>)}
+        </div>
+        
         </div>
         
         
