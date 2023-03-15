@@ -39,9 +39,35 @@ export default function PropertyForm(){
     return(
         <main className='w-full my-2 flex flex-col items-center'>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='w-[80%]   p-3 grid grid-cols-1 md:grid-cols-2'>
+        <form onSubmit={handleSubmit(onSubmit)} className='w-[80%]  border-2 border-gray-300 rounded-lg shadow-lg p-3 grid grid-cols-1 md:grid-cols-1'>
+        
+        <div>
+                {
+                  fields.map((field,index)=>{
+                    return(
+                      <div className='w-full border-2 border-red-500 ' key={field.id} >
+                        
+                        <label className='block text-sm font-bold'>Upload Image :</label>
+                        <div className='flex items-center'>
+                        <input className='text-md my-1 h-11 w-[50%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor' type="file" {...register(`images.${index}.image` as const)}></input>
+
+                       {/* donot render this button for 1st index */}
+                     {
+                     index!=0&&<button type='button' onClick={()=>remove(index)} className='p-2 text-sm h-10 text-white border-2 bg-red-400 rounded-lg hover:bg-red-700'>Delete</button>
+                     }  
+                        </div>
+                      {errors?.images?.[index]?.image && ( <ErrorText text='Please Upload Atleast One image'/>)}
+                       
+                    </div>
+                    )
+                  })
+                }
+            
+            <button type='button' onClick={()=>append({image:"newImage"})} className='p-2 text-sm text-white  bg-themeColor rounded-lg hover:bg-mainColor'>AddImage</button>
+        </div>
+        
         <div className='w-full'>
-        <label className='text-sm font-bold'>Property Name/Id :</label>
+        <label className=' block text-sm font-bold'>Property Name/Id :</label>
         <input
             type="text"
             placeholder="PropertyName"
@@ -124,29 +150,7 @@ export default function PropertyForm(){
           {errors.price && ( <ErrorText text='Please Enter Valid Price'/>)}
         </div>
         
-        <div>
-                {
-                  fields.map((field,index)=>{
-                    return(
-                      <div className='w-full ' key={field.id} >
-                        
-                        <label className='block text-sm font-bold'>Upload Image :</label>
-                        <div className='flex items-center'>
-                        <input className={inputStyle} type="file" {...register(`images.${index}.image` as const)}></input>
-                       {/* donot render this button for 1st index */}
-                     {
-                     index!=0&&<button type='button' onClick={()=>remove(index)} className='p-2 text-sm h-10 text-white border-2 bg-red-400 rounded-lg hover:bg-red-700'>Delete</button>
-                     }  
-                        </div>
-                      {errors?.images?.[index]?.image && ( <ErrorText text='Please Upload Atleast One image'/>)}
-                       
-                    </div>
-                    )
-                  })
-                }
-            
-            <button type='button' onClick={()=>append({image:"newImage"})} className='p-2 text-sm text-white  bg-themeColor rounded-lg hover:bg-mainColor'>AddImage</button>
-        </div>
+        
         
     </form>
     <div className='w-[80%] flex justify-center'>
