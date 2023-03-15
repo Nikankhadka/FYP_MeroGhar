@@ -40,7 +40,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
   }
 
   return (
-    <div className="mx-auto my-4 border-2 border-gray-200 flex w-4/5 flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]">
+    <div className="mx-auto my-4 border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]">
      
       <div className=" flex w-full items-center  border-b-2 border-gray-200 p-3">
         <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
