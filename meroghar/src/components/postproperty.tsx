@@ -8,7 +8,7 @@ import useFilePreview from '../customHoooks/previewImage'
 
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
-    interface PropertyForm{
+  interface PropertyForm{
     name:string,
     city:string,
     area:string,
@@ -56,8 +56,42 @@ export default function PropertyForm(){
     const propertyOptions=['Hotel','Room','Apartment',]
     const amenities = ["Wifi", "Air conditioning", "Heating", "TV", "Mini fridge", "Safe", "Hairdryer", "Iron", "Coffee maker", "Toiletries"];
 
-    const onSubmit: SubmitHandler<PropertyForm> =async(data)=>{
-        console.log(data)
+
+    const onSubmit: SubmitHandler<PropertyForm> =async(formdata)=>{
+        console.log(formdata)
+
+        const amenities=formdata.amenities.filter(item=>item!='')
+      const RequestBody:PropertyForm={
+        ...formdata,
+        amenities,
+        images:[]
+      }
+
+        //there might be multiple image upload so 
+        const imageData= new FormData();
+        //since there might be multiple images
+        formdata.images.map(async(image,index)=>{
+          imageData.append('file',image[0])
+          imageData.append('cloud_name','drpojzybw');
+          imageData.append('upload_preset','FypMeroGhar');
+
+          const res=await fetch('https://api.cloudinary.com/v1_1/drpojzybw/image/upload',{
+            method:"POST",
+            body:imageData
+          })
+          const response=await res.json()
+
+          RequestBody.images.push({
+            img_id:response.public_id,
+            img_url:response.url
+          })
+          
+        })
+        
+        console.log(RequestBody)
+
+
+        //now send post request into my post api
     }
 
 
@@ -75,8 +109,8 @@ export default function PropertyForm(){
                       <div className='w-full my-1  flex flex-col items-center gap-2 ' key={field.id} >
 
                              
-                      
-                         <img src={imageUrl(index)} alt="ImagePreviewHere" className='w-full h-auto md:w-[60%] md:h-80 rounded-lg' />
+                      {/* initially the value default does not read file casuing to return empty string */}
+                         <img src={imageUrl(index)} alt="ImagePreviewHere" className={imageUrl(index)==''? 'hidden' : 'w-full h-auto md:w-[60%] md:h-80 rounded-lg'} />
                         
                         
 
