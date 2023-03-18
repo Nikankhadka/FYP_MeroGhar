@@ -19,6 +19,7 @@ import YAML from "yamljs"
 //importing routes
 import indexRouter from "./routes/index.routes"
 import { clearUser } from "./middlewares/auth.middleware"
+import dbConnect from "./configs/db"
 
 
 
@@ -57,6 +58,10 @@ app.use(passport.initialize())
 
 //this is not needed since i am using token based authentication 
 //app.use(passport.session())
+
+
+//database connection 
+app.use(dbConnect)
 
 //basic logging will only log request to thr console
 app.use(morgan('dev'))

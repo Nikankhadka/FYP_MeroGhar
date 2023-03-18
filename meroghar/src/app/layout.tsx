@@ -4,9 +4,31 @@ import NavBar from '../components/navbar'
 import { cookies } from 'next/headers';
 
 import Footer from '../components/footer'
+import AdminNav from '../components/adminNav';
 
 
 //seup conditional root layout for admin and normal user so only url for somethings might differ
+
+const getUser=async()=>{
+  try{
+    const cookieStore=cookies();
+    const accessToken=cookieStore.get("accessToken")?.value;
+    const cookiedata=`acessToken=${accessToken}`
+    const response = await fetch(
+      'http://localhost:2900/user/v1/userData',
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: { cookie: cookiedata},
+      }).then(res=>res.json())
+
+      return response;
+  }catch(e){
+    console.log(e)
+    return false
+  }
+}
+
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
 
@@ -18,6 +40,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     sessionObj=JSON.parse(session)
   }
  
+  const user=await getUser()
     
   
 
@@ -31,7 +54,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
 
         {/* conditionally render navbar  */}
         
-        {!sessionObj.is_Admin&&<NavBar theme={theme}/>}
+        {!sessionObj.is_Admin?<NavBar theme={theme} authState={session?true:false} img={user?user.userData.profile_img.img_url:''}/>:<AdminNav />}
         {/* this children represents each page component  that is rendered */}
         {children}
         <Footer />

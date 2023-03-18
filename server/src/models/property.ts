@@ -1,9 +1,14 @@
-import {Schema,model, Types} from "mongoose"
+import {Schema,model, Types, SchemaTypes} from "mongoose"
 import { Property } from "../interfaces/dbInterface";
 
 
 const propertySchema=new Schema({
-    _id:Types.ObjectId,
+
+    //if id is defined in schema u need to pass on intialize in manually
+    // _id:{
+    //     type:Types.ObjectId,
+    //     required:false
+    // },
     userId:{type:String,required:true,immutable:true},
 
     //this will be default generated

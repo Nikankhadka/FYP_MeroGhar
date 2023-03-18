@@ -6,5 +6,6 @@ export interface SocialLoginProps {
 
 
 export interface loginSignupModal {
-    login: boolean
+    login: boolean,
+    modal?:boolean,
   }

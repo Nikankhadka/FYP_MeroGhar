@@ -1,24 +1,20 @@
 
-import LoginSignupModal from "../../components/loginSignupModal";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { checkSession } from "../../api/auth"
+import LoginSignup from "../../components/loginSignup"
+import { redirect } from 'next/navigation';
 
 export default async function LoginPage(){
 
-
-    // const cookieStore = cookies();
-    // const session = cookieStore.get('session')?.value
+    const session=await checkSession()
     
-    // if(session){
-    //     const sessionObj=await JSON.parse(session!)
-    //     if(sessionObj.is_Admin) return redirect('/admin')
-    //     if(!sessionObj.is_Admin) return redirect ('/user')
-    // }
    
     
-    return(
+   if(!session)return(
         <main className="my-20">
-             <LoginSignupModal  login={true}/>
+             <LoginSignup  login={true} modal={false}/>
         </main>
     )
+
+    //else redirect to home 
+    return redirect('/')
 }  

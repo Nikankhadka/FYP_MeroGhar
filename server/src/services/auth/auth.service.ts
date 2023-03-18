@@ -38,7 +38,11 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
         const newUser=await userModel.create({
             userId:userId,
             userName:userId,
-            password:await hash(password,8)
+            password:await hash(password,8),
+            profile_Img:{
+                img_id:"",
+                img_url:""
+            }
         })
 
         //not necessary to call but call
@@ -96,9 +100,10 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
 //service layer to verify token along with user in db
 export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{userId:string,is_Admin:boolean,kycVerified:boolean}}>=>{
     try{
-        
+        console.log('atoken',token)
         //if token is expire or error here it will be cathced and handled
-       const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload>jwt.verify(token,process.env.accessToken!)
+       const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(token,process.env.accessToken!)
+       console.log('token verified')
         const isValid=await userModel.findOne({userId,is_Admin,kyc:{is_verified:kycVerified}});
         if(!isValid) throw new Error("invalid token data")
     
@@ -138,6 +143,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
                 try{
                     
                     const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(refreshToken,process.env.refreshToken!);
+                    console.log('refresh token verified')
                     //validate token data
                     if (foundUser.userId !==userId) throw new Error("invalid token use detected,data mismatched");
 
@@ -175,7 +181,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
 }
 
         
-export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string}>=>{
+export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,is_Admin:boolean}}>=>{
     try{
         
         const{userName,email,profile_Img}=profileData
@@ -186,7 +192,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
-            return {accessToken,refreshToken};
+            return {accessToken,refreshToken,user:{userId:userExist.userId,is_Admin:userExist.is_Admin}};
         }
 
         //since no user create new user
@@ -216,7 +222,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         console.log("before mail send function or template is passed",userName,email)
         //dont need to wait as it takes time to send mail
         sendMail(signupMailTemplate(userName,email))
-        return {accessToken,refreshToken};
+        return {accessToken,refreshToken,user:{userId:newUser.userId,is_Admin:newUser.is_Admin}};
         
 
     }catch(e){
@@ -225,7 +231,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
     }
 }
 
-export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string}>=>{
+export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,is_Admin:boolean}}>=>{
     try{
          //here email will contain facebook id
         const{userName,email,profile_Img}=profileData
@@ -235,7 +241,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
-            return {accessToken,refreshToken};
+            return {accessToken,refreshToken,user:{userId:userExist.userId,is_Admin:userExist.is_Admin}};
         }
 
         //since no user create new user
@@ -253,7 +259,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
-        return {accessToken,refreshToken};
+        return {accessToken,refreshToken,user:{userId:newUser.userId,is_Admin:newUser.is_Admin}};
         
 
     }catch(e){

@@ -3,18 +3,19 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { SocialLogin } from './buttons'
 import { inputStyle } from '../styles/variants'
 import { loginSignupModal } from '../interface/buttons'
-import { LoginRegisterInput } from '../interface/inputs'
+import { LoginRegisterInput } from '../interface/request'
 import { ErrorText } from './random'
 import axios from 'axios'
 import { redirect } from 'next/navigation'
-
+import Link from 'next/link'
 
 
 
 
 //since this component will be used multiple places always check the page before rendering the component
 
-export default function LoginSignupModal({ login }: loginSignupModal): JSX.Element {
+export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Element {
+  
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
 
   const onSubmit: SubmitHandler<LoginRegisterInput> = async(data) => {
@@ -26,29 +27,40 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
       if(res.data.success){
         console.log('login succesful')
         if(res.data.user.is_Admin) return window.location.href='/admin'
-       return  window.location.href='/user'
+       return  window.location.href='/'
       }
      return  window.location.href='/'
     }
 
     //for signup
+    try{
     const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
-      window.alert("New user successfully registered")
+     return window.alert("New user successfully registered")
     }
+    throw new Error(`${res.data.error}`)
+    }catch(e:any){
+      console.log(e)
+      return window.alert(`${e.message}`)
+    }
+    
    
   }
 
+  const style1='mx-auto my-4 border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
+  const style2='absolute mt-8 translate-x-[-160%] border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
   return (
-    <div className="mx-auto my-4 border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]">
+    <div className={modal? style2:style1} >
      
       <div className=" flex w-full items-center  border-b-2 border-gray-200 p-3">
         <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
           {login ? 'Log in' : 'Sign up'}
         </p>
-        <button className="rounded-full p-1 hover:bg-hoverColor">
+        
+        {/* close button only renders for modal not for page */}
+        {modal&&<button className="rounded-full p-1 hover:bg-hoverColor">
           <img src="close.png" alt="cros" className="h-4 w-4 " />
-        </button>
+        </button>}
       </div>
 
       <div className="flex w-full justify-center p-2">
@@ -85,12 +97,12 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
           )}
 
           {login && (
-            <a
+            <Link
               href="#"
               className="text-md my-1 mr-6 self-end text-mainColor hover:underline"
             >
               Forgot Password?
-            </a>
+            </Link>
           )}
 
           <input
@@ -118,7 +130,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
           <div className="my-1  flex w-full items-center justify-center">
             <span className="text-md my-2">
               {login ? 'Dont Have Account ?' : 'Have Account ?'}{' '}
-              <a
+              <Link
                 href={
                   login
                     ? 'http://localhost:3000/signup'
@@ -127,7 +139,7 @@ export default function LoginSignupModal({ login }: loginSignupModal): JSX.Eleme
                 className="text-md text-mainColor hover:underline"
               >
                 {login ? 'Sign Up' : 'Login'}
-              </a>
+              </Link>
             </span>
           </div>
         </form>

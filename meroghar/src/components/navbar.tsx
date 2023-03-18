@@ -1,83 +1,105 @@
-'use client';
-import Image from "next/image"
-import { useState,useEffect,useRef } from "react";
-import InititailModalC from "./navmodel";
-import InititailModal from "./navmodel";
+'use client'
+import Image from 'next/image'
+import { useState, useEffect, useRef } from 'react'
+import InititailModalC from './navmodel'
+import { createRef } from 'react'
+import { ToggleButton } from './buttons'
+import Link from 'next/link'
+import LoginSignup from './loginSignup'
 
-import { createRef } from "react";
-import { ToggleButton } from "./buttons";
 
-interface NavProps{
-    theme:string
+interface NavProps {
+  theme: string,
+  authState:boolean,
+  img:string
 }
- const NavBar=({theme}:NavProps):JSX.Element=>{
-    //get auth state and pass into the initial model
-    const[open,setopen]=useState(false)
-
-    //ref obj/e obj for menu we doing this since we forwarding the ref
-    const menuRef=createRef<HTMLDivElement>()
-    
-    useEffect(()=>{
-        const clickHandler=(e:any)=>{
-            //if event click is outsise the div ref of the modal clsoe modal
-            if(!menuRef.current?.contains(e.target)){
-                setopen(false)
-            }}
-        document.addEventListener('mousedown',clickHandler);
-
-        return()=>{
-            document.removeEventListener('mousedown',clickHandler);
-        }
-    })
 
 
-    return(
-        <nav className=" fixed z-50 bg-white shadow-none md:shadow-md p-3 w-full h-20 flex justify-around items-center  dark:bg-slate-700">
-            {/* logoName */}
+
+
+const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
+  //get auth state and pass into the initial model
+  const [open, setopen] = useState(false)
+  const menuRef = createRef<HTMLDivElement>()
+
+
+  useEffect(() => {
+    const clickHandler = (e: any) => {
+      //if event click is outsise the div ref of the modal clsoe modal
+      if (!menuRef.current?.contains(e.target)) {
+        setopen(false)
+      }
+    }
+    document.addEventListener('mousedown', clickHandler)
+
+    return () => {
+      document.removeEventListener('mousedown', clickHandler)
+    }
+  })
+
+
+
+
+  return (
+    <nav className=" fixed z-50 flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md">
+      {/* logoName */}
+
+      <div className=" hidden items-center gap-1 md:flex">
+        <a
+          href="http://localhost:3000"
+          className="block items-center gap-2 md:flex "
+        >
+          <img src="airbnb.png" alt="logo" className="block h-10 w-10" />
+        </a>
+
+        <a
+          href="http://localhost:3000"
+          className="block font-semibold text-mainColor drop-shadow-xl dark:text-themeColor md:text-lg"
+        >
+          MeroGhar
+        </a>
+      </div>
+
+      {/* search Bar */}
+      <div className="  my-2 flex h-11 w-11/12 items-center gap-1 rounded-lg border-2 border-gray-200 bg-white hover:drop-shadow-md md:w-2/6 ">
+        <input
+          type="text"
+          className="text-md h-full w-full rounded-lg p-2 shadow-lg focus:outline-mainColor"
+          placeholder="   Search"
+        />
+        <button className=" h-full rounded-lg bg-white px-1 hover:bg-blue-100  ">
+          <img src="search.png" alt="search" className="h-6 w-6 " />
+        </button>
+      </div>
+
+      {/* post and Profile */}
+      <div className="hidden items-center gap-2 md:flex">
+        <ToggleButton theme={theme} />
+        <Link
+          href="http://localhost:3000/postProperty"
+          className=" block rounded-md border-2   border-gray-200 p-2 px-3  text-gray-700 hover:border-themeColor dark:text-gray-300 md:text-sm"
+        >
+          Postroom
+        </Link>
+
+        <div ref={menuRef}>
+          <button
+            className="flex items-center gap-1  rounded-lg border-2 border-gray-200  px-2 py-1 hover:border-themeColor dark:bg-slate-300 "
+            onClick={(e) => setopen(!open)}
+          >
+            <img src="menu.png" alt="user" className="h-5 w-5 " />
+            <img src={img==''?'user.png':img} alt="user" className="h-8 w-8 rounded-full " />
+          </button>
+
+          {open && <InititailModalC authState={authState} ref={menuRef} />}
+          
+          
+          {/* <LoginSignup login={true} modal={true} /> */}
             
-            <div className=" hidden md:flex items-center gap-1">
-            <a href="http://localhost:3000" className="block md:flex items-center gap-2 ">
-                <img src="airbnb.png" alt="logo" className="h-10 w-10 block" />
-            </a>
-
-            <a href="http://localhost:3000" className="block md:text-lg text-mainColor font-semibold drop-shadow-xl dark:text-themeColor">MeroGhar
-                </a>
-            </div>
-                
-           
-
-            {/* search Bar */}
-            <div className="  w-11/12 my-2 border-2 border-gray-200 rounded-lg hover:drop-shadow-md md:w-2/6 h-11 flex items-center bg-white gap-1 ">
-
-            <input type="text" className="w-full h-full p-2 text-md rounded-lg focus:outline-mainColor shadow-lg"  placeholder="   Search"/>
-            <button className=" h-full rounded-lg bg-white px-1 hover:bg-blue-100  "><img src="search.png" alt="search" className="h-6 w-6 " /></button>
-            
-            </div>
-            
-
-           {/* post and Profile */}
-        <div className="hidden md:flex items-center gap-2">
-             <ToggleButton  theme={theme}/>
-            <a href="http://localhost:2900/postRoom" className=" block md:text-sm text-gray-700   p-2 px-3 rounded-md  border-2 border-gray-300 hover:border-themeColor dark:text-gray-300">Postroom</a>
-
-                <div>
-                <button className="px-2 py-1 rounded-lg  flex items-center gap-1  border-2 border-gray-100 hover:border-themeColor dark:bg-slate-300 " onClick={(e)=>setopen(!open)}>
-                    <img src="menu.png" alt="user" className="h-5 w-5 "  />
-                    <img src="user.png" alt="user" className="h-8 w-8 rounded-full "  />
-                </button> 
-
-               {
-                open&&<InititailModalC authState={false} ref={menuRef}/>
-               }
-            </div>
-               
-
         </div>
-        
-        </nav>
-    )
-
-
+      </div>
+    </nav>
+  )
 }
 
 export default NavBar

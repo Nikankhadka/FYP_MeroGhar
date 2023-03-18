@@ -8,17 +8,10 @@ import { userModel } from "../../models/user";
 //property is not crated only request is send to admin for property post verification
 export const createPropertyS=async(userId:string,propertyData:Partial<Property>):Promise<boolean>=>{
     try{
-        const {name,location,discription,property_type,rules,amenities,price,images}=propertyData
+        console.log('imagges',propertyData)
         const newProperty=await propertyModel.create({
+            ...propertyData,
             userId,
-            name,
-            location,
-            discription,
-            property_type,
-            rules,
-            amenities,
-            price,
-            images,
             is_verified:{
             status:false,
             pending:true,

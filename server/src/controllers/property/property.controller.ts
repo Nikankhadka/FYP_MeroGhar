@@ -8,7 +8,8 @@ import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, del
 export const createPropertyC=async(req:Request,res:Response)=>{
     try{
         //check kyc verifcation 
-        if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});
+        //if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});
+        console.log(req.body)
         const newProperty=await createPropertyS(req.userData.userId,req.body)
         return res.status(200).json({success:true,message:"Property sent for further verification"})
     }catch(e:any){

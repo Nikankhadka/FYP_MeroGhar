@@ -50,7 +50,7 @@ export const ToggleButton = ({ theme }: ThemeToggle) => {
       onClick={(e) => {
         e.preventDefault()
         const theme = cookies.get('theme')
-        if (theme == 'light') {
+        if (theme == 'light'||!theme) {
           cookies.set('theme', 'dark')
           return router.refresh()
         }
