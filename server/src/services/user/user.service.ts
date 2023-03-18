@@ -13,9 +13,21 @@ import { sendMail } from "../../utils/zohoMailer";
 import { updateEmailTemplate,postEmailTemplate } from "../../configs/mailtemplate";
 import { KycData, updateProfile } from "../../interfaces/inputInterface";
 import { compare, hash } from "bcrypt";
+import { IUser } from "../../interfaces/dbInterface";
 dotenv.config()
 
 
+
+export const getUserS=async(userId:string):Promise<IUser>=>{
+    try{
+        const userData=await userModel.findOne({userId}).select("-password -Token -refreshToken -is_Admin -wishList");
+        if(!userData) throw new Error("Failed to fetch userData")
+        return userData
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+}
 
 export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
     try{

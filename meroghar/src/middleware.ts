@@ -74,13 +74,12 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
        
 
       const jsonData = await response.json()
-      console.log(jsonData)
+      console.log(jsonData.accessToken);
 
       //now we check whether the passed role mathces the user role 
       // if(is_Admin!==jsonData.user.is_Admin)  return NextResponse.redirect('http://localhost:3000')
 
       //verified token and also send new tokens access and refresh token
-
       await res.cookies.set('accessToken', jsonData.accessToken, {
         maxAge: 900,
         httpOnly: true,

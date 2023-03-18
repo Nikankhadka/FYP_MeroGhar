@@ -21,7 +21,7 @@ export const registerUserC=async(req:Request,res:Response)=>{
         const newUser=await registerUserS(userId,password);
         if(newUser) return res.status(200).json({success:true, message:`user ${userId} successfully registered`})
         
-        return res.status(409).json({ success:false,error:"user with id already exist"})
+        return res.status(400).json({success:false,error:"user with id already exist"})
         
     }catch(err:any){
         res.status(400).json({success:false, error:err.message})
@@ -79,7 +79,7 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
       //if client side request then set else use response data to set in Nextjs middleware
       res.cookie("accessToken",tokens.newaccessToken,{maxAge:900000,httpOnly:true})
       .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
-      .status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newrefreshToken,refreshToken:tokens.newrefreshToken,user});
+      .status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newaccessToken,refreshToken:tokens.newrefreshToken,user});
 
 
 
@@ -96,10 +96,10 @@ export const googleLoginC=async(req:Request,res:Response)=>{
     try{
        
         console.log(req.user);
-        const {accessToken,refreshToken}=await googleLoginS(req.user)
-        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(StatusCodes.OK).redirect("http://localhost:3000/test")
+        const {accessToken,refreshToken,user}=await googleLoginS(req.user)
+        res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+      .status(StatusCodes.OK).redirect("http://localhost:3000")
 
     }catch(e:any){
         console.log(e);
@@ -113,10 +113,10 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
     try{
        
         console.log(req.user);
-        const {accessToken,refreshToken}=await facebookLoginS(req.user)
-        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:2592000000,httpOnly:true})
-      .status(200).redirect("http://localhost:3000/test")
+        const {accessToken,refreshToken,user}=await facebookLoginS(req.user)
+        res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+      .status(200).redirect("http://localhost:3000")
 
     }catch(e:any){
         console.log(e);

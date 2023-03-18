@@ -27,7 +27,7 @@ export const authCheck=async(is_Admin:boolean)=>{
 }
 
 //for common routes can only be accessed by user/non user
-const checkSession=async():Promise<boolean>=>{
+export const checkSession=async():Promise<boolean>=>{
   const cookieStore=cookies();
   const session=cookieStore.get("session")?.value;
   if(!session) return false;

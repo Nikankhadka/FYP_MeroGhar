@@ -1,24 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+
 import {useForm,useFieldArray,useWatch,Control} from 'react-hook-form'
 import { SubmitHandler } from 'react-hook-form'
 import { ErrorText } from './random'
-import useFilePreview from '../customHoooks/previewImage'
+import { PropertyForm } from '../interface/form'
+import axios from 'axios'
+import { Images } from '../interface/request'
 
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
-  interface PropertyForm{
-    name:string,
-    city:string,
-    area:string,
-    discription:string,
-    property_type:string,
-    rule:string,
-    price:number,
-    images:any[],
-    amenities:string[]
-}
 
 
 
@@ -26,8 +17,7 @@ const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-40
 
 
 
-export default function PropertyForm(){
-
+export default function PostPropertyForm(){
 
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<PropertyForm>({
       defaultValues:{
@@ -60,17 +50,16 @@ export default function PropertyForm(){
     const onSubmit: SubmitHandler<PropertyForm> =async(formdata)=>{
         console.log(formdata)
 
-        const amenities=formdata.amenities.filter(item=>item!='')
-      const RequestBody:PropertyForm={
-        ...formdata,
-        amenities,
-        images:[]
-      }
+      const amenities=formdata.amenities.filter(item=>item!='')
+      
+      const {name,location,discription,price,property_type,rules}=formdata
+      let images:Images[]=[];
+
 
         //there might be multiple image upload so 
         const imageData= new FormData();
         //since there might be multiple images
-        formdata.images.map(async(image,index)=>{
+        for (const image of formdata.images){
           imageData.append('file',image[0])
           imageData.append('cloud_name','drpojzybw');
           imageData.append('upload_preset','FypMeroGhar');
@@ -81,17 +70,33 @@ export default function PropertyForm(){
           })
           const response=await res.json()
 
-          RequestBody.images.push({
+         await  images.push({
             img_id:response.public_id,
             img_url:response.url
           })
           
-        })
+        }
         
-        console.log(RequestBody)
+        let RequestBody:PropertyForm={
+          name,
+          location,
+          discription,
+          price,
+          property_type,
+          rules,
+          amenities,
+          images,
+        }
 
-
+        console.log(RequestBody.images)
         //now send post request into my post api
+        const res=await axios.post("http://localhost:2900/property/v1/createProperty",RequestBody,{withCredentials:true});
+        if(!res.data.success){
+         return  console.log('fuck u')
+        }
+
+        return alert("proeprty posted")
+
     }
 
 
@@ -110,7 +115,7 @@ export default function PropertyForm(){
 
                              
                       {/* initially the value default does not read file casuing to return empty string */}
-                         <img src={imageUrl(index)} alt="ImagePreviewHere" className={imageUrl(index)==''? 'hidden' : 'w-full h-auto md:w-[60%] md:h-80 rounded-lg'} />
+                         <img src={imageUrl(index)} alt="ImagePreviewHere" className={imageUrl(index)==''? 'hidden' : 'w-full h-auto  md:h-[320px] md:w-[80%] lg:h-[400px] rounded-lg'} />
                         
                         
 
@@ -181,9 +186,9 @@ export default function PropertyForm(){
             type="text"
             placeholder="City"
             className={inputStyle}
-            {...register('city', { required: true })}
+            {...register('location.city', { required: true })}
           />
-          {errors.city && ( <ErrorText text='Please Enter Valid city'/>)}
+          {errors?.location?.city && ( <ErrorText text='Please Enter Valid city'/>)}
         </div>
 
         <div className='w-full'>
@@ -192,9 +197,9 @@ export default function PropertyForm(){
             type="text"
             placeholder="Area"
             className={inputStyle}
-            {...register('area', { required: true})}
+            {...register('location.area', { required: true})}
           />
-          {errors.area && ( <ErrorText text='Please Enter Valid Area'/>)}
+          {errors?.location?.area && ( <ErrorText text='Please Enter Valid Area'/>)}
         </div>
       
        
@@ -222,12 +227,12 @@ export default function PropertyForm(){
             <textarea rows={5}
             placeholder="Rules"
             className={inputStyle}
-            {...register('rule', { required: true})}>
+            {...register('rules', { required: true})}>
 
             </textarea>
            
           
-          {errors.rule && ( <ErrorText text='Please Enter Rules/Criteria'/>)}
+          {errors.rules && ( <ErrorText text='Please Enter Rules/Criteria'/>)}
         </div>
 
 

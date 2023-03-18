@@ -4,6 +4,12 @@ export interface LoginRegisterInput {
     password: string
 }
 
+
+
+export interface Images{
+  img_id:string,
+  img_url:string
+}
 export interface PostProperty{
     name:string,
     city:string,
@@ -12,9 +18,6 @@ export interface PostProperty{
     property_type:string,
     rule:string,
     price:number,
-    images:[{
-      img_id:string,
-      img_url:string
-    }],
+    images:Images[],
     amenities:string[]
 }

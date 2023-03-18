@@ -1,7 +1,9 @@
 'use client'
 
 import Link from "next/link"
-import { forwardRef} from "react"
+import { forwardRef, useState} from "react"
+import LoginSignup from "./loginSignup"
+
 
 
 const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover:bg-hoverColor"
@@ -15,15 +17,21 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
  const InititailModalC =forwardRef<Ref,InitiailModal>((props,ref):JSX.Element=>{
 
+
   if(!props.authState){
     return(
         <div ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2   ">
-            <button className={`${btnstyle} font-semibold`}>Log in</button>
-            <button className={btnstyle}>Sign Up</button>
+            <Link href='/login' className={`${btnstyle} font-semibold`} 
+            >Log in</Link>
+
+
+            <Link href='/signup' className={btnstyle}>Sign Up</Link>
             <hr />
-            <a href="#" className={btnstyle}>Post Property</a>
-            <a href="#" className={btnstyle}>Rent Property</a>
-            <a href="#" className={btnstyle}>Help</a>
+            <Link href="/postProperty" className={btnstyle}>Post Property</Link>
+            <Link href="#" className={btnstyle}>Rent Property</Link>
+            <Link href="#" className={btnstyle}>Help</Link>
+
+            
         </div>
     )
   }  

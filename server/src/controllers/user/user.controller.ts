@@ -1,6 +1,18 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS} from "../../services/user/user.service"
+import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS, getUserS} from "../../services/user/user.service"
+
+
+
+export const getUserC=async(req:Request,res:Response)=>{
+    try{
+        const userData=await getUserS(req.userData.userId);
+        if(userData) return res.status(200).json({success:true,userData})
+    }catch(e:any){
+        console.log(e)
+        return res.status(400).json({success:false,error:e.message})
+    }
+}
 
 
 export const addEmailC=async(req:Request,res:Response)=>{

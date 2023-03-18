@@ -9,6 +9,7 @@ import { verifyAccessTokenS } from "../services/auth/auth.service";
 export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)=>{
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
+        
 
         try{
         const {success,tokendata}=await verifyAccessTokenS(accessToken);

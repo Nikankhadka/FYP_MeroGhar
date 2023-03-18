@@ -7,11 +7,11 @@ dotenv.config()
     try{
         const accessToken=await sign({
             userId, is_Admin,kycVerified
-        },process.env.accessToken!,{expiresIn:"1800s"})
+        },process.env.accessToken!,{expiresIn:"900s"})
 
         const refreshToken=await sign({
             userId,is_Admin,kycVerified
-        },process.env.refreshToken!,{expiresIn:"30 days"})
+        },process.env.refreshToken!,{expiresIn:"7 days"})
 
         return {accessToken,refreshToken}
 

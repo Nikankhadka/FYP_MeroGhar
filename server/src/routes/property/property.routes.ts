@@ -15,7 +15,7 @@ router.use("/wishList",wishlistRoutes);
 
 //view count sepeerate api for more accurate view count of the product
 router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyByIdC)
-router.post("/createProperty",verifyaccessToken,verifyRole(false),validatePropertyInput,createPropertyC)
+router.post("/createProperty",verifyaccessToken,validatePropertyInput,createPropertyC)
 router.patch("/updateProperty/:id",verifyaccessToken,verifyRole(false),validatePropertyUpdate,updatePropertyC)
 router.delete("/deleteProperty/:id",verifyaccessToken,verifyRole(false),deletePropertyC)
 
