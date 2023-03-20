@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Card from '../../../components/card'
 import Carousel from '../../../components/carousel'
 import { BookProperty } from '../../../components/propComp'
+import Review from '../../../components/reviewCard'
 import Wish from '../../../components/Svg/wishSvg'
 
 type Params = {
@@ -190,6 +191,13 @@ export default function Room({ params: { roomId } }: Params) {
       </div>
 
       <hr className="my-8 border-gray-400" />
+      
+      {/* review Crud component */}
+
+
+      <Review />
+
+      <hr className="my-8 border-gray-400" />
 
       {/* REViews Section */}
       <div>
@@ -214,7 +222,11 @@ export default function Room({ params: { roomId } }: Params) {
                   </p>
                 </div>
 
-                <p className="text-md text-gray-700 my-3">
+              <p className='my-2 flex items-center gap-x-2'>
+                <img src="/rate.png" alt="rate" className='block w-7 h-7' />
+                <span className='block text-sm font-bold'>5.0</span>
+              </p>
+              <p className="text-md text-gray-700 my-3">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
@@ -222,7 +234,14 @@ export default function Room({ params: { roomId } }: Params) {
               survived not only five centuries, but also the leap into
               electronic typesetting, remaining essentially unchanged
             </p>
-              </div>
+
+            {/* send api request to report this review so it can be checked by admin  can only be seen by owner*/}
+            <button className='flex items-center gap-x-2 underline'>
+              <img src="/flag.png" alt="flag" className='block h-5 w-5' />
+              <span className='block text-sm text-gray-700 font-bold'>Report Review</span>
+            </button>
+
+            </div>
             )
           })
         }

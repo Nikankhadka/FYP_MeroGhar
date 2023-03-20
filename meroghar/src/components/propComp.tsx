@@ -42,12 +42,14 @@ export function BookProperty() {
     
     <hr className=' border-gray-300 my-2'/>
     {/* pass form value from rouet then use catch all routes to access query values */}
-    <Link href='#' className='block w-full my-2 text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor'>Reserve</Link>
+    <button  className='block w-full my-2 text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor'>Reserve</button>
+
+    <Link href="#" className='w-full block my-3 text-center  text-sm underline'>Contact Host</Link>
+
     </form>
 
-
+   
     </div>
-
 
     {/* Review Section */}
     </main>
