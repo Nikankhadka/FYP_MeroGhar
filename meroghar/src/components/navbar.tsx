@@ -45,12 +45,12 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
       {/* logoName */}
 
       <div className=" hidden items-center gap-1 md:flex">
-        <a
+        <Link
           href="http://localhost:3000"
           className="block items-center gap-2 md:flex "
         >
           <img src="airbnb.png" alt="logo" className="block h-10 w-10" />
-        </a>
+        </Link>
 
         <a
           href="http://localhost:3000"

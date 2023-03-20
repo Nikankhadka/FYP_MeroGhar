@@ -22,7 +22,14 @@ const getUser=async()=>{
         headers: { cookie: cookiedata},
       }).then(res=>res.json())
 
-      return response;
+      console.log(response)
+
+      if(response.success){
+        return response
+      }
+
+      return false;
+      
   }catch(e){
     console.log(e)
     return false
