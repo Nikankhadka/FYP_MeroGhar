@@ -44,7 +44,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
         
         <hr />
         <Link  href='/user/booking' className={`${btnstyle}`}>Manage Listings</Link>
-        <Link  href='/user/booking' className={`${btnstyle}`}>Account</Link>
+        <Link  href='/user/nikan' className={`${btnstyle}`}>Account</Link>
         <hr />
         <button className={btnstyle}>Log Out</button>
     </div>

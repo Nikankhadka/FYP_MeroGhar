@@ -56,25 +56,24 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
       //if user has refresh token then send api request to verify the token data
       console.log('refresh request')
-      const response = await fetch(
+      const jsonData = await fetch(
         'http://localhost:2900/auth/v1/refreshToken',
         {
           method: 'POST',
           credentials: 'include',
           headers: { cookie: cookies},
         }
-      )
+      ).then(res=>res.json())
 
       //token has expired
-      if (!response.ok){
+      if (!jsonData.success){
         //clear cookie in client side since token is refresh is failed the old token will be unauthorized
         await res.cookies.delete('accessToken').delete('refreshToken').delete('session')
         return NextResponse.redirect('http://localhost:3000/login')
       }
        
 
-      const jsonData = await response.json()
-      console.log(jsonData.accessToken);
+
 
       //now we check whether the passed role mathces the user role 
       // if(is_Admin!==jsonData.user.is_Admin)  return NextResponse.redirect('http://localhost:3000')

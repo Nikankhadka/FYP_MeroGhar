@@ -22,14 +22,18 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     console.log(data)
     const {userId,password}=data
     if(login){
-      
-      const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
+      try{
+        const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
         console.log('login succesful')
         if(res.data.user.is_Admin) return window.location.href='/admin'
        return  window.location.href='/'
       }
      return  window.location.href='/'
+      }catch(e:any){
+        return alert(e.message)
+      }
+      
     }
 
     //for signup
