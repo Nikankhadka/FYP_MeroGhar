@@ -25,6 +25,10 @@ export const userSchema=new Schema({
             img_url:String
         },
         
+        About:{
+            type:String
+        },
+        
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
             mail:{type:String},

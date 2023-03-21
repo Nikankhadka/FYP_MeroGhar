@@ -1,4 +1,5 @@
-import Profile from "../../../components/profile"
+
+import Profile from "../../../components/user/profile"
 
 type Params = {
     params: {
@@ -6,12 +7,18 @@ type Params = {
     }
   }
   
-  export default function Room({ params: { userId } }: Params) {
+  export default async  function Room({ params: { userId } }: Params) {
+
+
+    
+
     return(
-        <main className="my-20 w-full">
-            userProfile here
-            <Profile />
-        </main>
+        
+           <main className="my-20">
+               <Profile />
+           </main>
+         
+       
     )
 
 }

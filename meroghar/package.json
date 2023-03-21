@@ -22,7 +22,7 @@
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
     "http": "^0.0.1-security",
-    "next": "^13.1.2",
+    "next": "^13.2.4",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-datepicker": "^4.10.0",
