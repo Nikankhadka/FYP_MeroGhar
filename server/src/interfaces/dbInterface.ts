@@ -26,6 +26,7 @@ interface kycSchema{
       img_id: string
       img_url: string
     }
+    About:string
     email: {
       mail: string
       is_verified: boolean
