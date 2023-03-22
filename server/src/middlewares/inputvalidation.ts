@@ -59,6 +59,7 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
             firstName:joi.string().required(),
             lastName:joi.string().required(),
             gender:joi.string().required(),
+            // email is not compulsory dynamically render email input in front end
             email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
             phoneNumber:joi.string().min(10).max(10).required(),
             address:{

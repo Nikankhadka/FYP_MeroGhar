@@ -33,17 +33,18 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
 }
 
 
-export const getKycRequestsS=async(userId:string):Promise<IUser>=>{
+// paginated kyc requests
+export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
     try{
-        //chekck if array of request exist and there are post requests to be verified
-        
-        const checkRequests=await userModel.findOne({userId});
-        if(checkRequests?.kycVerificationRequests==undefined||checkRequests.kycVerificationRequests.length==0) throw new Error("No kyc request in the present")
 
-        //since not empty or undefined
-        const kycRequests=await userModel.findOne({userId},"_id kycVerificationRequests").populate("kycVerificationRequests",{path:"Users",select:"_id userName profile_Img kycInfo"})
-        if(!kycRequests) throw new Error("Failed to Fetch Kyc requests")
-        return kycRequests;
+        const newlimit=parseInt(limit)
+        const newpage=parseInt(page)
+
+        //since all admin have access to this simply fetch unverified property set in pending 
+        const kycRequests=await userModel.find({kyc:{is_verified:false,pending:true}}).limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).select('userId _id profile_img kycInfo');
+        if(!kycRequests) throw new Error("No user need to be verified right now")
+        return kycRequests
+
     }catch(e){
         console.log(e)
         throw e
@@ -64,14 +65,17 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
                 "$set":{
                     "kyc.is_Verified":true,
                     "kyc.message":"KYC information valid",
-                    "kyc.approvedBy":adminId
+                    "kyc.approvedBy":adminId,
+                    'kyc.pending':false
                 }
             })
             if(!verifyUser) throw new Error("user not able to verify")
+
+            return true;
         }
 
         
-        if(!kycData.isVerified){
+        
             //since admin deemed kyc info to be invalid just provide the message to the user 
 
             //just make sure the user account is not verified
@@ -82,21 +86,22 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
                 "$set":{
                     "kyc.is_Verified":false,
                     "kyc.message":kycData.message,
-                    "kyc.approvedBy":adminId
+                    "kyc.approvedBy":adminId,
+                    'kyc.pending':false
                 }
             })
             if(!declineUser) throw new Error("User kyc Decline failed")
-        }
-
+        
+            return true;
         //the default task would be clear admin kyc request either way 
-        const deleteKycRequests=await userModel.updateMany({is_Admin:true},{
-            "$pull":{
-                "kycVerificationRequests":id
-            }
-        })
+        // const deleteKycRequests=await userModel.updateMany({is_Admin:true},{
+        //     "$pull":{
+        //         "kycVerificationRequests":id
+        //     }
+        // })
 
-        if(!deleteKycRequests) throw new Error("Kyc Request delete failed")
-        return true;
+        // if(!deleteKycRequests) throw new Error("Kyc Request delete failed")
+       
 
     }catch(e){
         console.log(e);

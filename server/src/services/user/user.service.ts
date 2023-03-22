@@ -130,16 +130,21 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
             if(addEmail) delete KycData.kycInfo.email;
         }
 
-        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData},{new:true})
+        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{is_verified:{
+            status:false,
+            pending:true,
+            message:""
+            }}},{new:true})
+
         if(!postKyc) throw new Error("Kyc post failed")
 
         //now update admin notification setting 
-        const adminRequest=await userModel.updateMany({is_Admin:true},{
-            "$push":{
-                "kycVerificationRequests":postKyc._id,
-            }
-        })
-        if(!adminRequest) throw new Error("Failed to push kyc for admin approval")
+        // const adminRequest=await userModel.updateMany({is_Admin:true},{
+        //     "$push":{
+        //         "kycVerificationRequests":postKyc._id,
+        //     }
+        // })
+        // if(!adminRequest) throw new Error("Failed to push kyc for admin approval")
         return true;
 
     }catch(e){

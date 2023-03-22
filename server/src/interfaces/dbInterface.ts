@@ -42,6 +42,7 @@ interface kycSchema{
       is_verified: boolean
       message: string
       approvedBy: string
+      pending:boolean
     };
     listing_Count: number
     avg_rating: number
@@ -57,7 +58,7 @@ interface kycSchema{
     rented_property: Types.ObjectId[]
     recommendation: Types.ObjectId[]
     viewed_property: Types.ObjectId[]
-    kycVerificationRequests: Types.ObjectId[]|kycSchema[]
+    
  }
  
 
