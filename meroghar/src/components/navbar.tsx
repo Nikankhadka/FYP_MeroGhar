@@ -41,7 +41,7 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
 
 
   return (
-    <nav className=" fixed z-50 flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md">
+    <nav className=" fixed  flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md">
       {/* logoName */}
 
       <div className=" hidden items-center gap-1 md:flex">
