@@ -103,7 +103,7 @@ export default function PostPropertyForm(){
     return(
         <main className='w-full my-2 flex flex-col items-center'>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='w-[95%] border-none shadow-none md:w-[80%]  md:border-2 border-gray-300 rounded-lg md:shadow-lg p-3 flex flex-col items-center'>
+        <form onSubmit={handleSubmit(onSubmit)} className='w-[95%] border-none shadow-none  lg:w-full p-3 flex flex-col items-center'>
         
         <div className='w-full p-2'>
 
@@ -115,7 +115,7 @@ export default function PostPropertyForm(){
 
                              
                       {/* initially the value default does not read file casuing to return empty string */}
-                         <img src={imageUrl(index)} alt="ImagePreviewHere" className={imageUrl(index)==''? 'hidden' : 'w-full h-auto  md:h-[320px] md:w-[80%] lg:h-[400px] rounded-lg'} />
+                         <img src={imageUrl(index)} alt="ImagePreviewHere" className={imageUrl(index)==''? 'hidden' : 'w-full h-[200px] sm:h-[270px]  md:h-[320px] md:w-[80%] lg:h-[400px] rounded-lg'} />
                         
                         
 
@@ -131,7 +131,7 @@ export default function PostPropertyForm(){
                      
                      {
                       index!=0&& <button type='button' onClick={()=>remove(index)} className='border-2 border-gray-400 rounded-lg hover:bg-red-300' >
-                      <img src="minus.png" alt="delete" />
+                      <img src="/minus.png" alt="delete" />
                      </button>
                      }
                     
@@ -145,7 +145,7 @@ export default function PostPropertyForm(){
                 }
             
             <button type='button' onClick={()=>append({image:"newImage"})} className='border-2 border-gray-400 rounded-lg hover:bg-hoverColor  '>
-                          <img src="add.png" alt="add" />
+                          <img src="/add.png" alt="add" />
             </button>
 
            

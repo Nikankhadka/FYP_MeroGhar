@@ -33,7 +33,7 @@ export default function Profile() {
       <div className="my-3 flex flex-col gap-2">
 
         <div>
-        <Link href='#' className=" block mb-2 text-left text-sm font-bold underline">Account-Settings</Link>
+        <Link href='/account-settings' className=" block mb-2 text-left text-sm font-bold underline">Account-Settings</Link>
         <button onClick={(e)=>{
           e.preventDefault();
           setEditProfile(true)

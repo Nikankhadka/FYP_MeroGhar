@@ -82,6 +82,9 @@ export const userSchema=new Schema({
         //kyc verification status
         kyc:{
             is_verified:{type:Boolean,default:false},
+
+            // can be used to fetch information and other things
+            pending:Boolean,
             message:String,
             approvedBy:String,
         },
@@ -127,16 +130,8 @@ export const userSchema=new Schema({
             default:undefined
         },
 
-        //now going to add some propertis utilized by admin only 
-        kycVerificationRequests:{
-            type:[ {type:Schema.Types.ObjectId,ref:"Users"}],
-            default:undefined
-        },
+        
 
-        propertyVerificationRequests:{
-            type:[ {type:Schema.Types.ObjectId,ref:"Properties"}],
-            default:undefined
-        }
 
 })
 

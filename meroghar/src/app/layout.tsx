@@ -4,7 +4,8 @@ import NavBar from '../components/navbar'
 import { cookies } from 'next/headers';
 
 import Footer from '../components/footer'
-import AdminNav from '../components/adminNav';
+import AdminNav from '../components/DashboardNav';
+import DashboardNav from '../components/DashboardNav';
 
 
 //seup conditional root layout for admin and normal user so only url for somethings might differ
@@ -47,8 +48,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     sessionObj=JSON.parse(session)
   }
  
-  const user=await getUser()
-    
+  // const user=await getUser()
+
   
 
   return (
@@ -61,7 +62,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
 
         {/* conditionally render navbar  */}
         
-        {!sessionObj.is_Admin?<NavBar theme={theme} authState={session?true:false} img={user?user.userData.profile_img.img_url:''}/>:<AdminNav />}
+        <DashboardNav />
         {/* this children represents each page component  that is rendered */}
         {children}
         <Footer />

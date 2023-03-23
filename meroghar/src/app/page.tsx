@@ -1,5 +1,6 @@
 import { checkSession } from "../api/auth"
 import Card from "../components/card"
+import NavBar from "../components/navbar"
 
 export default async function Home(){
 
@@ -7,7 +8,8 @@ export default async function Home(){
 
    if(session){
     return(
-        <main className="my-20 w-full ">
+        <main className="w-full ">
+            <NavBar theme="dark" authState={false}  img=''/>
             {/* for Property Viwed By users */}
             <div className="w-[95%] mx-auto">
             <h3 className="w- text-left">Recently Viewed Property</h3>

@@ -16,7 +16,7 @@ export const registerAdminC=async(req:Request,res:Response)=>{
 
 export const getKycRequestsC=async(req:Request,res:Response)=>{
     try{
-        const kycRequests=await getKycRequestsS(req.userData.userId);
+        const kycRequests=await getKycRequestsS(req.query.page as string,req.query.limit as string);
         if(kycRequests)return res.status(200).json({success:false,kycRequests})
     }catch(e:any){
         console.log(e);
