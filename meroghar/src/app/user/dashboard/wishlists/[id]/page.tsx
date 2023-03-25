@@ -1,11 +1,11 @@
 'use client'
 
-import Card from "../../../components/card"
-import WishlistCard from "../../../components/WishlistCard"
+import Card from "../../../../../components/card"
+
 import {BsThreeDots} from 'react-icons/bs'
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 import {useForm,SubmitHandler} from 'react-hook-form'
-import { ErrorText } from "../../../components/random"
+import { ErrorText } from "../../../../../components/random"
 import {useState} from 'react'
 interface wish{
     listName:string
@@ -25,9 +25,9 @@ export default function WishProperties(){
 
 
     return(
-        <main className="my-20 w-full ">
+        <main className=" ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
 
-        <div className=" mx-auto w-[95%] sm:w-[80%] ">
+        <div className=" mx-auto w-full sm:w-[95%] ">
 
        <div className="w-[98%] flex justify-between items-center">
        <h2 className="text-2xl font-bold text-gray-700">WishList Name</h2>

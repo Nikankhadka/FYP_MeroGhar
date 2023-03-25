@@ -1,10 +1,11 @@
 import Link from 'next/link'
-import Card from '../../../components/card'
+
 import Carousel from '../../../components/carousel'
 import { BookProperty } from '../../../components/propComp'
 import Review from '../../../components/reviewCard'
 import Wish from '../../../components/Svg/wishSvg'
 
+import NavBar from '../../../components/navbar'
 type Params = {
   params: {
     roomId: string
@@ -17,8 +18,12 @@ export default function Room({ params: { roomId } }: Params) {
   const Amenities = ['room', 'wifi', 'Ac', 'Tv']
   const Reviews = ['room', 'wifi', 'Ac', 'Tv']  
   return (
-    <main className="my-24 mx-auto w-[95%] md:w-[80%] ">
-      <div>
+    <main className="w-full  ">
+        <NavBar theme="dark" authState={false}  img=''/>
+
+        <div className='my-24 mx-auto w-[95%] md:w-[80%]'>
+
+        <div >
         <h3 className="my-2 text-center text-lg font-semibold md:text-left ">
           Property/Room Name Tiltle Goes Here
         </h3>
@@ -249,6 +254,8 @@ export default function Room({ params: { roomId } }: Params) {
         
 
       </div>
+        </div>
+      
     </main>
   )
 }

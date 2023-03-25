@@ -64,7 +64,7 @@ export default function Profile() {
         </div>
 
       </div>
-      
+        
 
       <hr className="my-5 border-gray-400" />
 
@@ -89,6 +89,8 @@ export default function Profile() {
 
       <hr className="my-5 border-gray-400" />
 
+
+      {/* this all will not be rendered on  */}
       {
         !EditProfile&&<div className='my-2 p-2 w-[95%] md:w-[80%]'>
          <h2 className='my-2 text-lg font-semibold'>About</h2>
@@ -117,6 +119,10 @@ export default function Profile() {
       </div>
 
     <Link href='#'className=' underline mx-2 my-2 text-sm font-semibold'>show Listings</Link>
+
+
+
+
     </main>
   )
 }

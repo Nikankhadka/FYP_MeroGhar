@@ -41,7 +41,7 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
 
 
   return (
-    <nav className=" fixed  flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md">
+    <nav className=" fixed z-50 flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md">
       {/* logoName */}
 
       <div className=" hidden items-center gap-1 md:flex">
@@ -49,7 +49,7 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
           href="http://localhost:3000"
           className="block items-center gap-2 md:flex "
         >
-          <img src="airbnb.png" alt="logo" className="block h-10 w-10" />
+          <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
         </Link>
 
         <a
@@ -68,7 +68,7 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
           placeholder="   Search"
         />
         <button className=" h-full rounded-lg bg-white px-1 hover:bg-blue-100  ">
-          <img src="search.png" alt="search" className="h-6 w-6 " />
+          <img src="/search.png" alt="search" className="h-6 w-6 " />
         </button>
       </div>
 
@@ -87,8 +87,8 @@ const NavBar = ({ theme,authState,img }: NavProps): JSX.Element => {
             className="flex items-center gap-1  rounded-lg border-2 border-gray-200  px-2 py-1 hover:border-themeColor dark:bg-slate-300 "
             onClick={(e) => setopen(!open)}
           >
-            <img src="menu.png" alt="user" className="h-5 w-5 " />
-            <img src={img==''?'user.png':img} alt="user" className="h-8 w-8 rounded-full " />
+            <img src="/menu.png" alt="user" className="h-5 w-5 " />
+            <img src={img==''?'/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
           </button>
 
           {open && <InititailModalC authState={authState} ref={menuRef} />}

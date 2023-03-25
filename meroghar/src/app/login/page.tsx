@@ -2,6 +2,7 @@
 import { checkSession } from "../../api/auth"
 import LoginSignup from "../../components/loginSignup"
 import { redirect } from 'next/navigation';
+import NavBar from "../../components/navbar";
 
 export default async function LoginPage(){
 
@@ -10,8 +11,13 @@ export default async function LoginPage(){
    
     
    if(!session)return(
-        <main className="my-20">
-             <LoginSignup  login={true} modal={false}/>
+        <main className="w-full">
+        <NavBar theme="dark" authState={false}  img=''/>
+
+        <div className="mt-24">
+        <LoginSignup  login={true} modal={false}/>
+        </div>
+           
         </main>
     )
 
