@@ -12,8 +12,8 @@ export default async function Singup(){
     
    if(!session)return(
         <main className="w-full">
-        <NavBar theme="dark" authState={false}  img=''/>
-        <div className="mt-24">
+        <NavBar theme="dark" authState={false}  img='' Z='0'/>
+        <div className="my-24">
         <LoginSignup  login={false} modal={false}/>
         </div>
             

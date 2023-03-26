@@ -24,7 +24,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
        <DashboardNav />
         {/* this children represents each page component  that is rendered */}
         {children}
-        <SideBar is_Admin={false} menu={false}  />
+        <SideBar is_Admin={true} menu={false}  />
         
         
       </body>

@@ -8,8 +8,8 @@ import { ErrorText } from './random'
 import axios from 'axios'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-
-
+import {useState} from 'react'
+import AlertC from './modals/alert'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -17,6 +17,8 @@ import Link from 'next/link'
 export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Element {
   
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
+  const[invalid,setinvalid]=useState(false);
+  const[alert,setalert]=useState(false)
 
   const onSubmit: SubmitHandler<LoginRegisterInput> = async(data) => {
     console.log(data)
@@ -27,11 +29,16 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
       if(res.data.success){
         console.log('login succesful')
         if(res.data.user.is_Admin) return window.location.href='/admin'
-       return  window.location.href='/'
+        setalert(true)
+        setTimeout(() => {
+          setalert(false);
+        },5000);
+        
+        return;
       }
-     return  window.location.href='/'
+     return  redirect('/')
       }catch(e:any){
-        return alert(e.message)
+        return setalert(false)
       }
       
     }
@@ -40,12 +47,17 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     try{
     const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
-     return window.alert("New user successfully registered")
+      setalert(true);
+      setTimeout(() => {
+        setalert(false);
+      },5000);
+      
+      return;
     }
     throw new Error(`${res.data.error}`)
     }catch(e:any){
       console.log(e)
-      return window.alert(`${e.message}`)
+      return  setalert(true);
     }
     
    
@@ -55,8 +67,10 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
   const style2='absolute mt-8 translate-x-[-160%] border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
   return (
     <div className={modal? style2:style1} >
-     
-      <div className=" flex w-full items-center  border-b-2 border-gray-200 p-3">
+      
+      {alert&&<AlertC type='success' message="successfully registered new user"/>}
+   
+      <div className=" flex w-full items-center my-5  border-b-2 border-gray-200 p-3">
         <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
           {login ? 'Log in' : 'Sign up'}
         </p>
@@ -109,6 +123,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
             </Link>
           )}
 
+           {invalid&&<p className='text-sm text-red-600 my-3'>Invalid UserId/Password</p>}
           <input
             type="submit"
             className="text-md my-1 w-[95%] cursor-pointer rounded-md bg-themeColor p-2 text-white hover:bg-mainColor"

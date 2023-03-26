@@ -12,9 +12,9 @@ export default async function LoginPage(){
     
    if(!session)return(
         <main className="w-full">
-        <NavBar theme="dark" authState={false}  img=''/>
+        <NavBar theme="dark" authState={false}  img='' Z='0' />
 
-        <div className="mt-24">
+        <div className="my-24">
         <LoginSignup  login={true} modal={false}/>
         </div>
            
@@ -22,5 +22,5 @@ export default async function LoginPage(){
     )
 
     //else redirect to home 
-    return redirect('/')
+    return redirect('/user')
 }  
