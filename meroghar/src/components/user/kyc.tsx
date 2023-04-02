@@ -2,7 +2,10 @@
 
 
 import {useForm,SubmitHandler} from 'react-hook-form'
+import {useState} from 'react'
 import { ErrorText } from '../random'
+import Cmodal from '../modals/confirmModal'
+const inputStyle="text-md my-1 h-11 w-[90%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
 interface form{
     firstName:string,
@@ -16,26 +19,21 @@ interface form{
     img:any
 }
 
-interface phone{
-  phoneNumber:string
-}
 
 
-const inputStyle="text-md my-1 h-11 w-[90%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
+
 
 
 interface kycprops{
   setopenKyc: React.Dispatch<React.SetStateAction<string>>
-  setkycinfo:React.Dispatch<React.SetStateAction<string>>
+  
 }
 
 
 
-export default function Kyc({setopenKyc,setkycinfo}:kycprops){
-
+export default function Kyc({setopenKyc}:kycprops){
+    const[openConfirm,setopenConfirm]=useState(false)
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<form>()
-    
-
     const gender=['Male','Female','Others']
     const img=watch('img')
    
@@ -52,6 +50,7 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
 
     const onSubmit: SubmitHandler<form> =async(formdata)=>{
       console.log(formdata)
+      setopenConfirm(true);
     }
    
 
@@ -59,9 +58,9 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
         <main className="w-full mt-5 p-4   md:border-2  md:border-gray-200 md:shadow-lg  rounded-lg">
 
        <Phone />
-
+        {openConfirm&&<Cmodal setopenConfirm={setopenConfirm} />}
         <hr className="my-5 border-gray-400" />  
-            
+        
         <form >        
         <div className='w-full  gap-3 grid grid-cols-1 md:grid-cols-2'>
         <div className='w-full'>
@@ -125,16 +124,16 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
             type="email"
             placeholder="Email"
             className={inputStyle}
-            {...register('email', { required: true})}
+            {...register('email', {required:true,pattern:/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i})}
           />
-          {errors?.email && ( <ErrorText text='Please Enter Valid Email'/>)}
+          {errors?.email && ( <ErrorText text='Please Enter Valid Email/Formatted Email'/>)}
         </div>
         </div>
         <div className='w-full p-2'>
 
                         
              
-          <div className='w-full my-2  flex flex-col items-center gap-2 '  >
+          <div className='w-full my-2  flex flex-col items-center gap-2'  >
 
                              
                       {/* initially the value default does not read file casuing to return empty string */}
@@ -156,8 +155,9 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
               
                        
                         </div>
+                        <p className='text-sm text-themeColor'>Please provide proof of Identification</p>
                         {errors?.img && ( <p className="block w-[95%] text-center text-sm text-red-700">Please Upload image for the Field</p>)}
-                       
+
                     </div>
 
             
@@ -173,9 +173,11 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
           e.preventDefault();
           
           setopenKyc('close');
-          setkycinfo('yes');
+          
         }}>Cancel</button>
-          <button className='p-2 text-white border border-white transition-all bg-themeColor rounded-lg hover:bg-mainColor'>Submit Kyc</button>
+          <button type='submit' className='p-2 text-white border border-white transition-all bg-themeColor rounded-lg hover:bg-mainColor'
+          onClick={handleSubmit(onSubmit)}
+          >Submit Kyc</button>
         </div>
           
         </form>
@@ -187,6 +189,9 @@ export default function Kyc({setopenKyc,setkycinfo}:kycprops){
 
 
 
+interface phone{
+  phoneNumber:string
+}
 
 function Phone(){
   const {register,handleSubmit,watch,formState: { errors },control} = useForm<phone>()

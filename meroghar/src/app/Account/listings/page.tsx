@@ -1,4 +1,4 @@
-import ListingComp from "../../../../components/user/listingpage";
+import ListingComp from "../../../components/user/listingpage";
 
 
 export default function UserListing(){

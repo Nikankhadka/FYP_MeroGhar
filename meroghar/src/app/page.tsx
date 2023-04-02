@@ -1,4 +1,4 @@
-import { checkSession } from "../api/auth"
+import { checkSession } from "../api/server/auth"
 import Card from "../components/card"
 
 import NavBar from "../components/navbar"

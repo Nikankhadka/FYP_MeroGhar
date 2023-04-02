@@ -7,6 +7,7 @@ import { ErrorText } from './random'
 import { PropertyForm } from '../interface/form'
 import axios from 'axios'
 import { Images } from '../interface/request'
+import { PostPropery } from '../api/client/property'
 
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
@@ -89,13 +90,17 @@ export default function PostPropertyForm(){
         }
 
         console.log(RequestBody.images)
-        //now send post request into my post api
-        const res=await axios.post("http://localhost:2900/property/v1/createProperty",RequestBody,{withCredentials:true});
-        if(!res.data.success){
-         return  console.log('fuck u')
+        
+        try{
+          const newProperty=await PostPropery(RequestBody)
+          if(newProperty) console.log("property Posted")
+        }catch(e){
+          console.log(e);
+        
         }
+       
 
-        return alert("proeprty posted")
+       
 
     }
 

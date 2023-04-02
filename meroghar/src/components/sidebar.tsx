@@ -3,14 +3,14 @@
 import Link from 'next/link'
 
 import { HiUser,HiIdentification,HiHeart,HiHome } from 'react-icons/hi'
-import {MdManageAccounts} from 'react-icons/md'
-import {MdOutlineReviews} from 'react-icons/md'
+import {MdManageAccounts,MdOutlineReviews} from 'react-icons/md'
+
 import{AiFillSetting} from 'react-icons/ai'
-import {RiLockPasswordFill} from 'react-icons/ri'
+import {RiLockPasswordFill,RiAdminFill} from 'react-icons/ri'
 
 import{BsFillChatLeftFill} from 'react-icons/bs'
 import {ImUserCheck} from 'react-icons/im'
-import {RiAdminFill} from 'react-icons/ri'
+
 import {BiLogOut} from 'react-icons/bi'
 import { forwardRef } from 'react'
 
@@ -55,7 +55,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
      
 
             <Link
-              href="/user/dashboard"
+              href="/Account"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <svg
@@ -73,7 +73,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>
 
             <Link
-              href="/user/dashboard/profile"
+              href="/Account/profile"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiUser className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -84,7 +84,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
            {
             !props.is_Admin&&<Link
-            href="/user/dashboard/wishlists"
+            href="/Account/wishlists"
             className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
           >
             <HiHeart className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -115,7 +115,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>
 
             <Link
-              href="/user/dashboard/reviews"
+              href="/Account/reviews"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <MdOutlineReviews className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -155,7 +155,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
             {account&&<div className='w-[95%] mx-auto '>
             <Link
-              href="/user/dashboard/Account"
+              href="/Account/Account-settings"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <MdManageAccounts className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -165,7 +165,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>
 
             <Link
-              href="/user/dashboard/password"
+              href="/Account/password"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <RiLockPasswordFill className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />

@@ -1,4 +1,4 @@
-import Password from "../../../../components/user/pasword";
+import Password from "../../../components/user/pasword";
 
 
 export default function PasswordPage(){

@@ -1,6 +1,6 @@
 
-import SideBar from '../../../components/sidebar';
-import DashboardNav from '../../../components/DashboardNav';
+import SideBar from '../../components/sidebar';
+import DashboardNav from '../../components/DashboardNav';
 
 
 

@@ -1,5 +1,5 @@
 
-import { checkSession } from "../../api/auth"
+import { checkSession } from "../../api/server/auth"
 import LoginSignup from "../../components/loginSignup"
 import { redirect } from 'next/navigation';
 import NavBar from "../../components/navbar";
