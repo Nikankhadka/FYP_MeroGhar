@@ -27,7 +27,7 @@ export default function Cmodal({setopenConfirm}:props) {
           {/* <hr className='border-[1px] border-gray-300 my-2' /> */}
 
           <h2 className="my-8 text-center text-xl font-bold text-gray-700">
-            Are You Sure?
+            Are You Sure You want to Continue?
           </h2>
 
           <div className="flex justify-around">

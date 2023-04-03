@@ -25,7 +25,7 @@ export default function AccountComponent() {
 
       {/* if kyc does not exist */}
 
-      {!kycinfo&&<div className='bg-gray-200 p-2 my-3 flex items-center justify-between '>
+      {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>
         <h1 className=''>Provide Kyc information ?</h1>
         <button className='text-sm font-bold text-gray-700 underline' onClick={(e)=>{
           e.preventDefault();

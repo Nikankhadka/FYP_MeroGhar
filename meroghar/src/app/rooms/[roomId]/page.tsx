@@ -19,7 +19,7 @@ export default function Room({ params: { roomId } }: Params) {
   const Reviews = ['room', 'wifi', 'Ac', 'Tv']  
   return (
     <main className="w-full  ">
-        <NavBar theme="dark" authState={false}  img=''/>
+        <NavBar theme="dark" authState={false}  img='' Z='50'/>
 
         <div className='my-24 mx-auto w-[95%] md:w-[80%]'>
 

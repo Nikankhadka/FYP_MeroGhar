@@ -14,5 +14,9 @@
     
   }
 
+  .react-tel-input .form-control{
+    @apply  py-4 
+  }
+
 
 
