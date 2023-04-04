@@ -24,6 +24,7 @@ import 'react-phone-input-2/lib/style.css'
 
 import { auth } from '../../configs/firebase'
 import OtpInput from 'react-otp-input'
+import { checkPhone, postPhone } from "../../api/client/user";
 
 interface form {
   firstName: string
@@ -225,7 +226,7 @@ function Phone() {
 
   const [otp, setOtp] = useState('')
   const [ph, setPh] = useState("");
-  const[error,seterror]=useState(false)
+  const[error,seterror]=useState('')
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
 
@@ -233,7 +234,7 @@ function Phone() {
   function onCaptchVerify() {
     try{
       console.log("this on captha verifiy is called")
-      if(!window.recaptchaVerifier){
+      
         window.recaptchaVerifier = new RecaptchaVerifier(
           "recaptcha-container",
           {
@@ -246,13 +247,21 @@ function Phone() {
           },
           auth
         );
-      }
+      
     }catch(e){
-      seterror(true)
+      seterror('phone')
     }}
 
-  function onSignup() {
+  async function onSignup() {
     setLoading(true);
+
+    // check whether this phone number is already used
+    const phone=await checkPhone(ph); //phone number passed
+    if(!phone) {
+      seterror('reuse')
+      return console.log('Phone Number Reuse Detected')
+    }
+
     onCaptchVerify();
 
     const appVerifier = window.recaptchaVerifier;
@@ -269,10 +278,11 @@ function Phone() {
       .catch((error) => {
         console.log(error);
         setLoading(false);
+        seterror("phone")
       });
   }
 
-  function onOTPVerify() {
+ async function onOTPVerify() {
     console.log("verify otp")
     console.log(otp)
     setLoading(true);
@@ -281,12 +291,20 @@ function Phone() {
       .then(async (res:any) => {
         console.log(res);
         
+        //post phone number to database
+        const post=await postPhone(ph)
+        if(!post){
+          setLoading(false);
+          seterror('fail');
+          return  console.log('phone number post failed')
+        }
         setLoading(false);
         setShowOTP(false)
       })
       .catch((err:any) => {
         console.log(err);
         setLoading(false);
+        seterror('otp')
 
       });
   }
@@ -306,12 +324,13 @@ function Phone() {
               <PhoneInput country={'us'} value={ph} onChange={setPh} />
               <div className="my-2">
 
-           {error&&<ErrorText text="Please Enter Valid PhoneNumber/Formatted PhoneNumber" />}
+           {error=='phone'&&<ErrorText text="Please Enter Valid PhoneNumber/Formatted PhoneNumber" />}
+           {error=='reuse'&&<ErrorText text="Phone Number Already used by user" />}
               </div>
             </div>
             <div id="recaptcha-container"></div>
             <button  onClick={onSignup} className="text-sm font-semibold text-gray-700 underline">
-              Send_Code
+              SendCode
             </button>
           </div>
       </div>
@@ -337,10 +356,23 @@ function Phone() {
           inputStyle={'border-b border-gray-700 w-5'}
         />
 
+{     error=='otp'&& 
+      <p className="text-center text-sm text-red-500 my-3">Please Enter Valid Otp Code</p>
+}
+
+{     error=='fail'&& 
+      <p className="text-center text-sm text-red-500 my-3">Phone Post Failed</p>
+}
+
       <hr className="my-5 border-gray-400" />
 
-        <div>
-
+        <div className="flex justify-between items-center">
+          <button  onClick={(e)=>{
+            e.preventDefault();
+            setShowOTP(false);
+          }} className="text-md font-bold text-gray-700 underline">
+              Cancel
+          </button>
           <button  onClick={onOTPVerify}  className="rounded-lg border border-white bg-themeColor p-2 px-4 text-white transition-all hover:bg-mainColor" >Verify Code</button>
         </div>
         </div>}

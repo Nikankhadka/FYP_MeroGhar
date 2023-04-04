@@ -7,6 +7,7 @@ import { verifyAccessTokenS } from "../services/auth/auth.service";
 //takes in custom value of admin or not first verifies the token data then verifies role with passed role 
 //token verification works same for all just pass the role for rout if admin only true else false
 export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)=>{
+    console.log(req.cookies)
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
         

@@ -62,6 +62,7 @@ export const userSchema=new Schema({
 
             // if email is verified then this will be automatically updated
             email:String,
+            // phone number will be added here as its verified 
             phoneNumber:String,
             address:{
                 country:String,
