@@ -70,12 +70,12 @@ export const userSchema=new Schema({
             },
             //multiple images of user, citizenship for manual verification
             img:{
-                type:[{
+                
                     //userId_img1/2
-                    img_id:String,
-                    img_url:String
-                }],
-                default:undefined
+                    imgId:String,
+                    imgUrl:String
+                
+                
             }
 
         },

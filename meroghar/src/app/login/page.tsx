@@ -1,26 +1,28 @@
+import { checkSession } from '../../api/server/auth'
+import LoginSignup from '../../components/loginSignup'
+import { redirect } from 'next/navigation'
+import NavBar from '../../components/navbar/navbar'
 
-import { checkSession } from "../../api/server/auth"
-import LoginSignup from "../../components/loginSignup"
-import { redirect } from 'next/navigation';
-import NavBar from "../../components/navbar";
+export default async function LoginPage() {
+  const session = await checkSession()
 
-export default async function LoginPage(){
+  if (!session)
+    return (
+      <main className="w-full">
+        <NavBar theme="dark" authState={false} img="" Z="0" />
 
-    const session=await checkSession()
-    
-   
-    
-   if(!session)return(
-        <main className="w-full">
-        <NavBar theme="dark" authState={false}  img='' Z='0' />
+        {/* main container with full width */}
+        <div className="my-24 flex items-center justify-center">
 
-        <div className="my-24">
-        <LoginSignup  login={true} modal={false}/>
+        {/* modal/conttent container  */}
+          <div className="w-[95%]  sm:w-[80%] md:w-fit ">
+            <LoginSignup login={true} modal={false} />
+          </div>
+
         </div>
-           
-        </main>
+      </main>
     )
 
-    //else redirect to home 
-    return redirect('/user')
-}  
+  //else redirect to home
+  return redirect('/user')
+}

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import {RxHamburgerMenu} from 'react-icons/rx'
-import SideBar from "./sidebar"
+import SideBar from "../sidebar"
  
 import {useState,useEffect,createRef} from 'react'
 

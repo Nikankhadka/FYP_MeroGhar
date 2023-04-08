@@ -3,6 +3,7 @@ import { HiOutlineBadgeCheck } from 'react-icons/hi'
 import { HiStar } from 'react-icons/hi'
  import Link from "next/link";
 import{HiCheck} from 'react-icons/hi'
+import ClientComp from "../../../components/clientComp";
 
 
 
@@ -75,8 +76,11 @@ export default function AccountSetting(){
 
       <hr className="my-5 border-gray-400" />
     </div>
-        
+      
+    <ClientComp>
     <AccountComponent/>
+    </ClientComp>
+    
     </main>
 
     )

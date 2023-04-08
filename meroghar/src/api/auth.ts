@@ -29,7 +29,7 @@ export const authCheck=async(is_Admin:boolean)=>{
 //for common routes can only be accessed by user/non user
 export const checkSession=async():Promise<boolean>=>{
   const cookieStore=cookies();
-  const session=cookieStore.get("session")?.value;
+  const session=await cookieStore.get("session")?.value;
   if(!session) return false;
   const sessionObj=await JSON.parse(session);
   if(sessionObj.is_Admin) return redirect("/admin");

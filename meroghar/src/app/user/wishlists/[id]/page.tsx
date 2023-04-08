@@ -7,7 +7,7 @@ const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-40
 import {useForm,SubmitHandler} from 'react-hook-form'
 import { ErrorText } from '../../../../components/random'
 import {useState} from 'react'
-import NavBar from '../../../../components/navbar'
+import NavBar from '../../../../components/navbar/navbar'
 interface wish{
     listName:string
 }

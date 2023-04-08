@@ -16,9 +16,12 @@ const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-40
 
 //checck image function 
 
+interface Property{
+  setlistProperty:React.Dispatch<React.SetStateAction<boolean>>
+}
 
 
-export default function PostPropertyForm(){
+export default function PostPropertyForm({setlistProperty}:Property){
 
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<PropertyForm>({
       defaultValues:{
@@ -278,8 +281,14 @@ export default function PostPropertyForm(){
         
         
     </form>
-    <div className='w-[80%] flex justify-center'>
-    <button type='submit' className="text-md my-1 w-[50%] cursor-pointer rounded-md bg-themeColor p-2 text-white hover:bg-mainColor" onClick={handleSubmit(onSubmit)}>PostProperty</button>
+    <hr className="my-5 border-gray-400" />
+    <div className='w-[80%] flex items-center justify-between'>
+    <button type='button' className='underline text-md font-bold' 
+    onClick={(e)=>{
+      e.preventDefault();
+      setlistProperty(false);
+    }}>Cancel</button>
+    <button type='submit' className="text-md cursor-pointer rounded-md bg-themeColor p-2 px-4 text-white hover:bg-mainColor" onClick={handleSubmit(onSubmit)}>PostProperty</button>
     </div>
    
     </main>

@@ -1,11 +1,11 @@
 'use client'
-import Image from 'next/image'
+
 import { useState, useEffect, useRef } from 'react'
 import InititailModalC from './navmodel'
 import { createRef } from 'react'
-import { ToggleButton } from './buttons'
+import { ToggleButton } from '../buttons'
 import Link from 'next/link'
-import LoginSignup from './loginSignup'
+
 
 
 interface NavProps {
@@ -99,6 +99,7 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
             
         </div>
       </div>
+      
     </nav>
   )
 }

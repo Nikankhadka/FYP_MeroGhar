@@ -14,7 +14,7 @@ export default function Footer(): JSX.Element {
 
   return (
     <main className='fixed bg-white  bottom-0 z-[1000] w-full border-gray-200'>
-      <footer className=" p-3 flex justify-center items-center border-2  md:hidden">
+      <footer className=" p-2 flex justify-center items-center border-2  md:hidden">
       <FooterChild page="Explore" active={false} />
       <FooterChild page="WishList" active={false} />
       <FooterChild page="Trips" active={false} />

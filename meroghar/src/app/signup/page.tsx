@@ -3,7 +3,7 @@ import { checkSession } from "../../api/server/auth"
 import LoginSignup from "../../components/loginSignup"
 import { redirect } from 'next/navigation';
 
-import NavBar from "../../components/navbar";
+import NavBar from "../../components/navbar/navbar";
 export default async function Singup(){
 
     const session=await checkSession()
@@ -13,8 +13,15 @@ export default async function Singup(){
    if(!session)return(
         <main className="w-full">
         <NavBar theme="dark" authState={false}  img='' Z='0'/>
-        <div className="my-24">
-        <LoginSignup  login={false} modal={false}/>
+
+        {/* main container with full width */}
+        <div className="my-24 flex items-center justify-center">
+
+        {/* modal/conttent container  */}
+          <div className="w-[95%]  sm:w-[80%] md:w-fit ">
+            <LoginSignup login={false} modal={false} />
+          </div>
+
         </div>
             
         </main>

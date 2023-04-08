@@ -1,30 +1,27 @@
 'use client'
-import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
-import { CgSpinner } from "react-icons/cg";
+import { BsFillShieldLockFill, BsTelephoneFill } from 'react-icons/bs'
+import { CgSpinner } from 'react-icons/cg'
 
+import { useState } from 'react'
+import PhoneInput from 'react-phone-input-2'
 
-import { useState } from "react";
-import PhoneInput from "react-phone-input-2";
-
-import {ImSpinner4} from 'react-icons/im'
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-
-
-
+import { ImSpinner4 } from 'react-icons/im'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { ErrorText } from '../random'
-import Cmodal from '../modals/confirmModal'
+
 const inputStyle =
   'text-md my-1 h-11 w-[90%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
-
 
 import 'react-phone-input-2/lib/style.css'
 
 import { auth } from '../../configs/firebase'
 import OtpInput from 'react-otp-input'
-import { checkPhone, postPhone } from "../../api/client/user";
+import { checkPhone, postKyc, postPhone } from '../../api/client/user'
+import { KycData } from '../../interface/form'
+import useModal from '../../customHoooks/useModal'
 
 interface form {
   firstName: string
@@ -35,7 +32,12 @@ interface form {
     city: string
   }
   email: string
-  img: any
+  img:
+    | any
+    | {
+        imgId: string
+        imgUrl: string
+      }
 }
 
 interface kycprops {
@@ -43,6 +45,8 @@ interface kycprops {
 }
 
 export default function Kyc({ setopenKyc }: kycprops) {
+  const confirmModal=useModal();
+
   const [openConfirm, setopenConfirm] = useState(false)
   const {
     register,
@@ -64,14 +68,51 @@ export default function Kyc({ setopenKyc }: kycprops) {
   }
 
   const onSubmit: SubmitHandler<form> = async (formdata) => {
-    console.log(formdata)
-    setopenConfirm(true)
+      confirmModal.onOpen('confirm')
+
+    //there might be multiple image upload so
+    const imageData = new FormData()
+    //first upload image
+    imageData.append('file', formdata.img[0])
+    imageData.append('cloud_name', 'drpojzybw')
+    imageData.append('upload_preset', 'FypMeroGhar')
+
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/drpojzybw/image/upload',
+      {
+        method: 'POST',
+        body: imageData,
+      }
+    )
+    const response = await res.json()
+
+    //create new object  to be passed into api request
+    const kycdata: KycData = {
+      kycInfo: {
+        ...formdata,
+        img: {
+          imgId: response.public_id,
+          imgUrl: response.url,
+        },
+      },
+    }
+
+    // post kyc information
+    const kyc=await postKyc(kycdata)
+    if(!kyc){
+      return alert('failed to post kyc');
+    }
+
+    alert('kyc posted successfuly')
   }
 
   return (
-    <main className="mt-5 w-full rounded-lg   p-4  md:border-2 md:border-gray-200  md:shadow-lg">
+    <main key={'fuckU'} className="mt-5 w-full rounded-lg   p-4  md:border-2 md:border-gray-200  md:shadow-lg">
       <Phone />
-      {openConfirm && <Cmodal setopenConfirm={setopenConfirm} />}
+      <button onClick={(e)=>{
+        e.preventDefault();
+        confirmModal.onOpen('confirm')
+      }}>check</button>
       <hr className="my-5 border-gray-400" />
 
       <form>
@@ -223,161 +264,175 @@ interface phone {
 }
 
 function Phone() {
-
   const [otp, setOtp] = useState('')
-  const [ph, setPh] = useState("");
-  const[error,seterror]=useState('')
-  const [loading, setLoading] = useState(false);
-  const [showOTP, setShowOTP] = useState(false);
-
+  const [ph, setPh] = useState('')
+  const [error, seterror] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [showOTP, setShowOTP] = useState(false)
 
   function onCaptchVerify() {
-    try{
-      console.log("this on captha verifiy is called")
-      
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: (response:any) => {
-              
-              onSignup();
-            },
-            "expired-callback": () => {},
+    try {
+      console.log('this on captha verifiy is called')
+
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha-container',
+        {
+          size: 'invisible',
+          callback: (response: any) => {
+            onSignup()
           },
-          auth
-        );
-      
-    }catch(e){
+          'expired-callback': () => {},
+        },
+        auth
+      )
+    } catch (e) {
       seterror('phone')
-    }}
+    }
+  }
 
   async function onSignup() {
-    setLoading(true);
+    setLoading(true)
 
     // check whether this phone number is already used
-    const phone=await checkPhone(ph); //phone number passed
-    if(!phone) {
+    const phone = await checkPhone(ph) //phone number passed
+    if (!phone) {
       seterror('reuse')
+      setLoading(false)
       return console.log('Phone Number Reuse Detected')
     }
 
-    onCaptchVerify();
+    onCaptchVerify()
 
-    const appVerifier = window.recaptchaVerifier;
+    const appVerifier = window.recaptchaVerifier
 
-    const formatPh = "+" + ph;
+    const formatPh = '+' + ph
     console.log(formatPh)
     signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setLoading(false);
-        setShowOTP(true);
-       
+        window.confirmationResult = confirmationResult
+        setLoading(false)
+        setShowOTP(true)
       })
       .catch((error) => {
-        console.log(error);
-        setLoading(false);
-        seterror("phone")
-      });
+        console.log(error)
+        setLoading(false)
+        seterror('phone')
+      })
   }
 
- async function onOTPVerify() {
-    console.log("verify otp")
+  async function onOTPVerify() {
+    console.log('verify otp')
     console.log(otp)
-    setLoading(true);
+    setLoading(true)
     window.confirmationResult
       .confirm(otp)
-      .then(async (res:any) => {
-        console.log(res);
-        
+      .then(async (res: any) => {
+        console.log(res)
+
         //post phone number to database
-        const post=await postPhone(ph)
-        if(!post){
-          setLoading(false);
-          seterror('fail');
-          return  console.log('phone number post failed')
+        const post = await postPhone(ph)
+        if (!post) {
+          setLoading(false)
+          seterror('fail')
+          return console.log('phone number post failed')
         }
-        setLoading(false);
+        setLoading(false)
         setShowOTP(false)
       })
-      .catch((err:any) => {
-        console.log(err);
-        setLoading(false);
+      .catch((err: any) => {
+        console.log(err)
+        setLoading(false)
         seterror('otp')
-
-      });
+      })
   }
 
   return (
     <main>
       {/* for phone number verification */}
       <div className="my-3">
+        {!showOTP && (
+          <div>
+            <label className=" text-md block font-semibold text-slate-700">
+              Phone Number
+            </label>
 
-      { !showOTP&&<div>
-        <label className=" text-md block font-semibold text-slate-700">
-          Phone Number
-        </label>
-
-        <div className=" flex flex-col items-start p-3 sm:flex-row sm:items-center">
-            <div className="w-full">
-              <PhoneInput country={'us'} value={ph} onChange={setPh} />
-              <div className="my-2">
-
-           {error=='phone'&&<ErrorText text="Please Enter Valid PhoneNumber/Formatted PhoneNumber" />}
-           {error=='reuse'&&<ErrorText text="Phone Number Already used by user" />}
+            <div className=" flex flex-col items-start p-3 sm:flex-row sm:items-center">
+              <div className="w-full">
+                <PhoneInput country={'us'} value={ph} onChange={setPh} />
+                <div className="my-2">
+                  {error == 'phone' && (
+                    <ErrorText text="Please Enter Valid PhoneNumber/Formatted PhoneNumber" />
+                  )}
+                  {error == 'reuse' && (
+                    <ErrorText text="Phone Number Already used by user" />
+                  )}
+                </div>
               </div>
+              <div id="recaptcha-container"></div>
+              <button
+                onClick={onSignup}
+                className="text-sm font-semibold text-gray-700 underline"
+              >
+                SendCode
+              </button>
             </div>
-            <div id="recaptcha-container"></div>
-            <button  onClick={onSignup} className="text-sm font-semibold text-gray-700 underline">
-              SendCode
-            </button>
           </div>
-      </div>
-         
-        }
+        )}
 
-{     loading&&   <div className="flex items-center justify-center">
-         <ImSpinner4 className="h-5 w-5 fill-themeColor stroke-themeColor animate-spin" />
-          
-        </div>}
+        {loading && (
+          <div className="flex items-center justify-center">
+            <ImSpinner4 className="h-5 w-5 animate-spin fill-themeColor stroke-themeColor" />
+          </div>
+        )}
 
+        {showOTP && (
+          <div>
+            <h1 className=" my-2 text-lg font-bold text-gray-700">
+              Enter Your Otp
+            </h1>
+            <OtpInput
+              value={otp}
+              shouldAutoFocus={true}
+              onChange={setOtp}
+              numInputs={6}
+              renderInput={(props) => <input {...props} />}
+              containerStyle={'p-2 flex justify-center gap-x-3'}
+              inputStyle={'border-b border-gray-700 w-5'}
+            />
 
-        {showOTP&&<div>
-        <h1 className=' my-2 text-lg text-gray-700 font-bold'>Enter Your Otp</h1>
-        <OtpInput
-          value={otp}
-          shouldAutoFocus={true}
-          onChange={setOtp}
-          numInputs={6}
-         
-          renderInput={(props) => <input {...props} />}
-          containerStyle={'p-2 flex justify-center gap-x-3'}
-          inputStyle={'border-b border-gray-700 w-5'}
-        />
+            {error == 'otp' && (
+              <p className="my-3 text-center text-sm text-red-500">
+                Please Enter Valid Otp Code
+              </p>
+            )}
 
-{     error=='otp'&& 
-      <p className="text-center text-sm text-red-500 my-3">Please Enter Valid Otp Code</p>
-}
+            {error == 'fail' && (
+              <p className="my-3 text-center text-sm text-red-500">
+                Phone Post Failed
+              </p>
+            )}
 
-{     error=='fail'&& 
-      <p className="text-center text-sm text-red-500 my-3">Phone Post Failed</p>
-}
+            <hr className="my-5 border-gray-400" />
 
-      <hr className="my-5 border-gray-400" />
-
-        <div className="flex justify-between items-center">
-          <button  onClick={(e)=>{
-            e.preventDefault();
-            setShowOTP(false);
-          }} className="text-md font-bold text-gray-700 underline">
-              Cancel
-          </button>
-          <button  onClick={onOTPVerify}  className="rounded-lg border border-white bg-themeColor p-2 px-4 text-white transition-all hover:bg-mainColor" >Verify Code</button>
-        </div>
-        </div>}
-      
-
+            <div className="flex items-center justify-between">
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setShowOTP(false)
+                }}
+                className="text-md font-bold text-gray-700 underline"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={onOTPVerify}
+                className="rounded-lg border border-white bg-themeColor p-2 px-4 text-white transition-all hover:bg-mainColor"
+              >
+                Verify Code
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   )

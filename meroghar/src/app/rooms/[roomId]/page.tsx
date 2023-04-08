@@ -5,7 +5,7 @@ import { BookProperty } from '../../../components/propComp'
 import Review from '../../../components/reviewCard'
 import Wish from '../../../components/Svg/wishSvg'
 
-import NavBar from '../../../components/navbar'
+import NavBar from '../../../components/navbar/navbar'
 type Params = {
   params: {
     roomId: string

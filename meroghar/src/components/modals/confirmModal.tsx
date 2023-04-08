@@ -1,26 +1,38 @@
+
+
 'use client'
 
-import { RxCross1 } from 'react-icons/rx'
+import useModal from "../../customHoooks/useModal"
 
+import LoginSignup from "../loginSignup"
+import { RxCross1 } from "react-icons/rx"
+import Modal from "./modal"
 
-interface props{
-    setopenConfirm:React.Dispatch<React.SetStateAction<boolean>>
+export function ConfirmModal(){
+    const confirmModal=useModal()
+    if(confirmModal.isOpen!='confirm'){
+        return null;
+    }
+    return(
+        <>
+        <Modal isOpen={confirmModal.isOpen}>
+          <ConfirmComp />
+        </Modal>
+        
+        </>
+    )
 }
 
-export default function Cmodal({setopenConfirm}:props) {
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
 
-        {/* modal content here */}
-        <div className="inline-block w-[95%] transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
+function ConfirmComp(){
+  return(
+    <div>
+              {/* modal content here */}
+              <div className="inline-block  w-full md:w-[570px] transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all ">
           <div className="flex items-center justify-end ">
             <button onClick={(e)=>{
                 e.preventDefault();
-                setopenConfirm(false)
+              
             }}><RxCross1 className="h-5 w-5 rounded-full hover:bg-slate-200" /></button>
           </div>
 
@@ -35,7 +47,7 @@ export default function Cmodal({setopenConfirm}:props) {
             
             onClick={(e)=>{
                 e.preventDefault();
-                setopenConfirm(false)
+               
             }}>
               Cancel
             </button>
@@ -44,7 +56,6 @@ export default function Cmodal({setopenConfirm}:props) {
             </button>
           </div>
         </div>
-      </div>
     </div>
   )
 }

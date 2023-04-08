@@ -9,7 +9,8 @@ import axios from 'axios'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {useState} from 'react'
-import AlertC from './modals/alert'
+
+import useModal from '../customHoooks/useModal'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -17,6 +18,9 @@ import AlertC from './modals/alert'
 export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Element {
   
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
+
+    const loginSignupModal=useModal();
+
   const[invalid,setinvalid]=useState(false);
   const[alert,setalert]=useState(false)
 
@@ -63,12 +67,13 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
    
   }
 
-  const style1='mx-auto my-4 border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
-  const style2='absolute mt-8 translate-x-[-160%] border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
+  const style1='bg-white border-2 border-gray-200 flex  flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
+
   return (
-    <div className={modal? style2:style1} >
+    
+    <div className={style1} >
       
-      {alert&&<AlertC type='success' message="successfully registered new user"/>}
+     
    
       <div className=" flex w-full items-center my-5  border-b-2 border-gray-200 p-3">
         <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
@@ -76,7 +81,11 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
         </p>
         
         {/* close button only renders for modal not for page */}
-        {modal&&<button className="rounded-full p-1 hover:bg-hoverColor">
+        {modal&&<button className="rounded-full p-1 hover:bg-hoverColor"
+        onClick={(e)=>{
+          e.preventDefault();
+          loginSignupModal.onClose()
+        }}>
           <img src="close.png" alt="cros" className="h-4 w-4 " />
         </button>}
       </div>
@@ -149,7 +158,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           <div className="my-1  flex w-full items-center justify-center">
             <span className="text-md my-2">
               {login ? 'Dont Have Account ?' : 'Have Account ?'}{' '}
-              <Link
+{      !modal  &&      <Link
                 href={
                   login
                     ? 'http://localhost:3000/signup'
@@ -158,11 +167,31 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
                 className="text-md text-mainColor hover:underline"
               >
                 {login ? 'Sign Up' : 'Login'}
-              </Link>
+              </Link>}
+
+              {      modal  &&<button
+
+                className="text-md text-mainColor hover:underline"
+                onClick={(e)=>{
+                  e.preventDefault();
+                  //switch from login to register
+                  if(login){
+                    loginSignupModal.onOpen('signup')
+                    return;
+                  }
+                  
+                  loginSignupModal.onOpen('login')
+
+                }}
+              >
+                {login ? 'Sign Up' : 'Login'}
+              </button>}
+
             </span>
           </div>
         </form>
       </div>
     </div>
+    
   )
 }

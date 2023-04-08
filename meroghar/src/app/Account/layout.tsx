@@ -1,6 +1,9 @@
 
 import SideBar from '../../components/sidebar';
-import DashboardNav from '../../components/DashboardNav';
+import DashboardNav from '../../components/navbar/DashboardNav';
+import ClientComp from '../../components/clientComp';
+import ToasterProvider from '../../components/toast/toastProvider';
+import { ConfirmModal } from '../../components/modals/confirmModal';
 
 
 
@@ -14,12 +17,13 @@ export default async function Layout({children}: {children: React.ReactNode}) {
   
 
   return (
-    //toggle dark mode by getting dark mode from 
-    <html >
-      <head />
-      {/* body sets the root layout for entire application */}
-      <body className='bg-white flex flex-col'>
-        
+
+      <main className='bg-white flex flex-col'>
+      
+      <ClientComp>
+        <ToasterProvider />
+        <ConfirmModal />
+      </ClientComp>
 
        <DashboardNav />
         {/* this children represents each page component  that is rendered */}
@@ -27,7 +31,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         <SideBar is_Admin={true} menu={false}  />
         
         
-      </body>
-    </html>
+      </main>
+    
   )
 }

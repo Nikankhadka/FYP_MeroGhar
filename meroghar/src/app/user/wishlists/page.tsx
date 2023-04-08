@@ -1,4 +1,4 @@
-import NavBar from "../../../components/navbar";
+import NavBar from "../../../components/navbar/navbar";
 import WishlistCard from "../../../components/WishlistCard";
 
 

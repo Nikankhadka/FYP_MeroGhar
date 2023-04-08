@@ -4,25 +4,36 @@ import {useState} from 'react'
 import Link from 'next/link'
 import Card from '../card'
 import Kyc from './kyc'
-
+import toast, { Toaster } from 'react-hot-toast';
+import useModal from '../../customHoooks/useModal'
+import { ConfirmModal } from '../modals/confirmModal'
 export default function AccountComponent() {
   
 
   // check kyc valid and pending status then only render 
   const [openKyc,setopenKyc]=useState('close');
-
+  const confirmModal=useModal()
   
   const kycinfo=false
 
   return (
-    <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%]  ">   
+    <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%] border-2 border-red-500 ">   
 
     <div className=' p-2 w-[95%] md:w-[80%]'>
-
+    <button onClick={(e)=>{
+      e.preventDefault();
+      confirmModal.onOpen('confirm');
+    }}>check</button>
+    
         {/* for kyc header */}
         
         <h2 className='text-xl font-semibold  text-gray-700'> Personal information</h2>
-
+      <button onClick={(e)=>{
+        console.log('clocke')
+        toast.loading('check toast is heere')
+        
+      }}>check</button>
+     
       {/* if kyc does not exist */}
 
       {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>

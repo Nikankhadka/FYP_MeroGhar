@@ -130,11 +130,11 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
             if(addEmail) delete KycData.kycInfo.email;
         }
 
-        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{is_verified:{
-            status:false,
+        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{is_verified:false,
             pending:true,
-            message:""
-            }}},{new:true})
+            message:"",
+            approvedBy:""
+            }},{new:true})
 
         if(!postKyc) throw new Error("Kyc post failed")
 
@@ -169,6 +169,8 @@ export const getPhoneS=async(phoneNumber:string):Promise<boolean>=>{
     }
 }
 
+
+// this same api can be used to update phone number
 export const postPhoneS=async(userId:string,phoneNumber:string):Promise<boolean>=>{
     try{
         const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
