@@ -3,11 +3,14 @@
 import Link from 'next/link'
 
 import { HiUser,HiIdentification,HiHeart,HiHome } from 'react-icons/hi'
-import {MdOutlineReviews} from 'react-icons/md'
+import {MdManageAccounts,MdOutlineReviews} from 'react-icons/md'
+
+import{AiFillSetting} from 'react-icons/ai'
+import {RiLockPasswordFill,RiAdminFill} from 'react-icons/ri'
 
 import{BsFillChatLeftFill} from 'react-icons/bs'
 import {ImUserCheck} from 'react-icons/im'
-import {RiAdminFill} from 'react-icons/ri'
+
 import {BiLogOut} from 'react-icons/bi'
 import { forwardRef } from 'react'
 
@@ -18,10 +21,12 @@ interface props{
 
 type Ref = HTMLDivElement;
 
+import {useState} from 'react'
 // takes in role and renders some element while others dont 
 const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
     const trans='-translate-x-full '
+    const [account,setaccount]=useState(false)
 
   return (
       <div className={`fixed top-[80px] w-[100%] bg-slate-500 bg-opacity-50 left-0 z-20 h-screen sm:w-64  border-r-2 border-gray-200 shadow-lg transition-transform ${props.menu?'':trans} md:translate-x-0 md:top-0 md:w-[220px] lg:w-64 sm:bg-white sm:opacity-100`}
@@ -37,7 +42,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
    {  !props.menu&&<div >
 
         <Link
-          href="http://localhost:3000"
+          href="http://localhost:3000/user"
           className="my-2 flex items-center gap-2  "
         >
           <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
@@ -50,7 +55,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
      
 
             <Link
-              href="#"
+              href="/Account"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <svg
@@ -68,7 +73,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>
 
             <Link
-              href="/user/dashboard/profile"
+              href="/Account/profile"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiUser className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -79,7 +84,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
            {
             !props.is_Admin&&<Link
-            href="#"
+            href="/Account/wishlists"
             className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
           >
             <HiHeart className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -110,7 +115,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>
 
             <Link
-              href="#"
+              href="/Account/reviews"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <MdOutlineReviews className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -134,16 +139,46 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
             
 
+           <div className='border-2 border-slate-400 rounded-lg'>
+           <button
+               className="w-full group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+              onClick={(e)=>{
+                e.preventDefault();
+                setaccount(!account)
+              }}
+            >
+              <AiFillSetting className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
+              <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
+                Settings
+              </span>
+            </button>
 
+            {account&&<div className='w-[95%] mx-auto '>
             <Link
-              href="#"
+              href="/Account/Account-settings"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
-              <HiIdentification className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
+              <MdManageAccounts className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
-                Personal info
+                Account
               </span>
             </Link>
+
+            <Link
+              href="/Account/password"
+              className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+            >
+              <RiLockPasswordFill className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
+              <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
+                Change Password
+              </span>
+            </Link>
+
+            </div>}
+           </div>
+            
+
+           
 
 
            { props.is_Admin&&<Link

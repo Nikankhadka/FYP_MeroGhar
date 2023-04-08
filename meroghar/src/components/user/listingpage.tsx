@@ -55,7 +55,7 @@ export default function ListingComp() {
       </div>
      
         {
-          listPorperty&&<PostPropertyForm/>
+          listPorperty&&<PostPropertyForm setlistProperty={setlistProperty}/>
         }
           
            {!listPorperty&&<div className="overflow-hidden shadow border-2 border-red-500">

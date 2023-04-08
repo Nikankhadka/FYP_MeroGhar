@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { Arrow } from './buttons'
 import Wish from './Svg/wishSvg'
 
+// hover:-translate-y-1 hover:scale-105
 export default function Card() {
   return (
-    <main className=" w-[98%]  rounded-lg border-2 border-gray-300 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
+    <main className="w-[98%] rounded-lg border-2 border-gray-300 hover:shadow-xl   duration-300">   
+
       <div className="margin-bottom-3">
         <Link href="/rooms/444">
           <img src="/prop1.jpg" alt="property" className=" w-full  rounded-lg" />

@@ -1,6 +1,6 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS, getUserS} from "../../services/user/user.service"
+import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS, getUserS, getPhoneS,postPhoneS} from "../../services/user/user.service"
 
 
 
@@ -71,6 +71,27 @@ export const postKycC=async(req:Request,res:Response)=>{
 }
 
 
+
+export const getPhoneC=async(req:Request,res:Response)=>{
+    try{
+        console.log(req.params.phone)
+        const getPhone=await getPhoneS(req.params.phone)
+        if(getPhone) return res.status(200).json({success:true,message:'Add phone/Phone number does not exist'})
+    }catch(e:any){
+        console.log(e)
+        return res.status(409).json({success:false,error:e.message})
+    }
+}
+
+export const postPhoneC=async(req:Request,res:Response)=>{
+    try{
+        const postPhone=await postPhoneS(req.userData.userId,req.params.phone)
+        if(postPhone) return res.status(200).json({success:true,message:'Phone Number Successfully Verfied and Posted'})
+    }catch(e:any){
+        console.log(e)
+        return res.status(409).json({success:false,error:e.message})
+    }
+}
 
 
 

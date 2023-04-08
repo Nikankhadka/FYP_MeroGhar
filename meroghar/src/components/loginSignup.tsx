@@ -8,8 +8,9 @@ import { ErrorText } from './random'
 import axios from 'axios'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import {useState} from 'react'
 
-
+import useModal from '../customHoooks/useModal'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -17,6 +18,11 @@ import Link from 'next/link'
 export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Element {
   
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
+
+    const loginSignupModal=useModal();
+
+  const[invalid,setinvalid]=useState(false);
+  const[alert,setalert]=useState(false)
 
   const onSubmit: SubmitHandler<LoginRegisterInput> = async(data) => {
     console.log(data)
@@ -27,11 +33,16 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
       if(res.data.success){
         console.log('login succesful')
         if(res.data.user.is_Admin) return window.location.href='/admin'
-       return  window.location.href='/'
+        setalert(true)
+        setTimeout(() => {
+          setalert(false);
+        },5000);
+        
+        return;
       }
-     return  window.location.href='/'
+     return  redirect('/')
       }catch(e:any){
-        return alert(e.message)
+        return setalert(false)
       }
       
     }
@@ -40,29 +51,41 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     try{
     const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
-     return window.alert("New user successfully registered")
+      setalert(true);
+      setTimeout(() => {
+        setalert(false);
+      },5000);
+      
+      return;
     }
     throw new Error(`${res.data.error}`)
     }catch(e:any){
       console.log(e)
-      return window.alert(`${e.message}`)
+      return  setalert(true);
     }
     
    
   }
 
-  const style1='mx-auto my-4 border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
-  const style2='absolute mt-8 translate-x-[-160%] border-2 border-gray-200 flex w-[95%] flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
+  const style1='bg-white border-2 border-gray-200 flex  flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
+
   return (
-    <div className={modal? style2:style1} >
+    
+    <div className={style1} >
+      
      
-      <div className=" flex w-full items-center  border-b-2 border-gray-200 p-3">
+   
+      <div className=" flex w-full items-center my-5  border-b-2 border-gray-200 p-3">
         <p className="w-11/12 text-center text-lg font-semibold text-mainColor ">
           {login ? 'Log in' : 'Sign up'}
         </p>
         
         {/* close button only renders for modal not for page */}
-        {modal&&<button className="rounded-full p-1 hover:bg-hoverColor">
+        {modal&&<button className="rounded-full p-1 hover:bg-hoverColor"
+        onClick={(e)=>{
+          e.preventDefault();
+          loginSignupModal.onClose()
+        }}>
           <img src="close.png" alt="cros" className="h-4 w-4 " />
         </button>}
       </div>
@@ -109,6 +132,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
             </Link>
           )}
 
+           {invalid&&<p className='text-sm text-red-600 my-3'>Invalid UserId/Password</p>}
           <input
             type="submit"
             className="text-md my-1 w-[95%] cursor-pointer rounded-md bg-themeColor p-2 text-white hover:bg-mainColor"
@@ -134,7 +158,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           <div className="my-1  flex w-full items-center justify-center">
             <span className="text-md my-2">
               {login ? 'Dont Have Account ?' : 'Have Account ?'}{' '}
-              <Link
+{      !modal  &&      <Link
                 href={
                   login
                     ? 'http://localhost:3000/signup'
@@ -143,11 +167,31 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
                 className="text-md text-mainColor hover:underline"
               >
                 {login ? 'Sign Up' : 'Login'}
-              </Link>
+              </Link>}
+
+              {      modal  &&<button
+
+                className="text-md text-mainColor hover:underline"
+                onClick={(e)=>{
+                  e.preventDefault();
+                  //switch from login to register
+                  if(login){
+                    loginSignupModal.onOpen('signup')
+                    return;
+                  }
+                  
+                  loginSignupModal.onOpen('login')
+
+                }}
+              >
+                {login ? 'Sign Up' : 'Login'}
+              </button>}
+
             </span>
           </div>
         </form>
       </div>
     </div>
+    
   )
 }

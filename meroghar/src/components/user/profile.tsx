@@ -16,7 +16,7 @@ export default function Profile() {
   const [EditProfile,setEditProfile]=useState(false)
 
   return (
-    <main className="mx-auto my-4 w-[95%]  p-2 md:w-[80%] lg:w-[70%]">
+    <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%]">
       
       <div className="flex justify-between">
         <div>
@@ -64,7 +64,7 @@ export default function Profile() {
         </div>
 
       </div>
-      
+        
 
       <hr className="my-5 border-gray-400" />
 
@@ -89,6 +89,8 @@ export default function Profile() {
 
       <hr className="my-5 border-gray-400" />
 
+
+      {/* this all will not be rendered on  */}
       {
         !EditProfile&&<div className='my-2 p-2 w-[95%] md:w-[80%]'>
          <h2 className='my-2 text-lg font-semibold'>About</h2>
@@ -106,17 +108,9 @@ export default function Profile() {
         EditProfile&& <EditBasic setEditProfile={setEditProfile} />
       }
 
-    <hr className="my-8 border-gray-400" />
+  
 
-    {/* show users listing kind of pagination in map */}
-    <h2 className=' mx-2 my-2 text-lg font-semibold'>Listings</h2>
-    <div className="w-full p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                <Card />
-                <Card />
 
-      </div>
-
-    <Link href='#'className=' underline mx-2 my-2 text-sm font-semibold'>show Listings</Link>
     </main>
   )
 }

@@ -130,11 +130,11 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
             if(addEmail) delete KycData.kycInfo.email;
         }
 
-        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{is_verified:{
-            status:false,
+        const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{is_verified:false,
             pending:true,
-            message:""
-            }}},{new:true})
+            message:"",
+            approvedBy:""
+            }},{new:true})
 
         if(!postKyc) throw new Error("Kyc post failed")
 
@@ -154,7 +154,44 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
 }
 
 
+export const getPhoneS=async(phoneNumber:string):Promise<boolean>=>{
+    try{
+        console.log("check Phone")
+        const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
+        if(checkPhone) throw new Error("user With provided Phone Number Exist please try new Number");
 
+        console.log('phon checked')
+        //now simply return true and dont throw error from front end
+        return true
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+// this same api can be used to update phone number
+export const postPhoneS=async(userId:string,phoneNumber:string):Promise<boolean>=>{
+    try{
+        const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
+        if(checkPhone) throw new Error("user With provided Phone Number Exist please try new Number");
+
+        const postPhone=await userModel.findOneAndUpdate({userId},{
+            $set:{
+                kycInfo:{
+                    phoneNumber
+                }
+            }
+        },{new:true});
+
+        if(!postPhone) throw new Error("Phone number Post Failed");
+
+        return true;
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
 
 
 

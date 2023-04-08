@@ -1,13 +1,19 @@
 
 import '../styles/globals.css'
-import NavBar from '../components/navbar'
+import NavBar from '../components/navbar/navbar'
 import { cookies } from 'next/headers';
 
 import Footer from '../components/footer'
-import AdminNav from '../components/DashboardNav';
-import DashboardNav from '../components/DashboardNav';
+import AdminNav from '../components/navbar/DashboardNav';
+import DashboardNav from '../components/navbar/DashboardNav';
+import { Nunito } from 'next/font/google'
+import ClientComp from '../components/clientComp';
+import Modal from '../components/modals/modal';
+import { LoginModal } from '../components/modals/loginModal';
+import { RegisterModal } from '../components/modals/registerModal';
 
-
+import ToasterProvider from '../components/toast/toastProvider';
+import { ConfirmModal } from '../components/modals/confirmModal';
 //seup conditional root layout for admin and normal user so only url for somethings might differ
 
 const getUser=async()=>{
@@ -37,32 +43,44 @@ const getUser=async()=>{
   }
 }
 
+const font = Nunito({ 
+  subsets: ['latin'], 
+});
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
 
   const cookieStore=cookies();
   const theme=cookieStore.get("theme")?.value||'light'
-  const session=cookieStore.get("session")?.value
+  const session=await cookieStore.get("session")?.value
   let sessionObj={is_Admin:false}
-  if(session){
-    sessionObj=JSON.parse(session)
-  }
+  // if(session){
+  //   sessionObj=JSON.parse(session)
+  // }
  
   // const user=await getUser()
 
   
+  // conditionally render navbar nad footer 
 
   return (
     //toggle dark mode by getting dark mode from 
     <html className={theme=='dark'? 'dark':'light'}>
       <head />
       {/* body sets the root layout for entire application */}
-      <body className='bg-white flex flex-col'>
+      <body className={`bg-white flex flex-col ${font.className}`}>
         
 
         {/* conditionally render navbar  */}
+      
+        <ClientComp>
+        <ToasterProvider />
+           <LoginModal />
+           <RegisterModal />
+           <ConfirmModal />
+          
+           
+        </ClientComp>
         
-        <DashboardNav />
         {/* this children represents each page component  that is rendered */}
         {children}
         <Footer />

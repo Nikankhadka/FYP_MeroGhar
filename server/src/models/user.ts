@@ -62,6 +62,7 @@ export const userSchema=new Schema({
 
             // if email is verified then this will be automatically updated
             email:String,
+            // phone number will be added here as its verified 
             phoneNumber:String,
             address:{
                 country:String,
@@ -69,12 +70,12 @@ export const userSchema=new Schema({
             },
             //multiple images of user, citizenship for manual verification
             img:{
-                type:[{
+                
                     //userId_img1/2
-                    img_id:String,
-                    img_url:String
-                }],
-                default:undefined
+                    imgId:String,
+                    imgUrl:String
+                
+                
             }
 
         },
