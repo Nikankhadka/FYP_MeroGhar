@@ -104,9 +104,11 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
         //if token is expire or error here it will be cathced and handled
        const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(token,process.env.accessToken!)
        console.log('token verified')
-        const isValid=await userModel.findOne({userId,is_Admin,kyc:{is_verified:kycVerified}});
+       console.log(userId,is_Admin,kycVerified)
+        const isValid=await userModel.findOne({userId,is_Admin});
         if(!isValid) throw new Error("invalid token data")
-    
+        
+        
         //now since tokenn data is validated just return query status and token data
         return {success:true,tokendata:{userId,is_Admin,kycVerified}}
 

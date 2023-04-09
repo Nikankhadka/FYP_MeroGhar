@@ -2,10 +2,16 @@
 
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
 import { ErrorText } from '../random'
-
+import {useState} from 'react'
+import { uploadImage } from '../../api/client/user'
+import {  toast } from 'react-hot-toast'
+import Api from '../../api/client/axios'
 interface EditProfile {
   userName?: string
-  image?: any
+  profileImg?: any|{
+    imgId:string,
+    imgUrl:string
+  }
   About?: string
 }
 
@@ -26,25 +32,77 @@ export function EditBasic({setEditProfile}:Prop) {
   } = useForm<EditProfile>()
 
 
+  const [error,seterror]=useState(false);
+
       // every change detected is recorded here we want to fetch the image information only 
-      const image=watch('image')
+      const image=watch('profileImg')
       
       const imageUrl=()=>{
         try{
           return  URL.createObjectURL(image[0])
   
         }catch(e){
-          console.log(e)
+          
           return ''
         }
       }
 
+
+
       const submitHandler:SubmitHandler<EditProfile>=async(formdata)=>{
         try{
-            console.log(formdata)
+            
+          // check for empty values 
+          if(formdata.userName==""&&formdata.About==""&&formdata.profileImg.length===0){
+            return seterror(true);
+          }
+          seterror(false)
+          //then 
+
+          let profileData:EditProfile={
+            userName:formdata.userName,
+            About:formdata.About,
+            profileImg:{
+              imgUrl:"",
+              imgId:""
+            }
+          }
+
+
+          if(formdata.userName==""){
+            delete profileData.userName;
+          }
+
+          if(formdata.About==""){
+            delete profileData.About;
+          }
+
+          if(formdata.profileImg.length===0){
+            delete profileData.profileImg;
+          }else{
+            //upload image
+          const upload=await uploadImage(formdata.profileImg[0]);
+          if(upload){
+            profileData.profileImg.imgId=upload.imgId,
+            profileData.profileImg.imgUrl=upload.imgUrl
+          }
+          }
+
+
+          
+
+          console.log(profileData);
+          const updateProfile=await Api.patch('/user/v1/updateProfile',{...profileData},{withCredentials:true});
+          if(updateProfile.data.success){
+             toast.success("User profile Data SuccessFully Updated");
+             return setEditProfile(false);
+          }
+
+          return toast.error("Profile Upload Failed")
 
         }catch(e){
             console.log(e)
+           return toast.error("Profile Upload Failed")
         }
       }
 
@@ -55,7 +113,7 @@ export function EditBasic({setEditProfile}:Prop) {
         
         <div
           className="my-4 flex  w-full flex-col  gap-y-4   " >
-            <label className=" block text-sm text-black">profile Image</label>
+            <label className=" block text-sm text-black font-semibold">profile Image</label>
           {/* initially the value default does not read file casuing to return empty string */}
           <img
             src={imageUrl()}
@@ -73,48 +131,42 @@ export function EditBasic({setEditProfile}:Prop) {
             <input
               type="file"
               
-              {...register(`image`, { required: false,})}
+              {...register(`profileImg`,)}
             ></input>
 
             {/* donot render this button for 1st index */}
 
           </div>
-          {errors?.image && (
-            <p className="block w-[95%] text-left text-sm text-red-700">
-              Please Upload image for the Field
-            </p>
-          )}
-          
+         
 
 
         </div>
         <div className="w-full my-4">
-          <label className=" block text-sm text-black">UserName</label>
+          <label className=" block text-sm text-black font-semibold">UserName</label>
           <input
             type="text"
-            placeholder="PropertyName"
+            placeholder="userName"
             className='text-md my-1 h-10 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor md:w-[70%]'
-            {...register('userName', { required: false ,minLength:5})}
+            {...register('userName')}
           />
-          {errors.userName && (
-            <ErrorText text="Please Enter Valid UserName" />
-          )}
+
         </div>
 
         <div className='w-full my-4'>
-        <label className='text-sm block text-black'>About</label>
+        <label className='block text-sm text-black font-semibold'>About</label>
             <textarea rows={5}
             placeholder="Desription"
             className={inputStyle}
-            {...register('About',{ required: false})}>
+            {...register('About')}>
 
            </textarea>
            
           
-          {errors.About && ( <ErrorText text='Please Enter Valid About'/>)}
+         
         </div>
-        
-        <div className='flex items-center justify-between p-2'>
+
+      { error&& <ErrorText text='Please Enter Valid Profile Update Input '/>}
+        <div className='flex my-2 items-center justify-between p-2'>
         <button onClick={(e)=>{
             e.preventDefault();
             setEditProfile(false)

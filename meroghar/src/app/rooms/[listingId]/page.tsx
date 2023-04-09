@@ -1,19 +1,42 @@
 import Link from 'next/link'
 
 import Carousel from '../../../components/carousel'
-import { BookProperty } from '../../../components/propComp'
+import { BookProperty } from '../../../components/listing/booking'
 import Review from '../../../components/reviewCard'
 import Wish from '../../../components/Svg/wishSvg'
 
 import NavBar from '../../../components/navbar/navbar'
-type Params = {
-  params: {
-    roomId: string
-  }
+import getReservations from '../../../api/server/property/getReservation'
+import ClientComp from '../../../components/clientComp'
+
+// type Params = {
+//   params: {
+//     listingId: string
+//   }
+// }
+// { params: { listingId }}:params
+
+interface IParams{
+  listingId?:string,
 }
 
-export default function Room({ params: { roomId } }: Params) {
-  console.log('room id', roomId)
+interface Reservation{
+  startDate:Date,
+  endDate:Date
+}
+
+export default async function Room({params}:{params:IParams}) {
+
+  // since get resevation can be used for multiple cases betrter to pass entire param obj
+  
+    const reservations:Reservation[]= await getReservations('64147e0b3f7adb1886790bfe','');
+    console.log(reservations)
+ 
+  
+  
+
+
+  console.log('room id',params.listingId )
 
   const Amenities = ['room', 'wifi', 'Ac', 'Tv']
   const Reviews = ['room', 'wifi', 'Ac', 'Tv']  
@@ -192,15 +215,20 @@ export default function Room({ params: { roomId } }: Params) {
           </div>
         </div>
         {/* interactive component for contacting owner */}
-        <BookProperty />
+        <ClientComp>
+        <BookProperty reservations={reservations}/>
+        </ClientComp>
+       
       </div>
 
       <hr className="my-8 border-gray-400" />
       
       {/* review Crud component */}
 
-
+      <ClientComp>
       <Review />
+      </ClientComp>
+    
 
       <hr className="my-8 border-gray-400" />
 

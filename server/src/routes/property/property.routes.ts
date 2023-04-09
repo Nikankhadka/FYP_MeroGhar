@@ -6,12 +6,13 @@ import { validatePropertyInput, validatePropertyUpdate } from "../../middlewares
 //import other router related to property 
 import reviewRoutes from "./review.routes"
 import wishlistRoutes from './wishlist.routes'
-
+import bookingRoutes from "./booking.routes"
 const router=Router()
 
 //register routes
 router.use("/review",reviewRoutes);
 router.use("/wishList",wishlistRoutes);
+router.use("/booking",bookingRoutes)
 
 //view count sepeerate api for more accurate view count of the product
 router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyByIdC)

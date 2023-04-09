@@ -18,3 +18,24 @@ export async function PostPropery(body:Partial<PropertyForm>):Promise<boolean>{
     }
     
 }
+
+
+interface Booking{
+    startDate:Date,
+    endDate:Date,
+    guest:string
+}
+
+export async function PostBooking(propertyId:string,body:Booking):Promise<boolean>{
+    try{
+    const res=await Api.post(`/property/v1/booking/${propertyId}`,body,{withCredentials:true});
+    if(!res.data.success){
+     throw new Error(res.data.error)
+    }
+    return true;
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+    
+}

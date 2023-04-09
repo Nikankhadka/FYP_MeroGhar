@@ -25,14 +25,17 @@ export function ConfirmModal(){
 
 
 function ConfirmComp(){
+  const modal=useModal();
+
+
   return(
-    <div>
-              {/* modal content here */}
-              <div className="inline-block  w-full md:w-[570px] transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all ">
+   
+             
+          <div className="w-full border-2 border-blue-500 md:w-[570px]  rounded-lg bg-white px-4 pt-5 pb-4   shadow-xl  ">
           <div className="flex items-center justify-end ">
             <button onClick={(e)=>{
                 e.preventDefault();
-              
+                modal.onClose();
             }}><RxCross1 className="h-5 w-5 rounded-full hover:bg-slate-200" /></button>
           </div>
 
@@ -47,7 +50,7 @@ function ConfirmComp(){
             
             onClick={(e)=>{
                 e.preventDefault();
-               
+               modal.onClose();
             }}>
               Cancel
             </button>
@@ -56,6 +59,6 @@ function ConfirmComp(){
             </button>
           </div>
         </div>
-    </div>
+   
   )
 }

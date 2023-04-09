@@ -49,6 +49,7 @@ export const verifyEmailC=async(req:Request,res:Response)=>{
 
 export const updateProfileC=async(req:Request,res:Response)=>{
     try{
+        console.log('inside controller')
         const profileUpdated=await updateProfileS(req.userData.userId,req.body);
         if(profileUpdated) return res.status(200).json({success:true,message:"Profile data successfully updated"})
 

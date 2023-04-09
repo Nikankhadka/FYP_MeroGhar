@@ -107,6 +107,7 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
             profileData.password=await hash(profileData.password,process.env.salt_rounds!);
         }
 
+        console.log('ready to update profile')
         const updatedUserProfile=await userModel.updateOne({userId},{...profileData},{new:true});
         if(!updatedUserProfile) throw new Error("User profile update failed")
         return true

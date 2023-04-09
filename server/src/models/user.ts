@@ -20,9 +20,9 @@ export const userSchema=new Schema({
         //only necessary for local login
         password:{type:String},
         //userid__profile
-        profile_Img:{
-            img_id:String,
-            img_url:String
+        profileImg:{
+            imgId:String,
+            imgUrl:String
         },
         
         About:{
