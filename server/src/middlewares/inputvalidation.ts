@@ -29,16 +29,20 @@ export const validateInput=async(req:Request,res:Response,next:NextFunction)=>{
 
 export const validateProfile=async(req:Request,res:Response,next:NextFunction)=>{
     try{
+        console.log("validation input")
+        console.log(req.body)
         //defined joi schema for input validation of requet body
         const updateProfileSchema=joi.object({
             userName:joi.string().optional(),
-            password:joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')).optional(),
-            profile_img:{
-                img_id:string().optional(),
-                img_url:string().optional()
-            }
+            password:joi.string().optional().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')),
+            profileImg:joi.object({
+                imgId:joi.string().optional(),
+                imgUrl:joi.string().optional()
+            }).optional(),
+            About:joi.string().optional()
         })
 
+      
         //calls the validate method to check the value with schema  and validates both property to generate error response
         const{error,value}=updateProfileSchema.validate(req.body,{abortEarly:false})
         if(error) return res.status(400).json({success:false,message:error.message})
@@ -47,9 +51,34 @@ export const validateProfile=async(req:Request,res:Response,next:NextFunction)=>
         next()
 
     }catch(err){
-        return res.status(400).json(err)
+        return res.status(400).json({err:'nihgga'})
     }
 }
+
+export const validateBooking=async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        console.log("validation input")
+        console.log(req.body)
+        //defined joi schema for input validation of requet body
+        const bookingSchema=joi.object({
+            startDate:joi.date().required(),
+            endDate:joi.date().required(),
+            guest:joi.string().required()
+        })
+
+      
+        //calls the validate method to check the value with schema  and validates both property to generate error response
+        const{error,value}=bookingSchema.validate(req.body,{abortEarly:false})
+        if(error) return res.status(400).json({success:false,message:error.message})
+        
+        console.log(value)
+        next()
+
+    }catch(err){
+        return res.status(400).json({err:'nihgga'})
+    }
+}
+
 
 
 export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{

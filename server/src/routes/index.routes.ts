@@ -5,6 +5,7 @@ import authRoutes from "../routes/auth/auth.routes"
 import userRoutes from "../routes/user/user.routes"
 import adminRoutes from "../routes/admin/admin.routes"  
 import propertyRoutes from "../routes/property/property.routes"
+
 const router=Router()
 
 //simply register the route here 

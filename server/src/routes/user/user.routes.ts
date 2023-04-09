@@ -7,10 +7,9 @@ const router=Router();
 
 router.get("/verifyEmail/:token",verifyEmailC)
 
-router.use(verifyaccessToken)
 router.get('/userData',getUserC)
 router.post("/addEmail",addEmailC)
-router.patch("/updateProfile",validateProfile,updateProfileC)
+router.patch("/updateProfile",verifyaccessToken,validateProfile,updateProfileC)
 
 //use the same api end point to update kyc information
 router.post("/postKyc",validateKyc,postKycC)

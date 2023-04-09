@@ -124,3 +124,14 @@ export interface IReview{
     adminReview:string
   }
 }
+
+
+export interface IBooking{
+  userId:string,
+  propertyId:Types.ObjectId,
+  hostId:string,
+  createdAt:Date,
+  startDate:Date,
+  endDate:Date,
+  guest:string
+}

@@ -20,20 +20,16 @@ export default function AccountComponent() {
     <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%] border-2 border-red-500 ">   
 
     <div className=' p-2 w-[95%] md:w-[80%]'>
-    <button onClick={(e)=>{
-      e.preventDefault();
-      confirmModal.onOpen('confirm');
-    }}>check</button>
+
     
         {/* for kyc header */}
         
         <h2 className='text-xl font-semibold  text-gray-700'> Personal information</h2>
+
       <button onClick={(e)=>{
-        console.log('clocke')
-        toast.loading('check toast is heere')
-        
-      }}>check</button>
-     
+        e.preventDefault()
+        confirmModal.onOpen('confirm')
+      }}>hello</button>
       {/* if kyc does not exist */}
 
       {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>

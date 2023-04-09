@@ -8,6 +8,7 @@ import { verifyAccessTokenS } from "../services/auth/auth.service";
 //token verification works same for all just pass the role for rout if admin only true else false
 export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)=>{
     console.log(req.cookies)
+        if(!req.checkCookie) return next();
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
         
@@ -16,9 +17,11 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
         const {success,tokendata}=await verifyAccessTokenS(accessToken);
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
+        
         //store the token data req.user
          req.userData=tokendata;
         next()  
+        console.log('next called')
     }catch(e:any){
         console.log(e)
         return res.status(401).json({authState:false,error:e.message})
@@ -54,6 +57,10 @@ export const verifyRole=(is_Admin:boolean)=>{
             is_Admin:false,
             kycVerified:false
         }
+
+        //we want to check access token on protected routes
+        req.checkCookie=true,
+        console.log(req.checkCookie)
         next();
     }catch(e:any){
         console.log(e);
@@ -66,9 +73,16 @@ export const verifyRole=(is_Admin:boolean)=>{
 
  export const checkCookie=async(req:Request,res:Response,next:NextFunction)=>{
     try{
+
         //if user doenot have access token redirect him to main controller
-        if(!req.cookies.accessToken) return next('route');
+        if(!req.cookies.accessToken){
+            console.log('modify')
+            //since some routes are exception for those we set this false
+            req.checkCookie=false,
+          next();
+        }
         
+        req.checkCookie=true;
         //since user has accessToken that he is logged and authenticated 
         next()
     }catch(e){

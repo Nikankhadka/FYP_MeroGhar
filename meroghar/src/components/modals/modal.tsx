@@ -24,8 +24,9 @@ function Modal({isOpen,children}:modalProps) {
     const clickHandler = (e: any) => {
       //if event click is outsise the div ref of the modal clsoe modal
       if (!modalRef.current?.contains(e.target)) {
-        modal.onClose()
+        return modal.onClose()
       }
+     
     }
     document.addEventListener('mousedown', clickHandler)
 
@@ -69,7 +70,7 @@ function Modal({isOpen,children}:modalProps) {
          flex
          items-center
          justify-center
-         
+         border-2 border-red-500
           "
           
         >
@@ -78,7 +79,7 @@ function Modal({isOpen,children}:modalProps) {
       {/* this modal container is perfect for all conditio try to make the child component width fixed for md and for smaller full according to parent div */}
 
     {/* container for modal with ref to not close and have size of modal */}
-     <div ref={modalRef} className="  border-2 border-red-500 w-[95%]  sm:w-[80%] md:w-fit">
+     <div ref={modalRef} className=" border-2 border-red-500 w-[95%]  sm:w-[80%] md:w-fit">
      {children}
      </div>
 

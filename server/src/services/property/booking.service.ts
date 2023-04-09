@@ -1,0 +1,81 @@
+import { IBooking } from "../../interfaces/dbInterface";
+import { bookingModel } from "../../models/booking";
+import { propertyModel } from "../../models/property";
+
+
+export const postBookingS=async(propId:string,userId:string,bookingDetail:Partial<IBooking>):Promise<boolean>=>{
+    try{
+        const{startDate,endDate,guest}=bookingDetail
+        const checkProperty=await propertyModel.findOne({_id:propId});
+        if(!checkProperty) throw new Error("invalid Property Id/Does not Exist");
+        
+        const existingBooking = await bookingModel.findOne({
+            $and: [
+              { propertyId: propId },
+              {
+                $or: [
+                  { startDate: { $lte: endDate }, endDate: { $gte: endDate } },
+                  { startDate: { $lte: startDate }, endDate: { $gte: startDate } },
+                  { startDate: { $gte: startDate }, endDate: { $lte: endDate } }
+                ]
+              }
+            ]
+          });
+        if(existingBooking) return false;
+       
+          const newBooking=await bookingModel.create({
+            propertyId:propId,
+            userId,
+            hostId:checkProperty.userId,
+            startDate,
+            endDate,
+            guest
+        });
+
+        await newBooking.save();
+
+      return true
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+export const getBookingS=async(propId:string,userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
+    try{
+        console.log("ins serbce")
+
+       if(userId!=''){
+        const reservations=await bookingModel.find({propertyId:propId,hostId:userId}).skip((page! - 1) * limit!)
+        .limit(limit!);
+        if(!reservations) throw new Error("Failed to Fetch reservation for user");
+        return reservations;
+       }
+
+       const reservations=await bookingModel.find({
+        propertyId:propId
+       }).select('startDate endDate -_id').exec();
+
+       if(!reservations) throw new Error("failed to get Reservation details");
+
+       return reservations;
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
+    try{
+        const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
+        .limit(limit!);
+        if(!reservations) throw new Error("Failed to Fetch reservation for user");
+        return reservations;
+     
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
