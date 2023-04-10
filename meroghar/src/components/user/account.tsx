@@ -26,10 +26,7 @@ export default function AccountComponent() {
         
         <h2 className='text-xl font-semibold  text-gray-700'> Personal information</h2>
 
-      <button onClick={(e)=>{
-        e.preventDefault()
-        confirmModal.onOpen('confirm')
-      }}>hello</button>
+
       {/* if kyc does not exist */}
 
       {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>

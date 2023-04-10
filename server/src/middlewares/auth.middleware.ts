@@ -6,14 +6,17 @@ import { verifyAccessTokenS } from "../services/auth/auth.service";
 //combined verify token+role in single middle ware 
 //takes in custom value of admin or not first verifies the token data then verifies role with passed role 
 //token verification works same for all just pass the role for rout if admin only true else false
-export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)=>{
-    console.log(req.cookies)
-        if(!req.checkCookie) return next();
+export const verifyaccessToken=(verify:boolean)=>{
+
+    return async(req:Request,res:Response,next:NextFunction)=>{
+        try{
+        // check authentication since it is asked
+        if(verify){
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
         
 
-        try{
+        
         const {success,tokendata}=await verifyAccessTokenS(accessToken);
         if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
        
@@ -22,13 +25,39 @@ export const verifyaccessToken=async(req:Request,res:Response,next:NextFunction)
          req.userData=tokendata;
         next()  
         console.log('next called')
-    }catch(e:any){
-        console.log(e)
-        return res.status(401).json({authState:false,error:e.message})
+
+    }else{
+        if(!req.cookies.accessToken){
+            console.log("not token not compulsory")
+            next()
+        }else{
+            // if there is token then it needs to verified and used
+            const {accessToken}=req.cookies;
+        
+
+        
+        const {success,tokendata}=await verifyAccessTokenS(accessToken);
+        if(!success) return res.status(401).json({success:false,message:"invalid token credentials"})
+       
+        
+        //store the token data req.user
+         req.userData=tokendata;
+        next()  
+        console.log('next called')
+        }
     }
+
+
+}
+catch(e:any){
+    console.log(e)
+    return res.status(401).json({authState:false,error:e.message})
+}
+    }
+}
     
         
-}
+
 
 //verify roles for speciific api end points
 export const verifyRole=(is_Admin:boolean)=>{
@@ -58,9 +87,7 @@ export const verifyRole=(is_Admin:boolean)=>{
             kycVerified:false
         }
 
-        //we want to check access token on protected routes
-        req.checkCookie=true,
-        console.log(req.checkCookie)
+
         next();
     }catch(e:any){
         console.log(e);
@@ -70,23 +97,3 @@ export const verifyRole=(is_Admin:boolean)=>{
     
 
  //middle ware which for authentication state like cookies? if available authenticates,else skip to main controller
-
- export const checkCookie=async(req:Request,res:Response,next:NextFunction)=>{
-    try{
-
-        //if user doenot have access token redirect him to main controller
-        if(!req.cookies.accessToken){
-            console.log('modify')
-            //since some routes are exception for those we set this false
-            req.checkCookie=false,
-          next();
-        }
-        
-        req.checkCookie=true;
-        //since user has accessToken that he is logged and authenticated 
-        next()
-    }catch(e){
-        console.log(e);
-        next()
-    }
- }

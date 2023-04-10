@@ -9,7 +9,7 @@ const router=Router()
 
 
 //crud opeartion except for read needs user access 
-router.use(verifyaccessToken);
+router.use(verifyaccessToken(true));
 router.use(verifyRole(false))
 
 router.post("/:id",validateReviewInput,postReviewC)

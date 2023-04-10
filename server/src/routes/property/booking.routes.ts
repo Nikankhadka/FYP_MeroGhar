@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkCookie, verifyRole, verifyaccessToken } from "../../middlewares/auth.middleware";
+import { verifyRole, verifyaccessToken } from "../../middlewares/auth.middleware";
 import { validateBooking } from "../../middlewares/inputvalidation";
 import { getBookingC, getMyBookingC, postBookingC } from "../../controllers/property/booking.controller";
 import { verifyAccessTokenS } from "../../services/auth/auth.service";
@@ -7,15 +7,17 @@ import { verifyAccessTokenS } from "../../services/auth/auth.service";
 
 const router=Router();
 
-
-
-router.post('/:id',verifyaccessToken,validateBooking,postBookingC);
-
 //get resevation for a single property/conditional of host or normal user
-router.get("/:id",getBookingC)
+router.get("/:id",verifyaccessToken(false),getBookingC)
 
+router.use(verifyaccessToken(true))
+router.post('/:id',validateBooking,postBookingC);
 //bookings made by me
-router.get('/myBookings',verifyaccessToken,verifyRole(false),getMyBookingC)
+router.get('/myBookings',verifyRole(false),getMyBookingC)
+
+
+
+
 
 //update booking patch 
 //dlete booking delete

@@ -22,6 +22,9 @@ import OtpInput from 'react-otp-input'
 import { checkPhone, postKyc, postPhone } from '../../api/client/user'
 import { KycData } from '../../interface/form'
 import useModal from '../../customHoooks/useModal'
+import useConfirm from '../../customHoooks/useConfirm'
+import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 interface form {
   firstName: string
@@ -46,6 +49,8 @@ interface kycprops {
 
 export default function Kyc({ setopenKyc }: kycprops) {
   const confirmModal=useModal();
+  const confirmData=useConfirm();
+  const router=useRouter();
 
   const [openConfirm, setopenConfirm] = useState(false)
   const {
@@ -68,9 +73,10 @@ export default function Kyc({ setopenKyc }: kycprops) {
   }
 
   const onSubmit: SubmitHandler<form> = async (formdata) => {
-      confirmModal.onOpen('confirm')
 
-    //there might be multiple image upload so
+
+    const submitAction=async()=>{
+        //there might be multiple image upload so
     const imageData = new FormData()
     //first upload image
     imageData.append('file', formdata.img[0])
@@ -100,19 +106,28 @@ export default function Kyc({ setopenKyc }: kycprops) {
     // post kyc information
     const kyc=await postKyc(kycdata)
     if(!kyc){
-      return alert('failed to post kyc');
+      toast.error('failed to post kyc');
+      return confirmModal.onClose()
     }
 
-    alert('kyc posted successfuly')
+    toast.success('kyc posted successfuly')
+    confirmModal.onClose()
+    return router.refresh();
+    
+    }
+
+    //now mutate the data 
+    confirmData.onContent({
+      header:'Are You Sure To Submit Kyc?',
+      actionBtn:"Submit",
+      onAction:submitAction
+    })
+    confirmModal.onOpen('confirm')
   }
 
   return (
     <main key={'fuckU'} className="mt-5 w-full rounded-lg   p-4  md:border-2 md:border-gray-200  md:shadow-lg">
       <Phone />
-      <button onClick={(e)=>{
-        e.preventDefault();
-        confirmModal.onOpen('confirm')
-      }}>check</button>
       <hr className="my-5 border-gray-400" />
 
       <form>

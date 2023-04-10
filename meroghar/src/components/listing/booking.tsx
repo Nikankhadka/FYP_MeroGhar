@@ -23,7 +23,8 @@ export function BookProperty({reservations}:Booking) {
         endDate: null
         });
 
-        const router=useRouter();
+        console.log(reservations)
+  const router=useRouter();
   const[guest,setguest]=useState(0)
 
   const[error,seterror]=useState(false);

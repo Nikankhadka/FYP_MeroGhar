@@ -73,7 +73,11 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         {/* conditionally render navbar  */}
       
         <ClientComp>
-        <ToasterProvider />
+
+          {/* this component are kind of hassle donot repeat them on other layouts since they have shared state 
+          overlapping will cause modal to bug and close  on click since they are in root layout they are rendered through out the 
+          application */}
+          <ToasterProvider />
            <LoginModal />
            <RegisterModal />
            <ConfirmModal />
