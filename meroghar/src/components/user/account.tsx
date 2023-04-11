@@ -2,7 +2,7 @@
 
 import {useState} from 'react'
 import Link from 'next/link'
-import Card from '../card'
+import Card from '../card/card'
 import Kyc from './kyc'
 import toast, { Toaster } from 'react-hot-toast';
 import useModal from '../../customHoooks/useModal'

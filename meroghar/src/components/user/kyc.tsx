@@ -103,10 +103,10 @@ export default function Kyc({ setopenKyc }: kycprops) {
       },
     }
 
-    // post kyc information
+    // post kyc information ssa
     const kyc=await postKyc(kycdata)
     if(!kyc){
-      toast.error('failed to post kyc');
+    
       return confirmModal.onClose()
     }
 

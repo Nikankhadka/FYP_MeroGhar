@@ -20,7 +20,8 @@ dotenv.config()
 
 export const getUserS=async(userId:string):Promise<IUser>=>{
     try{
-        const userData=await userModel.findOne({userId}).select("-password -Token -refreshToken -is_Admin -wishList");
+    
+        const userData=await userModel.findOne({userId}).select("-password -Token -refreshToken -is_Admin -wishList -kycInfo -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.is_verified");
         if(!userData) throw new Error("Failed to fetch userData")
         return userData
     }catch(e){

@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import NavBar from '../components/navbar/navbar'
 import { cookies } from 'next/headers';
 
-import Footer from '../components/footer'
+import Footer, { PrimaryFooter, SecondaryFooter } from '../components/footer'
 import AdminNav from '../components/navbar/DashboardNav';
 import DashboardNav from '../components/navbar/DashboardNav';
 import { Nunito } from 'next/font/google'
@@ -87,7 +87,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         
         {/* this children represents each page component  that is rendered */}
         {children}
-        <Footer />
+        <PrimaryFooter />
+        
         
       </body>
     </html>

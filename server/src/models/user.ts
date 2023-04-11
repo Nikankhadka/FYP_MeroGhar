@@ -26,7 +26,8 @@ export const userSchema=new Schema({
         },
         
         About:{
-            type:String
+            type:String,
+            default:""
         },
         
         //can be manually updated or if user logs in with google then it will be updated automatically
@@ -109,13 +110,13 @@ export const userSchema=new Schema({
         
 
         //can be modified by admin to ban user for certain time or permanently
-        is_banned:{
+        isBanned:{
             strikes:Number,
             banTime:Date,
             message:String
         },
 
-        rented_property:{
+        rentedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },
@@ -126,7 +127,7 @@ export const userSchema=new Schema({
             default:undefined
         },
 
-        viewed_property:{
+        viewedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },

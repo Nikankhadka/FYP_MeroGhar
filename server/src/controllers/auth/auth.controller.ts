@@ -21,7 +21,7 @@ export const registerUserC=async(req:Request,res:Response)=>{
         const newUser=await registerUserS(userId,password);
         if(newUser) return res.status(200).json({success:true, message:`user ${userId} successfully registered`})
         
-        return res.status(400).json({success:false,error:"user with id already exist"})
+        return res.status(409).json({success:false,error:"user with id already exist"})
         
     }catch(err:any){
         res.status(400).json({success:false, error:err.message})
@@ -97,6 +97,7 @@ export const googleLoginC=async(req:Request,res:Response)=>{
        
         console.log(req.user);
         const {accessToken,refreshToken,user}=await googleLoginS(req.user)
+        
         res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
       .status(StatusCodes.OK).redirect("http://localhost:3000")

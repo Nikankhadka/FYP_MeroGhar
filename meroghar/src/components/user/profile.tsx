@@ -7,20 +7,27 @@ import{HiCheck} from 'react-icons/hi'
 import { EditBasic } from './Edit'
 import {useState} from 'react'
 import Link from 'next/link'
-import Card from '../card'
+import Card from '../card/card'
+import { FetchedUserData } from '../../interface/request'
 
-export default function Profile() {
+
+interface ProfileProps{
+  userId:string
+  profileData:FetchedUserData
+}
+
+export default function Profile({userId,profileData}:ProfileProps) {
   
 
 
   const [EditProfile,setEditProfile]=useState(false)
 
   return (
-    <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%]">
+    <main className=" border-2 border-red-500">
       
       <div className="flex justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Hi, I am Ronnin</h2>
+          <h2 className="text-2xl font-semibold">Hi, I am Ronnin</h2>
           <p className="text-sm text-gray-700">Joined in 2022</p>
         </div>
         <img
@@ -33,13 +40,14 @@ export default function Profile() {
       <div className="my-3 flex flex-col gap-2">
 
         <div>
-        <Link href='/account-settings' className=" block mb-2 text-left text-sm font-bold underline">Account-Settings</Link>
-        <button onClick={(e)=>{
+        {userId==profileData.userId&&<Link href='/account-settings' className=" block mb-2 text-left text-sm font-semibold underline">Account-Settings</Link>}
+        
+        {userId==profileData.userId&&<button onClick={(e)=>{
           e.preventDefault();
           setEditProfile(true)
-        }} className="mb-2 text-left text-sm font-bold underline">
+        }} className="mb-2 text-left text-sm font-semibold underline">
           Edit Profile
-        </button>
+        </button>}
 
        
         </div>

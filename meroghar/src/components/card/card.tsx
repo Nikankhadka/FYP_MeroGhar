@@ -1,8 +1,8 @@
 
 'use client'
 import Link from 'next/link'
-import { Arrow } from './buttons'
-import Wish from './Svg/wishSvg'
+import { Arrow } from '../buttons'
+import Wish from '../Svg/wishSvg'
 
 // hover:-translate-y-1 hover:scale-105
 export default function Card() {
@@ -29,9 +29,9 @@ export default function Card() {
       </div>
 
       <div className="my-2 w-[95%] mx-auto">
-        <p className="text-sm font-bold">Nepal,kathmandu-kapan</p>
+        <p className="text-sm font-semibold">Nepal,kathmandu-kapan</p>
         <p className="gray-600 text-sm">
-          <span className="text-sm font-bold">Rs 200</span> Night
+          <span className="text-sm font-semibold">Rs 200</span> Night
         </p>
       </div>
     </main>

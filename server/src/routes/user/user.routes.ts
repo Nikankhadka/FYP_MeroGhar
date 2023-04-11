@@ -7,7 +7,8 @@ const router=Router();
 
 router.get("/verifyEmail/:token",verifyEmailC)
 
-router.get('/userData',getUserC)
+router.get('/getUser/:userId',getUserC)
+
 router.post("/addEmail",addEmailC)
 router.patch("/updateProfile",verifyaccessToken,validateProfile,updateProfileC)
 

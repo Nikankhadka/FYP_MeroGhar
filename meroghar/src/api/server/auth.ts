@@ -26,13 +26,23 @@ export const authCheck=async(is_Admin:boolean)=>{
   }
 }
 
+
+interface sessionData{
+  session:boolean,
+  userData:{
+    userId:string,
+    is_Admin:boolean,
+    img:string
+  }
+}
 //for common routes can only be accessed by user/non user
-export const checkSession=async():Promise<boolean>=>{
+export const checkSession=async():Promise<sessionData>=>{
   const cookieStore=cookies();
-  const session=cookieStore.get("session")?.value;
-  if(!session) return false;
+  const session=await cookieStore.get("session")?.value;
+  if(!session) return {session:false,userData:{userId:"",is_Admin:false,img:''}}
   const sessionObj=await JSON.parse(session);
+ 
   if(sessionObj.is_Admin) return redirect("/admin");
-  return true
+  return {session:true,userData:{userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img}}
     
 }
