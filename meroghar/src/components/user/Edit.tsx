@@ -6,6 +6,9 @@ import {useState} from 'react'
 import { uploadImage } from '../../api/client/user'
 import {  toast } from 'react-hot-toast'
 import Api from '../../api/client/axios'
+import useConfirm from '../../customHoooks/useConfirm'
+import useModal from '../../customHoooks/useModal'
+import { useRouter } from 'next/navigation'
 interface EditProfile {
   userName?: string
   profileImg?: any|{
@@ -19,18 +22,29 @@ const inputStyle =
   'text-md my-1 h-10 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
 
 interface Prop{
+    userName:string,
+    About:string,
+    img:string,
     setEditProfile:React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function EditBasic({setEditProfile}:Prop) {
+export function EditBasic({setEditProfile,userName,About,img}:Prop) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     control,
-  } = useForm<EditProfile>()
+  } = useForm<EditProfile>({
+    defaultValues:{
+      userName,
+      About
+    }
+  })
 
+  const confirm=useConfirm();
+  const confirmModal=useModal();
+  const router=useRouter()
 
   const [error,seterror]=useState(false);
 
@@ -39,71 +53,83 @@ export function EditBasic({setEditProfile}:Prop) {
       
       const imageUrl=()=>{
         try{
-          return  URL.createObjectURL(image[0])
-  
+            return  URL.createObjectURL(image[0])
         }catch(e){
           
-          return ''
+          return img||''
         }
       }
 
 
 
       const submitHandler:SubmitHandler<EditProfile>=async(formdata)=>{
-        try{
-            
-          // check for empty values 
-          if(formdata.userName==""&&formdata.About==""&&formdata.profileImg.length===0){
-            return seterror(true);
-          }
-          seterror(false)
-          //then 
-
-          let profileData:EditProfile={
-            userName:formdata.userName,
-            About:formdata.About,
-            profileImg:{
-              imgUrl:"",
-              imgId:""
-            }
-          }
-
-
-          if(formdata.userName==""){
-            delete profileData.userName;
-          }
-
-          if(formdata.About==""){
-            delete profileData.About;
-          }
-
-          if(formdata.profileImg.length===0){
-            delete profileData.profileImg;
-          }else{
-            //upload image
-          const upload=await uploadImage(formdata.profileImg[0]);
-          if(upload){
-            profileData.profileImg.imgId=upload.imgId,
-            profileData.profileImg.imgUrl=upload.imgUrl
-          }
-          }
-
-
-          
-
-          console.log(profileData);
-          const updateProfile=await Api.patch('/user/v1/updateProfile',{...profileData},{withCredentials:true});
-          if(updateProfile.data.success){
-             toast.success("User profile Data SuccessFully Updated");
-             return setEditProfile(false);
-          }
-
-          return toast.error("Profile Upload Failed")
-
-        }catch(e){
-            console.log(e)
-           return toast.error("Profile Upload Failed")
+        if(formdata.userName==""&&formdata.About==""&&formdata.profileImg.length===0){
+          return seterror(true);
         }
+        seterror(false)
+        const onSubmit=async()=>{
+          try{
+            let profileData:EditProfile={
+              userName:formdata.userName,
+              About:formdata.About,
+              profileImg:{
+                imgUrl:"",
+                imgId:""
+              }
+            }
+  
+  
+            if(formdata.userName==""){
+              delete profileData.userName;
+            }
+  
+            if(formdata.About==""){
+              delete profileData.About;
+            }
+  
+            if(formdata.profileImg.length===0){
+              delete profileData.profileImg;
+            }else{
+              //upload image
+            const upload=await uploadImage(formdata.profileImg[0]);
+            if(upload){
+              profileData.profileImg.imgId=upload.imgId,
+              profileData.profileImg.imgUrl=upload.imgUrl
+            }
+            }
+  
+  
+            
+  
+            console.log(profileData);
+            const updateProfile=await Api.patch('/user/v1/updateProfile',{...profileData},{withCredentials:true});
+            if(updateProfile.data.success){
+               toast.success("User profile Data SuccessFully Updated");
+               setEditProfile(false);
+               confirmModal.onClose();
+               return router.refresh();
+            }
+            confirmModal.onClose();
+             toast.error("Profile Upload Failed")
+              
+  
+          }catch(e){
+              console.log(e)
+            confirmModal.onClose();
+             return toast.error("Profile Upload Failed")
+            
+          }
+        }
+
+        // for confirmation update default state 
+        confirm.onContent({
+          header:"Are you sure U Want to Update Profile Details?",
+          actionBtn:"Update",
+          onAction:onSubmit
+        })
+
+        confirmModal.onOpen('confirm');
+
       }
 
 
@@ -113,7 +139,7 @@ export function EditBasic({setEditProfile}:Prop) {
         
         <div
           className="my-4 flex  w-full flex-col  gap-y-4   " >
-            <label className=" block text-sm text-black font-semibold">profile Image</label>
+            <label className=" block text-sm text-black font-semibold">Profile Image</label>
           {/* initially the value default does not read file casuing to return empty string */}
           <img
             src={imageUrl()}
@@ -121,7 +147,7 @@ export function EditBasic({setEditProfile}:Prop) {
             className={
               imageUrl() == ''
                 ? 'hidden'
-                : ' rounded-full border-2 border-gray-500 w-[100px] h-[100px] md:w-[200px] md:h-[200px]'
+                : ' rounded-full border-2 p-1 border-gray-300 shadow-lg w-[100px] h-[100px] md:w-[200px] md:h-[200px]'
             }
           />
 
@@ -142,7 +168,7 @@ export function EditBasic({setEditProfile}:Prop) {
 
         </div>
         <div className="w-full my-4">
-          <label className=" block text-sm text-black font-semibold">UserName</label>
+          <label className=" block my-1 text-sm text-black font-semibold">UserName</label>
           <input
             type="text"
             placeholder="userName"
@@ -171,7 +197,7 @@ export function EditBasic({setEditProfile}:Prop) {
             e.preventDefault();
             setEditProfile(false)
         }} className='underline font-semibold text-sm'>Cancel</button>
-        <button type='submit' onClick={handleSubmit(submitHandler)} className='font-bold text-white py-2 px-4 rounded-lg bg-themeColor hover:bg-mainColor transition-all' >save</button>
+        <button type='submit' onClick={handleSubmit(submitHandler)} className='font-semibold text-white py-2 px-4 rounded-lg bg-themeColor hover:bg-mainColor transition-all' >save</button>
         </div>
        
       </form>

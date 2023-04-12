@@ -1,6 +1,6 @@
 'server-only'
 
-import { FetchedUserData } from "../../../interface/request";
+import { FetchedUserData } from "../../../interface/response";
 import Api from "../../client/axios"
 
 

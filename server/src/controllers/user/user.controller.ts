@@ -6,7 +6,7 @@ import { updateEmailS,addEmailS, verifyEmailS,updateProfileS,postKycS, getUserS,
 
 export const getUserC=async(req:Request,res:Response)=>{
     try{
-        const userData=await getUserS(req.params.userId);
+        const userData=await getUserS(req.params.id);
         if(userData) return res.status(200).json({success:true,userData})
     }catch(e:any){
         console.log(e)

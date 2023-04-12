@@ -20,7 +20,7 @@ export default async  function UserProfile({ params: { userId } }: Params) {
     <main>
 
       <NavBar authState={false}  img='' Z="0" theme="light"/>
-      <div className=" my-24 mx-auto   p-3  w-[95%] sm:w-[90%]  lg:w-[75%]">
+      <div className=" my-24 mx-auto   p-3  w-[98%] sm:w-[90%]  lg:w-[75%]">
       <Profile userId={session.session?session.userData.userId:""} profileData={userData} />
 
 

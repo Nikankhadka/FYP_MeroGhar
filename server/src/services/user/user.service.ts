@@ -14,16 +14,25 @@ import { updateEmailTemplate,postEmailTemplate } from "../../configs/mailtemplat
 import { KycData, updateProfile } from "../../interfaces/inputInterface";
 import { compare, hash } from "bcrypt";
 import { IUser } from "../../interfaces/dbInterface";
+import { returnUserData } from "../../interfaces/userResponse";
 dotenv.config()
 
 
 
-export const getUserS=async(userId:string):Promise<IUser>=>{
+export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     try{
     
-        const userData=await userModel.findOne({userId}).select("-password -Token -refreshToken -is_Admin -wishList -kycInfo -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.is_verified");
+        const userData=await userModel.findOne({_id:id}).select("-password -Token -userId -refreshToken -updated_At -is_Admin -wishList  -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.is_verified kycInfo.phoneNumber");
+        const phoneNumber=userData?.kycInfo.phoneNumber!;
+        
         if(!userData) throw new Error("Failed to fetch userData")
-        return userData
+
+        // delete kyc info from copy document
+        
+        let Data = { ...userData.toObject(),kycInfo:{phoneNumber}};
+        console.log(Data)
+        return Data;
+
     }catch(e){
         console.log(e)
         throw e;

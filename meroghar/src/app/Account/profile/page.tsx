@@ -10,7 +10,7 @@ export default async function Dashboardprofile() {
   
   return (
     <main className="my-20 ml-0 md:my-10 md:ml-[230px] lg:ml-[260px]">
-      <div className="mx-auto w-[95%]  p-3  sm:w-[90%] lg:w-[85%]">
+      <div className="mx-auto w-[98%]  p-3  sm:w-[90%] lg:w-[85%]">
       <Profile userId={session.session?session.userData.userId:""} profileData={userData} />
 
         <div>
