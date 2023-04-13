@@ -20,4 +20,4 @@ const bookingSchema=new Schema({
 
 })
 
-export const bookingModel=model<IBooking>("inspection",bookingSchema)
+export const bookingModel=model<IBooking>("Booking",bookingSchema)

@@ -26,7 +26,8 @@ export const userSchema=new Schema({
         },
         
         About:{
-            type:String
+            type:String,
+            default:""
         },
         
         //can be manually updated or if user logs in with google then it will be updated automatically
@@ -56,24 +57,48 @@ export const userSchema=new Schema({
         refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
         kycInfo:{
-            firstName:String,
-            lastName:String,
-            gender:String,
+            firstName:{
+                type:String,
+                default:""
+            },
+            lastName:{
+                type:String,
+                default:""
+            },
+            gender:{
+                type:String,
+                default:""
+            },
 
             // if email is verified then this will be automatically updated
             email:String,
             // phone number will be added here as its verified 
-            phoneNumber:String,
+            phoneNumber:{
+                type:String,
+                default:""
+            },
             address:{
-                country:String,
-                city:String,  
+                country:{
+                    type:String,
+                    default:""
+                },
+                city:{
+                    type:String,
+                    default:""
+                },
             },
             //multiple images of user, citizenship for manual verification
             img:{
                 
                     //userId_img1/2
-                    imgId:String,
-                    imgUrl:String
+                    imgId:{
+                        type:String,
+                        default:""
+                    },
+                    imgUrl:{
+                        type:String,
+                        default:""
+                    },
                 
                 
             }
@@ -95,7 +120,7 @@ export const userSchema=new Schema({
 
         //rating and review count will be updated on write every time user property is reviewd
         avg_rating:{type: Number,default:0}, 
-        recieved_Reviewcount:{type: Number},
+        recieved_Reviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
         wishList:[
@@ -109,13 +134,13 @@ export const userSchema=new Schema({
         
 
         //can be modified by admin to ban user for certain time or permanently
-        is_banned:{
+        isBanned:{
             strikes:Number,
             banTime:Date,
             message:String
         },
 
-        rented_property:{
+        rentedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },
@@ -126,7 +151,7 @@ export const userSchema=new Schema({
             default:undefined
         },
 
-        viewed_property:{
+        viewedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:undefined
         },

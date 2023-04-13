@@ -121,8 +121,9 @@ export const validatePropertyInput = async(req: Request, res: Response, next: Ne
         const PropertySchema = joi.object({
             name: joi.string().required(),
             location:{
-                city: joi.string().min(4).required(),
-                area: joi.string().min(4).required(),
+                country:joi.string().required(),
+                state: joi.string().required(),
+                city: joi.string().required(),
             },
             discription: joi.string().min(15).required(),
             property_type: joi.string().required(),
@@ -151,8 +152,9 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
         const PropertySchema = joi.object({
             name: joi.string().optional(),
             location:{
-                city: joi.string().min(4).optional(),
-                area: joi.string().min(4).optional(),
+                country:joi.string().optional(),
+                state: joi.string().optional(),
+                city: joi.string().optional(),
             },
             discription: joi.string().min(15).optional(),
             property_type: joi.string().optional(),

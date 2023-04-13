@@ -21,3 +21,4 @@ export interface PostProperty{
     images:Images[],
     amenities:string[]
 }
+

@@ -7,17 +7,18 @@ const router=Router();
 
 router.get("/verifyEmail/:token",verifyEmailC)
 
-router.get('/userData',getUserC)
+router.get('/getUser/:id',getUserC)
+
 router.post("/addEmail",addEmailC)
-router.patch("/updateProfile",verifyaccessToken,validateProfile,updateProfileC)
+router.patch("/updateProfile",verifyaccessToken(true),validateProfile,updateProfileC)
 
 //use the same api end point to update kyc information
 router.post("/postKyc",validateKyc,postKycC)
 router.patch("/updateUser",verifyaccessToken,)
 
 //add middleware for both of these
-router.get("/verifyPhone/:phone",verifyaccessToken,getPhoneC)
-router.post("/verifyPhone/:phone",verifyaccessToken,postPhoneC)
+router.get("/verifyPhone/:phone",verifyaccessToken(true),getPhoneC)
+router.post("/verifyPhone/:phone",verifyaccessToken(true),postPhoneC)
 
 
 

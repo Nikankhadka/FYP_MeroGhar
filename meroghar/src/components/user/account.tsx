@@ -2,7 +2,7 @@
 
 import {useState} from 'react'
 import Link from 'next/link'
-import Card from '../card'
+import Card from '../card/card'
 import Kyc from './kyc'
 import toast, { Toaster } from 'react-hot-toast';
 import useModal from '../../customHoooks/useModal'
@@ -26,10 +26,7 @@ export default function AccountComponent() {
         
         <h2 className='text-xl font-semibold  text-gray-700'> Personal information</h2>
 
-      <button onClick={(e)=>{
-        e.preventDefault()
-        confirmModal.onOpen('confirm')
-      }}>hello</button>
+
       {/* if kyc does not exist */}
 
       {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>

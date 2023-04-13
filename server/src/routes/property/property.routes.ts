@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createPropertyC, deletePropertyC, getPropertyByIdC, updatePropertyC, updateViewCountC } from "../../controllers/property/property.controller";
-import { checkCookie, verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
+import {  verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
 import { validatePropertyInput, validatePropertyUpdate } from "../../middlewares/inputvalidation";
 
 //import other router related to property 
@@ -14,15 +14,20 @@ router.use("/review",reviewRoutes);
 router.use("/wishList",wishlistRoutes);
 router.use("/booking",bookingRoutes)
 
+
+router.get("/getProperty/:id",verifyaccessToken(false),verifyRole(false),getPropertyByIdC)
+router.patch("/updateViewCount/:id",verifyaccessToken(false),verifyRole(false),updateViewCountC)
+
+router.use(verifyaccessToken(true));
+router.use(verifyRole(false));
 //view count sepeerate api for more accurate view count of the product
-router.get("/getProperty/:id",checkCookie,verifyaccessToken,verifyRole(false),getPropertyByIdC)
-router.post("/createProperty",verifyaccessToken,validatePropertyInput,createPropertyC)
-router.patch("/updateProperty/:id",verifyaccessToken,verifyRole(false),validatePropertyUpdate,updatePropertyC)
-router.delete("/deleteProperty/:id",verifyaccessToken,verifyRole(false),deletePropertyC)
+
+router.post("/createProperty",validatePropertyInput,createPropertyC)
+router.patch("/updateProperty/:id",validatePropertyUpdate,updatePropertyC)
+router.delete("/deleteProperty/:id",deletePropertyC)
 
 //api to fetch user previously viwed property 
-router.get('/getViewedProperty',verifyaccessToken,verifyRole(false))
-router.patch("/updateViewCount/:id",checkCookie,verifyaccessToken,verifyRole(false),updateViewCountC)
+router.get('/getViewedProperty',)
 
 
 

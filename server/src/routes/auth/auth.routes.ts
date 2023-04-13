@@ -11,7 +11,7 @@ import "../../configs/strategy"
 
 
 const router=Router()
-router.use(dbConnect)
+
 
 router.post("/registerUser",validateInput,registerUserC)
 router.post("/login",validateInput,LoginC)

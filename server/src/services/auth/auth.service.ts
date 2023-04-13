@@ -16,6 +16,7 @@ import { googleProfile } from "../../interfaces/Auth";
 import { generateTokens } from "../../utils/token";
 import {signupMailTemplate } from "../../configs/mailtemplate";
 import { sendMail } from "../../utils/zohoMailer";
+import { Types } from "mongoose";
 
 
 gg
@@ -40,8 +41,8 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
             userName:userId,
             password:await hash(password,8),
             profile_Img:{
-                img_id:"",
-                img_url:""
+                imgId:"",
+                imgUrl:""
             }
         })
 
@@ -83,14 +84,13 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
         //throw error or return false 
         if(!tokenStored) throw new Error("Token storage failed")
 
-        return {success:true,accessToken,refreshToken,user:{userId,is_Admin:foundUser.is_Admin}}
+        return {success:true,accessToken,refreshToken,user:{userId:foundUser._id,is_Admin:foundUser.is_Admin,img:foundUser.profileImg.imgUrl}}
 
     }catch(e){
         console.log(e)
         throw e;
     }
 }
-
 
 
 
@@ -161,7 +161,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
                     //store refrehtoken 
                     foundUser.refreshToken = await [...newRefreshTokenArray, newrefreshToken];
                     await foundUser.save();
-                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken},user:{userId,is_Admin}};
+                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken},user:{userId:foundUser._id,is_Admin,img:foundUser.profileImg.imgUrl}};
 
 
                 }catch(e){
@@ -183,10 +183,11 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
 }
 
         
-export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,is_Admin:boolean}}>=>{
+export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:Types.ObjectId,is_Admin:boolean,img:string}}>=>{
     try{
         
         const{userName,email,profile_Img}=profileData
+        
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
             console.log("user with email exist")
@@ -194,7 +195,8 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
-            return {accessToken,refreshToken,user:{userId:userExist.userId,is_Admin:userExist.is_Admin}};
+            console.log(userExist.profileImg);
+            return {accessToken,refreshToken,user:{userId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl}};
         }
 
         //since no user create new user
@@ -205,15 +207,16 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
                 mail:email,
                 is_verified:true
             },
-            profile_Img:{
-                img_id:"",
-                img_url:profile_Img
+            profileImg:{
+                imgId:"",
+                imgUrl:profile_Img
             },
             kycInfo:{
                 email:email
             }
         })
         await newUser.save();
+        console.log('newuser profile',newUser.profileImg)
         if(!newUser) throw new Error("new user creation failed")
         const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
             //push refresh token into userdb
@@ -224,7 +227,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         console.log("before mail send function or template is passed",userName,email)
         //dont need to wait as it takes time to send mail
         sendMail(signupMailTemplate(userName,email))
-        return {accessToken,refreshToken,user:{userId:newUser.userId,is_Admin:newUser.is_Admin}};
+        return {accessToken,refreshToken,user:{userId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl}};
         
 
     }catch(e){
@@ -233,7 +236,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
     }
 }
 
-export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,is_Admin:boolean}}>=>{
+export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:Types.ObjectId,is_Admin:boolean,img:string}}>=>{
     try{
          //here email will contain facebook id
         const{userName,email,profile_Img}=profileData
@@ -243,16 +246,16 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
-            return {accessToken,refreshToken,user:{userId:userExist.userId,is_Admin:userExist.is_Admin}};
+            return {accessToken,refreshToken,user:{userId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl}};
         }
 
         //since no user create new user
         const newUser=await userModel.create({
             userId:email,
             userName,
-            profile_Img:{
-                img_id:"",
-                img_url:profile_Img
+            profileImg:{
+                imgId:"",
+                imgUrl:profile_Img
             }
         })
         await newUser.save();
@@ -261,7 +264,7 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
-        return {accessToken,refreshToken,user:{userId:newUser.userId,is_Admin:newUser.is_Admin}};
+        return {accessToken,refreshToken,user:{userId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl}};
         
 
     }catch(e){

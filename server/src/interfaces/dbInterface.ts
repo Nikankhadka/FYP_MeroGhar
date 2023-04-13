@@ -13,18 +13,18 @@ interface kycSchema{
       city: string
     };
     img: {
-      img_id: string
-      img_url: string
-    }[];
+      imgId: string
+      imgUrl: string
+    };
   
 }
  export interface IUser {
     userId: string
     userName: string
     password: string
-    profile_Img: {
-      img_id: string
-      img_url: string
+    profileImg: {
+      imgId: string
+      imgUrl: string
     }
     About:string
     email: {

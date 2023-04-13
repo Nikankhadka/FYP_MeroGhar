@@ -8,17 +8,23 @@ import { PropertyForm } from '../interface/form'
 import axios from 'axios'
 import { Images } from '../interface/request'
 import { PostPropery } from '../api/client/property'
-
+import {AiOutlinePlus,AiOutlineMinus} from 'react-icons/ai'
+import { amenities,propertyOptions} from '../configs/constant'
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
-
-
-
+import {useState,useEffect} from 'react'
+import useCountry from '../customHoooks/useCountry'
+import { ICountry, IState, ICity } from 'country-state-city'
+import useConfirm from '../customHoooks/useConfirm'
+import useModal from '../customHoooks/useModal'
+import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 //checck image function 
 
 interface Property{
   setlistProperty:React.Dispatch<React.SetStateAction<boolean>>
 }
+
 
 
 export default function PostPropertyForm({setlistProperty}:Property){
@@ -30,10 +36,27 @@ export default function PostPropertyForm({setlistProperty}:Property){
     })
 
     const { fields, append, remove } = useFieldArray({name:'images',control});
+
+    // for country state and city
+    const [countries, setCountries] = useState<ICountry[]>([]);
+    const country=useCountry();
+    const confirmModal=useConfirm();
+    const modal=useModal();
+    const router=useRouter();
+
+
+    useEffect(()=>{
+      setCountries(country.Countries)
+    },[])
+
+
+
     
     // every change detected is recorded here we want to fetch the image information only 
     const images=watch('images')
-    console.log(images)
+   
+
+    
 
     const imageUrl=(index:number)=>{
       try{
@@ -47,13 +70,15 @@ export default function PostPropertyForm({setlistProperty}:Property){
    
     
 
-    const propertyOptions=['Hotel','Room','Apartment',]
-    const amenities = ["Wifi", "Air conditioning", "Heating", "TV", "Mini fridge", "Safe", "Hairdryer", "Iron", "Coffee maker", "Toiletries"];
+    
+    
 
 
     const onSubmit: SubmitHandler<PropertyForm> =async(formdata)=>{
-        console.log(formdata)
+      
 
+      const submitConfirmation=async()=>{
+        
       const amenities=formdata.amenities.filter(item=>item!='')
       
       const {name,location,discription,price,property_type,rules}=formdata
@@ -83,7 +108,11 @@ export default function PostPropertyForm({setlistProperty}:Property){
         
         let RequestBody:PropertyForm={
           name,
-          location,
+          location:{
+            country:country.getCountryData(parseInt(location.country)).name,
+            state:country.getStateData(parseInt(location.country),parseInt(location.state)).name,
+            city:location.city
+          },
           discription,
           price,
           property_type,
@@ -91,17 +120,37 @@ export default function PostPropertyForm({setlistProperty}:Property){
           amenities,
           images,
         }
-
+        console.log(RequestBody)
         console.log(RequestBody.images)
         
         try{
           const newProperty=await PostPropery(RequestBody)
-          if(newProperty) console.log("property Posted")
+          if(newProperty){
+            toast.success("Property Posted Successfully");
+            modal.onClose();
+            setlistProperty(false);
+            return router.refresh();
+            
+          }
         }catch(e){
           console.log(e);
-        
+          toast.error("Property Post Failed");
+          modal.onClose(); 
         }
        
+      }
+      //confirmation logic 
+      confirmModal.onContent({
+        header:"Are You Sure You Want To Post?",
+        actionBtn:"Post Property",
+        onAction:submitConfirmation
+      })
+
+      //render modal
+      modal.onOpen('confirm');
+
+
+
 
        
 
@@ -109,9 +158,9 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
 
     return(
-        <main className='w-full my-2 flex flex-col items-center'>
+        <main className='w-full p-3 my-2 flex flex-col items-center justify-center bg-slate-100'>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='w-[95%] border-none shadow-none  lg:w-full p-3 flex flex-col items-center'>
+        <form onSubmit={handleSubmit(onSubmit)} className='w-full mx-auto  lg:w-full p-3 flex flex-col items-center'>
         
         <div className='w-full p-2'>
 
@@ -129,8 +178,8 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
 
                         {/* for input and label */}
-                        <div className='w-full p-2 flex-col items-start md:w-[60%] flex md:flex-row justify-around md:items-center shadow-md border-2 border-gray-300 rounded-lg'>
-                        <label className='text-sm font-bold'>Upload Image :</label>
+                        <div className='w-full  bg-white p-2 flex-col items-start md:w-[60%] flex md:flex-row justify-around md:items-center shadow-md border-2 border-gray-300 rounded-lg'>
+                        <label className='block my-1 text-sm font-semibold'>Upload Image </label>
                         <input  type="file" key={field.id} {...register(`images.${index}` as const,{required:true})} ></input>
 
     
@@ -139,7 +188,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
                      
                      {
                       index!=0&& <button type='button' onClick={()=>remove(index)} className='border-2 border-gray-400 rounded-lg hover:bg-red-300' >
-                      <img src="/minus.png" alt="delete" />
+                      <AiOutlineMinus className='h-6 w-6 stroke-themeColor fill-red-500' />
                      </button>
                      }
                     
@@ -152,8 +201,8 @@ export default function PostPropertyForm({setlistProperty}:Property){
                   })
                 }
             
-            <button type='button' onClick={()=>append({image:"newImage"})} className='border-2 border-gray-400 rounded-lg hover:bg-hoverColor  '>
-                          <img src="/add.png" alt="add" />
+            <button type='button' onClick={()=>append({image:"newImage"})} className='border-2 my-2 border-gray-400 rounded-lg hover:bg-hoverColor  '>
+                         <AiOutlinePlus className='h-6 w-6 stroke-themeColor fill-themeColor' />
             </button>
 
            
@@ -161,11 +210,13 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
 
 
-        {/* grid div */}
+        
+        <div className='w-full p-4 border-2 bg-white border-gray-200 shadow-lg rounded-lg'>
 
-        <div className='w-full grid grid-cols-1 md:grid-cols-2'>
+        <div className='w-full my-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+
         <div className='w-full'>
-        <label className=' block text-sm font-bold'>Property Name/Id :</label>
+        <label className=' block my-1 text-sm font-semibold'>Property Name</label>
         <input
             type="text"
             placeholder="PropertyName"
@@ -176,7 +227,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
         </div>
 
         <div className='w-full'>
-        <label className='text-sm font-bold'>Property Type :</label>
+        <label className='block my-1 text-sm font-semibold'>Property Type</label>
             <select className={inputStyle} {...register('property_type', { required: true})}>
                 {
                     propertyOptions.map((type)=><option value={type}>{type}</option>)
@@ -186,34 +237,68 @@ export default function PostPropertyForm({setlistProperty}:Property){
           {errors.property_type && ( <ErrorText text='Select Property Type Pls'/>)}
           </div>
 
+        <div className='w-full'>
+        <label className='block my-1 text-sm font-semibold'>Price</label>
+            <input
+            type="number"
+            placeholder="Price"
+            className={inputStyle}
+            {...register('price', { required: true, minLength:1 })}
+          />
+          {errors.price && ( <ErrorText text='Please Enter Valid Price'/>)}
+        </div>
+        
+         
+         
+
+</div>
   {/* div for city and area  */}
       
+    <div className='w-full my-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+    <div className='w-full'>
+        <label className='block my-1 text-sm font-semibold'>Country </label>
+        <select className={inputStyle}  {...register('location.country', { required: true})}>
+                <option value="" >Select Country</option>
+                {
+                    countries.map((country,index)=><option  value={index}>{country.name}</option>)
+                }
+        </select>
+
+
+          {errors?.location?.country && ( <ErrorText text='Please Select Valid Country'/>)}
+      </div>
+
       <div className='w-full'>
-        <label className='text-sm font-bold'>City  :</label>
-            <input
-            type="text"
-            placeholder="City"
-            className={inputStyle}
-            {...register('location.city', { required: true })}
-          />
-          {errors?.location?.city && ( <ErrorText text='Please Enter Valid city'/>)}
+        <label className='block my-1 text-sm font-semibold'>State </label>
+        <select className={inputStyle}  {...register('location.state', { required: true})}>
+                <option value="">Select a State</option>
+                {
+                    
+                    country.getStates(parseInt(watch('location.country'))).map((state,index)=><option value={index}>{state.name}</option>)
+                }
+        </select>
+          {errors?.location?.state && ( <ErrorText text='Please Select Valid State'/>)}
         </div>
 
         <div className='w-full'>
-        <label className='text-sm font-bold'>Area :</label>
-            <input
-            type="text"
-            placeholder="Area"
-            className={inputStyle}
-            {...register('location.area', { required: true})}
-          />
-          {errors?.location?.area && ( <ErrorText text='Please Enter Valid Area'/>)}
+        <label className='block my-1 text-sm font-semibold'>City</label>
+        <select className={inputStyle}  {...register('location.city', { required: true})}>
+                <option value="">Select a City</option>
+                {
+                    
+                    country.getCities(parseInt(watch('location.country')),parseInt(watch('location.state'))).map((city)=><option value={city.name}>{city.name}</option>)
+                }
+        </select>
+          {errors?.location?.city && ( <ErrorText text='Please Select Valid City'/>)}
         </div>
       
+      </div>
+        </div>
        
 
+      <div className='w-full my-4 bg-white border-2 border-gray-200 p-4 shadow-lg rounded-lg'>
         <div className='w-full'>
-        <label className='text-sm font-bold'>Property Description :</label>
+        <label className='block my-1 text-sm font-semibold'>Property Description</label>
             <textarea rows={5}
             placeholder="Desription"
             className={inputStyle}
@@ -227,11 +312,8 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
        
 
-
-
-
-        <div className='w-full'>
-        <label className='text-sm font-bold'>Rules/Criteria :</label>
+        <div className='w-full my-2'>
+        <label className='block my-1 text-sm font-semibold'>Rules</label>
             <textarea rows={5}
             placeholder="Rules"
             className={inputStyle}
@@ -243,53 +325,50 @@ export default function PostPropertyForm({setlistProperty}:Property){
           {errors.rules && ( <ErrorText text='Please Enter Rules/Criteria'/>)}
         </div>
 
-
-        {/* checkBox */}
-        <div className='w-full '>
-          <div className='w-[95%] border-2 border-gray-400 rounded-lg p-2 hover:bg-hoverColor'>
-          <span className='block text-sm font-bold'>Amenities</span>
-            {
+  </div>
+  
+       
+        
+                  {/* checkBox */}
+          <div className='w-full '>
+          <div className=' mx-auto p-4 bg-white  border-2 border-gray-200 shadow-lg rounded-lg  hover:bg-hoverColor '>
+          <span className='block my-1 text-sm font-semibold'>Amenities</span>
+          <div className=' my-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3'>
+          {
               amenities.map((items,index)=>{
                 return(
                   <div key={index}>
                     <input type="checkbox" value={items} {...register(`amenities.${index}` as const)} className='cursor-pointer'/>
-                    <label className='mx-1 text-sm'>{items}</label>
+                    <label className='mx-2 text-sm text-gray-600'>{items}</label>
                   </div>
                 )
               })
             }
           </div>
+            
+          </div>
           
         </div>
-       
 
-
-
-        <div className='w-full'>
-        <label className='text-sm font-bold'>Price :</label>
-            <input
-            type="number"
-            placeholder="Price"
-            className={inputStyle}
-            {...register('price', { required: true, minLength:1 })}
-          />
-          {errors.price && ( <ErrorText text='Please Enter Valid Price'/>)}
-        </div>
-        
-        </div>
-        
-        
+      
         
     </form>
-    <hr className="my-5 border-gray-400" />
-    <div className='w-[80%] flex items-center justify-between'>
-    <button type='button' className='underline text-md font-bold' 
+
+
+
+        <hr className="my-5 border-gray-400" />
+    
+    <div className='w-full  bg-slate-300 p-4 rounded-lg '>
+    <div className=' mx-auto w-[97%]  flex items-center justify-between'>
+    <button type='button' className='underline text-md font-semibold' 
     onClick={(e)=>{
       e.preventDefault();
       setlistProperty(false);
     }}>Cancel</button>
-    <button type='submit' className="text-md cursor-pointer rounded-md bg-themeColor p-2 px-4 text-white hover:bg-mainColor" onClick={handleSubmit(onSubmit)}>PostProperty</button>
+    <button type='submit' className="text-md cursor-pointer font-semibold rounded-md bg-themeColor p-2 px-4 transition-all text-white hover:bg-mainColor" onClick={handleSubmit(onSubmit)}>Submit</button>
     </div>
+    </div>
+    
    
     </main>
     )

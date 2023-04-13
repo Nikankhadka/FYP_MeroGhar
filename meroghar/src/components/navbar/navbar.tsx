@@ -53,12 +53,12 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
           <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
         </Link>
 
-        <a
+        <Link
           href="http://localhost:3000"
           className="block font-semibold text-mainColor drop-shadow-xl dark:text-themeColor md:text-lg"
         >
           MeroGhar
-        </a>
+        </Link>
       </div>
 
       {/* search Bar */}
@@ -89,7 +89,7 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
             onClick={(e) => setopen(!open)}
           >
             <img src="/menu.png" alt="user" className="h-5 w-5 " />
-            <img src={img==''?'/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
+            <img src={img==''? '/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
           </button>
 
           {open && <InititailModalC authState={authState} ref={menuRef} />}

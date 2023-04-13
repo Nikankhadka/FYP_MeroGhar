@@ -20,6 +20,7 @@ passport.use(new googleStrategy({
     },async(accessToken,refreshToken,profile,done)=>{
         try{
             const{_json:{name,email,picture}}=profile
+            console.log(name,email,picture);
             //will be attached to req.user
             done(null,{userName:name,email,profile_Img:picture})
         }catch(e){

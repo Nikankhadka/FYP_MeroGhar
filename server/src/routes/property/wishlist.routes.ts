@@ -5,7 +5,7 @@ import {verifyaccessToken,verifyRole} from "../../middlewares/auth.middleware"
 
 
 const router=Router()
-router.use(verifyaccessToken);
+router.use(verifyaccessToken(true));
 router.use(verifyRole(false));
 
 router.get('/wishList',getWishListC)

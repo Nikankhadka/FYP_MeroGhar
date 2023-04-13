@@ -18,12 +18,9 @@ export default async function Layout({children}: {children: React.ReactNode}) {
 
   return (
 
-      <main className='bg-white flex flex-col'>
+      <main className=' flex flex-col'>
       
-      <ClientComp>
-        <ToasterProvider />
-        <ConfirmModal />
-      </ClientComp>
+
 
        <DashboardNav />
         {/* this children represents each page component  that is rendered */}

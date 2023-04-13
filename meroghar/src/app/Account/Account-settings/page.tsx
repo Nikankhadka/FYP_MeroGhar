@@ -12,7 +12,7 @@ import ClientComp from "../../../components/clientComp";
 
 export default function AccountSetting(){
     return(
-        <main  className="ml-0 my-20  md:ml-[230px] md:my-10 lg:ml-[260px]">
+        <main  className=" ml-0 my-20  md:ml-[230px] md:my-10 lg:ml-[260px]">
 
         <div className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%]  ">
         <div className="flex justify-between">
