@@ -24,8 +24,9 @@ export interface KycData{
   gender:string,
   email?:string,
   address:{
-      country:string,
-      city:string
+    country:string,
+    state:string,
+    city:string,
   },
   img:{
       imgId:string,

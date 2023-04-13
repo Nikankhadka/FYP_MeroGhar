@@ -53,7 +53,9 @@ interface kycSchema{
     }[],
     is_banned: {
       strikes: number
-      banTime: Date
+      banStart:Date,
+      banEnd:Date
+      message:string
     }
     rented_property: Types.ObjectId[]
     recommendation: Types.ObjectId[]

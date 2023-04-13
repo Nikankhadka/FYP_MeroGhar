@@ -1,6 +1,6 @@
 'server-only'
-
-import { FetchedUserData } from "../../../interface/response";
+import { cookies } from 'next/headers';
+import { FetchedMe, FetchedUserData } from "../../../interface/response";
 import Api from "../../client/axios"
 
 
@@ -24,4 +24,32 @@ export async function getUser(userId:string):Promise<FetchedUserData>{
     }catch(e){
        throw e;
     }
+}
+
+
+export async function getMe():Promise<FetchedMe>{
+  try{
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('accessToken')?.value
+    const cookie=`accessToken=${accessToken}`
+    
+      const userData = await fetch(
+          `http://localhost:2900/user/v1/getMe`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { cookie: cookie},
+            cache:'no-store'
+          }
+        ).then(res=>res.json())
+  
+      if(!userData.success) throw new Error("failed to fetch user information")
+      
+      console.log("userAccount Data",userData);
+      return userData.userData;
+
+      
+  }catch(e){
+     throw e;
+  }
 }

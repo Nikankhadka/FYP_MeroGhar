@@ -13,7 +13,7 @@ const inputStyle =
 
 import 'react-phone-input-2/lib/style.css'
 
-import { checkPhone, postKyc, postPhone } from '../../api/client/user'
+import { checkPhone, postKyc, postPhone, uploadImage } from '../../api/client/user'
 import { KycData } from '../../interface/form'
 import useModal from '../../customHoooks/useModal'
 import useConfirm from '../../customHoooks/useConfirm'
@@ -31,7 +31,7 @@ interface form {
   address: {
     country: string,
     state:string,
-    city: string
+    city: string,
   }
   email: string
   img: any|{
@@ -54,7 +54,7 @@ export default function Kyc({ setopenKyc }: kycprops) {
         const confirmModal=useModal();
         const router=useRouter();
 
-  const [openConfirm, setopenConfirm] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -74,77 +74,79 @@ export default function Kyc({ setopenKyc }: kycprops) {
     }
   }
 
-
-
-  
-  
-      useEffect(()=>{
+useEffect(()=>{
         setCountries(country.Countries)
-      },[])
+},[])
 
   const onSubmit: SubmitHandler<form> = async (formdata) => {
 
 
     const submitAction=async()=>{
-        //there might be multiple image upload so
-    const imageData = new FormData()
-    //first upload image
-    imageData.append('file', formdata.img[0])
-    imageData.append('cloud_name', 'drpojzybw')
-    imageData.append('upload_preset', 'FypMeroGhar')
+      const uploadedImage= await uploadImage(formdata.img[0]);
+    
+   
 
-    const res = await fetch(
-      'https://api.cloudinary.com/v1_1/drpojzybw/image/upload',
-      {
-        method: 'POST',
-        body: imageData,
-      }
-    )
-    const response = await res.json()
-
-    //create new object  to be passed into api request
-    const kycdata: KycData = {
-      kycInfo: {
-        ...formdata,
-        img: {
-          imgId: response.public_id,
-          imgUrl: response.url,
+      //create new object  to be passed into api request
+      const kycdata: KycData = {
+        kycInfo: {
+          ...formdata,
+          address:{
+            country:country.getCountryData(parseInt(formdata.address.country)).name,
+            state:country.getStateData(parseInt(formdata.address.country),parseInt(formdata.address.state)).name,
+            city:formdata.address.city
+          },
+          img: {
+            imgId: uploadedImage.imgId,
+            imgUrl:uploadedImage.imgUrl,
+          },
         },
-      },
+      }
+  
+      // post kyc information ssa
+      const kyc=await postKyc(kycdata)
+      if(!kyc){
+        toast.error("Failed to Post Kyc")
+        return confirmModal.onClose()
+      }
+  
+      toast.success('kyc posted successfuly')
+      confirmModal.onClose()
+      setopenKyc('close')
+      return router.refresh();
+      
     }
 
-    // post kyc information ssa
-    const kyc=await postKyc(kycdata)
-    if(!kyc){
-    
-      return confirmModal.onClose()
-    }
 
-    toast.success('kyc posted successfuly')
-    confirmModal.onClose()
-    return router.refresh();
-    
-    }
-
-    //now mutate the data 
+  // call the main confirmation trigger
+    try{ 
     confirmData.onContent({
       header:'Are You Sure To Submit Kyc?',
       actionBtn:"Submit",
       onAction:submitAction
     })
     confirmModal.onOpen('confirm')
+    }catch(e:any){
+      console.log(e);
+      return toast.error(e.message)
+    }
+
+
   }
 
+  
+
+
   return (
-    <main key={'fuckU'} className="mt-5 w-full rounded-lg   p-4  md:border-2 md:border-gray-200  md:shadow-lg">
+    <main key={'fuckU'} className="mt-5 w-full rounded-lg   p-4  ">
       <PhoneComp />
       <hr className="my-5 border-gray-400" />
 
       <form>
-<div className="grid  w-full grid-cols-1 gap-3 md:grid-cols-2">
+
+<div className="grid my-3  w-full grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
 
           <div className="w-full">
-            <label className=" text-md block  text-slate-700">First Name</label>
+            <label className=" text-sm font-semibold block  text-slate-700">First Name</label>
             <input
               type="text"
               placeholder="First Name"
@@ -157,7 +159,7 @@ export default function Kyc({ setopenKyc }: kycprops) {
           </div>
 
           <div className="w-full">
-            <label className="  text-md block  text-slate-700">Last Name</label>
+            <label className="  text-sm font-semibold block  text-slate-700">Last Name</label>
             <input
               type="text"
               placeholder="Last Name"
@@ -169,13 +171,15 @@ export default function Kyc({ setopenKyc }: kycprops) {
             )}
           </div>
 
-</div>
+
           <div className="w-full">
-            <label className=" text-md block  text-slate-700">Gender</label>
+            <label className=" text-sm font-semibold block  text-slate-700">Gender</label>
+
             <select
               className={inputStyle}
               {...register('gender', { required: true })}
             >
+                <option value="" >Select Gender</option>
               {gender.map((type) => (
                 <option value={type}>{type}</option>
               ))}
@@ -184,7 +188,10 @@ export default function Kyc({ setopenKyc }: kycprops) {
             {errors.gender && <ErrorText text="Select Property Type Pls" />}
           </div>
 
-          <div className='w-full my-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+</div>
+          
+
+  <div className='w-full my-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
     <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>Country </label>
         <select className={inputStyle}  {...register('address.country', { required: true})}>
@@ -226,8 +233,8 @@ export default function Kyc({ setopenKyc }: kycprops) {
         
        
 
-          <div className="w-full">
-            <label className=" text-md block  text-slate-700">Email</label>
+    <div className="w-full my-3 md:w-[70%]">
+            <label className=" text-sm font-semibold block  text-slate-700">Email</label>
             <input
               type="email"
               placeholder="Email"
@@ -240,10 +247,10 @@ export default function Kyc({ setopenKyc }: kycprops) {
             {errors?.email && (
               <ErrorText text="Please Enter Valid Email/Formatted Email" />
             )}
-          </div>
+    </div>
         
-        <div className="w-full p-2">
-          <div className="my-2 flex  w-full flex-col items-center gap-2">
+        <div className="w-full my-6">
+          <div className="my-2 flex  w-full flex-col items-center gap-y-3">
             {/* initially the value default does not read file casuing to return empty string */}
             <img
               src={imageUrl()}
@@ -257,7 +264,7 @@ export default function Kyc({ setopenKyc }: kycprops) {
 
             {/* for input and label */}
             <div className="flex w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-2 shadow-md md:w-[60%] md:flex-row md:items-center">
-              <label className="text-sm ">Upload Image :</label>
+              <label className="text-sm font-semibold block  text-slate-700 ">Upload Image </label>
               <input
                 type="file"
                 {...register(`img`, { required: true })}
@@ -265,8 +272,8 @@ export default function Kyc({ setopenKyc }: kycprops) {
 
               {/* donot render this button for 1st index */}
             </div>
-            <p className="text-sm text-themeColor">
-              Please provide proof of Identification
+            <p className="text-sm text-themeColor font-semibold">
+              Please provide proof of Identification CitizenShip/Passport/Driving License
             </p>
             {errors?.img && (
               <p className="block w-[95%] text-center text-sm text-red-700">
@@ -278,7 +285,7 @@ export default function Kyc({ setopenKyc }: kycprops) {
 
         <hr className="my-5 border-gray-400" />
 
-        <div className="my-2 flex items-center justify-between p-2">
+        <div className="my-2 bg-slate-200 p-4 rounded-lg flex items-center justify-between">
           <button
             className="text-md font-semibold underline"
             onClick={(e) => {

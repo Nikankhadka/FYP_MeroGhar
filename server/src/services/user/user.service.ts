@@ -39,6 +39,18 @@ export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     }
 }
 
+export const getMeS=async(userId:string):Promise<Partial<IUser>>=>{
+    try{
+        const userData=await userModel.findOne({userId}).select("-password -Token -two_FA -refreshToken -updated_At  -wishList  -rentedProperty -viewedProperty -recommendation ");
+        if(!userData) throw new Error("Failed to fetch userData")
+        return userData;
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+}
+
 export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
     try{
         //first check whethe this email exist or not in our system 

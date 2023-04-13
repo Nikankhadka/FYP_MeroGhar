@@ -17,9 +17,9 @@ export default function AccountComponent() {
   const kycinfo=false
 
   return (
-    <main className="mx-auto  md:ml-10 p-3  w-[95%] sm:w-[90%] lg:w-[80%] border-2 border-red-500 ">   
+    <main className="mx-auto rounded-lg b bg-white  p-3  w-[95%] sm:w-[90%] lg:w-[85%]  ">   
 
-    <div className=' p-2 w-[95%] md:w-[80%]'>
+    <div className=' p-3 w-[80%] '>
 
     
         {/* for kyc header */}
@@ -29,7 +29,7 @@ export default function AccountComponent() {
 
       {/* if kyc does not exist */}
 
-      {!kycinfo&&<div className='bg-gray-200 p-3 rounded-lg my-3 flex items-center justify-between '>
+      {!kycinfo&&<div className='bg-slate-300 p-3 rounded-lg my-3 flex items-center justify-between '>
         <h1 className=''>Provide Kyc information ?</h1>
         <button className='text-sm font-bold text-gray-700 underline' onClick={(e)=>{
           e.preventDefault();

@@ -92,7 +92,8 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
             email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
             address:{
                 country:joi.string().required(),
-                city:joi.string().required()
+                state: joi.string().required(),
+                city: joi.string().required(),
             },
 
             //when defining complex tyope can use joi.object to define schema,or can simply create object and nest 
