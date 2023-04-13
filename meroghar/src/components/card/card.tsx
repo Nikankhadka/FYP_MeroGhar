@@ -7,7 +7,7 @@ import Wish from '../Svg/wishSvg'
 // hover:-translate-y-1 hover:scale-105
 export default function Card() {
   return (
-    <main className="w-[98%] rounded-lg border-2 border-gray-300 hover:shadow-xl   duration-300">   
+    <main className="w-[98%] bg-white rounded-lg border-2 border-gray-300 hover:shadow-xl   duration-300">   
 
       <div className="margin-bottom-3">
         <Link href="/rooms/444">

@@ -1,4 +1,4 @@
-import { Content } from 'next/font/google';
+
 import { create } from 'zustand';
 
 //this same modal store can be used for any other modal through out the application

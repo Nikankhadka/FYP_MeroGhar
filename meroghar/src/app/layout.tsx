@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import NavBar from '../components/navbar/navbar'
 import { cookies } from 'next/headers';
 
-import Footer, { PrimaryFooter, SecondaryFooter } from '../components/footer'
+import  { PrimaryFooter, SecondaryFooter } from '../components/footer'
 import AdminNav from '../components/navbar/DashboardNav';
 import DashboardNav from '../components/navbar/DashboardNav';
 import { Nunito } from 'next/font/google'
@@ -67,7 +67,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <html className={theme=='dark'? 'dark':'light'}>
       <head />
       {/* body sets the root layout for entire application */}
-      <body className={`bg-white flex flex-col ${font.className}`}>
+      <body className={`bg-slate-200 flex flex-col ${font.className}`}>
         
 
         {/* conditionally render navbar  */}
