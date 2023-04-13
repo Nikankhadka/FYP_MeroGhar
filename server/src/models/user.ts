@@ -136,7 +136,8 @@ export const userSchema=new Schema({
         //can be modified by admin to ban user for certain time or permanently
         isBanned:{
             strikes:Number,
-            banTime:Date,
+            banStart:Date,
+            banEnd:Date,
             message:String
         },
 
