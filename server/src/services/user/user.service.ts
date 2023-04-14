@@ -146,8 +146,10 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
         const kycVerified=await userModel.findOne({userId,kyc:{is_verified:true}})
         if(kycVerified) throw new Error("kyc is already verified cant post new kyc information")
 
+        console.log("inside post kyc before sending email")
         //first validate email input
          if(KycData.kycInfo.email){
+            console.log("inside kyc email");
             const addEmail=await addEmailS(userId,KycData.kycInfo.email);
             //since email is not verified needs to go through verification as above email property in the KycData will be deleted
             if(addEmail) delete KycData.kycInfo.email;
@@ -199,13 +201,7 @@ export const postPhoneS=async(userId:string,phoneNumber:string):Promise<boolean>
         const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
         if(checkPhone) throw new Error("user With provided Phone Number Exist please try new Number");
 
-        const postPhone=await userModel.findOneAndUpdate({userId},{
-            $set:{
-                kycInfo:{
-                    phoneNumber
-                }
-            }
-        },{new:true});
+        const postPhone=await userModel.findOneAndUpdate({userId}, { $set: { 'kycInfo.phoneNumber':phoneNumber} },{new:true});
 
         if(!postPhone) throw new Error("Phone number Post Failed");
 

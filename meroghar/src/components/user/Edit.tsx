@@ -67,6 +67,7 @@ export function EditBasic({setEditProfile,userName,About,img}:Prop) {
           return seterror(true);
         }
         seterror(false)
+        
         const onSubmit=async()=>{
           try{
             let profileData:EditProfile={

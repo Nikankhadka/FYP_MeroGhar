@@ -47,7 +47,7 @@ export const addEmailC=async(req:Request,res:Response)=>{
 export const verifyEmailC=async(req:Request,res:Response)=>{
     try{
         const emailVerified=await verifyEmailS(req.params.token);
-        if(emailVerified) return res.status(200).redirect("http://localhost:3000/user")
+        if(emailVerified) return res.status(200).redirect("http://localhost:3000")
 
     }catch(e:any){
         console.log(e)

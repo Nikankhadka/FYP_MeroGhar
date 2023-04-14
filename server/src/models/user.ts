@@ -21,8 +21,14 @@ export const userSchema=new Schema({
         password:{type:String},
         //userid__profile
         profileImg:{
-            imgId:String,
-            imgUrl:String
+            imgId:{
+                type:String,
+                default:""
+            },
+            imgUrl:{
+                type:String,
+                default:""
+            }
         },
         
         About:{
@@ -32,7 +38,7 @@ export const userSchema=new Schema({
         
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
-            mail:{type:String},
+            mail:{type:String,default:""},
             is_verified:{type:Boolean,default:false}
         },
 
@@ -71,7 +77,10 @@ export const userSchema=new Schema({
             },
 
             // if email is verified then this will be automatically updated
-            email:String,
+            email:{
+                type:String,
+                default:""
+            },
             // phone number will be added here as its verified 
             phoneNumber:{
                 type:String,
@@ -82,6 +91,11 @@ export const userSchema=new Schema({
                     type:String,
                     default:""
                 },
+                state:{
+                    type:String,
+                    default:""
+                },
+
                 city:{
                     type:String,
                     default:""
@@ -110,7 +124,10 @@ export const userSchema=new Schema({
             is_verified:{type:Boolean,default:false},
 
             // can be used to fetch information and other things
-            pending:Boolean,
+            pending:{
+                type:Boolean,
+                default:false
+            },
             message:String,
             approvedBy:String,
         },
@@ -135,7 +152,10 @@ export const userSchema=new Schema({
 
         //can be modified by admin to ban user for certain time or permanently
         isBanned:{
-            strikes:Number,
+            strikes:{
+                type:Number,
+                default:0
+            },
             banStart:Date,
             banEnd:Date,
             message:String

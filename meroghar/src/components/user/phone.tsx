@@ -10,6 +10,8 @@ import 'react-phone-input-2/lib/style.css'
 import { auth } from '../../configs/firebase'
 import OtpInput from 'react-otp-input'
 import { checkPhone,postPhone } from '../../api/client/user'
+import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 
 interface phone {
@@ -22,6 +24,7 @@ interface phone {
     const [error, seterror] = useState('')
     const [loading, setLoading] = useState(false)
     const [showOTP, setShowOTP] = useState(false)
+    const router=useRouter()
   
     function onCaptchVerify() {
       try {
@@ -87,15 +90,19 @@ interface phone {
           if (!post) {
             setLoading(false)
             seterror('fail')
-            return console.log('phone number post failed')
+            return toast.error("Failed to Post Phone Number");
           }
           setLoading(false)
           setShowOTP(false)
+          toast.success("Phone Number verified and Posted!")
+          return router.refresh();
+
         })
         .catch((err: any) => {
           console.log(err)
           setLoading(false)
           seterror('otp')
+          return toast.error("Failed to verify Otp Try Again!!!");
         })
     }
   

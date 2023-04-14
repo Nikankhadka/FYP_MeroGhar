@@ -48,6 +48,7 @@ export interface FetchedUserData {
       phoneNumber: string;
       address: {
         country: string;
+        state:string,
         city: string;
       };
       img: {

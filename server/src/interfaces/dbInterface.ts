@@ -9,7 +9,8 @@ interface kycSchema{
     email: string
     phoneNumber: string
     address: {
-      country: string
+      country: string,
+      state:string,
       city: string
     };
     img: {
