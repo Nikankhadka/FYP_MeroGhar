@@ -5,6 +5,7 @@ import { verifyKyc } from "../../interfaces/admin";
 import { propertyModel } from "../../models/property";
 
 
+
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
     try{
         
@@ -33,6 +34,21 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
 }
 
 
+export const getUserKycS=async(id:string):Promise<Partial<IUser>>=>{
+    try{
+    
+        const userData=await userModel.findOne({_id:id}).select("-password -Token  -refreshToken -updated_At -is_Admin -wishList   -rentedProperty -viewedProperty -recommendation ");
+        if(!userData) throw new Error("Failed to fetch userData")
+        return userData;
+    }catch(e){
+        console.log(e)
+        throw e;    
+    }
+}
+
+
+
+
 // paginated kyc requests
 export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
     try{
@@ -41,7 +57,7 @@ export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
         const newpage=parseInt(page)
 
         //since all admin have access to this simply fetch unverified property set in pending 
-        const kycRequests=await userModel.find({kyc:{is_verified:false,pending:true}}).limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).select('userId _id profile_img kycInfo');
+        const kycRequests=await userModel.find({kyc:{is_verified:false,pending:true}}).limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).select('userId userName _id profile_img');
         if(!kycRequests) throw new Error("No user need to be verified right now")
         return kycRequests
 

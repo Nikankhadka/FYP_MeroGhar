@@ -23,10 +23,10 @@ export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     try{
     
         const userData=await userModel.findOne({_id:id}).select("-password -Token -userId -refreshToken -updated_At -is_Admin -wishList  -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.is_verified kycInfo.phoneNumber");
-        const phoneNumber=userData?.kycInfo.phoneNumber!;
+        
         
         if(!userData) throw new Error("Failed to fetch userData")
-
+        const phoneNumber=userData?.kycInfo.phoneNumber!;
         // delete kyc info from copy document
         
         let Data = { ...userData.toObject(),kycInfo:{phoneNumber}};

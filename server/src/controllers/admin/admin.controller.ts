@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getKycRequestsS, getPropertyRequestsS, registerAdminS, verifyKycRequestsS,verifyPropertyRequestsS} from "../../services/admin/admin.service";
+import { getKycRequestsS, getPropertyRequestsS, getUserKycS,registerAdminS, verifyKycRequestsS,verifyPropertyRequestsS} from "../../services/admin/admin.service";
 import joi from "joi"
 
 
@@ -17,10 +17,20 @@ export const registerAdminC=async(req:Request,res:Response)=>{
 export const getKycRequestsC=async(req:Request,res:Response)=>{
     try{
         const kycRequests=await getKycRequestsS(req.query.page as string,req.query.limit as string);
-        if(kycRequests)return res.status(200).json({success:false,kycRequests})
+        if(kycRequests)return res.status(200).json({success:true,kycRequests})
     }catch(e:any){
         console.log(e);
         res.status(400).json({success:false,error:e.message})
+    }
+}
+
+export const getUserKycC=async(req:Request,res:Response)=>{
+    try{
+        const userData=await getUserKycS(req.params.id);
+        if(userData) return res.status(200).json({success:true,userData})
+    }catch(e:any){
+        console.log(e)
+        return res.status(400).json({success:false,error:e.message})
     }
 }
 

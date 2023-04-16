@@ -122,19 +122,17 @@ export default function AccountComponent({userData}:props) {
 
 
 interface infoprops{
-title:string,
-value:string,
-
-}
-
- function Info({title,value}:infoprops){
-  return(
-    <div className=' p-3 flex items-center justify-between'>
-    <p>
-      <h1 className='font-semibold my-1'>{title}</h1>
-        <p className='text-sm text-gray-600'>{value}</p>
-    </p>
-    <button className='text-sm text-gray-700 font-semibold underline'>Edit</button>
-    </div>
-  )
-}
+  title:string,
+  value:string,
+  
+  }
+function Info({title,value}:infoprops){
+    return(
+      <div className=' p-3 flex items-center justify-between'>
+      <p>
+        <h1 className='font-semibold my-1'>{title}</h1>
+          <p className='text-sm text-gray-600'>{value}</p>
+      </p>
+      <button className='text-sm text-gray-700 font-semibold underline'>Edit</button>
+      </div>
+    )}

@@ -74,42 +74,43 @@ export default function Profile({userId,profileData}:ProfileProps) {
         </div>
 
       </div>
+      <hr className="my-5 border-gray-400" />
+
+<div className=' my-5  flex  items-center justify-around '>
+<div className="flex items-center gap-x-2 ">
+    {kyc.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
+    <HiMinus className="h-6 w-6 fill-themeColor" />}
+    <span>Identity</span>
+  </div>
+
+  <div className="flex items-center gap-x-2 ">
+  {email.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
+    <HiMinus className="h-6 w-6 fill-themeColor" />}
+    <span>Email</span>
+  </div>
+
+  <div className="flex items-center gap-x-2 ">
+  {kycInfo.phoneNumber?<HiCheck className="h-6 w-6 fill-themeColor" />:
+    <HiMinus className="h-6 w-6 fill-themeColor" />}
+    <span>Phone Number</span>
+  </div>
+
+</div>
+
+
+<hr className="my-5 border-gray-400" />
       </div>
 
         
 
-      <hr className="my-5 border-gray-400" />
 
-      <div className=' my-5  flex  items-center justify-around '>
-      <div className="flex items-center gap-x-2 ">
-          {kyc.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
-          <HiMinus className="h-6 w-6 fill-themeColor" />}
-          <span>Identity</span>
-        </div>
-
-        <div className="flex items-center gap-x-2 ">
-        {email.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
-          <HiMinus className="h-6 w-6 fill-themeColor" />}
-          <span>Email</span>
-        </div>
-
-        <div className="flex items-center gap-x-2 ">
-        {kycInfo.phoneNumber?<HiCheck className="h-6 w-6 fill-themeColor" />:
-          <HiMinus className="h-6 w-6 fill-themeColor" />}
-          <span>Phone Number</span>
-        </div>
-
-      </div>
-
-
-      <hr className="my-5 border-gray-400" />
 
 
       {/* this all will not be rendered on  */}
       {
         !EditProfile&&<div className='my-2 p-2 w-[95%] md:w-[80%]'>
          <h2 className='my-2 text-lg font-semibold'>About</h2>
-         <p className='text-md text-gray-700 p-2 border-2 border-gray-200 shadow-lg rounded-lg'>{About? About:'..................'}</p>
+         <p className='text-md bg-white text-gray-700 p-2 border-2 border-gray-200 shadow-lg rounded-lg'>{About? About:'..................'}</p>
        </div>
       }
      

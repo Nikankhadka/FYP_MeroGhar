@@ -148,12 +148,12 @@ export function EditBasic({setEditProfile,userName,About,img}:Prop) {
             className={
               imageUrl() == ''
                 ? 'hidden'
-                : ' rounded-full border-2 p-1 border-gray-300 shadow-lg w-[100px] h-[100px] md:w-[200px] md:h-[200px]'
+                : ' rounded-full border-2 p-1 border-gray-300 shadow-lg w-[100px] h-[100px] md:w-[160px] md:h-[160px]'
             }
           />
 
           {/* for input and label */}
-          <div className="flex  w-[95%] flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-2 shadow-md md:w-[60%] md:flex-row md:items-center">
+          <div className="flex bg-white  w-[95%] flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-2 shadow-md md:w-[65%] md:flex-row md:items-center">
            
             <input
               type="file"
