@@ -23,6 +23,7 @@ import { PhoneComp } from './phone'
 import { useEffect } from 'react'
 import useCountry from '../../customHoooks/useCountry'
 import { ICountry, IState, ICity } from 'country-state-city'
+import { FetchedMe } from '../../interface/response'
 
 interface form {
   firstName: string
@@ -33,7 +34,7 @@ interface form {
     state:string,
     city: string,
   }
-  email: string
+  email?: string
   img: any|{
         imgId: string
         imgUrl: string
@@ -42,9 +43,11 @@ interface form {
 
 interface kycprops {
   setopenKyc: React.Dispatch<React.SetStateAction<string>>
+  userData:FetchedMe
 }
 
-export default function Kyc({ setopenKyc }: kycprops) {
+export default function Kyc({ setopenKyc,userData }: kycprops) {
+  const {email,kyc,kycInfo}=userData
  
   const confirmData=useConfirm();
         // for country state and city
@@ -61,16 +64,30 @@ export default function Kyc({ setopenKyc }: kycprops) {
     watch,
     formState: { errors },
     control,
-  } = useForm<form>()
+  } = useForm<form>({
+    defaultValues:{
+      firstName:kycInfo.firstName,
+      lastName:kycInfo.lastName,
+      gender:kycInfo.gender,
+      address:{
+        country:kycInfo.address.country,
+        state:kycInfo.address.state,
+        city:kycInfo.address.city
+      },
+      email:kycInfo.email,
+      //donot put image here since onlyfile can be default 
+    }
+  })
   const gender = ['Male', 'Female', 'Others']
   const img = watch('img')
 
+  // here if file reads image then image is previewed else default image fetched is shwos
   const imageUrl = () => {
     try {
       return URL.createObjectURL(img[0])
     } catch (e) {
       console.log(e)
-      return ''
+      return kycInfo.img.imgUrl||''
     }
   }
 
@@ -82,34 +99,53 @@ useEffect(()=>{
 
 
     const submitAction=async()=>{
-      const uploadedImage= await uploadImage(formdata.img[0]);
-    
-   
 
       //create new object  to be passed into api request
-      const kycdata: KycData = {
+      //data which is not passed will not replce or update existing data in db so careful what u pass
+      let kycdata: KycData = {
         kycInfo: {
-          ...formdata,
+          firstName:formdata.firstName,
+          lastName:formdata.lastName,
+          gender:formdata.gender,
           address:{
-            country:country.getCountryData(parseInt(formdata.address.country)).name,
-            state:country.getStateData(parseInt(formdata.address.country),parseInt(formdata.address.state)).name,
+            country:kycInfo.address.country==formdata.address.country? formdata.address.country:  country.getCountryData(parseInt(formdata.address.country)).name,
+            state:kycInfo.address.state==formdata.address.state? formdata.address.state: country.getStateData(parseInt(formdata.address.country),parseInt(formdata.address.state)).name,
             city:formdata.address.city
           },
-          img: {
-            imgId: uploadedImage.imgId,
-            imgUrl:uploadedImage.imgUrl,
-          },
+          img:{
+            imgId:'',
+            imgUrl:""
+          }
+          
         },
       }
+
+      
+      if(formdata.img.length!=0){
+        // for update image can be empty so u have to use old image 
+      const uploadedImage= await uploadImage(formdata.img[0]);
+      if(uploadedImage){
+        kycdata.kycInfo.img!.imgId=uploadedImage.imgId;
+        kycdata.kycInfo.img!.imgUrl=uploadedImage.imgUrl
+
+      }
+      }else{
+        kycdata.kycInfo.img!.imgId=kycInfo.img.imgId;
+        kycdata.kycInfo.img!.imgUrl=kycInfo.img.imgUrl;
+      }
+
+     
+
   
+      console.log('kycdata',kycdata)
       // post kyc information ssa
       const kyc=await postKyc(kycdata)
       if(!kyc){
-        toast.error("Failed to Post Kyc")
+        toast.error("Failed to Post/Update Kyc")
         return confirmModal.onClose()
       }
   
-      toast.success('kyc posted successfuly')
+      toast.success('kyc posted/Updated successfuly')
       confirmModal.onClose()
       setopenKyc('close')
       return router.refresh();
@@ -138,9 +174,15 @@ useEffect(()=>{
 
   return (
     <main key={'fuckU'} className="mt-5 w-full rounded-lg   p-4  ">
-      <PhoneComp />
-      <hr className="my-5 border-gray-400" />
 
+      <h2 className='text-xl font-semibold mb-5'>Kyc Form</h2>
+      <hr className="my-5 border-gray-400" />
+      {kycInfo.phoneNumber==''&&<div>
+        <PhoneComp />
+        <hr className="my-5 border-gray-400" />
+
+        </div>}
+      
       <form>
 
 <div className="grid my-3  w-full grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -194,8 +236,8 @@ useEffect(()=>{
   <div className='w-full my-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
     <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>Country </label>
-        <select className={inputStyle}  {...register('address.country', { required: true})}>
-                <option value="" >Select Country</option>
+        <select className={inputStyle} defaultValue={kycInfo.address.country} {...register('address.country', { required: true})}>
+        <option value={kycInfo.address.country}>{kycInfo.address.country==''?'Select a Country':kycInfo.address.country}</option>
                 {
                     countries.map((country,index)=><option  value={index}>{country.name}</option>)
                 }
@@ -208,7 +250,7 @@ useEffect(()=>{
       <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>State </label>
         <select className={inputStyle}  {...register('address.state', { required: true})}>
-                <option value="">Select a State</option>
+        <option value={kycInfo.address.state}>{kycInfo.address.state==''?'Select a State':kycInfo.address.state}</option>
                 {
                     
                     country.getStates(parseInt(watch('address.country'))).map((state,index)=><option value={index}>{state.name}</option>)
@@ -220,7 +262,7 @@ useEffect(()=>{
         <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>City</label>
         <select className={inputStyle}  {...register('address.city', { required: true})}>
-                <option value="">Select a City</option>
+                <option value={kycInfo.address.city}>{kycInfo.address.city==''?'Select a City':kycInfo.address.city}</option>
                 {
                     
                     country.getCities(parseInt(watch('address.country')),parseInt(watch('address.state'))).map((city)=><option value={city.name}>{city.name}</option>)
@@ -233,7 +275,7 @@ useEffect(()=>{
         
        
 
-    <div className="w-full my-3 md:w-[70%]">
+{ email.mail==''&& <div className="w-full my-3 md:w-[70%]">
             <label className=" text-sm font-semibold block  text-slate-700">Email</label>
             <input
               type="email"
@@ -247,7 +289,9 @@ useEffect(()=>{
             {errors?.email && (
               <ErrorText text="Please Enter Valid Email/Formatted Email" />
             )}
-    </div>
+
+            <p className='text-sm font-semibold text-themeColor my-2'>New Mail/verify Existing Email</p>
+    </div>}
         
         <div className="w-full my-6">
           <div className="my-2 flex  w-full flex-col items-center gap-y-3">
@@ -267,7 +311,7 @@ useEffect(()=>{
               <label className="text-sm font-semibold block  text-slate-700 ">Upload Image </label>
               <input
                 type="file"
-                {...register(`img`, { required: true })}
+                {...register(`img`, { required:kycInfo.img.imgUrl==''?true:false })}
               ></input>
 
               {/* donot render this button for 1st index */}

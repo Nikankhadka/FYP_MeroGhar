@@ -9,6 +9,7 @@ import { FiUserCheck,FiUserMinus } from 'react-icons/fi'
 import { HiStar,HiMinus } from 'react-icons/hi'
  
 import{HiCheck} from 'react-icons/hi'
+import { bg } from "../../../styles/variants";
 
 
 
@@ -23,7 +24,7 @@ export default async function AccountSetting(){
       <main  className=" ml-0 my-24  md:ml-[230px] md:my-10 lg:ml-[260px]">
 
 
-    <div className='mx-auto my-5 rounded-lg  bg-white  p-3  w-[95%] sm:w-[90%] lg:w-[85%] '>
+    <div className={`mx-auto my-5 rounded-lg ${bg}   w-[95%] sm:w-[90%] lg:w-[85%]`}  >
       
       <div className="flex justify-between items-center flex-wrap-reverse">
         <div>
@@ -94,7 +95,7 @@ export default async function AccountSetting(){
     </div>
       
     <ClientComp>
-    <AccountComponent/>
+    <AccountComponent  userData={userData}/>
     </ClientComp>
     
     </main>

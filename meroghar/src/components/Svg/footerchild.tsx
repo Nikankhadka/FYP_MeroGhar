@@ -36,7 +36,7 @@ export default function FooterChild({ page, active }: FooterChild) {
     if (page == 'WishList') {
       return (
         <Link
-          href="/user/wishList"
+          href="/wishList"
           className={LinkStyle}
         >
           <svg
@@ -59,7 +59,7 @@ export default function FooterChild({ page, active }: FooterChild) {
   
     if (page == 'Log in'||page=="Profile") {
       return (
-        <Link href={page=='Log in'? '/login':"/user/account"} className={LinkStyle}>
+        <Link href={page=='Log in'? '/login':"/Account"} className={LinkStyle}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ export default function FooterChild({ page, active }: FooterChild) {
   
     if (page == 'Trips') {
       return (
-        <Link href="/login" className={LinkStyle}>
+        <Link href="/Bookings" className={LinkStyle}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -101,7 +101,7 @@ export default function FooterChild({ page, active }: FooterChild) {
   
     if (page == 'Inbox') {
       return (
-        <Link href="/login" className={LinkStyle}>
+        <Link href="#" className={LinkStyle}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
           

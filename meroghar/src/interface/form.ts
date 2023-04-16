@@ -28,7 +28,7 @@ export interface KycData{
     state:string,
     city:string,
   },
-  img:{
+  img?:{
       imgId:string,
       imgUrl:string
   }

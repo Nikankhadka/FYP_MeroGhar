@@ -1,8 +1,8 @@
 'server-only'
 import { cookies } from 'next/headers';
-import { FetchedMe, FetchedUserData } from "../../../interface/response";
+import { FetchedMe, FetchedUserData, IUserKyc } from "../../../interface/response";
 import Api from "../../client/axios"
-
+import { getAccessToken } from '../auth';
 
 export async function getUser(userId:string):Promise<FetchedUserData>{
     try{
@@ -27,18 +27,18 @@ export async function getUser(userId:string):Promise<FetchedUserData>{
 }
 
 
+
+
 export async function getMe():Promise<FetchedMe>{
   try{
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get('accessToken')?.value
-    const cookie=`accessToken=${accessToken}`
     
+      
       const userData = await fetch(
           `http://localhost:2900/user/v1/getMe`,
           {
             method: 'GET',
             credentials: 'include',
-            headers: { cookie: cookie},
+            headers: { cookie: getAccessToken()},
             cache:'no-store'
           }
         ).then(res=>res.json())
@@ -53,3 +53,69 @@ export async function getMe():Promise<FetchedMe>{
      throw e;
   }
 }
+
+
+
+//fetch information of user whose kyc needs to be verified basic profile view by admin
+export async function getUserKyc(userId:string):Promise<IUserKyc>{
+  try{
+    
+      
+      const userData = await fetch(
+          `http://localhost:2900/admin/v1/getUser/${userId}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { cookie: getAccessToken()},
+            cache:'no-store'
+          }
+        ).then(res=>res.json())
+  
+      if(!userData.success) throw new Error("failed to fetch user information")
+      
+      console.log("userAccount Data",userData);
+      return userData.userData;
+
+      
+  }catch(e){
+     throw e;
+  }
+}
+
+
+
+export interface kycRequests{
+  userId:string
+  userName:string,
+  _id:string,
+  profileImg:{
+    imgUrl:string,
+    imgId:string
+  }
+}
+
+export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
+  try{
+    
+      
+      const kycRequests = await fetch(
+          `http://localhost:2900/admin/v1/kycRequests`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { cookie: getAccessToken()},
+            cache:'no-store'
+          }
+        ).then(res=>res.json())
+  
+      if(!kycRequests.success) throw new Error("failed to fetch user information")
+      
+      console.log("Kyc requests",kycRequests);
+      return kycRequests.kycRequests;
+
+      
+  }catch(e){
+     throw e;
+  }
+}
+

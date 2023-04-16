@@ -1,3 +1,5 @@
+import { getKycs } from "../../../api/server/user/getUser"
+import ClientComp from "../../../components/clientComp"
 import Profile from "../../../components/user/profile"
 import UserCard from "../../../components/user/userCard"
 import Link from "next/link"
@@ -5,7 +7,19 @@ import { AiOutlineLeft,AiOutlineRight } from "react-icons/ai"
 
 
 
-export default function KycRequest(){
+export default  async function KycRequest(){
+
+  const KycRequests=await getKycs(1,10);
+
+  if(KycRequests.length===0){
+    return(
+      <main className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
+        <p className="text-lg font-semibold text-center"> No Kyc Requests To Verify</p>
+      </main>
+    )
+  }
+
+
    return(
     <main  className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
          <div className="mb-1 w-[96%]  p-2 mx-auto">
@@ -33,14 +47,26 @@ export default function KycRequest(){
 
           </div>
         </div>
+     
         <hr className="my-5 border-gray-400" /> 
+
+    
+     
     <div className="w-[96%]  p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-    <UserCard />
-    <UserCard />
-    <UserCard />
-    <UserCard />
-    <UserCard />
+    <ClientComp>
+    {
+      KycRequests.map((data,index)=>{
+        return(
+          <UserCard userData={data} />
+        )
+      })
+    }
+    </ClientComp>
+   
     </div>
+    
+
+    
 
    
 

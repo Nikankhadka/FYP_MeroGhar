@@ -42,7 +42,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
    {  !props.menu&&<div >
 
         <Link
-          href="http://localhost:3000/user"
+          href="/"
           className="my-2 flex items-center gap-2  "
         >
           <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
@@ -95,7 +95,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
            } 
 
             {props.is_Admin&&<Link
-              href="#"
+              href="/Account/users"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <ImUserCheck className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -105,7 +105,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link>}
 
             <Link
-              href={props.is_Admin?'/user/dashboard/Admin/listings':'/user/dashboard/listings'}
+              href={props.is_Admin?'/Account/listings':'/Account/listings'}
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiHome className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />

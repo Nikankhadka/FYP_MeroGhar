@@ -47,14 +47,14 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
 
       <div className=" hidden items-center gap-1 md:flex">
         <Link
-          href="http://localhost:3000"
+          href="/"
           className="block items-center gap-2 md:flex "
         >
           <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
         </Link>
 
         <Link
-          href="http://localhost:3000"
+          href="/"
           className="block font-semibold text-mainColor drop-shadow-xl dark:text-themeColor md:text-lg"
         >
           MeroGhar
@@ -77,7 +77,7 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
       <div className="hidden items-center gap-2 md:flex">
         <ToggleButton theme={theme} />
         <Link
-          href="http://localhost:3000/postProperty"
+          href="/Account/listings"
           className=" block rounded-md border-2   border-gray-200 p-2 px-3  text-gray-700 hover:border-themeColor dark:text-gray-300 md:text-sm"
         >
           Postroom

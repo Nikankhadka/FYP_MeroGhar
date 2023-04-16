@@ -42,7 +42,21 @@ export const checkSession=async():Promise<sessionData>=>{
   if(!session) return {session:false,userData:{userId:"",is_Admin:false,img:''}}
   const sessionObj=await JSON.parse(session);
  
-  if(sessionObj.is_Admin) return redirect("/admin");
+  //here if admin and redirection was here 
   return {session:true,userData:{userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img}}
     
+}
+
+
+
+export const getAccessToken=()=>{
+  try{
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('accessToken')?.value
+    const cookie=`accessToken=${accessToken}`
+    return cookie;
+  }catch(e){
+    console.log(e);
+    return '';
+  }
 }

@@ -8,7 +8,7 @@ export  function PropertyRow(){
 
     const is_Admin=false;
     return(
-        <div className="hover:bg-gray-100 p-3 dark:hover:bg-gray-700 flex items-center justify-around">
+        <div className="bg-white hover:bg-slate-200 p-3 dark:hover:bg-gray-700 flex items-center justify-around">
        
           <div className="flex items-center ">
             <input
@@ -71,7 +71,7 @@ export function TableHeader(){
   const userheader=['LISTING','VIEW',"STATUS","HOST","PRICE",]
   const adminheader=['LISTING','VIEW',"STATUS","HOST","PRICE"]
   return(
-    <div className="hover:bg-gray-100 bg-gray-100  p-3 dark:hover:bg-gray-700 flex items-center justify-around">
+    <div className="  bg-hoverColor  p-3 dark:hover:bg-gray-700 flex items-center justify-around">
        
     <div className="flex items-center ">
       <input

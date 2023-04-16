@@ -48,6 +48,49 @@ export interface FetchedUserData {
       phoneNumber: string;
       address: {
         country: string;
+        state:string,
+        city: string;
+      };
+      img: {
+        imgId: string;
+        imgUrl: string;
+      };
+    };
+    kyc: {
+      is_verified: boolean;
+      pending: boolean;
+      message: string;
+      approvedBy: string;
+    };
+    listing_Count: number;
+    avg_rating: number;
+    recieved_Reviewcount: number;
+  }
+
+
+ export  interface IUserKyc {
+    userId: string;
+    userName: string;
+    profileImg: {
+      imgId: string;
+      imgUrl: string;
+    };
+    About: string;
+    email: {
+      mail: string;
+      is_verified: boolean;
+    };
+    two_FA: boolean;
+    created_At: Date;
+    kycInfo: {
+      firstName: string;
+      lastName: string;
+      gender: string;
+      email: string;
+      phoneNumber: string;
+      address: {
+        country: string;
+        state: string;
         city: string;
       };
       img: {
