@@ -26,7 +26,7 @@ export default function AccountComponent({userData}:props) {
 
   const {kycInfo,kyc,email,}=userData
 
-  const kycinfo=kyc.is_verified||kyc.pending
+  const kycinfo=kyc.isVerified||kyc.pending
   console.log(kycinfo);
 
 

@@ -30,7 +30,7 @@ export default async function Home(){
 
                
                 </div>
-                <SecondaryFooter />
+                
             </main>
         )
     }
@@ -50,7 +50,7 @@ export default async function Home(){
        </ClientComp>
        
         </div>
-        <SecondaryFooter />
+       
     </main> 
     )
     

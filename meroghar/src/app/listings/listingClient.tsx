@@ -5,15 +5,16 @@ import Link from 'next/link'
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
 import {FiEdit} from 'react-icons/fi'
 import {RiDeleteBin6Fill} from 'react-icons/ri'
-import  {PropertyRow, TableHeader } from '../Row'
+import  {PropertyRow, TableHeader } from '../../components/Row'
 import {useState} from 'react'
-import PostPropertyForm from '../postproperty'
+import PostPropertyForm from '../../components/postproperty'
 
 export default function ListingComp() {
 
     const [listPorperty,setlistProperty]=useState(false)
     const columnHeader=["Listing","View","Status","Host","Price","Actions"]
     const rowData=['Room1','room2' ,'room3','room4']
+    const is_Admin=false;
 
   return (
     <main>
@@ -40,7 +41,9 @@ export default function ListingComp() {
                 </div>
               </form>
             </div>
-            <button
+
+      {/* only for normal user */}
+            {!is_Admin&&<button
               className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 rounded-lg bg-themeColor px-5 py-2.5 text-sm font-medium text-white hover:bg-mainColor focus:outline-none focus:ring-4"
               type="button"
               onClick={(e)=>{
@@ -49,7 +52,9 @@ export default function ListingComp() {
               }}
               >
               List Property
-            </button>
+            </button>}
+
+
           </div>
         </div>
       </div>

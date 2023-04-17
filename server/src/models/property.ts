@@ -36,11 +36,7 @@ const propertySchema=new Schema({
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
         default:undefined
     },
-    //this can be used to set the current property status for booking
-    currentStatus:{
-        availability:Boolean,
-        availableAfter:Date
-    },
+    
     tennantId:Schema.Types.ObjectId,
 
     //calculate these on write

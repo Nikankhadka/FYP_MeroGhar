@@ -57,7 +57,8 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
 
 export const getPropertyRequestsC=async(req:Request,res:Response)=>{
     try{   
-        const propertyRequests=await getPropertyRequestsS()
+
+        const propertyRequests=await getPropertyRequestsS(req.query.page as string,req.query.limit as string)
         return res.status(200).json({success:true,propertyRequests})
     }catch(e:any){
         console.log(e)

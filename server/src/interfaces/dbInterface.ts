@@ -40,7 +40,7 @@ interface kycSchema{
     is_Admin: boolean
     kycInfo:kycSchema,
     kyc: {
-      is_verified: boolean
+      isVerified: boolean
       message: string
       approvedBy: string
       pending:boolean
@@ -86,10 +86,6 @@ interface kycSchema{
       img_url: string;
     }[];
     tennants: Types.ObjectId[];
-    currentStatus: {
-      availability: boolean;
-      availableAfter: Date;
-    };
     tennantId: Types.ObjectId;
     rating_count: number;
     viewCount: number;

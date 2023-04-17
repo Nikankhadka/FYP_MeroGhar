@@ -21,11 +21,16 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       <main className=' flex flex-col'>
       
 
-
-       <DashboardNav />
+        <ClientComp>
+        <DashboardNav />
+        </ClientComp>
+      
         {/* this children represents each page component  that is rendered */}
         {children}
+        <ClientComp>  
         <SideBar is_Admin={true} menu={false}  />
+        </ClientComp>
+        
         
         
       </main>

@@ -14,7 +14,7 @@ export interface FetchedUserData {
     two_FA: boolean
     created_At: string
     kyc: {
-      is_verified: boolean
+      isVerified: boolean
     }
     kycInfo:{
         phoneNumber:string
@@ -57,7 +57,7 @@ export interface FetchedUserData {
       };
     };
     kyc: {
-      is_verified: boolean;
+      isVerified: boolean;
       pending: boolean;
       message: string;
       approvedBy: string;
@@ -99,7 +99,7 @@ export interface FetchedUserData {
       };
     };
     kyc: {
-      is_verified: boolean;
+      isVerified: boolean;
       pending: boolean;
       message: string;
       approvedBy: string;
@@ -108,3 +108,42 @@ export interface FetchedUserData {
     avg_rating: number;
     recieved_Reviewcount: number;
   }
+
+
+
+  export interface Property{
+  
+    _id: string;
+    userId: string;
+    name: string;
+    url: string;
+    location: {
+      country: string;
+      city: string;
+      area: string;
+    };
+    discription: string;
+    property_type: string;
+    rules: string[];
+    amenities: string[];
+    price: number;
+    images: {
+      img_id: string;
+      img_url: string;
+    }[];
+    rating_count: number;
+    viewCount: number;
+    avg_Rating: number;
+    is_banned: {
+      status: boolean;
+      message: string;
+    };
+    is_verified: {
+      status: boolean;
+      pending: boolean;
+      message: string;
+      approvedBy: string;
+    };
+    recommendation: string[];
+  
+}

@@ -132,9 +132,9 @@ export default function PostPropertyForm({setlistProperty}:Property){
             return router.refresh();
             
           }
-        }catch(e){
+        }catch(e:any){
           console.log(e);
-          toast.error("Property Post Failed");
+          toast.error(`property Post Failed/${e.message}`);
           modal.onClose(); 
         }
        

@@ -16,7 +16,7 @@ export interface returnUserData {
     created_At: Date
     
     kyc: {
-      is_verified: boolean
+      isVerified: boolean
     }
     kycInfo:{
         phoneNumber:string

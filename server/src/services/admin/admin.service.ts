@@ -37,7 +37,7 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
 export const getUserKycS=async(id:string):Promise<Partial<IUser>>=>{
     try{
     
-        const userData=await userModel.findOne({_id:id}).select("-password -Token  -refreshToken -updated_At -is_Admin -wishList   -rentedProperty -viewedProperty -recommendation ");
+        const userData=await userModel.findOne({$or:[{_id: id },{ userId:id }]}).select("-password -Token  -refreshToken -updated_At -is_Admin -wishList   -rentedProperty -viewedProperty -recommendation ");
         if(!userData) throw new Error("Failed to fetch userData")
         return userData;
     }catch(e){
@@ -56,8 +56,8 @@ export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
         const newlimit=parseInt(limit)
         const newpage=parseInt(page)
 
-        //since all admin have access to this simply fetch unverified property set in pending 
-        const kycRequests=await userModel.find({kyc:{is_verified:false,pending:true}}).limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).select('userId userName _id profile_img');
+        //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
+        const kycRequests=await userModel.find({ "kyc.is_verified": false, "kyc.pending": true }).select('userId userName _id profileImg').limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"});
         if(!kycRequests) throw new Error("No user need to be verified right now")
         return kycRequests
 
@@ -79,7 +79,7 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             //since admin has verified and data is also valid now update the userDocument 
             const verifyUser=await userModel.updateOne({_id:id},{
                 "$set":{
-                    "kyc.is_Verified":true,
+                    "kyc.isVerified":true,
                     "kyc.message":"KYC information valid",
                     "kyc.approvedBy":adminId,
                     'kyc.pending':false
@@ -100,7 +100,7 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
 
             const declineUser=await userModel.updateOne({_id:id},{
                 "$set":{
-                    "kyc.is_Verified":false,
+                    "kyc.isVerified":false,
                     "kyc.message":kycData.message,
                     "kyc.approvedBy":adminId,
                     'kyc.pending':false
@@ -127,10 +127,12 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
 
 
 
-export const getPropertyRequestsS=async():Promise<Property[]>=>{
+export const getPropertyRequestsS=async(page:string,limit:string):Promise<Property[]>=>{
     try{
-        //since all admin have access to this simply fetch unverified property set in pending 
-        const propertyRequests=await propertyModel.find({is_verified:{status:false,pending:true}})
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const propertyRequests=await propertyModel.find({is_verified:{status:false,pending:true}}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
         if(!propertyRequests) throw new Error("No property to be verified right now")
         return propertyRequests
 
@@ -165,8 +167,6 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
                 "is_verified.pending":false,
                 "is_verified.message":message,
                 "is_verified.approvedBy":adminId,
-                "currentStatus.availability":true,
-                "currentStatus.availableAfter":Date.now()
             }})
 
         if(!verifyProperty) throw new Error("Property verification failed");

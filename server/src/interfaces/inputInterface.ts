@@ -16,7 +16,6 @@ export interface KycData{
     lastName:string,
     gender:string,
     email?:string,
-    phoneNumber:string,
     address:{
         country:string,
         city:string

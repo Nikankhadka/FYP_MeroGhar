@@ -121,7 +121,7 @@ export const userSchema=new Schema({
         
         //kyc verification status
         kyc:{
-            is_verified:{type:Boolean,default:false},
+            isVerified:{type:Boolean,default:false},
 
             // can be used to fetch information and other things
             pending:{
