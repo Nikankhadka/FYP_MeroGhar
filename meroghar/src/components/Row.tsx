@@ -3,10 +3,17 @@ import { RiDeleteBin6Fill } from "react-icons/ri"
 import {FiEdit } from 'react-icons/fi'
 import Link from "next/link"
 import {BsFillClipboardCheckFill,BsHouseCheckFill,BsFillHouseDashFill} from'react-icons/bs'
+import { Property } from "../interface/response"
 
-export  function PropertyRow(){
 
-    const is_Admin=true;
+interface Props{
+  is_Admin:boolean,
+  property:Partial<Property>
+}
+export  function PropertyRow({is_Admin,property}:Props){
+
+    const {name,is_verified,_id,userId,price,}=property
+
     return(
         <div className="bg-white hover:bg-slate-200 p-3 dark:hover:bg-gray-700 flex items-center justify-around">
        
@@ -15,23 +22,23 @@ export  function PropertyRow(){
 
        
           <div className="text-md font-semibold text-gray-700 dark:text-white">
-            Rooom1
+            {name}
           </div>
           <div className="text-md dark:text-gray-400">
-            status
+            {is_verified!.pending}
           </div>
 
 
-          <Link href='#' className=" block text-sm font-semibold underline dark:text-gray-400">
-            View
+          <Link href={`/rooms/${_id}`} target="_blank" className=" block text-sm font-semibold underline dark:text-gray-400">
+            Property
           </Link>
 
-          {is_Admin&&<Link href='#' className=" block text-sm font-semibold underline dark:text-gray-400">
+          {is_Admin&&<Link href={`/Account/users/${userId}`} target="_blank" className=" block text-sm font-semibold underline dark:text-gray-400">
             Host
           </Link>}
 
           <div className="text-md dark:text-gray-400">
-            Price
+            {price}
           </div>
      
          {!is_Admin&&<div>  
@@ -76,9 +83,12 @@ export  function PropertyRow(){
 
 
 
+interface headerProps{
+  is_Admin:boolean
+}
 
-export function TableHeader(){
-  const is_Admin=false;
+export function TableHeader({is_Admin}:headerProps){
+  
   const userheader=['LISTING','STATUS',"VIEW","PRICE",]
   const adminheader=['LISTING','STATUS',"VIEW","HOST","PRICE"]
   return(

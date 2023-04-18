@@ -16,8 +16,8 @@ const propertySchema=new Schema({
     url:String,
     location:{
         country:String,
+        state:String,
         city:String,
-        area:String,
 
     },
     discription:{type:String,required:true},

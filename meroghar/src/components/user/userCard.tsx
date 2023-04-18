@@ -72,7 +72,23 @@ export default function UserCard({userData}:UserProps){
           onClick={(e)=>{
             e.preventDefault();
             console.log('reject')
-            verify.setId(_id);
+            verify.onContent({
+              onReject:async(message:string)=>{
+                const res=await verifyKyc(_id,{isVerified:false,message});
+                  if(res){
+                    toast.success("User kyc Rejected");
+                    modal.onClose();
+                    return router.refresh();
+                  }
+                  toast.error("Kyc rejection Failed!");
+                  return modal.onClose();
+              }
+            })
+
+
+
+
+
             modal.onOpen("reject")
           }}
           >

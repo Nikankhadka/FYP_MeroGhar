@@ -38,7 +38,7 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
     try{
         const kycVerify=joi.object({
             isVerified:joi.boolean().required(),
-            message:joi.string().min(10).optional(),
+            message:joi.string().optional(),
         })
 
         const{error,value}=kycVerify.validate(req.body,{abortEarly:false})

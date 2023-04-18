@@ -39,11 +39,19 @@ interface sessionData{
 export const checkSession=async():Promise<sessionData>=>{
   const cookieStore=cookies();
   const session=await cookieStore.get("session")?.value;
-  if(!session) return {session:false,userData:{userId:"",is_Admin:false,img:''}}
-  const sessionObj=await JSON.parse(session);
- 
-  //here if admin and redirection was here 
-  return {session:true,userData:{userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img}}
+    if(!session){
+      return {session:false,userData:{userId:"",is_Admin:false,img:''}}  
+    }
+    const sessionObj=await JSON.parse(session!)
+    console.log("poagesobj",sessionObj)
+
+    // role mismatched so unauthorized throw custom un authorized erorr 
+    // if(sessionObj.is_Admin!==is_Admin){
+    //   return {session:false,userData:{userId:"",is_Admin:false,img:''}} 
+    // }
+    
+    //here if admin and redirection was here 
+    return {session:true,userData:{userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img}}
     
 }
 

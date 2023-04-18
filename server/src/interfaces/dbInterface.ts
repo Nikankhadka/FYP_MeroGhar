@@ -73,8 +73,8 @@ interface kycSchema{
     url: string;
     location: {
       country: string;
+      state: string;
       city: string;
-      area: string;
     };
     discription: string;
     property_type: string;

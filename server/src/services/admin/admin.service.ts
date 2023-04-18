@@ -57,7 +57,7 @@ export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
         const newpage=parseInt(page)
 
         //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
-        const kycRequests=await userModel.find({ "kyc.is_verified": false, "kyc.pending": true }).select('userId userName _id profileImg').limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"});
+        const kycRequests=await userModel.find({"kyc.is_verified": false,"kyc.pending": true }).select('userId userName _id profileImg').limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"});
         if(!kycRequests) throw new Error("No user need to be verified right now")
         return kycRequests
 
@@ -132,7 +132,7 @@ export const getPropertyRequestsS=async(page:string,limit:string):Promise<Proper
         //since all admin have access to this simply fetch unverified property set in pending
         const newLimit=parseInt(limit);
         const newPage=parseInt(page) 
-        const propertyRequests=await propertyModel.find({is_verified:{status:false,pending:true}}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        const propertyRequests=await propertyModel.find({'is_verified.status': false, 'is_verified.pending': true}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
         if(!propertyRequests) throw new Error("No property to be verified right now")
         return propertyRequests
 

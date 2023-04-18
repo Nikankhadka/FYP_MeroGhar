@@ -61,15 +61,8 @@ export function MessageModal(){
 
 
                 <button type='submit' onClick={handleSubmit(async(data)=>{
-
-                  const res=await verifyKyc(verify.id,{isVerified:false,message:data.message});
-                  if(res){
-                    toast.success("User kyc Rejected");
-                    confirmModal.onClose();
-                    return router.refresh();
-                  }
-                  toast.error("Kyc rejection Failed!");
-                  return confirmModal.onClose();
+                    verify.action.onReject(data.message)
+                  
                   
                 })} className={`py-2 px-4 text-white font-semibold rounded-lg ${confirmModal.isOpen=='verify'? 'bg-themeColor hover:bg-mainColor':'bg-red-500 hover:bg-red-700'}`}>{confirmModal.isOpen=='verify'?'Verify':"Reject"}</button>
             </div>
@@ -81,4 +74,5 @@ export function MessageModal(){
     )}
     return null;
 }
+
 

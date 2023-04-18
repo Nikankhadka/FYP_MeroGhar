@@ -99,7 +99,7 @@ export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
     
       
       const kycRequests = await fetch(
-          `http://localhost:2900/admin/v1/kycRequests`,
+          `http://localhost:2900/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',

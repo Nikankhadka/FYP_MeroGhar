@@ -1,13 +1,16 @@
 
+import { Property } from "../../../interface/response";
 import { getAccessToken } from "../auth";
 
 
-export async function getPropertyRequests(page:number,limit:number):Promise<kycRequests[]>{
+
+//for admin verificationnpm
+export async function getPropertyRequests(page:number,limit:number):Promise<Partial<Property>[]>{
     try{
       
         
         const res = await fetch(
-            `http://localhost:2900/admin/v1/kycRequests`,
+            `http://localhost:2900/admin/v1/propertyRequests?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -16,7 +19,7 @@ export async function getPropertyRequests(page:number,limit:number):Promise<kycR
             }
           ).then(res=>res.json())
     
-        if(!res.success) throw new Error("failed to fetch user information")
+        if(!res.success) throw new Error("failed to fetch Property Requests")
         
         console.log("Kyc requests",res);
         return res.propertyRequests;

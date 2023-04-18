@@ -5,16 +5,30 @@ import Link from 'next/link'
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
 import {FiEdit} from 'react-icons/fi'
 import {RiDeleteBin6Fill} from 'react-icons/ri'
-import  {PropertyRow, TableHeader } from '../../components/Row'
+import  {PropertyRow, TableHeader } from '../../../components/Row'
 import {useState} from 'react'
-import PostPropertyForm from '../../components/postproperty'
+import PostPropertyForm from '../../../components/postproperty'
+import { Property } from '../../../interface/response'
+import Card from '../../../components/card/card'
 
-export default function ListingComp() {
+
+interface Props{
+  is_Admin:boolean,
+  properties?:Partial<Property>[]
+}
+
+export default function ListingComp({is_Admin,properties}:Props) {
 
     const [listPorperty,setlistProperty]=useState(false)
-    const columnHeader=["Listing","View","Status","Host","Price","Actions"]
-    const rowData=['Room1','room2' ,'room3','room4']
-    const is_Admin=false;
+    
+    
+    if(properties?.length===0){
+      return(
+        <main className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
+        <p className="text-lg font-semibold text-center">{is_Admin?"No properties to Verify":"No Propert here"}</p>
+      </main>
+      )
+    }
 
   return (
     <main>
@@ -59,28 +73,30 @@ export default function ListingComp() {
         </div>
       </div>
      
+        {/* only available for kyc verified user */}
         {
           listPorperty&&<PostPropertyForm setlistProperty={setlistProperty}/>
         }
           
-           {!listPorperty&&<div className="overflow-hidden shadow border-2 border-red-500">
+
+           {!listPorperty&&<div className="w-[96%]  p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
              
     
-                <TableHeader /> 
+               
                 {
-                    rowData.map((data)=>{
+                    properties!.map((property)=>{
                         return(
-                            <div>
-                              <PropertyRow />
-                            </div>
+                            // property card
+                            <Card user={is_Admin? 'admin':'user'} data={property}/>
+                    
                             
                         )
                     })
                 }
 
                 
-              
-            </div>}
+              </div>
+            }
           
         
      
