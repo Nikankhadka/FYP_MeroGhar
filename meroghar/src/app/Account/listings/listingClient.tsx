@@ -10,25 +10,20 @@ import {useState} from 'react'
 import PostPropertyForm from '../../../components/postproperty'
 import { Property } from '../../../interface/response'
 import Card from '../../../components/card/card'
+import useRandom from '../../../customHoooks/randomStore'
 
 
 interface Props{
   is_Admin:boolean,
-  properties?:Partial<Property>[]
+  properties:Partial<Property>[]
 }
 
 export default function ListingComp({is_Admin,properties}:Props) {
 
-    const [listPorperty,setlistProperty]=useState(false)
+    const list=useRandom();
+
     
-    
-    if(properties?.length===0){
-      return(
-        <main className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
-        <p className="text-lg font-semibold text-center">{is_Admin?"No properties to Verify":"No Propert here"}</p>
-      </main>
-      )
-    }
+
 
   return (
     <main>
@@ -62,7 +57,7 @@ export default function ListingComp({is_Admin,properties}:Props) {
               type="button"
               onClick={(e)=>{
                 e.preventDefault();
-                setlistProperty(!listPorperty)
+                list.onList("list")
               }}
               >
               List Property
@@ -73,21 +68,21 @@ export default function ListingComp({is_Admin,properties}:Props) {
         </div>
       </div>
      
-        {/* only available for kyc verified user */}
-        {
-          listPorperty&&<PostPropertyForm setlistProperty={setlistProperty}/>
-        }
+
+     {properties?.length!>0&&<div>
+               {/* only available for kyc verified user */}
+        
           
 
-           {!listPorperty&&<div className="w-[96%]  p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+           {list.listPorperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
              
     
                
                 {
-                    properties!.map((property)=>{
+                    properties!.map((property,index)=>{
                         return(
                             // property card
-                            <Card user={is_Admin? 'admin':'user'} data={property}/>
+                            <Card user={is_Admin? 'admin':'user'} data={property} index={index}/>
                     
                             
                         )
@@ -97,12 +92,21 @@ export default function ListingComp({is_Admin,properties}:Props) {
                 
               </div>
             }
-          
-        
+     </div>}
+       
+
+
+          {/* property lisiting form  */}
+        {
+          list.listPorperty=='list'&&<PostPropertyForm isUpdate={false}/>
+        }
+         {
+          list.listPorperty=='edit'&&<PostPropertyForm isUpdate={true} propertyData={properties[list.propIndex]}/>
+        }
      
 
       {/* paginatioon footer */}
-      {!listPorperty&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+      {list.listPorperty=='close'&&properties?.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
         <div className="flex items-center space-x-3">
           <Link
             href="#"

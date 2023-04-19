@@ -4,7 +4,7 @@ import { FiUserCheck,FiUserMinus } from 'react-icons/fi'
 import { HiStar,HiMinus } from 'react-icons/hi'
  
 import{HiCheck} from 'react-icons/hi'
-import { EditBasic } from './Edit'
+import { EditBasic } from './editProfile'
 import {useState} from 'react'
 import Link from 'next/link'
 import Card from '../card/card'

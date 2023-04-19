@@ -71,7 +71,7 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
 
 
   return (
-    <main className="w-[95%] border-2 shadow-none my-4  rounded-lg md:w-[35%] md:shadow-lg  md:border-gray-300 ">
+    <main className="w-[95%] bg-white border-2 shadow-none my-4  rounded-lg md:w-[35%] md:shadow-lg  md:border-gray-300 ">
     
     <div className='flex justify-around items-center my-5'>
         <p className='text-lg font-bold'>$107 <span className='text-sm font-medium'>night</span></p>
@@ -98,7 +98,7 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
     <form>
     <input type="number" className="w-full h-11 border-2 border-gray-300  my-1 rounded-md text-sm text-gray-700 text-md p-2 hover:bg-hoverColor" placeholder='No of Guest' value={guest}  onChange={(e)=>{
       console.log(guest)
-      setguest(e.target.value)}}/>
+      setguest(parseInt(e.target.value))}}/>
     
 {   error&&<div className='my-2 '>
     <ErrorText text='Please Enter Valid Date/guest for Booking' />

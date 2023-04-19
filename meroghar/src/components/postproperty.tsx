@@ -7,7 +7,7 @@ import { ErrorText } from './random'
 import { PropertyForm } from '../interface/form'
 import axios from 'axios'
 import { Images } from '../interface/request'
-import { PostPropery } from '../api/client/property'
+import { PostPropery, UpdatePropery } from '../api/client/property'
 import {AiOutlinePlus,AiOutlineMinus} from 'react-icons/ai'
 import { amenities,propertyOptions} from '../configs/constant'
 const inputStyle="text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
@@ -18,23 +18,54 @@ import useConfirm from '../customHoooks/useConfirm'
 import useModal from '../customHoooks/useModal'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import { Property } from '../interface/response'
+import useRandom from '../customHoooks/randomStore'
 
 //checck image function 
 
-interface Property{
-  setlistProperty:React.Dispatch<React.SetStateAction<boolean>>
+interface postProperty{
+  propertyData?:Partial<Property>
+  isUpdate:boolean;
 }
 
 
 
-export default function PostPropertyForm({setlistProperty}:Property){
+export default function PostPropertyForm({isUpdate,propertyData}:postProperty){
 
+
+  const defaultValues:PropertyForm={
+    images:['default'],
+    name: '',
+    location: {
+      country: '',
+      city: '',
+      state: '',
+    },
+    discription: '',
+    rules:'',
+    amenities:[],
+    price:0,
+    property_type:'hotel',
+  };
+
+  // If this is an update form, set the default values based on the passed property data
+  if (isUpdate && propertyData) {
+    defaultValues.name = propertyData.name || '';
+    defaultValues.location = propertyData.location || defaultValues.location;
+    defaultValues.discription = propertyData.discription || '';
+    defaultValues.rules = propertyData.rules![0] || '';
+    defaultValues.amenities = propertyData.amenities || [];
+    defaultValues.price = propertyData.price || 0;
+    defaultValues.property_type = propertyData.property_type || 'hotel';
+  }
+
+  
+  const list=useRandom()
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<PropertyForm>({
-      defaultValues:{
-        images:['default']
-      },mode:'onChange'
+      defaultValues:defaultValues,mode:'onChange'
     })
 
+    
     const { fields, append, remove } = useFieldArray({name:'images',control});
 
     // for country state and city
@@ -53,14 +84,14 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
     
     // every change detected is recorded here we want to fetch the image information only 
-    const images=watch('images')
+    const imagesS=watch('images')
    
 
     
 
     const imageUrl=(index:number)=>{
       try{
-        return  URL.createObjectURL(images[index][0])
+        return  URL.createObjectURL(imagesS[index][0])
 
       }catch(e){
         console.log(e)
@@ -77,73 +108,148 @@ export default function PostPropertyForm({setlistProperty}:Property){
     const onSubmit: SubmitHandler<PropertyForm> =async(formdata)=>{
       
 
-      const submitConfirmation=async()=>{
+      const postConfirmation=async()=>{
         
-      const amenities=formdata.amenities.filter(item=>item!='')
-      
-      const {name,location,discription,price,property_type,rules}=formdata
-      let images:Images[]=[];
-
-
-        //there might be multiple image upload so 
-        const imageData= new FormData();
-        //since there might be multiple images
-        for (const image of formdata.images){
-          imageData.append('file',image[0])
-          imageData.append('cloud_name','drpojzybw');
-          imageData.append('upload_preset','FypMeroGhar');
-
-          const res=await fetch('https://api.cloudinary.com/v1_1/drpojzybw/image/upload',{
-            method:"POST",
-            body:imageData
-          })
-          const response=await res.json()
-
-         await  images.push({
-            img_id:response.public_id,
-            img_url:response.url
-          })
-          
-        }
+        const amenities=formdata.amenities.filter(item=>item!='')
         
-        let RequestBody:PropertyForm={
-          name,
-          location:{
-            country:country.getCountryData(parseInt(location.country)).name,
-            state:country.getStateData(parseInt(location.country),parseInt(location.state)).name,
-            city:location.city
-          },
-          discription,
-          price,
-          property_type,
-          rules,
-          amenities,
-          images,
-        }
-        console.log(RequestBody)
-        console.log(RequestBody.images)
-        
-        try{
-          const newProperty=await PostPropery(RequestBody)
-          if(newProperty){
-            toast.success("Property Posted Successfully");
-            modal.onClose();
-            setlistProperty(false);
-            return router.refresh();
+        const {name,location,discription,price,property_type,rules}=formdata
+        let images:Images[]=[];
+  
+  
+          //there might be multiple image upload so 
+          const imageData= new FormData();
+          //since there might be multiple images
+          for (const image of formdata.images){
+            imageData.append('file',image[0])
+            imageData.append('cloud_name','drpojzybw');
+            imageData.append('upload_preset','FypMeroGhar');
+  
+            const res=await fetch('https://api.cloudinary.com/v1_1/drpojzybw/image/upload',{
+              method:"POST",
+              body:imageData
+            })
+            const response=await res.json()
+  
+           await  images.push({
+              img_id:response.public_id,
+              img_url:response.url
+            })
             
           }
-        }catch(e:any){
-          console.log(e);
-          toast.error(`property Post Failed/${e.message}`);
-          modal.onClose(); 
+          
+          let RequestBody:PropertyForm={
+            name,
+            location:{
+              country:country.getCountryData(parseInt(location.country)).name,
+              state:country.getStateData(parseInt(location.country),parseInt(location.state)).name,
+              city:location.city
+            },
+            discription,
+            price,
+            property_type,
+            rules,
+            amenities,
+            images,
+          }
+          console.log(RequestBody)
+          console.log(RequestBody.images)
+          
+          try{
+            const newProperty=await PostPropery(RequestBody)
+            if(newProperty){
+              toast.success("Property Posted Successfully");
+              modal.onClose();
+              list.onList('close');
+              return router.refresh();
+              
+            }
+          }catch(e:any){
+            console.log(e);
+            toast.error(`property Post Failed/${e.message}`);
+            modal.onClose(); 
+          }
+         
         }
-       
-      }
+
+
+        //now for update property
+
+        const updateConfirmation=async()=>{
+        
+          const amenities=formdata.amenities.filter(item=>item!='')
+          
+          const {name,location,discription,price,property_type,rules}=formdata
+          let RequestBody:PropertyForm={
+            name,
+            location:{
+              country:propertyData?.location!.country==formdata.location.country? formdata.location.country:  country.getCountryData(parseInt(formdata.location.country)).name,
+              state:propertyData?.location!.state==formdata.location!.state? formdata.location.state: country.getStateData(parseInt(formdata.location.country),parseInt(formdata.location.state)).name,
+              city:formdata.location.city
+            },
+            discription,
+            price,
+            property_type,
+            rules,
+            amenities,
+            images:[]
+          }
+    
+          if(formdata.images[0]=='default'){
+            RequestBody.images=propertyData?.images!;
+          }
+            else{
+             //there might be multiple image upload so 
+             const imageData= new FormData();
+             //since there might be multiple images
+             for (const image of formdata.images){
+               imageData.append('file',image[0])
+               imageData.append('cloud_name','drpojzybw');
+               imageData.append('upload_preset','FypMeroGhar');
+     
+               const res=await fetch('https://api.cloudinary.com/v1_1/drpojzybw/image/upload',{
+                 method:"POST",
+                 body:imageData
+               })
+               const response=await res.json()
+     
+              await  RequestBody.images.push({
+                 img_id:response.public_id,
+                 img_url:response.url
+               })
+               
+             } 
+          }
+           
+
+            console.log(RequestBody)
+            console.log(RequestBody.images)
+            
+            try{
+              const uProperty=await UpdatePropery(propertyData?._id!,RequestBody)
+              if(uProperty){
+                toast.success("Property updated Successfully/Needs Reverification");
+                modal.onClose();
+                list.onList('close');
+                return router.refresh();
+                
+              }
+            }catch(e:any){
+              console.log(e);
+              toast.error(`property update Failed/${e.message}`);
+              modal.onClose(); 
+            }
+           
+          }
+
+
+
+
+
       //confirmation logic 
       confirmModal.onContent({
-        header:"Are You Sure You Want To Post?",
-        actionBtn:"Post Property",
-        onAction:submitConfirmation
+        header:isUpdate?"Are You Sure You Want To Update?":"Are You sure You Want to Post",
+        actionBtn:isUpdate?"Update Property":"Post Property",
+        onAction:isUpdate?updateConfirmation:postConfirmation
       })
 
       //render modal
@@ -162,6 +268,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
 
         <form onSubmit={handleSubmit(onSubmit)} className='w-full mx-auto  lg:w-full p-3 flex flex-col items-center'>
         
+      { isUpdate&& <p className='text-lg font-semibold text-themeColor'>Adding New Images will replace previous images </p>}
         <div className='w-full p-2'>
 
                         
@@ -180,7 +287,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
                         {/* for input and label */}
                         <div className='w-full  bg-white p-2 flex-col items-start md:w-[60%] flex md:flex-row justify-around md:items-center shadow-md border-2 border-gray-300 rounded-lg'>
                         <label className='block my-1 text-sm font-semibold'>Upload Image </label>
-                        <input  type="file" key={field.id} {...register(`images.${index}` as const,{required:true})} ></input>
+                        <input  type="file" key={field.id} {...register(`images.${index}` as const,{required:isUpdate?false:true})} ></input>
 
     
 
@@ -258,7 +365,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
     <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>Country </label>
         <select className={inputStyle}  {...register('location.country', { required: true})}>
-                <option value="" >Select Country</option>
+        <option value={defaultValues.location.country}>{defaultValues.location.country==''?'Select a Country':defaultValues.location.country}</option>
                 {
                     countries.map((country,index)=><option  value={index}>{country.name}</option>)
                 }
@@ -271,7 +378,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
       <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>State </label>
         <select className={inputStyle}  {...register('location.state', { required: true})}>
-                <option value="">Select a State</option>
+        <option value={defaultValues.location.state}>{defaultValues.location.state==''?'Select a state':defaultValues.location.state}</option>
                 {
                     
                     country.getStates(parseInt(watch('location.country'))).map((state,index)=><option value={index}>{state.name}</option>)
@@ -283,7 +390,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
         <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>City</label>
         <select className={inputStyle}  {...register('location.city', { required: true})}>
-                <option value="">Select a City</option>
+        <option value={defaultValues.location.city}>{defaultValues.location.city==''?'Select a City':defaultValues.location.city}</option>
                 {
                     
                     country.getCities(parseInt(watch('location.country')),parseInt(watch('location.state'))).map((city)=><option value={city.name}>{city.name}</option>)
@@ -363,7 +470,7 @@ export default function PostPropertyForm({setlistProperty}:Property){
     <button type='button' className='underline text-md font-semibold' 
     onClick={(e)=>{
       e.preventDefault();
-      setlistProperty(false);
+      list.onList('close')
     }}>Cancel</button>
     <button type='submit' className="text-md cursor-pointer font-semibold rounded-md bg-themeColor p-2 px-4 transition-all text-white hover:bg-mainColor" onClick={handleSubmit(onSubmit)}>Submit</button>
     </div>

@@ -112,6 +112,7 @@ useEffect(()=>{
             state:kycInfo.address.state==formdata.address.state? formdata.address.state: country.getStateData(parseInt(formdata.address.country),parseInt(formdata.address.state)).name,
             city:formdata.address.city
           },
+          phoneNumber:kycInfo.phoneNumber,
           img:{
             imgId:'',
             imgUrl:""

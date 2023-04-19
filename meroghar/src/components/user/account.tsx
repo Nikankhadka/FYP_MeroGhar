@@ -84,8 +84,6 @@ export default function AccountComponent({userData}:props) {
           <h1 className='font-semibold my-2'>Id</h1>
             <img src={kycInfo.img.imgUrl} alt="imghere" className='block h-auto w-[85%]  sm:w-[60%] rounded-lg my-2'/>
         </p>
-        
-        <button className='text-sm text-gray-700 font-semibold underline'>Edit</button>
         </div>}
    
 
@@ -133,6 +131,8 @@ function Info({title,value}:infoprops){
         <h1 className='font-semibold my-1'>{title}</h1>
           <p className='text-sm text-gray-600'>{value}</p>
       </p>
-      <button className='text-sm text-gray-700 font-semibold underline'>Edit</button>
+
+      {title=='Phone Number'&&<button className='text-sm text-gray-700 font-semibold underline'>Edit</button>}
+      {title=='Email'&&<button className='text-sm text-gray-700 font-semibold underline'>Edit</button>}
       </div>
     )}

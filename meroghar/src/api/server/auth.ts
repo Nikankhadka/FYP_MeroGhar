@@ -61,7 +61,9 @@ export const getAccessToken=()=>{
   try{
     const cookieStore = cookies();
     const accessToken = cookieStore.get('accessToken')?.value
+    if(!accessToken) throw new Error("no access token");
     const cookie=`accessToken=${accessToken}`
+    console.log(cookie)
     return cookie;
   }catch(e){
     console.log(e);
