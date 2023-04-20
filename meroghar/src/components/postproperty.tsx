@@ -20,6 +20,7 @@ import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { Property } from '../interface/response'
 import useRandom from '../customHoooks/randomStore'
+import { uploadImage } from '../api/client/user'
 
 //checck image function 
 
@@ -50,6 +51,7 @@ export default function PostPropertyForm({isUpdate,propertyData}:postProperty){
 
   // If this is an update form, set the default values based on the passed property data
   if (isUpdate && propertyData) {
+    defaultValues.images=propertyData.images||defaultValues.images
     defaultValues.name = propertyData.name || '';
     defaultValues.location = propertyData.location || defaultValues.location;
     defaultValues.discription = propertyData.discription || '';
@@ -91,11 +93,21 @@ export default function PostPropertyForm({isUpdate,propertyData}:postProperty){
 
     const imageUrl=(index:number)=>{
       try{
+        
         return  URL.createObjectURL(imagesS[index][0])
 
       }catch(e){
         console.log(e)
-        return ''
+        try{
+          if(propertyData?.images![index].img_url){
+            return propertyData.images[index].img_url
+           }
+        }
+        catch(e){
+          return ''
+        }
+         
+         
       }
     }
    
@@ -178,51 +190,54 @@ export default function PostPropertyForm({isUpdate,propertyData}:postProperty){
         
           const amenities=formdata.amenities.filter(item=>item!='')
           
-          const {name,location,discription,price,property_type,rules}=formdata
-          let RequestBody:PropertyForm={
-            name,
-            location:{
-              country:propertyData?.location!.country==formdata.location.country? formdata.location.country:  country.getCountryData(parseInt(formdata.location.country)).name,
-              state:propertyData?.location!.state==formdata.location!.state? formdata.location.state: country.getStateData(parseInt(formdata.location.country),parseInt(formdata.location.state)).name,
-              city:formdata.location.city
-            },
-            discription,
-            price,
-            property_type,
-            rules,
-            amenities,
-            images:[]
-          }
-    
-          if(formdata.images[0]=='default'){
-            RequestBody.images=propertyData?.images!;
-          }
-            else{
-             //there might be multiple image upload so 
-             const imageData= new FormData();
+          const {name,location,discription,price,property_type,rules,}=formdata
+          let images:Images[]=[];
+          
+
+          
+          
+        
+         
+          //    //there might be multiple image upload so 
+          
              //since there might be multiple images
              for (const image of formdata.images){
-               imageData.append('file',image[0])
-               imageData.append('cloud_name','drpojzybw');
-               imageData.append('upload_preset','FypMeroGhar');
-     
-               const res=await fetch('https://api.cloudinary.com/v1_1/drpojzybw/image/upload',{
-                 method:"POST",
-                 body:imageData
-               })
-               const response=await res.json()
-     
-              await  RequestBody.images.push({
-                 img_id:response.public_id,
-                 img_url:response.url
-               })
+              try{
+                //if its able to crrate url itsfile if its not then obj
+                const imgurl=URL.createObjectURL(image[0])
+                console.log("uploaded img")
+                const {imgId,imgUrl}=await uploadImage(image[0]);
+                images.push({img_id:imgId,img_url:imgUrl});  
+              }catch(e){
+                console.log(e)
+                console.log('object');
+                  images.push(image);
+              }
+              
                
              } 
-          }
-           
+             
 
-            console.log(RequestBody)
-            console.log(RequestBody.images)
+             
+          
+             let RequestBody:PropertyForm={
+              name,
+              location:{
+                country:propertyData?.location!.country==formdata.location.country? formdata.location.country:  country.getCountryData(parseInt(formdata.location.country)).name,
+                state:propertyData?.location!.state==formdata.location!.state? formdata.location.state: country.getStateData(parseInt(formdata.location.country),parseInt(formdata.location.state)).name,
+                city:formdata.location.city
+              },
+              discription,
+              price,
+              property_type,
+              rules,
+              amenities,
+              images
+            }
+
+            console.log('final form',RequestBody)
+
+       
             
             try{
               const uProperty=await UpdatePropery(propertyData?._id!,RequestBody)
