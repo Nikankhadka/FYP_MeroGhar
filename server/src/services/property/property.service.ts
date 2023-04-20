@@ -54,7 +54,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             const userdocument=await userModel.findOne({userId});
 
 
-            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified.");
+            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified");
             if(!propertyData) throw new Error("No property with the given id")
             
             //check whether property is in wishlist of the user
@@ -72,7 +72,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             
         }
         console.log("no user inside service")
-        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified.");
+        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified");
         if(!propertyData) throw new Error("Proper data fetching failed")
         return {property:propertyData,user:"",inWishList:false};
         

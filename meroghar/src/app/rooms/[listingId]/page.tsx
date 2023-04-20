@@ -24,12 +24,12 @@ export default async function Room({ params }: { params: IParams }) {
   // since get resevation can be used for multiple cases betrter to pass entire param obj
 
   const propertyData =getPropertyById(params.listingId)
-  // const reservationsData = getReservations(params.listingId, '')
+  const reservationsData = getReservations(params.listingId, '')
 
-  // const [{ property, user, inWishList }, reservations] = await Promise.all([
-  //   propertyData,
-  //   reservationsData,
-  // ])
+  const [{ property, user, inWishList }, reservations] = await Promise.all([
+    propertyData,
+    reservationsData,
+  ])
 
   return (
     <ClientComp>

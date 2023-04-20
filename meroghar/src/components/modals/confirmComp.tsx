@@ -34,7 +34,7 @@ export default function ConfirmComp(){
               }}>
                 Cancel
               </button>
-              <button className="rounded-lg bg-themeColor px-4 py-2 text-white transition-all hover:bg-mainColor"
+              <button className={`rounded-lg  px-4 py-2 text-white transition-all ${confirm.content.actionBtn=='Delete'? 'bg-red-500 hover:bg-red-700' :'bg-themeColor hover:bg-mainColor'}`}
               onClick={(e)=>{
                 e.preventDefault();
                 confirm.content.onAction();

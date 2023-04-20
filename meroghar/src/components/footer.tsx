@@ -2,24 +2,57 @@
 
 import Link from 'next/link'
 import FooterChild from './Svg/footerchild'
+import {TfiWorld} from 'react-icons/tfi'
+import {FiSearch,FiMessageSquare} from 'react-icons/fi'
+import {AiOutlineHeart} from 'react-icons/ai'
+import {VscAccount} from 'react-icons/vsc'
 
 
-
-
+const LinkStyle='mx-4 sm:mx-7 flex  flex-col items-center gap-1'
 
 //footer is going to be server render
 export  function PrimaryFooter(): JSX.Element {
   //check get auth state from initail root layout then conditionally render footerchild
   //path=router.patth
-
+  const active=false
+  const Svgstyle=active ? 'h-6  w-6  fill-themeColor': 'h-6 w-6 fill-gray-400 stroke-0    transition-all  hover:fill-themeColor'
   return (
     <main className='fixed bg-white  bottom-0  w-full border-gray-200'>
       <footer className=" p-2 flex justify-center items-center border-2  md:hidden">
-      <FooterChild page="Explore" active={false} />
-      <FooterChild page="WishList" active={false} />
-      <FooterChild page="Trips" active={false} />
-      <FooterChild page="Inbox" active={false} />
-      <FooterChild page="Profile" active={false} />
+
+      <Link href="/" className={LinkStyle}>
+        <FiSearch className='h-6 w-6  stroke-gray-400 hover:stroke-themeColor' />
+          <span className="text-xs ">Home</span>
+      </Link>
+
+      <Link href="/wishList" className={LinkStyle}>
+        <AiOutlineHeart className={Svgstyle} />
+          <span className="text-xs ">WishList</span>
+      </Link>
+
+      <Link href="/bookings" className={LinkStyle}>
+        <TfiWorld className={Svgstyle} />
+          <span className="text-xs ">Trips</span>
+      </Link>
+
+
+
+
+
+
+    {/* additional feature  */}
+      {/* <Link href="/" className={LinkStyle}>
+        <FiMessageSquare className={`h-6 w-6 stroke-gray-400 hover:stroke-themeColor`} />
+          <span className="text-xs ">Inbox</span>
+      </Link> */}
+
+      <Link href="/" className={LinkStyle}>
+        <VscAccount className={`h-6 w-6 fill-gray-400 hover:fill-themeColor`} />
+          <span className="text-xs ">Profile</span>
+      </Link>
+
+
+
       </footer>
     </main>
 
