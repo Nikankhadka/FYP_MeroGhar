@@ -6,8 +6,6 @@ import Carousel from '../../../components/carousel'
 import { BookProperty } from '../../../components/listing/booking'
 import Review from '../../../components/reviewCard'
 import Wish from '../../../components/Svg/wishSvg'
-import { BsFillHouseFill } from 'react-icons/bs'
-import { GrMapLocation } from 'react-icons/gr'
 import NavBar from '../../../components/navbar/navbar'
 import { Property } from '../../../interface/response'
 import { Reservation } from './page'
@@ -29,6 +27,7 @@ export function RoomClient({
   reservations,
 }: RoomProps) {
   const {
+    images,
     name,
     price,
     location,
@@ -68,18 +67,19 @@ export function RoomClient({
             <div className="flex items-center gap-x-3">
               <button className="flex items-center gap-1 rounded-lg p-1 hover:bg-hoverColor ">
                 <Wish active={inWishList} />
-                <span className="text-md font-semibold underline">save</span>
+                <span className="text-sm font-semibold underline">Save</span>
               </button>
 
               {user == 'owner' && (
-                <Link href="#" className="text-sm font-bold underline">
+                <Link href="#" className="text-sm font-semibold underline">
                   Edit
                 </Link>
               )}
             </div>
           </div>
         </div>
-        <Carousel />
+
+        <Carousel images={images!}/>
 
         {/* property Information  */}
 
@@ -88,16 +88,16 @@ export function RoomClient({
 
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
-                <h3 className=" text-lg md:text-xl font-semibold">
+                <h3 className=" text-md md:text-lg font-semibold">
                   {_.startCase(property_type)} Hosted by {userId}
                 </h3>
               </div>
 
-              <Link href="#" className="block">
+              <Link href={`/user/${userId}`} className="block" target='_blank'>
                 <img
                   src="/user.png"
                   alt="user"
-                  className="h-13 w-13 rounded-full"
+                  className="h-13 w-13 rounded-full p-1 ring-2 ring-gray-200"
                 />
               </Link>
             </div>
@@ -108,12 +108,12 @@ export function RoomClient({
             <div>
               <div className="flex items-center gap-x-3 ">
                 <BsHouses className="h-7 w-7" />
-                <p className="text-md font-semibold">{_.startCase(property_type)}</p>
+                <p className="text-sm font-semibold">{_.startCase(property_type)}</p>
               </div>
 
               <div className="my-4 flex items-center gap-x-3">
                 <HiOutlineMapPin className="h-7 w-7" />
-                <p className="text-md font-semibold">
+                <p className="text-sm font-semibold">
                   {location?.country},{location?.state},{location?.city}
                 </p>
               </div>
@@ -122,21 +122,21 @@ export function RoomClient({
             <hr className="my-5 border-gray-400" />
             {/* discription */}
             <div>
-              <h3 className="text-xl font-semibold text-black">
+              <h3 className=" text-md md:text-lg font-semibold text-black">
                 Description
               </h3>
-              <p className="text-md mt-2 text-gray-800 ">{_.startCase(discription)}</p>
+              <p className="text-sm sm:text-md mt-2 text-gray-800 ">{_.startCase(discription)}</p>
             </div>
             <hr className="my-5 border-gray-400" />
 
             {/* Amenities */}
             <div>
-              <h3 className="text-lg font-semibold text-black">Amenities</h3>
-              <div className="my-2">
+              <h3 className="text-md md:text-lg font-semibold text-black">What this place offers</h3>
+              <div className="my-1">
                 {amenities!.map((items) => {
                   return (
                     <div className="my-1 flex items-center gap-x-4">
-                      <p className='text-md text-gray-700 '>{items}</p>
+                      <p className='text-sm sm:text-md text-gray-700 '>{items}</p>
                     </div>
                   )
                 })}
@@ -147,22 +147,22 @@ export function RoomClient({
             {/* for Rules */}
             <div>
               <h3 className="text-lg font-semibold text-black">Rules</h3>
-              <p className="text-md text-gray-700">{rules![0]}</p>
+              <p className="text-sm sm:text-md text-gray-700">{_.startCase(rules![0])}</p>
             </div>
           </div>
           {/* interactive component for contacting owner */}
 
-          <BookProperty reservations={reservations} />
+          <BookProperty reservations={reservations} user={user} propertyData={propertyData} />
         </div>
 
+        {<div>
+          <hr className="my-8 border-gray-400" />
+          <Review />
+          
+        </div>}
+       
+
         <hr className="my-8 border-gray-400" />
-
-        {/* review Crud component */}
-
-        <Review />
-
-        <hr className="my-8 border-gray-400" />
-
         {/* REViews Section */}
         <div>
           {/* header block */}

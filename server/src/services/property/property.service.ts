@@ -49,24 +49,25 @@ export const getMyPropertiesS=async(page:string,limit:string,userId:string):Prom
 export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:Property,user:string,inWishList:boolean}>=>{
     try{
         if(userId!==""){
-            console.log("indie user")
+            console.log("indie user",userId)
             //check whether its a previous tennent 
             const userdocument=await userModel.findOne({userId});
 
 
-            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified");
+            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified");
             if(!propertyData) throw new Error("No property with the given id")
             
             //check whether property is in wishlist of the user
-            const inWishList=userdocument!.wishList.some((wish)=> wish.properties.includes(id))
+            const inWishList = userdocument!.wishList?.some((wish) => wish.properties.includes(id)) ?? false;
 
-            if(propertyData.tennants.includes(userdocument!._id)) return {property:propertyData,user:"tennant",inWishList}
+
+            if(propertyData?.tennants?.includes(userdocument!._id?.toString()) ?? false) return {property:propertyData,user:"tennant",inWishList}
 
             //check whether it is the property owner 
             const ownedProperty=await propertyModel.findOne({_id:id,userId});
             if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
 
-            //now for normal user 
+            //now for normal user/admin 
             return {property:propertyData,user:"user",inWishList}
 
             

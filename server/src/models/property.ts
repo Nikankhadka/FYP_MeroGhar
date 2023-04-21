@@ -34,7 +34,7 @@ const propertySchema=new Schema({
     //id of previus tennats
     tennants:{
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
-        default:undefined
+        default:[]
     },
     
     tennantId:Schema.Types.ObjectId,

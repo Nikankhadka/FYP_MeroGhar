@@ -50,7 +50,7 @@ interface kycSchema{
     recieved_Reviewcount: number
     wishList: {
       listName:string,
-      properties:string
+      properties:string[]
     }[],
     is_banned: {
       strikes: number
@@ -85,7 +85,7 @@ interface kycSchema{
       img_id: string;
       img_url: string;
     }[];
-    tennants: Types.ObjectId[];
+    tennants: string[];
     tennantId: Types.ObjectId;
     rating_count: number;
     viewCount: number;

@@ -28,7 +28,8 @@ interface props {
   index: number
 }
 export default function Card({ user, data, index }: props) {
-  const [img, setimg] = useState(0);
+  const [img,setimg] = useState(0);
+  
   
   const { images, _id, avg_Rating, location, price } = data!
 

@@ -6,3 +6,10 @@ declare global {
     confirmationResult:any
   }
 }
+
+
+declare module 'khalti-checkout-web'{
+  const value:any,
+  
+}
+

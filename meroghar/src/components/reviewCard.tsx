@@ -1,9 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import {AiFillStar} from 'react-icons/ai'
+import { ErrorText } from './random';
 
 export default function Review() {
-  const [isActive, setIsActive] = useState(0)
+  const [rate, setrate] = useState(0)
+  const [review,setreview]=useState("");
+  const [err,seterr]=useState(false);
+  
+  
 
   const rating = [1, 2, 3, 4, 5]
   return (
@@ -19,29 +25,20 @@ export default function Review() {
 
         {/* rating stars */}
         <div className='my-2'>
-          {rating.map((rate,index) => {
+          {rating.map((ratevalue,index) => {
             return (
               <button
                 onClick={(e) => {
-                  setIsActive(index)
+                  setrate(index)
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  className={
-                    index<=isActive
+                <AiFillStar className={
+                    index<=rate
                       ? 'h-7  w-7 fill-themeColor stroke-gray-100'
-                      : 'h-7 w-7 fill-gray-400  stroke-gray-100  transition-all  hover:stroke-themeColor'
-                  }
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                  />
-                </svg>
+                      : 'h-7 w-7 fill-gray-400  stroke-gray-300  transition-all  hover:fill-themeColor'
+                  }/>
+                
+                
               </button>
             )
           })}
@@ -53,11 +50,21 @@ export default function Review() {
           <textarea
             id="message"
             rows={4}
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block w-full rounded-lg border my-2 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             placeholder="Leave a comment..."
+            onChange={(e)=>setreview(e.target.value)}
           ></textarea>
 
-          <button className="my-2  block rounded-lg bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor">
+          {err&&<ErrorText  text='please Provide rating and review Both!'/>}
+          <button type='button' className="my-2  block rounded-lg bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor"
+          onClick={(e)=>{
+            e.preventDefault;
+            if(rate+1<1||review.length<=2){
+              return seterr(true)
+            }
+            console.log(rate+1,review);
+          }}
+          >
             submit
           </button>
         </form>

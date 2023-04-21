@@ -1,6 +1,7 @@
 import { IBooking } from "../../interfaces/dbInterface";
 import { bookingModel } from "../../models/booking";
 import { propertyModel } from "../../models/property";
+import { userModel } from "../../models/user";
 
 
 export const postBookingS=async(propId:string,userId:string,bookingDetail:Partial<IBooking>):Promise<boolean>=>{
@@ -33,6 +34,13 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
         });
 
         await newBooking.save();
+
+        //add user document id to this property ko tennant information
+        const userdoc=await userModel.findOne({userId});
+        const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
+            tennants:userdoc!._id}},{new:true});
+            
+        if(!addTennant)  throw new Error("failed to add user to tennant")
 
       return true
 
