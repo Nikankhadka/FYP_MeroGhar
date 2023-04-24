@@ -27,6 +27,7 @@ export default async function UserKycProfile({params:{userId}}:PageProps) {
  const userData=await getUserKyc(userId);
   
   const {kycInfo,email}=userData
+  console.log(kycInfo,email)
   return (
     <ClientComp>
       <main className="my-20 ml-0 md:my-10 md:ml-[230px] lg:ml-[260px]">
@@ -76,10 +77,10 @@ export default async function UserKycProfile({params:{userId}}:PageProps) {
           <hr className="my-8 border-gray-400" />
           {/* show users listing kind of pagination in map */}
           <h2 className=" mx-2 my-2 text-lg font-semibold">Listings</h2>
-          <div className="mx-auto my-2 grid w-full grid-cols-1 gap-x-2 gap-y-4 p-2 sm:grid-cols-2 md:grid-cols-3 ">
+          {/* <div className="mx-auto my-2 grid w-full grid-cols-1 gap-x-2 gap-y-4 p-2 sm:grid-cols-2 md:grid-cols-3 ">
             <Card />
             <Card />
-          </div>
+          </div> */}
 
           <Link href="#" className=" mx-2 my-2 text-sm font-semibold underline" >
             show Listings
@@ -139,7 +140,7 @@ function Profile({userData}:ProfileProps){
 
       <div className="my-3 flex flex-col gap-2">
         <div className="my-2 flex items-center gap-x-2">
-        {kyc.is_verified?<FiUserCheck className="h-6 w-6 stroke-themeColor  " />:
+        {kyc.isVerified?<FiUserCheck className="h-6 w-6 stroke-themeColor  " />:
           <FiUserMinus className="h-6 w-6 stroke-themeColor  " />}
           <span className="block">Identity Verified</span>
 
@@ -162,7 +163,7 @@ function Profile({userData}:ProfileProps){
 
 <div className=' my-5  flex  items-center justify-around '>
 <div className="flex items-center gap-x-2 ">
-    {kyc.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
+    {kyc.isVerified?<HiCheck className="h-6 w-6 fill-themeColor" />:
     <HiMinus className="h-6 w-6 fill-themeColor" />}
     <span>Identity</span>
   </div>

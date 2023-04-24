@@ -5,14 +5,10 @@ module.exports = {
 //the purgr property is used to remove unused css from the final build
 
   content: [
-    "./node_modules/flowbite-react/**/*.{js,ts,jsx,tsx}",
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx}"
-  ],
-  plugins: [
-    require("flowbite")
   ],
   darkMode:'class',
   theme: {

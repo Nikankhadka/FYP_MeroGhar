@@ -4,7 +4,7 @@ import { FiUserCheck,FiUserMinus } from 'react-icons/fi'
 import { HiStar,HiMinus } from 'react-icons/hi'
  
 import{HiCheck} from 'react-icons/hi'
-import { EditBasic } from './Edit'
+import { EditBasic } from './editProfile'
 import {useState} from 'react'
 import Link from 'next/link'
 import Card from '../card/card'
@@ -55,7 +55,7 @@ export default function Profile({userId,profileData}:ProfileProps) {
         
 
         <div className="my-2 flex items-center gap-x-2">
-        {kyc.is_verified?<FiUserCheck className="h-6 w-6 stroke-themeColor  " />:
+        {kyc.isVerified?<FiUserCheck className="h-6 w-6 stroke-themeColor  " />:
           <FiUserMinus className="h-6 w-6 stroke-themeColor  " />}
           <span className="block">Identity Verified</span>
 
@@ -78,7 +78,7 @@ export default function Profile({userId,profileData}:ProfileProps) {
 
 <div className=' my-5  flex  items-center justify-around '>
 <div className="flex items-center gap-x-2 ">
-    {kyc.is_verified?<HiCheck className="h-6 w-6 fill-themeColor" />:
+    {kyc.isVerified?<HiCheck className="h-6 w-6 fill-themeColor" />:
     <HiMinus className="h-6 w-6 fill-themeColor" />}
     <span>Identity</span>
   </div>

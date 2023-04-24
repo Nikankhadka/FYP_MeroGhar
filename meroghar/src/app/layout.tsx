@@ -1,19 +1,20 @@
 
 import '../styles/globals.css'
-import NavBar from '../components/navbar/navbar'
+
 import { cookies } from 'next/headers';
 
-import  { PrimaryFooter, SecondaryFooter } from '../components/footer'
-import AdminNav from '../components/navbar/DashboardNav';
-import DashboardNav from '../components/navbar/DashboardNav';
+import  { PrimaryFooter} from '../components/footer'
+
 import { Nunito } from 'next/font/google'
 import ClientComp from '../components/clientComp';
-import Modal from '../components/modals/modal';
+
 import { LoginModal } from '../components/modals/loginModal';
 import { RegisterModal } from '../components/modals/registerModal';
 
 import ToasterProvider from '../components/toast/toastProvider';
 import { ConfirmModal } from '../components/modals/confirmModal';
+import { MessageModal } from '../components/modals/kycmessage';
+import { BookingModal } from '../components/modals/bookingModal';
 //seup conditional root layout for admin and normal user so only url for somethings might differ
 
 const getUser=async()=>{
@@ -81,6 +82,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
            <LoginModal />
            <RegisterModal />
            <ConfirmModal />
+           <MessageModal />
+           <BookingModal />
           
            
         </ClientComp>

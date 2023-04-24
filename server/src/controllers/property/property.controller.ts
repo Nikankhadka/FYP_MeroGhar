@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, deletePropertyS} from "../../services/property/property.service";
+import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, deletePropertyS, getMyPropertiesS, getPropertiesS} from "../../services/property/property.service";
 
 
 
@@ -7,11 +7,11 @@ import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, del
 
 export const createPropertyC=async(req:Request,res:Response)=>{
     try{
-        //check kyc verifcation 
-        //if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});
+        // check kyc verifcation 
+        if(!req.userData.kycVerified) return res.status(403).json({success:false,error:"Kyc not Verified/Unauthorized user"});
         console.log(req.body)
         const newProperty=await createPropertyS(req.userData.userId,req.body)
-        return res.status(200).json({success:true,message:"Property sent for further verification"})
+        if(newProperty)return res.status(200).json({success:true,message:"Property sent for further verification"})
     }catch(e:any){
         console.log(e);
         res.status(400).json({success:false,error:e.message})
@@ -25,6 +25,30 @@ export const getPropertyByIdC=async(req:Request,res:Response)=>{
             return res.status(200).json({success:true,propertyData})
         }
         const propertyData=await getPropertyByIdS(req.params.id,req.userData.userId);
+        return res.status(200).json({success:true,propertyData})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+export const getPropertiesC=async(req:Request,res:Response)=>{
+    try{
+        // if(req.userData.userId==""){
+        //     const propertyData=await getPropertyByIdS(req.params.id,"");
+        //     return res.status(200).json({success:true,propertyData})
+        // }
+        const propertyData=await getPropertiesS(req.query.page as string,req.query.limit as string);
+        return res.status(200).json({success:true,propertyData})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+export const getMyPropertiesC=async(req:Request,res:Response)=>{
+    try{
+
+        const propertyData=await getMyPropertiesS(req.query.page as string,req.query.limit as string,req.userData.userId)
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);

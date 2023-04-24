@@ -64,7 +64,7 @@ interface phone {
       const formatPh = '+' + ph
       console.log(formatPh)
       signInWithPhoneNumber(auth, formatPh, appVerifier)
-        .then((confirmationResult) => {
+        .then((confirmationResult : any) => {
           window.confirmationResult = confirmationResult
           setLoading(false)
           setShowOTP(true)

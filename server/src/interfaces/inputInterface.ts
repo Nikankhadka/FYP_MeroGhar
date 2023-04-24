@@ -16,7 +16,6 @@ export interface KycData{
     lastName:string,
     gender:string,
     email?:string,
-    phoneNumber:string,
     address:{
         country:string,
         city:string
@@ -24,8 +23,22 @@ export interface KycData{
     img:{
         img_id:string,
         img_url:string
-    }
+    },
+    phoneNumber?:string,
     }
     
 }
 
+
+export interface BookingInput {
+    startDate: Date;
+    endDate: Date;
+    guest: string;
+    payerId: string;
+    initialAmount: number;
+    serviceCharge: number;
+    totalAmount: number;
+    paymentId: string;
+    Stay: number;
+  }
+  

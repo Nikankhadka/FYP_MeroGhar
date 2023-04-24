@@ -1,9 +1,25 @@
-import mongoose from "mongoose"
+import mongoose, { Types, model } from "mongoose"
+import { Payment } from "../interfaces/dbInterface"
 
- export const paymentSchema=new mongoose.Schema({
-        tennant_id:{type:String,required:true},
-        owner_id:{type:String,required:true},
-        property_id:{type:String,required:true},
-        payment_Date:{type:Date,default:Date.now},
-        amount:{type:Number,required:true},
+ const paymentSchema=new mongoose.Schema({
+        //make string for now
+        tennantId:String,
+        payerId:String,
+        ownerId:{type:String,required:true},
+        propertyId:{type:String,required:true},
+        paymentDate:{type:Date,default:Date.now},
+        initialAmount:Number,
+        serviceCharge:Number,
+        totalAmount:Number,
+        stay:Number,
+        bookingId:Types.ObjectId,
+        id:String,
+
+        // will contain bill image from cloudinary
+        // billImg:String,
+        // billId:String, 
 })
+
+const paymentModel=model<Payment>('payments',paymentSchema);
+
+export default paymentModel;

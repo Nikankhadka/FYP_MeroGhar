@@ -39,7 +39,8 @@ export async function getMe():Promise<FetchedMe>{
             method: 'GET',
             credentials: 'include',
             headers: { cookie: getAccessToken()},
-            cache:'no-store'
+            cache:'no-store',
+            next:{revalidate:10}
           }
         ).then(res=>res.json())
   
@@ -99,7 +100,7 @@ export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
     
       
       const kycRequests = await fetch(
-          `http://localhost:2900/admin/v1/kycRequests`,
+          `http://localhost:2900/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',

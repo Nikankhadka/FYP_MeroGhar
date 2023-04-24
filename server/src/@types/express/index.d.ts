@@ -11,6 +11,7 @@ declare namespace Express {
     
     // this data is set after the token is verified
     userData:{
+      docId:string,
       userId:string,
       is_Admin:boolean,
       kycVerified:boolean

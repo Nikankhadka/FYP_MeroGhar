@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
+import { bookingModel } from "../../models/booking";
 
 
 
@@ -28,32 +29,67 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
     }
 }
 
+export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const properties=await propertyModel.find({userId}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        if(!properties) throw new Error("No property listedby the user")
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
+}
+
+export const getPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const properties=await propertyModel.find({}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({name:"asc"})
+        if(!properties) throw new Error("No properties rightNow")
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
+}
+
+
 export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:Property,user:string,inWishList:boolean}>=>{
     try{
         if(userId!==""){
-            
+            console.log("indie user",userId)
             //check whether its a previous tennent 
             const userdocument=await userModel.findOne({userId});
 
 
-            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified");
             if(!propertyData) throw new Error("No property with the given id")
             
             //check whether property is in wishlist of the user
-            const inWishList=userdocument!.wishList.some((wish)=> wish.properties.includes(id))
+            const inWishList = userdocument!.wishList?.some((wish) => wish.properties.includes(id)) ?? false;
 
-            if(propertyData.tennants.includes(userdocument!._id)) return {property:propertyData,user:"tennant",inWishList}
+
+            if(propertyData?.tennants?.includes(userdocument!._id?.toString()) ?? false) return {property:propertyData,user:"tennant",inWishList}
 
             //check whether it is the property owner 
             const ownedProperty=await propertyModel.findOne({_id:id,userId});
             if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
 
-            //now for normal user 
+            //now for normal user/admin 
             return {property:propertyData,user:"user",inWishList}
 
             
         }
-        const propertyData=await propertyModel.findOne({_id:id,is_verified:{status:true}}).select("-tennants -tennantId -is_banned -is_verified.pending -is_verified.message -is_verified.");
+        console.log("no user inside service")
+        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified");
         if(!propertyData) throw new Error("Proper data fetching failed")
         return {property:propertyData,user:"",inWishList:false};
         
@@ -98,6 +134,25 @@ export const deletePropertyS=async(userId:string,propertyId:string):Promise<bool
         const checkProperty=await propertyModel.findOne({_id:propertyId,userId});
         if(!checkProperty) throw new Error("Invalid Delete Request/No property with the User exist");
 
+
+        //check if booking for the property exist if then cant delete 
+        const currentDate = new Date();
+        const bookingExist=await bookingModel.findOne({
+            propertyId,
+            $or: [
+                {
+                    startDate: {$gt: currentDate},
+                    endDate: {$gt: currentDate},
+                },
+                {
+                    startDate: {$lt: currentDate},
+                    endDate: {$gte: currentDate},
+                },
+            ],
+        }).exec();
+
+        if(bookingExist) throw new Error("Property cant be removed/Booking Exist");
+        
         //now delete
         const deleteProperty=await propertyModel.findOneAndDelete({_id:propertyId,userId});
         if(!deleteProperty) throw new Error("Propery Delete failed");

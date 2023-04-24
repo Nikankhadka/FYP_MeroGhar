@@ -40,7 +40,7 @@ interface kycSchema{
     is_Admin: boolean
     kycInfo:kycSchema,
     kyc: {
-      is_verified: boolean
+      isVerified: boolean
       message: string
       approvedBy: string
       pending:boolean
@@ -50,7 +50,7 @@ interface kycSchema{
     recieved_Reviewcount: number
     wishList: {
       listName:string,
-      properties:string
+      properties:string[]
     }[],
     is_banned: {
       strikes: number
@@ -73,8 +73,8 @@ interface kycSchema{
     url: string;
     location: {
       country: string;
+      state: string;
       city: string;
-      area: string;
     };
     discription: string;
     property_type: string;
@@ -85,11 +85,7 @@ interface kycSchema{
       img_id: string;
       img_url: string;
     }[];
-    tennants: Types.ObjectId[];
-    currentStatus: {
-      availability: boolean;
-      availableAfter: Date;
-    };
+    tennants: string[];
     tennantId: Types.ObjectId;
     rating_count: number;
     viewCount: number;
@@ -136,5 +132,22 @@ export interface IBooking{
   createdAt:Date,
   startDate:Date,
   endDate:Date,
-  guest:string
+  guest:number
+}
+
+
+export interface Payment {
+  tennantId: string;
+  bookingId:string
+  payerId: string;
+  ownerId: string;
+  propertyId: Types.ObjectId;
+  paymentDate: Date;
+  initialAmount: number;
+  serviceCharge: number;
+  totalAmount: number;
+  stay: number;
+  id:string
+  // billImg?: string;
+  // billId?: string;
 }

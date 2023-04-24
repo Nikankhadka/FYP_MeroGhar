@@ -1,7 +1,8 @@
+import { IBooking } from "../../../interface/response";
 import Api from "../../client/axios";
 
 
-
+import { getAccessToken } from "../auth";
   
 export default async function getReservations(propertyId:string,user:string,page?:number,limit?:number){
     try {
@@ -53,3 +54,29 @@ export default async function getReservations(propertyId:string,user:string,page
       throw error;
     }
   }
+
+
+
+  export async function getPropertyBookings(id:string):Promise<Partial<IBooking>[]>{
+    try{
+      
+       
+        const res = await fetch(
+            `http://localhost:2900/property/v1/booking/propertyBooking/${id}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: { cookie: getAccessToken()},
+              cache:'no-store'
+            }
+          ).then(res=>res.json())
+    
+        if(!res.success) throw new Error("failed to fetch Property reservations")
+        
+        console.log("my properties",res);
+        return res.reservations;
+  
+        
+    }catch(e){
+       throw e;
+    }}

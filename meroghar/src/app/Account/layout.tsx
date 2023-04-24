@@ -2,8 +2,7 @@
 import SideBar from '../../components/sidebar';
 import DashboardNav from '../../components/navbar/DashboardNav';
 import ClientComp from '../../components/clientComp';
-import ToasterProvider from '../../components/toast/toastProvider';
-import { ConfirmModal } from '../../components/modals/confirmModal';
+import { checkSession } from '../../api/server/auth';
 
 
 
@@ -13,7 +12,7 @@ import { ConfirmModal } from '../../components/modals/confirmModal';
 export default async function Layout({children}: {children: React.ReactNode}) {
 
 
- 
+  const {session,userData}=await checkSession()
   
 
   return (
@@ -21,11 +20,16 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       <main className=' flex flex-col'>
       
 
-
-       <DashboardNav />
+        <ClientComp>
+        <DashboardNav />
+        </ClientComp>
+      
         {/* this children represents each page component  that is rendered */}
         {children}
-        <SideBar is_Admin={true} menu={false}  />
+        <ClientComp>  
+        <SideBar is_Admin={userData.is_Admin} menu={false}  />
+        </ClientComp>
+        
         
         
       </main>

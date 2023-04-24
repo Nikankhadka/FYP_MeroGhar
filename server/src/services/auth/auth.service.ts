@@ -2,6 +2,7 @@ import { userModel } from "../../models/user";
 
 declare module "jsonwebtoken" {
      interface JwtPayload {
+        docId:string,
        userId: string,
        is_Admin:boolean,
        kycVerified:boolean
@@ -75,7 +76,7 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
         if(!verifiedUser) throw new Error("Invalid User Credentials")
         
         //since user is been verfied 
-         const {accessToken,refreshToken}=await generateTokens(userId,foundUser.is_Admin,foundUser.kyc.is_verified);
+         const {accessToken,refreshToken}=await generateTokens(foundUser._id.toString(),userId,foundUser.is_Admin,foundUser.kyc.isVerified);
 
         //now append refresh token to userdocument 
          const tokenStored=await foundUser.refreshToken.push(refreshToken);
@@ -84,7 +85,7 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
         //throw error or return false 
         if(!tokenStored) throw new Error("Token storage failed")
 
-        return {success:true,accessToken,refreshToken,user:{userId:foundUser._id,is_Admin:foundUser.is_Admin,img:foundUser.profileImg.imgUrl}}
+        return {success:true,accessToken,refreshToken,user:{userId,docId:foundUser._id,is_Admin:foundUser.is_Admin,img:foundUser.profileImg.imgUrl,kycVerified:foundUser.kyc.isVerified}}
 
     }catch(e){
         console.log(e)
@@ -98,11 +99,11 @@ export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
 
 
 //service layer to verify token along with user in db
-export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{userId:string,is_Admin:boolean,kycVerified:boolean}}>=>{
+export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tokendata:{docId:string,userId:string,is_Admin:boolean,kycVerified:boolean}}>=>{
     try{
         console.log('atoken',token)
         //if token is expire or error here it will be cathced and handled
-       const {userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(token,process.env.accessToken!)
+       const {docId,userId,is_Admin,kycVerified}=await <jwt.JwtPayload> jwt.verify(token,process.env.accessToken!)
        console.log('token verified')
        console.log(userId,is_Admin,kycVerified)
         const isValid=await userModel.findOne({userId,is_Admin});
@@ -110,7 +111,7 @@ export const verifyAccessTokenS=async(token:string):Promise<{success:boolean,tok
         
         
         //now since tokenn data is validated just return query status and token data
-        return {success:true,tokendata:{userId,is_Admin,kycVerified}}
+        return {success:true,tokendata:{docId,userId,is_Admin,kycVerified}}
 
     }catch(e){
         console.log(e)
@@ -130,8 +131,8 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
             if(!foundUser){
                
                     //hacked user
-                    const {userId,is_Admin,kycVerified} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
-                    const hackedUser=await userModel.findOne({userId,is_Admin,kyc:{is_verified:kycVerified}})
+                    const {userId,is_Admin,kycVerified,docId} =await <jwt.JwtPayload>jwt.verify(refreshToken,process.env.refreshToken!)
+                    const hackedUser=await userModel.findOne({userId,is_Admin})
                     if(!hackedUser) throw new Error("Invalid token data, user not valid")
                     //if user is hacked
                     hackedUser.refreshToken=[]
@@ -151,17 +152,17 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
 
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
-                        userId, is_Admin,kycVerified
+                        userId, is_Admin,kycVerified,docId:foundUser._id
                     },process.env.accessToken!,{expiresIn:"900s"})
             
                     const newrefreshToken=await jwt.sign({
-                        userId,is_Admin,kycVerified
+                        userId,is_Admin,kycVerified,docId:foundUser._id
                     },process.env.refreshToken!,{expiresIn:"7 days"})
             
                     //store refrehtoken 
                     foundUser.refreshToken = await [...newRefreshTokenArray, newrefreshToken];
                     await foundUser.save();
-                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken},user:{userId:foundUser._id,is_Admin,img:foundUser.profileImg.imgUrl}};
+                    return {success:true,message:"refresh Token verfied Successfully",tokens:{newaccessToken,newrefreshToken},user:{userId,docId:foundUser._id,is_Admin,img:foundUser.profileImg.imgUrl,kycVerified:foundUser.kyc.isVerified}};
 
 
                 }catch(e){
@@ -183,7 +184,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
 }
 
         
-export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:Types.ObjectId,is_Admin:boolean,img:string}}>=>{
+export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,docId:Types.ObjectId,is_Admin:boolean,img:string,kycVerified:boolean}}>=>{
     try{
         
         const{userName,email,profile_Img}=profileData
@@ -191,12 +192,12 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
             console.log("user with email exist")
-            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin,userExist.kyc.is_verified);
+            const{accessToken,refreshToken}=await generateTokens(userExist._id.toString(),email,userExist.is_Admin,userExist.kyc.isVerified);
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
             console.log(userExist.profileImg);
-            return {accessToken,refreshToken,user:{userId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl}};
+            return {accessToken,refreshToken,user:{userId:email,docId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl,kycVerified:userExist.kyc.isVerified}};
         }
 
         //since no user create new user
@@ -218,7 +219,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         await newUser.save();
         console.log('newuser profile',newUser.profileImg)
         if(!newUser) throw new Error("new user creation failed")
-        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
+        const{accessToken,refreshToken}=await generateTokens(newUser._id.toString(),email,newUser.is_Admin,newUser.kyc.isVerified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
@@ -227,7 +228,7 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
         console.log("before mail send function or template is passed",userName,email)
         //dont need to wait as it takes time to send mail
         sendMail(signupMailTemplate(userName,email))
-        return {accessToken,refreshToken,user:{userId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl}};
+        return {accessToken,refreshToken,user:{userId:email,docId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl,kycVerified:newUser.kyc.isVerified}};
         
 
     }catch(e){
@@ -236,17 +237,17 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
     }
 }
 
-export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:Types.ObjectId,is_Admin:boolean,img:string}}>=>{
+export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToken:string,refreshToken:string,user:{userId:string,docId:Types.ObjectId,is_Admin:boolean,img:string,kycVerified:boolean}}>=>{
     try{
          //here email will contain facebook id
         const{userName,email,profile_Img}=profileData
         const userExist=await userModel.findOne({userId:email})
         if(userExist){ 
-            const{accessToken,refreshToken}=await generateTokens(email,userExist.is_Admin,userExist.kyc.is_verified);
+            const{accessToken,refreshToken}=await generateTokens(userExist._id.toString(),email,userExist.is_Admin,userExist.kyc.isVerified);
             //push refresh token into userdb
             const tokenStored=await userExist.refreshToken.push(refreshToken);
             await userExist.save();
-            return {accessToken,refreshToken,user:{userId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl}};
+            return {accessToken,refreshToken,user:{userId:email,docId:userExist._id,is_Admin:userExist.is_Admin,img:userExist.profileImg.imgUrl,kycVerified:userExist.kyc.isVerified}};
         }
 
         //since no user create new user
@@ -260,11 +261,11 @@ export const facebookLoginS=async(profileData:googleProfile):Promise<{accessToke
         })
         await newUser.save();
         if(!newUser) throw new Error("new user registration failed")
-        const{accessToken,refreshToken}=await generateTokens(email,newUser.is_Admin,newUser.kyc.is_verified);
+        const{accessToken,refreshToken}=await generateTokens(newUser._id.toString(),email,newUser.is_Admin,newUser.kyc.isVerified);
             //push refresh token into userdb
         const tokenStored=await newUser.refreshToken.push(refreshToken);
         await newUser.save();
-        return {accessToken,refreshToken,user:{userId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl}};
+        return {accessToken,refreshToken,user:{userId:email,docId:newUser._id,is_Admin:newUser.is_Admin,img:newUser.profileImg.imgUrl,kycVerified:newUser.kyc.isVerified}};
         
 
     }catch(e){

@@ -5,15 +5,27 @@ import Link from 'next/link'
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
 import {FiEdit} from 'react-icons/fi'
 import {RiDeleteBin6Fill} from 'react-icons/ri'
-import  {PropertyRow, TableHeader } from '../Row'
+import  {PropertyRow, TableHeader } from '../../../components/Row'
 import {useState} from 'react'
-import PostPropertyForm from '../postproperty'
+import PostPropertyForm from '../../../components/postproperty'
+import { Property } from '../../../interface/response'
+import Card from '../../../components/card/card'
+import useRandom from '../../../customHoooks/randomStore'
+import { toast } from 'react-hot-toast'
 
-export default function ListingComp() {
 
-    const [listPorperty,setlistProperty]=useState(false)
-    const columnHeader=["Listing","View","Status","Host","Price","Actions"]
-    const rowData=['Room1','room2' ,'room3','room4']
+interface Props{
+  is_Admin:boolean,
+  properties:Partial<Property>[]
+  kycVerified?:boolean
+}
+
+export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
+
+    const list=useRandom();
+
+    
+
 
   return (
     <main>
@@ -40,48 +52,66 @@ export default function ListingComp() {
                 </div>
               </form>
             </div>
-            <button
+
+      {/* only for normal user */}
+            {!is_Admin&&<button
               className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 rounded-lg bg-themeColor px-5 py-2.5 text-sm font-medium text-white hover:bg-mainColor focus:outline-none focus:ring-4"
               type="button"
               onClick={(e)=>{
                 e.preventDefault();
-                setlistProperty(!listPorperty)
+                if(!kycVerified){
+                  return toast.error("Please Verify Kyc to List Property!")
+                }
+                list.onList("list")
               }}
               >
               List Property
-            </button>
+            </button>}
+
+
           </div>
         </div>
       </div>
      
-        {
-          listPorperty&&<PostPropertyForm setlistProperty={setlistProperty}/>
-        }
+
+     {properties?.length!>0&&<div>
+               {/* only available for kyc verified user */}
+        
           
-           {!listPorperty&&<div className="overflow-hidden shadow border-2 border-red-500">
+
+           {list.listPorperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
              
     
-                <TableHeader /> 
+               
                 {
-                    rowData.map((data)=>{
+                    properties!.map((property,index)=>{
                         return(
-                            <div>
-                              <PropertyRow />
-                            </div>
+                            // property card
+                            <Card user={is_Admin? 'admin':'user'} data={property} index={index}/>
+                    
                             
                         )
                     })
                 }
 
                 
-              
-            </div>}
-          
-        
+              </div>
+            }
+     </div>}
+       
+
+
+          {/* property lisiting form  */}
+        {
+          list.listPorperty=='list'&&<PostPropertyForm isUpdate={false}/>
+        }
+         {
+          list.listPorperty=='edit'&&<PostPropertyForm isUpdate={true} propertyData={properties[list.propIndex]}/>
+        }
      
 
       {/* paginatioon footer */}
-      {!listPorperty&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+      {list.listPorperty=='close'&&properties?.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
         <div className="flex items-center space-x-3">
           <Link
             href="#"

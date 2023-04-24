@@ -38,7 +38,7 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
     try{
         const kycVerify=joi.object({
             isVerified:joi.boolean().required(),
-            message:joi.string().min(10).optional(),
+            message:joi.string().optional(),
         })
 
         const{error,value}=kycVerify.validate(req.body,{abortEarly:false})
@@ -57,7 +57,8 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
 
 export const getPropertyRequestsC=async(req:Request,res:Response)=>{
     try{   
-        const propertyRequests=await getPropertyRequestsS()
+
+        const propertyRequests=await getPropertyRequestsS(req.query.page as string,req.query.limit as string)
         return res.status(200).json({success:true,propertyRequests})
     }catch(e:any){
         console.log(e)

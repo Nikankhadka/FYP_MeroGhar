@@ -3,7 +3,7 @@
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
 import { ErrorText } from '../random'
 import {useState} from 'react'
-import { uploadImage } from '../../api/client/user'
+import { uploadImage } from '../../api/client/uploadImag'
 import {  toast } from 'react-hot-toast'
 import Api from '../../api/client/axios'
 import useConfirm from '../../customHoooks/useConfirm'

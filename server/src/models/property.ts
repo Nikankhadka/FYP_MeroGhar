@@ -16,8 +16,8 @@ const propertySchema=new Schema({
     url:String,
     location:{
         country:String,
+        state:String,
         city:String,
-        area:String,
 
     },
     discription:{type:String,required:true},
@@ -34,13 +34,9 @@ const propertySchema=new Schema({
     //id of previus tennats
     tennants:{
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
-        default:undefined
+        default:[]
     },
-    //this can be used to set the current property status for booking
-    currentStatus:{
-        availability:Boolean,
-        availableAfter:Date
-    },
+    
     tennantId:Schema.Types.ObjectId,
 
     //calculate these on write

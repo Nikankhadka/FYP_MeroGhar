@@ -31,7 +31,8 @@ export interface KycData{
   img?:{
       imgId:string,
       imgUrl:string
-  }
+  },
+  phoneNumber?:string
   }
   
 }

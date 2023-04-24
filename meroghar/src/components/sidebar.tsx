@@ -13,7 +13,9 @@ import {ImUserCheck} from 'react-icons/im'
 
 import {BiLogOut} from 'react-icons/bi'
 import { forwardRef } from 'react'
-
+import Api from '../api/client/axios'
+import toast from 'react-hot-toast'
+import { redirect, useRouter } from 'next/navigation'
 interface props{
     is_Admin:boolean
     menu:boolean
@@ -22,11 +24,13 @@ interface props{
 type Ref = HTMLDivElement;
 
 import {useState} from 'react'
+
 // takes in role and renders some element while others dont 
 const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
     const trans='-translate-x-full '
     const [account,setaccount]=useState(false)
+    const router=useRouter()
 
   return (
       <div className={`fixed top-[80px] w-[100%] bg-slate-500 bg-opacity-50 left-0 z-20 h-screen sm:w-64  border-r-2 border-gray-200 shadow-lg transition-transform ${props.menu?'':trans} md:translate-x-0 md:top-0 md:w-[220px] lg:w-64 sm:bg-white sm:opacity-100`}
@@ -195,15 +199,24 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             
             <div className=''>
             
-            <Link
-              href="#"
+            <button
+              onClick={(e)=>{
+                e.preventDefault();
+                const res= Api.delete('/auth/v1/logout',{withCredentials:true}).then((res)=>{
+                    toast.success("User logged Out");
+                    return router.push('/Home')
+                }).catch((e)=>{
+                  toast.success("User logged Out");
+                  return router.push('/Home')
+                
+            })}}
               className=" group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <BiLogOut className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Log out
               </span>
-            </Link>
+            </button>
             </div>
             
 

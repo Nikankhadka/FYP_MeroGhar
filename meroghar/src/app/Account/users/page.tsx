@@ -13,7 +13,7 @@ export default  async function KycRequest(){
 
   if(KycRequests.length===0){
     return(
-      <main className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
+      <main className="ml-0 my-20  md:ml-[230px] md:my-10 lg:ml-[260px]">
         <p className="text-lg font-semibold text-center"> No Kyc Requests To Verify</p>
       </main>
     )

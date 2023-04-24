@@ -12,7 +12,7 @@ const bookingSchema=new Schema({
     },
     startDate:Date,
     endDate:Date,
-    guest:String
+    guest:Number
     
 
     //like pending or verified something like that

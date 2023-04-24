@@ -121,7 +121,7 @@ export const userSchema=new Schema({
         
         //kyc verification status
         kyc:{
-            is_verified:{type:Boolean,default:false},
+            isVerified:{type:Boolean,default:false},
 
             // can be used to fetch information and other things
             pending:{
@@ -140,12 +140,15 @@ export const userSchema=new Schema({
         recieved_Reviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
-        wishList:[
+        wishList:{type:[
             {
                 listName:String,
-                properties:[{type:Schema.Types.ObjectId,ref:"properties"}]
+                properties:{type:[{type:Schema.Types.ObjectId,ref:"properties"}]}
             }
-        ]
+            
+        ],
+        default:[]
+    }
         ,
            
         
@@ -163,7 +166,7 @@ export const userSchema=new Schema({
 
         rentedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
-            default:undefined
+            default:[]
         },
 
         //for recommendation colloborative information data will be rating and review 
@@ -174,7 +177,7 @@ export const userSchema=new Schema({
 
         viewedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
-            default:undefined
+            default:[]
         },
 
         

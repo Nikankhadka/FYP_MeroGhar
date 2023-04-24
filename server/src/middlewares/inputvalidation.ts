@@ -63,7 +63,19 @@ export const validateBooking=async(req:Request,res:Response,next:NextFunction)=>
         const bookingSchema=joi.object({
             startDate:joi.date().required(),
             endDate:joi.date().required(),
-            guest:joi.string().required()
+            guest:joi.number().required(),
+            payerId:joi.string().required(),
+            // imgId:joi.string().required(),
+            // imgUrl:joi.string().required(),
+            initialAmount:joi.number().required(),
+            serviceCharge:joi.number().required(),
+            totalAmount:joi.number().required(),
+            paymentId:joi.string().required(),
+            //for how many days
+            stay:joi.number().required(),
+           // propertyId:joi.string().required(), in route param
+
+
         })
 
       
@@ -101,7 +113,9 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
             img:{
                 imgId:joi.string().required(),
                 imgUrl:joi.string().required()
-            }
+            },
+            phoneNumber:joi.string().allow('').optional()
+
         })
 
         //calls the validate method to check the value with schema  and validates both property to generate error response
@@ -150,6 +164,8 @@ export const validatePropertyInput = async(req: Request, res: Response, next: Ne
 
 export const validatePropertyUpdate = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+        console.log(req.body)
         const PropertySchema = joi.object({
             name: joi.string().optional(),
             location:{
@@ -157,15 +173,16 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
                 state: joi.string().optional(),
                 city: joi.string().optional(),
             },
-            discription: joi.string().min(15).optional(),
+            discription: joi.string().optional(),
             property_type: joi.string().optional(),
-            rules: joi.array().items(joi.string()).optional(),
+            rules:joi.string().optional(),
             amenities: joi.array().items(joi.string()).optional(),
             price: joi.number().optional(),
-            images: joi.array().items(
+            images:joi.array().items(
                 {
                     img_id: joi.string().optional(),
                     img_url: joi.string().optional(),
+                    _id:joi.string().optional()
                 }
             ).optional()
         });

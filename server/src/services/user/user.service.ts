@@ -21,8 +21,12 @@ dotenv.config()
 
 export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     try{
-    
-        const userData=await userModel.findOne({_id:id}).select("-password -Token -userId -refreshToken -updated_At -is_Admin -wishList  -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.is_verified kycInfo.phoneNumber");
+        
+            const validId = /^[a-f\d]{24}$/i.test(id) ? id : null;
+
+
+        const query = validId? { $or: [{ _id: validId }, { userId: validId }] }:{ userId:id };
+        const userData=await userModel.findOne(query).select("-password -Token -userId -refreshToken -updated_At -is_Admin -wishList  -isBanned -rentedProperty -viewedProperty -recommendation ").select("kyc.isVerified kycInfo.phoneNumber");
         
         
         if(!userData) throw new Error("Failed to fetch userData")

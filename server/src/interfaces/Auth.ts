@@ -4,7 +4,7 @@ export interface LSR1 {
   success: boolean;
   accessToken: string;
   refreshToken: string;
-  user: { userId:Types.ObjectId; is_Admin: boolean,img:string };
+  user: {userId:string,docId:Types.ObjectId; is_Admin: boolean,img:string,kycVerified:boolean };
 }
 
 export interface googleProfile {
@@ -17,5 +17,5 @@ export interface refreshTService {
   success: boolean;
   message: string;
   tokens: { newaccessToken: string; newrefreshToken: string };
-  user: { userId: Types.ObjectId; is_Admin: boolean,img:string};
+  user: {userId:string, docId: Types.ObjectId; is_Admin: boolean,img:string,kycVerified:boolean};
 }

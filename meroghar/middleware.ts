@@ -45,7 +45,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
     //since cookie accessed does not match the format of cookie passed in header modify it then pass as cookie so it can be parse by cookie parser
     const cookies=`refreshToken=${refreshToken}`
     console.log('sessionin middleware',session)
-    if(!refreshToken) return NextResponse.redirect('http://localhost:3000/login')
+    if(!refreshToken) return NextResponse.redirect('http://localhost:3000/Home/login')
     if(session){
     return res;  
     }
@@ -69,7 +69,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       if (!jsonData.success){
         //clear cookie in client side since token is refresh is failed the old token will be unauthorized
         await res.cookies.delete('accessToken').delete('refreshToken').delete('session')
-        return NextResponse.redirect('http://localhost:3000/login')
+        return NextResponse.redirect('http://localhost:3000/Home/login')
       }
        
 

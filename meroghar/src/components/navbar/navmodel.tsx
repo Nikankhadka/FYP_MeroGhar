@@ -7,7 +7,9 @@ import useLoginModal from "../../customHoooks/useModal"
 
 import Modal from "../modals/modal"
 import useModal from "../../customHoooks/useModal"
-
+import Api from "../../api/client/axios"
+import { toast } from "react-hot-toast"
+import {redirect, useRouter} from 'next/navigation'
 
 
 const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover:bg-hoverColor"
@@ -21,7 +23,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
  const InititailModalC =forwardRef<Ref,InitiailModal>((props,ref):JSX.Element=>{
     const modal=useModal();
-
+    const router=useRouter()
 
   if(!props.authState){
     return(
@@ -62,7 +64,17 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
         <Link  href='/Account/listings' className={`${btnstyle}`}>Manage Listings</Link>
         <Link  href='/Account' className={`${btnstyle}`}>Account</Link>
         <hr />
-        <button className={btnstyle}>Log Out</button>
+        <button className={btnstyle}  onClick={(e)=>{
+                e.preventDefault();
+                const res= Api.delete('/auth/v1/logout',{withCredentials:true}).then((res)=>{
+                    toast.success("User logged Out");
+                    return router.push('/Home')
+                }).catch((e)=>{
+                  toast.success("User logged Out");
+                    return router.push('/Home')
+                })
+                
+            }}>Log Out</button>
     </div>
 )
 
