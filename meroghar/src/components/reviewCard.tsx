@@ -56,7 +56,7 @@ export default function Review() {
           ></textarea>
 
           {err&&<ErrorText  text='please Provide rating and review Both!'/>}
-          <button type='button' className="my-2  block rounded-lg bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor"
+          <button type='button' className="my-2  block rounded-lg font-semibold bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor"
           onClick={(e)=>{
             e.preventDefault;
             if(rate+1<1||review.length<=2){
@@ -65,7 +65,7 @@ export default function Review() {
             console.log(rate+1,review);
           }}
           >
-            submit
+            Submit
           </button>
         </form>
       </div>

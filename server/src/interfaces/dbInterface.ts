@@ -132,5 +132,22 @@ export interface IBooking{
   createdAt:Date,
   startDate:Date,
   endDate:Date,
-  guest:string
+  guest:number
+}
+
+
+export interface Payment {
+  tennantId: string;
+  bookingId:string
+  payerId: string;
+  ownerId: string;
+  propertyId: Types.ObjectId;
+  paymentDate: Date;
+  initialAmount: number;
+  serviceCharge: number;
+  totalAmount: number;
+  stay: number;
+  id:string
+  // billImg?: string;
+  // billId?: string;
 }

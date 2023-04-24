@@ -12,13 +12,13 @@ interface NavProps {
   theme: string,
   authState:boolean,
   img:string
-  Z:string
+
 }
 
 
 
 
-const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
+const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
   //get auth state and pass into the initial model
   const [open, setopen] = useState(false)
   const menuRef = createRef<HTMLDivElement>()
@@ -42,7 +42,7 @@ const NavBar = ({ theme,authState,img,Z }: NavProps): JSX.Element => {
 
 
   return (
-    <nav className={`fixed z-${Z} flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md`} >
+    <nav className={`fixed z-20 flex h-20 w-full items-center justify-around bg-white p-3 shadow-none dark:bg-slate-700  md:shadow-md`} >
       {/* logoName */}
 
       <div className=" hidden items-center gap-1 md:flex">

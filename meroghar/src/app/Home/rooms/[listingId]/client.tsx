@@ -2,22 +2,24 @@
 
 import Link from 'next/link'
 
-import Carousel from '../../../components/carousel'
-import { BookProperty } from '../../../components/listing/booking'
-import Review from '../../../components/reviewCard'
-import Wish from '../../../components/Svg/wishSvg'
-import NavBar from '../../../components/navbar/navbar'
-import { Property } from '../../../interface/response'
+import Carousel from '../../../../components/carousel'
+import { BookProperty } from '../../../../components/listing/booking'
+import Review from '../../../../components/reviewCard'
+import Wish from '../../../../components/Svg/wishSvg'
+import NavBar from '../../../../components/navbar/navbar'
+import { Property } from '../../../../interface/response'
 import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
 import * as _ from 'lodash'
+import Invoice from '../../../../components/listing/bill'
 
 interface RoomProps {
   propertyData: Partial<Property>
   inWishList: boolean
   user: string
-  reservations: Reservation[]
+  reservations: Reservation[],
+  is_Admin:boolean
 }
 
 export function RoomClient({
@@ -25,6 +27,7 @@ export function RoomClient({
   inWishList,
   user,
   reservations,
+  is_Admin
 }: RoomProps) {
   const {
     images,
@@ -43,8 +46,7 @@ export function RoomClient({
 
   return (
     <main className="w-full bg-white ">
-      <NavBar theme="dark" authState={false} img="" Z="50" />
-
+    
       <div className="my-24 mx-auto w-[95%] md:w-[80%]">
         <div>
           <h3 className="my-2 text-center text-2xl font-semibold md:text-left ">
@@ -152,7 +154,7 @@ export function RoomClient({
           </div>
           {/* interactive component for contacting owner */}
 
-          <BookProperty reservations={reservations} user={user} propertyData={propertyData} />
+          {!is_Admin&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
         </div>
 
         {<div>
@@ -218,6 +220,9 @@ export function RoomClient({
           </div>
         </div>
       </div>
+
+
+     
     </main>
   )
 }

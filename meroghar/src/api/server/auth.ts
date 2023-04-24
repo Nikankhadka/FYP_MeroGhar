@@ -30,9 +30,11 @@ export const authCheck=async(is_Admin:boolean)=>{
 interface sessionData{
   session:boolean,
   userData:{
+    docId:string,
     userId:string,
     is_Admin:boolean,
-    img:string
+    img:string,
+    kycVerified:boolean
   }
 }
 //for common routes can only be accessed by user/non user
@@ -40,7 +42,7 @@ export const checkSession=async():Promise<sessionData>=>{
   const cookieStore=cookies();
   const session=await cookieStore.get("session")?.value;
     if(!session){
-      return {session:false,userData:{userId:"",is_Admin:false,img:''}}  
+      return {session:false,userData:{userId:"",is_Admin:false,img:'',docId:"",kycVerified:false}}  
     }
     const sessionObj=await JSON.parse(session!)
     console.log("poagesobj",sessionObj)
@@ -51,7 +53,7 @@ export const checkSession=async():Promise<sessionData>=>{
     // }
     
     //here if admin and redirection was here 
-    return {session:true,userData:{userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img}}
+    return {session:true,userData:{docId:sessionObj.docId,userId:sessionObj.userId,is_Admin:sessionObj.is_Admin,img:sessionObj.img,kycVerified:sessionObj.kycVerified}}
     
 }
 

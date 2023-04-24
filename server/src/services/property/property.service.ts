@@ -45,6 +45,22 @@ export const getMyPropertiesS=async(page:string,limit:string,userId:string):Prom
 
 }
 
+export const getPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const properties=await propertyModel.find({}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({name:"asc"})
+        if(!properties) throw new Error("No properties rightNow")
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
+}
+
 
 export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:Property,user:string,inWishList:boolean}>=>{
     try{

@@ -11,14 +11,16 @@ import PostPropertyForm from '../../../components/postproperty'
 import { Property } from '../../../interface/response'
 import Card from '../../../components/card/card'
 import useRandom from '../../../customHoooks/randomStore'
+import { toast } from 'react-hot-toast'
 
 
 interface Props{
   is_Admin:boolean,
   properties:Partial<Property>[]
+  kycVerified?:boolean
 }
 
-export default function ListingComp({is_Admin,properties}:Props) {
+export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
 
     const list=useRandom();
 
@@ -57,6 +59,9 @@ export default function ListingComp({is_Admin,properties}:Props) {
               type="button"
               onClick={(e)=>{
                 e.preventDefault();
+                if(!kycVerified){
+                  return toast.error("Please Verify Kyc to List Property!")
+                }
                 list.onList("list")
               }}
               >

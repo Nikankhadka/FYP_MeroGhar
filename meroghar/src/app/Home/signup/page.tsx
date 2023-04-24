@@ -1,19 +1,18 @@
 
-import { checkSession } from "../../api/server/auth"
-import LoginSignup from "../../components/loginSignup"
+import { checkSession } from "../../../api/server/auth"
+import LoginSignup from "../../../components/loginSignup"
 import { redirect } from 'next/navigation';
 
-import NavBar from "../../components/navbar/navbar";
+import NavBar from "../../../components/navbar/navbar";
 export default async function Singup(){
 
     const session=await checkSession()
     
    
     
-   if(!session)return(
+   if(!session.session)return(
         <main className="w-full">
-        <NavBar theme="dark" authState={false}  img='' Z='0'/>
-
+       
         {/* main container with full width */}
         <div className="my-24 flex items-center justify-center">
 
@@ -28,5 +27,5 @@ export default async function Singup(){
     )
 
     //else redirect to home 
-    return redirect('/')
+    return redirect('/Home')
 }  

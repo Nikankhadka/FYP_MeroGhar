@@ -13,7 +13,8 @@ const inputStyle =
 
 import 'react-phone-input-2/lib/style.css'
 
-import { checkPhone, postKyc, postPhone, uploadImage } from '../../api/client/user'
+import { checkPhone, postKyc, postPhone } from '../../api/client/user'
+import { uploadImage } from '../../api/client/uploadImag'
 import { KycData } from '../../interface/form'
 import useModal from '../../customHoooks/useModal'
 import useConfirm from '../../customHoooks/useConfirm'
@@ -106,6 +107,7 @@ useEffect(()=>{
         kycInfo: {
           firstName:formdata.firstName,
           lastName:formdata.lastName,
+          email:formdata.email,
           gender:formdata.gender,
           address:{
             country:kycInfo.address.country==formdata.address.country? formdata.address.country:  country.getCountryData(parseInt(formdata.address.country)).name,

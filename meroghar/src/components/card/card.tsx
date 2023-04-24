@@ -42,7 +42,7 @@ export default function Card({ user, data, index }: props) {
   return (
     <main className="mx-auto my-auto h-fit w-[98%] rounded-lg border-2 border-gray-300 bg-white duration-300   hover:shadow-xl">
       <div className="">
-        <Link href={`/rooms/${_id}`} target="_blank">
+        <Link href={`/Home/rooms/${_id}`} target="_blank">
           <img
             src={images![img].img_url}
             alt="property"
@@ -81,7 +81,7 @@ export default function Card({ user, data, index }: props) {
           <Wish active={false} />
           <p className="flex items-center">
             <img src="/rate.png" alt="rate" width={20} height={20} />
-            <span className="text-md text-gray-600">5.0</span>
+            <span className="text-md text-gray-600">{data?.avg_Rating}</span>
           </p>
         </div>
       )}
@@ -91,7 +91,7 @@ export default function Card({ user, data, index }: props) {
           {location?.country},{location?.state},{location?.city}
         </p>
         <p className="gray-600 text-sm">
-          <span className="text-sm font-semibold">Rs {price}</span> Night
+          <span className="text-sm font-semibold">{price}$</span> Night
         </p>
       </div>
 

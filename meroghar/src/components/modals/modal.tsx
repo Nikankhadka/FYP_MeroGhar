@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import LoginSignup from "../loginSignup";
 import useModal from "../../customHoooks/useModal";
-
+import { createRef } from "react";
 
 interface modalProps{
     isOpen?:string
@@ -14,7 +14,8 @@ interface modalProps{
 function Modal({isOpen,children}:modalProps) {
   const modal=useModal();
   const [showModal, setShowModal] = useState(isOpen);
-  const modalRef=useRef<HTMLDivElement>();
+  const modalRef=createRef<HTMLDivElement>();
+
   useEffect(() => {
     setShowModal(isOpen);
   }, [isOpen]);
@@ -58,8 +59,7 @@ function Modal({isOpen,children}:modalProps) {
          
         "
       >
-        <div className="
-          relative 
+        <div className={`relative 
           w-full
           my-6
           mx-auto 
@@ -71,7 +71,13 @@ function Modal({isOpen,children}:modalProps) {
          items-center
          justify-center
          border-2 border-red-500
-          "
+         translate
+            duration-300
+          
+          ${isOpen!='close' ? 'translate-y-0' : 'translate-y-full'}
+          ${isOpen!='close' ? 'opacity-100' : 'opacity-0'}`}
+          
+          
           
         >
 

@@ -147,3 +147,15 @@ export interface FetchedUserData {
     recommendation: string[];
   
 }
+
+
+export interface IBooking{
+  userId:string,
+  propertyId:string,
+  hostId:string,
+  createdAt:Date,
+  startDate:Date,
+  endDate:Date,
+  guest:number
+  id:string
+}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPropertyC, deletePropertyC, getMyPropertiesC, getPropertyByIdC, updatePropertyC, updateViewCountC } from "../../controllers/property/property.controller";
+import { createPropertyC, deletePropertyC, getMyPropertiesC, getPropertiesC, getPropertyByIdC, updatePropertyC, updateViewCountC } from "../../controllers/property/property.controller";
 import {  verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
 import { validatePropertyInput, validatePropertyUpdate } from "../../middlewares/inputvalidation";
 
@@ -16,6 +16,7 @@ router.use("/booking",bookingRoutes)
 
 
 router.get("/getProperty/:id",verifyaccessToken(false),getPropertyByIdC)
+router.get("/getProperty",verifyaccessToken(false),getPropertiesC)
 router.patch("/updateViewCount/:id",verifyaccessToken(false),verifyRole(false),updateViewCountC)
 
 router.use(verifyaccessToken(true));

@@ -1,14 +1,13 @@
 
 import '../styles/globals.css'
-import NavBar from '../components/navbar/navbar'
+
 import { cookies } from 'next/headers';
 
-import  { PrimaryFooter, SecondaryFooter } from '../components/footer'
-import AdminNav from '../components/navbar/DashboardNav';
-import DashboardNav from '../components/navbar/DashboardNav';
+import  { PrimaryFooter} from '../components/footer'
+
 import { Nunito } from 'next/font/google'
 import ClientComp from '../components/clientComp';
-import Modal from '../components/modals/modal';
+
 import { LoginModal } from '../components/modals/loginModal';
 import { RegisterModal } from '../components/modals/registerModal';
 

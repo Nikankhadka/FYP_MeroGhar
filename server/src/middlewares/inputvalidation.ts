@@ -63,7 +63,19 @@ export const validateBooking=async(req:Request,res:Response,next:NextFunction)=>
         const bookingSchema=joi.object({
             startDate:joi.date().required(),
             endDate:joi.date().required(),
-            guest:joi.string().required()
+            guest:joi.number().required(),
+            payerId:joi.string().required(),
+            // imgId:joi.string().required(),
+            // imgUrl:joi.string().required(),
+            initialAmount:joi.number().required(),
+            serviceCharge:joi.number().required(),
+            totalAmount:joi.number().required(),
+            paymentId:joi.string().required(),
+            //for how many days
+            stay:joi.number().required(),
+           // propertyId:joi.string().required(), in route param
+
+
         })
 
       
@@ -102,7 +114,7 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
                 imgId:joi.string().required(),
                 imgUrl:joi.string().required()
             },
-            phoneNumber:joi.string().optional()
+            phoneNumber:joi.string().allow('').optional()
 
         })
 

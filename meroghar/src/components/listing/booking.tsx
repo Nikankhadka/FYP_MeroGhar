@@ -9,7 +9,8 @@ import Api from '../../api/client/axios'
 import { toast } from 'react-hot-toast'
 import { Router } from 'next/router'
 import { useRouter } from 'next/navigation'
-import { checkout } from '../../configs/khalti'
+import moment from 'moment'
+
 
 import useModal from '../../customHoooks/useModal'
 import { Property } from '../../interface/response'
@@ -22,7 +23,8 @@ interface Booking{
   }[]
   ,
   user:string,
-  propertyData:Partial<Property>
+  propertyData:Partial<Property>,
+  is_Admin:boolean
 }
 
 export function BookProperty({reservations,user,propertyData}:Booking) {
@@ -30,16 +32,17 @@ export function BookProperty({reservations,user,propertyData}:Booking) {
         startDate:new Date(), 
         endDate: new Date()
         });
-
+ 
         console.log(reservations)
   const router=useRouter();
   const[guest,setguest]=useState(0)
 
-  const[error,seterror]=useState(false);
+     
   const modal=useModal()
   const bookingStore=useBookingStore()
 
 const currentDate = new Date();
+console.log(date.startDate,currentDate);
 const maxDate = new Date();
 maxDate.setFullYear(currentDate.getFullYear() + 1); // set the year to be one year after the current date
 maxDate.setMonth(currentDate.getMonth()); // set the month to be the same as the current date
@@ -55,13 +58,23 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
   const onReserve=async(e:any)=>{
     e.preventDefault();
 
-    // if(user==''){
-    //   return modal.onOpen('login');
-    // }
+    if(user==''){
+      return modal.onOpen('login');
+    }
+  
 
-    // if(date.startDate==null||date.endDate==null||guest<=0){
-    //   return seterror(true)
-    // }
+
+    //date setup is checked on client side
+    if(date.startDate==null||date.endDate==null||guest<=0){
+      return bookingStore.setError(true);
+    }
+
+    if(moment(date.startDate).isSame(moment(),'day')){
+      console.log('same date')
+      return bookingStore.setError(true);
+    }
+    //now check for bookingg 
+  
 
     bookingStore.setPropertyData(propertyData);
     bookingStore.setbookingInfo({
@@ -72,25 +85,7 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
     modal.onOpen("booking")
 
     // // send post request 
-    // const body={
-    //   startDate:date.startDate,
-    //   endDate:date.endDate,
-    //   guest
-    // }
-    // try{
-    //   const newBooking=await Api.post(`/property/v1/booking/64147e0b3f7adb1886790bfe`,body,{withCredentials:true});
-    //   if(!newBooking.data.success){
-    //     toast.error(newBooking.data.error)
-    //     return seterror(true);
-    //   }
-    //    toast.success("Property reserved SuccessFully ")
-    //     seterror(false);
-    //     return router.refresh();
-    // }catch(e:any){
     
-    //   toast.error("This booking conflicts with an existing booking/Error occurred.");
-    //   return seterror(true);
-    // }
   }
 
 
@@ -98,10 +93,10 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
     <main className="w-[95%] bg-white border-2 shadow-none my-4 p-3 rounded-xl md:w-[35%] md:shadow-lg  md:border-gray-200 ">
     
     <div className='flex justify-around items-center my-5'>
-        <p className='text-lg font-bold'>$107 <span className='text-sm font-medium'>night</span></p>
+        <p className='text-lg font-semibold'>${propertyData.price}<span className=' text-sm font-semibold'>/Night</span></p>
         <div className='flex '>
             <img src="/rate.png" alt="rate"  className='h-5 w-5'/>
-            <span>5.0</span>
+            <span>{propertyData.avg_Rating}</span>
             <button className='block mx-2 underline text-sm font-semibold text-gray-600'>reviews</button>
         </div>
     </div>
@@ -124,13 +119,13 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
       console.log(guest)
       setguest(parseInt(e.target.value))}}/>
     
-{   error&&<div className='my-2 '>
+{   bookingStore.error&&<div className='my-2 '>
     <ErrorText text='Please Enter Valid Date/guest for Booking' />
     </div>}
    
     <hr className=' border-gray-300 my-2'/>
     {/* pass form value from rouet then use catch all routes to access query values */}
-    <button type='submit'  className='block w-full my-2 font-semibold text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor' onClick={onReserve}>Reserve</button>
+    <button type='submit'  className='block w-full my-2 font-semibold text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor' onClick={onReserve} >reserve</button>
 
     <Link href="#" className='w-full block my-3 text-center  text-sm underline'>Contact Host</Link>
 

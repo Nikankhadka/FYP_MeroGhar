@@ -4,6 +4,7 @@ import ClientComp from '../../../../components/clientComp'
 
 export default async function MyBookings() {
   const { session, userData } = await checkSession()
+  
 
   //fetch booking on made on my properties use my id and find host id then populate the property information using property id 
   return (

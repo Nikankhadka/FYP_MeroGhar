@@ -83,6 +83,7 @@ export const verifyRole=(is_Admin:boolean)=>{
     try{
         console.log("inside clear users");
         req.userData={
+            docId:'',
             userId:"",
             is_Admin:false,
             kycVerified:false

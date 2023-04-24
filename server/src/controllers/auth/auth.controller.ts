@@ -100,11 +100,11 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         
         res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
-      .status(StatusCodes.OK).redirect("http://localhost:3000")
+      .status(StatusCodes.OK).redirect("http://localhost:3000/Home")
 
     }catch(e:any){
         console.log(e);
-        res.status(401).redirect("http://localhost:3000")
+        res.status(401).redirect("http://localhost:3000/Home")
     }
 
 }
@@ -117,11 +117,11 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken,user}=await facebookLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
-      .status(200).redirect("http://localhost:3000")
+      .status(200).redirect("http://localhost:3000/Home")
 
     }catch(e:any){
         console.log(e);
-        res.status(401).redirect("http://localhost:3000")
+        res.status(401).redirect("http://localhost:3000/Home")
     }
 
 }
@@ -131,11 +131,11 @@ export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
     if(!req.cookies.refreshToken) return res.status(204).json({success:false,err:"Invalid logout credential"})
     const{refreshToken}=req.cookies
     const verifyToken=await logOutS(refreshToken);
-   if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:true,message:'user logged out'})
+   if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
    res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:false})
     }catch(e:any){
         //if invalid token use detected clear cookie from imposter
         console.log(e)
-        
+        res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:false})
     }
 }

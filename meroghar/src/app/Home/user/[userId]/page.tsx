@@ -1,10 +1,10 @@
 
-import Profile from "../../../components/user/profile"
-import Card from "../../../components/card/card"
+import Profile from "../../../../components/user/profile"
+import Card from "../../../../components/card/card"
 import Link from "next/link"
-import NavBar from "../../../components/navbar/navbar"
-import { getUser } from "../../../api/server/user/getUser"
-import { checkSession } from "../../../api/server/auth"
+import NavBar from "../../../../components/navbar/navbar"
+import { getUser } from "../../../../api/server/user/getUser"
+import { checkSession } from "../../../../api/server/auth"
 type Params = {
     params: {
       userId: string
@@ -19,7 +19,7 @@ export default async  function UserProfile({ params: { userId } }: Params) {
     return(
     <main>
 
-      <NavBar authState={false}  img='' Z="0" theme="light"/>
+     
       <div className=" my-24 mx-auto   p-3  w-[98%] sm:w-[90%]  lg:w-[75%]">
       <Profile userId={session.session?session.userData.userId:""} profileData={userData} />
 

@@ -9,8 +9,9 @@ import axios from 'axios'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {useState} from 'react'
-
+import { useRouter } from 'next/navigation'
 import useModal from '../customHoooks/useModal'
+import { toast } from 'react-hot-toast'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -20,7 +21,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
   const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
 
     const loginSignupModal=useModal();
-
+  const router=useRouter();
   const[invalid,setinvalid]=useState(false);
   const[alert,setalert]=useState(false)
 
@@ -32,17 +33,18 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
         const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
         console.log('login succesful')
-        if(res.data.user.is_Admin) return window.location.href='/admin'
-        setalert(true)
-        setTimeout(() => {
-          setalert(false);
-        },5000);
-        
-        return;
+        // if(res.data.user.is_Admin){}
+          toast.success("Login Successful!")
+          loginSignupModal.onClose()
+           
+          return  router.refresh();
+          
       }
-     return  redirect('/')
+      toast.error("Login Failed/Invalid Credential")
+     return  router.push('/Home')
       }catch(e:any){
-        return setalert(false)
+        toast.error("Login Failed/Invalid Credential")
+        return  router.push('/Home')
       }
       
     }
@@ -51,17 +53,15 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     try{
     const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
-      setalert(true);
-      setTimeout(() => {
-        setalert(false);
-      },5000);
+     
+      toast.success("User Registeres Successfully!")
+      loginSignupModal.onOpen('login')
       
-      return;
     }
     throw new Error(`${res.data.error}`)
     }catch(e:any){
-      console.log(e)
-      return  setalert(true);
+      toast.error("User Registration Failed!");
+      
     }
     
    
@@ -148,12 +148,12 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           <SocialLogin
             placeholder="Continue with Google"
             url="http://localhost:2900/auth/v1/google-login"
-            img="google.png"
+            img="/google.png"
           />
           <SocialLogin
             placeholder="Continue with Facebook"
             url="http://localhost:2900/auth/v1/facebook-login"
-            img="facebook.png"
+            img="/facebook.png"
           />
           <div className="my-1  flex w-full items-center justify-center">
             <span className="text-md my-2">

@@ -13,7 +13,7 @@ export default function Carousel({images}:Props){
     const [img,setimg]=useState(0)
 
     return(
-    <div  className="relative w-full mx-auto my-2">
+    <div  className="relative z-10 w-full mx-auto my-2">
     
     <div className="relative h-[250px] sm:h-[324px] overflow-hidden rounded-lg md:h-96 ">
         

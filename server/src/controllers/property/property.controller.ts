@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, deletePropertyS, getMyPropertiesS} from "../../services/property/property.service";
+import { updateViewCountS,createPropertyS,updatePropertyS, getPropertyByIdS, deletePropertyS, getMyPropertiesS, getPropertiesS} from "../../services/property/property.service";
 
 
 
@@ -25,6 +25,19 @@ export const getPropertyByIdC=async(req:Request,res:Response)=>{
             return res.status(200).json({success:true,propertyData})
         }
         const propertyData=await getPropertyByIdS(req.params.id,req.userData.userId);
+        return res.status(200).json({success:true,propertyData})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+export const getPropertiesC=async(req:Request,res:Response)=>{
+    try{
+        // if(req.userData.userId==""){
+        //     const propertyData=await getPropertyByIdS(req.params.id,"");
+        //     return res.status(200).json({success:true,propertyData})
+        // }
+        const propertyData=await getPropertiesS(req.query.page as string,req.query.limit as string);
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);

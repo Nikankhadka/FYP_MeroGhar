@@ -1,12 +1,42 @@
 import { IBooking } from "../../interfaces/dbInterface";
+import { BookingInput } from "../../interfaces/inputInterface";
 import { bookingModel } from "../../models/booking";
+import paymentModel from "../../models/payment";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
 
 
-export const postBookingS=async(propId:string,userId:string,bookingDetail:Partial<IBooking>):Promise<boolean>=>{
+export const checkBookingS=async(propId:string,startDate:Date,endDate:Date)=>{
+  try{
+    
+    const checkProperty=await propertyModel.findOne({_id:propId});
+    if(!checkProperty) throw new Error("invalid Property Id/Does not Exist");
+    
+    const existingBooking = await bookingModel.findOne({
+        $and: [
+          { propertyId: propId },
+          {
+            $or: [
+              { startDate: { $lte: endDate }, endDate: { $gte: endDate } },
+              { startDate: { $lte: startDate }, endDate: { $gte: startDate } },
+              { startDate: { $gte: startDate }, endDate: { $lte: endDate } }
+            ]
+          }
+        ]
+      });
+    if(existingBooking) return true;
+    return false;
+  }catch(e){
+    console.log(e);
+    throw e;
+  }
+}
+
+
+//modify query later to only work on verified proeprty and verified user
+export const postBookingS=async(propId:string,userId:string,bookingDetail:Partial<BookingInput>):Promise<boolean>=>{
     try{
-        const{startDate,endDate,guest}=bookingDetail
+        const{startDate,endDate,guest,payerId,initialAmount,serviceCharge,totalAmount,paymentId,Stay}=bookingDetail
         const checkProperty=await propertyModel.findOne({_id:propId});
         if(!checkProperty) throw new Error("invalid Property Id/Does not Exist");
         
@@ -24,7 +54,7 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
           });
         if(existingBooking) return false;
        
-          const newBooking=await bookingModel.create({
+        const newBooking=await bookingModel.create({
             propertyId:propId,
             userId,
             hostId:checkProperty.userId,
@@ -39,8 +69,26 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
         const userdoc=await userModel.findOne({userId});
         const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
             tennants:userdoc!._id}},{new:true});
-            
+
         if(!addTennant)  throw new Error("failed to add user to tennant")
+        //now also create a paymentdoc
+
+        const newPayment=await paymentModel.create({
+          bookingId:newBooking._id,
+          propertyId:propId,
+          payerId,
+          Stay,
+          paymentDate:new Date(),
+          tennantId:userId,
+          ownerId:checkProperty.userId,
+          initialAmount,
+          serviceCharge,
+          totalAmount,
+          id:paymentId,
+        });
+
+        await newPayment.save();
+        if(!newPayment)  throw new Error("failed to store Payment Information");
 
       return true
 
@@ -51,16 +99,16 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
 }
 
 
-export const getBookingS=async(propId:string,userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
+export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
     try{
-        console.log("ins serbce")
+      //   console.log("ins serbce") userId:string,page?:number,limit?:number
 
-       if(userId!=''){
-        const reservations=await bookingModel.find({propertyId:propId,hostId:userId}).skip((page! - 1) * limit!)
-        .limit(limit!);
-        if(!reservations) throw new Error("Failed to Fetch reservation for user");
-        return reservations;
-       }
+      //  if(userId!=''){
+      //   const reservations=await bookingModel.find({propertyId:propId,hostId:userId}).skip((page! - 1) * limit!)
+      //   .limit(limit!);
+      //   if(!reservations) throw new Error("Failed to Fetch reservation for user");
+      //   return reservations;
+      //  }
 
        const reservations=await bookingModel.find({
         propertyId:propId

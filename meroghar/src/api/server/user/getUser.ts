@@ -39,7 +39,8 @@ export async function getMe():Promise<FetchedMe>{
             method: 'GET',
             credentials: 'include',
             headers: { cookie: getAccessToken()},
-            cache:'no-store'
+            cache:'no-store',
+            next:{revalidate:10}
           }
         ).then(res=>res.json())
   

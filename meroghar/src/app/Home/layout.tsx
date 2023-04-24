@@ -1,8 +1,9 @@
 
-import SideBar from '../../components/sidebar';
-import DashboardNav from '../../components/navbar/DashboardNav';
-import ClientComp from '../../components/clientComp';
+
 import { checkSession } from '../../api/server/auth';
+import ClientComp from '../../components/clientComp';
+import NavBar from '../../components/navbar/navbar';
+import { cookies } from 'next/headers';
 
 
 
@@ -11,8 +12,9 @@ import { checkSession } from '../../api/server/auth';
 
 export default async function Layout({children}: {children: React.ReactNode}) {
 
-
-  const {session,userData}=await checkSession()
+    const {session,userData}=await checkSession()
+    const cookieStore=cookies();
+    const theme=cookieStore.get("theme")?.value||'light'
   
 
   return (
@@ -21,14 +23,12 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       
 
         <ClientComp>
-        <DashboardNav />
+        <NavBar authState={session} img={userData.img} theme={theme} />
         </ClientComp>
       
         {/* this children represents each page component  that is rendered */}
         {children}
-        <ClientComp>  
-        <SideBar is_Admin={userData.is_Admin} menu={false}  />
-        </ClientComp>
+       
         
         
         

@@ -310,7 +310,7 @@ export default function PostPropertyForm({
           <div className="my-2 grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <div className="w-full">
               <label className=" my-1 block text-sm font-semibold">
-                Property Name
+                Property Title
               </label>
               <input
                 type="text"
@@ -342,7 +342,7 @@ export default function PostPropertyForm({
             </div>
 
             <div className="w-full">
-              <label className="my-1 block text-sm font-semibold">Price</label>
+              <label className="my-1 block text-sm font-semibold">Usd Rate/Night</label>
               <input
                 type="number"
                 placeholder="Price"

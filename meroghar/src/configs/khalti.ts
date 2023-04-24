@@ -3,9 +3,9 @@ import KhaltiCheckout from "khalti-checkout-web";
 let config = {
     // replace this key with yours
     "publicKey": "test_public_key_9df6a476434945f4a118424a7bead0e2",
-    "productIdentity": "64422c1cb17c9dd1eff81536",
+    "productIdentity": "6441f73fb0317f7e15638ee0",
     "productName": "check22",
-    "productUrl": "http://localhost:3000/rooms/64422c1cb17c9dd1eff81536",
+    "productUrl": "http://localhost:3000/rooms/6441f73fb0317f7e15638ee0",
     "eventHandler": {
         onSuccess (payload:any) {
             // hit merchant api for initiating verfication
