@@ -144,32 +144,30 @@ export function BookingModal(){
         <Modal isOpen={bookingModal.isOpen}>
         <main className={style1}>
 
-{         !bill && <div className=" w-full p-4 border-2 border-red-500">
+{         !bill && <div className="w-full overflow-scroll p-4 border-2 border-red-500">
                 <div className="flex  gap-x-4 flex-wrap">
-                    <img src={images![0].img_url} alt="propertyImage" className="w-[95%] mx-auto sm:m-0 h-48 sm:h-40 sm:w-44 rounded-lg" />
+                    <img src={images![0].img_url} alt="propertyImage" className="w-[95%] mx-auto sm:m-0 h-40 sm:h-48  rounded-lg" />
                     
-                    <div className="p-2 " >
+                    <div className="p-2 flex flex-row items-center w-full justify-around " >
 
-                    <div className="mt-3">
+                    <div >
                     <p className="text-sm text-gray-600">{property_type}</p>
                     <h1 className="text-md font-semibold">{name}</h1>
                     </div>
                   
-                    <div className=" mt-6">
+                    <div>
                     <p  className="text-sm flex items-center gap-x-1"><AiFillStar/>{avg_Rating}</p>
                     <p className='mt-2 text-sm font-semibold'>{userId}</p>
                     </div>
                    
                     </div>
                 </div>
-                <hr  className="border-gray-300 my-5"/>
+                
 
-                <p className="text-md font-semibold text-center text-mainColor ">Property Verified and Safe</p>
-
-                <hr  className="border-gray-300 my-5"/>
+                <hr  className="border-gray-300 my-3"/>
 
                 <div>
-                <h2 className="text-lg font-semibold my-3">Your Total</h2>
+                <h2 className="text-lg font-semibold mb-3">Your Total</h2>
                 <div className="flex justify-between items-center">
                     <p className='text-md'>{totalDays} nights</p>
                     <p className="font-semiBold"> ${basePrice}</p>
@@ -182,7 +180,7 @@ export function BookingModal(){
 
                 </div>
 
-                <hr  className="border-gray-300 my-5"/>
+                <hr  className="border-gray-300 my-3"/>
                 
                 <div className="flex justify-between items-center">
                     <p className='font-semibold text-md'>Total $</p>

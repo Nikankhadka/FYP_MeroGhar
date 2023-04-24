@@ -27,7 +27,11 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         </ClientComp>
       
         {/* this children represents each page component  that is rendered */}
-        {children}
+
+
+         {children}
+        
+       
        
         
         

@@ -47,20 +47,20 @@ export function RoomClient({
   return (
     <main className="w-full bg-white ">
     
-      <div className="my-24 mx-auto w-[95%] md:w-[80%]">
+      <div className="my-24 mx-auto w-[95%] md:w-[75%]">
         <div>
-          <h3 className="my-2 text-center text-2xl font-semibold md:text-left ">
+          <h3 className=" text-center text-xl font-semibold md:text-left ">
             {_.startCase(name)}
           </h3>
 
-          <div className="w-fll my-2 flex flex-wrap justify-between">
+          <div className="w-full  flex flex-wrap justify-between">
             <div className=" flex items-center justify-around gap-3 ">
               
 
 
               <Link
                 href="/address"
-                className="block text-md font-semibold underline"
+                className="block text-sm font-semibold underline"
               >
                 {location?.country},{location?.state},{location?.city}
               </Link>

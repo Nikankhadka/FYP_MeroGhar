@@ -45,8 +45,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
             }}  className={btnstyle}>Sign Up</button>
             <hr />
             <Link href="/Account/listings" className={btnstyle}>Post Property</Link>
-            <Link href="/" className={btnstyle}>Rent Property</Link>
-            <Link href="#" className={btnstyle}>Help</Link>
+           
 
             
 
@@ -56,9 +55,11 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
   return(
     <div  ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2    ">
-        <Link  href='#' className={`${btnstyle} font-semibold`}>Messages</Link>
+        <Link  href='/wishlists' className={`${btnstyle} font-semibold`}>Trips</Link>
         <Link  href='/wishlists' className={`${btnstyle} font-semibold`}>WishLists</Link>
-        <Link  href='/Bookings' className={`${btnstyle} font-semibold`}>Bookings</Link>
+        <Link  href='/Bookings' className={`${btnstyle} font-semibold`}>Reservations</Link>
+        
+       
         
         <hr />
         <Link  href='/Account/listings' className={`${btnstyle}`}>Manage Listings</Link>
@@ -68,10 +69,14 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
                 e.preventDefault();
                 const res= Api.delete('/auth/v1/logout',{withCredentials:true}).then((res)=>{
                     toast.success("User logged Out");
+                    router.refresh()
                     return router.push('/Home')
+                    
                 }).catch((e)=>{
                   toast.success("User logged Out");
-                    return router.push('/Home')
+                  router.refresh()
+                  return router.push('/Home')
+                  
                 })
                 
             }}>Log Out</button>

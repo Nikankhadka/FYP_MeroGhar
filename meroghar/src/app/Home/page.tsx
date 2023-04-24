@@ -6,6 +6,7 @@ import { SecondaryFooter } from "../../components/footer"
 import ClientComp from "../../components/clientComp"
 import { checkSession } from "../../api/server/auth"
 import { getProperties } from "../../api/server/property/getProperty"
+import{AiFillStar} from 'react-icons/ai'
 
 export default async function Home(){
 

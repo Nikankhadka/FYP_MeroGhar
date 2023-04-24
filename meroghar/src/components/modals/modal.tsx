@@ -85,7 +85,7 @@ function Modal({isOpen,children}:modalProps) {
       {/* this modal container is perfect for all conditio try to make the child component width fixed for md and for smaller full according to parent div */}
 
     {/* container for modal with ref to not close and have size of modal */}
-     <div ref={modalRef} className=" border-2 border-red-500 w-[95%]  sm:w-[80%] md:w-fit">
+     <div ref={modalRef} className=" border-2 border-red-500 w-[95%] h-fit  sm:w-[80%] md:w-fit">
      {children}
      </div>
 

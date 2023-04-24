@@ -10,8 +10,10 @@
     scroll-behavior: smooth;
     color:black;
     letter-spacing:0.5px;
+    /* font-family: 'Poppins', sans-serif; */
     
   }
+
 
   .react-tel-input .form-control{
     @apply  py-4 
