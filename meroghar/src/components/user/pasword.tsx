@@ -3,16 +3,18 @@
 import {AiTwotoneSetting} from 'react-icons/ai'
 import {useForm,SubmitHandler} from 'react-hook-form'
 import { ErrorText } from '../random';
-
+import { bg } from '../../styles/variants';
+import useAccount from '../../customHoooks/AccountState';
 interface passwordform{
     oldPassword:string,
     newPassword:string,
     confirmNewPassword:string
 }
 
-const inputStyle="text-md my-2 h-11 w-[90%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
+const inputStyle="text-md my-2 h-10 w-[90%]  rounded-md border-2  border-gray-400 p-1 text-gray-700 hover:bg-hoverColor focus:border-themeColor"
 
 export default function Password(){
+    const account=useAccount();
 
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<passwordform>()
 
@@ -21,11 +23,12 @@ export default function Password(){
       }
 
     return(
-        <main className="mx-auto md:ml-10 p-4 w-[95%] sm:w-[70%] md:w-[50%] border-2 border-gray-300 rounded-lg">
-        <h2 className=" mb-5 text-2xl font-bold text-slate-700">Change Your Password</h2>
+        <main  className={`mx-auto rounded-lg ${bg}`} >
+        <div className='w-[95%] sm:w-[70%] md:w-[50%]'>
+        <h2 className=" mb-5 text-2xl font-semibold text-slate-700">Change Your Password</h2>
         <form >
             <div className='w-full my-2'>
-        <label className=' block text-md  text-slate-700'>Old Password</label>
+        <label className=' block text-md  font-semibold text-slate-700'>Old password</label>
         <input
             type="text"
             placeholder="old Password"
@@ -35,7 +38,7 @@ export default function Password(){
           {errors.oldPassword && ( <ErrorText text='Please Enter Valid Password'/>)}
         </div>
         <div className='w-full my-2'>
-        <label className=' block text-md  text-slate-700'>New Password</label>
+        <label className=' block text-md  font-semibold text-slate-700'>New Password</label>
         <input
             type="text"
             placeholder="New password"
@@ -46,7 +49,7 @@ export default function Password(){
 
         </div>
         <div className='w-full my-2'>
-        <label className=' block text-md  text-slate-700'>Confirm Password</label>
+        <label className=' block text-md  font-semibold text-slate-700'>Confirm Password</label>
         <input
             type="text"
             placeholder="Password"
@@ -57,12 +60,18 @@ export default function Password(){
         </div>
 
         <hr className="my-5 border-gray-400" />  
-        <div>
+        <div className='flex justify-between items-center mb-4'>
+          <button className='text-md font-semibold underline'
+          onClick={()=>{
+            account.onClose();
+          }}>Cancel</button>
             <button type='submit' className=' mt-2   text-white p-2 px-4 bg-themeColor transition-all rounded-lg hover:bg-mainColor' 
                 onClick={handleSubmit(onSubmit)}
             >Update</button>
         </div>
         </form>
+        </div>
+        
           
         </main>
     )

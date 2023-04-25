@@ -44,7 +44,7 @@ export const verifyKycRequestsC=async(req:Request,res:Response)=>{
         const{error,value}=kycVerify.validate(req.body,{abortEarly:false})
         if(error) return res.status(400).json({success:false,message:error.message})
 
-        const requestVerified=await verifyKycRequestsS(req.userData.userId,req.params.id,req.body);
+        const requestVerified=await verifyKycRequestsS(req.userData.docId,req.params.id,req.body);
         //since error thrown is the failure otherwise verified or not is part of the query so its ok
         if(requestVerified)return res.status(200).json({success:true})
 

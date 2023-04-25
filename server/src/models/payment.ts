@@ -3,22 +3,19 @@ import { Payment } from "../interfaces/dbInterface"
 
  const paymentSchema=new mongoose.Schema({
         //make string for now
-        tennantId:String,
         payerId:String,
-        ownerId:{type:String,required:true},
-        propertyId:{type:String,required:true},
+        bookingId:{type:Types.ObjectId,ref:"Bookings"},
         paymentDate:{type:Date,default:Date.now},
         initialAmount:Number,
         serviceCharge:Number,
         totalAmount:Number,
         stay:Number,
-        bookingId:Types.ObjectId,
         id:String,
 
         // will contain bill image from cloudinary
         // billImg:String,
         // billId:String, 
-})
+},{timestamps:true})
 
 const paymentModel=model<Payment>('payments',paymentSchema);
 

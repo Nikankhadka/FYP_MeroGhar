@@ -9,7 +9,7 @@ import { Images } from '../interface/request'
 import { PostPropery, UpdatePropery } from '../api/client/property'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { amenities, propertyOptions } from '../configs/constant'
-const inputStyle ='text-md my-1 h-11 w-[95%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
+const inputStyle ='text-md my-1 h-10 w-[95%]  rounded-md border-2  border-gray-400 p-1 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
 import { useState, useEffect } from 'react'
 import useCountry from '../customHoooks/useCountry'
 import { ICountry} from 'country-state-city'
@@ -32,31 +32,33 @@ export default function PostPropertyForm({
   isUpdate,
   propertyData,
 }: postProperty) {
-  const defaultValues: PropertyForm = {
+  let defaultValues: PropertyForm = {
     images: ['default'],
     name: '',
-    location: {
+   
       country: '',
       city: '',
       state: '',
-    },
+
     discription: '',
     rules: '',
     amenities: [],
-    price: 0,
-    property_type: 'hotel',
+    rate: 0,
+    propertyType:'hotel',
   }
 
   // If this is an update form, set the default values based on the passed property data
   if (isUpdate && propertyData) {
     defaultValues.images = propertyData.images || defaultValues.images
     defaultValues.name = propertyData.name || ''
-    defaultValues.location = propertyData.location || defaultValues.location
+    defaultValues.country = propertyData.country || defaultValues.country,
+    defaultValues.state = propertyData.state || defaultValues.state,
+    defaultValues.city = propertyData.city || defaultValues.city,
     defaultValues.discription = propertyData.discription || ''
     defaultValues.rules = propertyData.rules![0] || ''
     defaultValues.amenities = propertyData.amenities || []
-    defaultValues.price = propertyData.price || 0
-    defaultValues.property_type = propertyData.property_type || 'hotel'
+    defaultValues.rate = propertyData.rate || 0
+    defaultValues.propertyType = propertyData.propertyType || 'hotel'
   }
 
   const list = useRandom()
@@ -75,13 +77,13 @@ export default function PostPropertyForm({
 
   // for country state and city
   const [countries, setCountries] = useState<ICountry[]>([])
-  const country = useCountry()
+  const countryhook = useCountry()
   const confirmModal = useConfirm()
   const modal = useModal()
   const router = useRouter()
 
   useEffect(() => {
-    setCountries(country.Countries)
+    setCountries(countryhook.Countries)
   }, [])
 
   // every change detected is recorded here we want to fetch the image information only
@@ -92,8 +94,8 @@ export default function PostPropertyForm({
       return URL.createObjectURL(imagesS[index][0])
     } catch (e) {
       try {
-        if (propertyData?.images![index].img_url) {
-          return propertyData.images[index].img_url
+        if (propertyData?.images![index].imgUrl) {
+          return propertyData.images[index].imgUrl
         }
       } catch (e) {
         return ''
@@ -106,7 +108,7 @@ export default function PostPropertyForm({
     const postConfirmation = async () => {
       const amenities = formdata.amenities.filter((item) => item != '')
 
-      const { name, location, discription, price, property_type, rules } =
+      const { name, country,state,city, discription, rate, propertyType, rules } =
         formdata
       let images: Images[] = []
 
@@ -124,17 +126,17 @@ export default function PostPropertyForm({
 
       let RequestBody: PropertyForm={
         name,
-        location: {
-          country: country.getCountryData(parseInt(location.country)).name,
-          state: country.getStateData(
-            parseInt(location.country),
-            parseInt(location.state)
+        
+          country: countryhook.getCountryData(parseInt(country)).name,
+          state: countryhook.getStateData(
+            parseInt(country),
+            parseInt(state)
           ).name,
-          city: location.city,
-        },
+          city:city,
+        
         discription,
-        price,
-        property_type,
+        rate,
+        propertyType,
         rules,
         amenities,
         images,
@@ -162,7 +164,7 @@ export default function PostPropertyForm({
     const updateConfirmation = async () => {
       const amenities = formdata.amenities.filter((item) => item != '')
 
-      const { name, location, discription, price, property_type, rules } =
+      const { name, country,state,city, discription, rate, propertyType, rules } =
         formdata
       let images: Images[] = []
       //since there might be multiple images
@@ -182,24 +184,24 @@ export default function PostPropertyForm({
 
       let RequestBody: PropertyForm = {
         name,
-        location: {
+        
           country:
-            propertyData?.location!.country == formdata.location.country
-              ? formdata.location.country
-              : country.getCountryData(parseInt(formdata.location.country))
+            propertyData?.country == formdata.country
+              ? formdata.country
+              : countryhook.getCountryData(parseInt(formdata.country))
                   .name,
           state:
-            propertyData?.location!.state == formdata.location!.state
-              ? formdata.location.state
-              : country.getStateData(
-                  parseInt(formdata.location.country),
-                  parseInt(formdata.location.state)
+            propertyData?.state == formdata.state
+              ? formdata.state
+              : countryhook.getStateData(
+                  parseInt(formdata.country),
+                  parseInt(formdata.state)
                 ).name,
-          city: formdata.location.city,
-        },
+          city: formdata.city,
+        
         discription,
-        price,
-        property_type,
+        rate,
+        propertyType,
         rules,
         amenities,
         images,
@@ -264,7 +266,7 @@ export default function PostPropertyForm({
                 />
 
                 {/* for input and label */}
-                <div className="flex  w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 bg-white p-2 shadow-md md:w-[60%] md:flex-row md:items-center">
+                <div className="flex  w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 bg-white p-[6px] shadow-md md:w-[60%] md:flex-row md:items-center">
                   <label className="my-1 block text-sm font-semibold">
                     Upload Image{' '}
                   </label>
@@ -329,14 +331,14 @@ export default function PostPropertyForm({
               </label>
               <select
                 className={inputStyle}
-                {...register('property_type', { required: true })}
+                {...register('propertyType', { required: true })}
               >
                 {propertyOptions.map((type) => (
                   <option value={type}>{type}</option>
                 ))}
               </select>
 
-              {errors.property_type && (
+              {errors.propertyType && (
                 <ErrorText text="Select Property Type Pls" />
               )}
             </div>
@@ -347,9 +349,9 @@ export default function PostPropertyForm({
                 type="number"
                 placeholder="Price"
                 className={inputStyle}
-                {...register('price', { required: true, minLength: 1 })}
+                {...register('rate', { required: true, minLength: 1 })}
               />
-              {errors.price && <ErrorText text="Please Enter Valid Price" />}
+              {errors.rate && <ErrorText text="Please Enter Valid Price" />}
             </div>
           </div>
           {/* div for city and area  */}
@@ -361,19 +363,19 @@ export default function PostPropertyForm({
               </label>
               <select
                 className={inputStyle}
-                {...register('location.country', { required: true })}
+                {...register('country', { required: true })}
               >
-                <option value={defaultValues.location.country}>
-                  {defaultValues.location.country == ''
+                <option value={defaultValues.country}>
+                  {defaultValues.country == ''
                     ? 'Select a Country'
-                    : defaultValues.location.country}
+                    : defaultValues.country}
                 </option>
                 {countries.map((country, index) => (
                   <option value={index}>{country.name}</option>
                 ))}
               </select>
 
-              {errors?.location?.country && (
+              {errors?.country && (
                 <ErrorText text="Please Select Valid Country" />
               )}
             </div>
@@ -382,20 +384,20 @@ export default function PostPropertyForm({
               <label className="my-1 block text-sm font-semibold">State </label>
               <select
                 className={inputStyle}
-                {...register('location.state', { required: true })}
+                {...register('state', { required: true })}
               >
-                <option value={defaultValues.location.state}>
-                  {defaultValues.location.state == ''
+                <option value={defaultValues.state}>
+                  {defaultValues.state == ''
                     ? 'Select a state'
-                    : defaultValues.location.state}
+                    : defaultValues.state}
                 </option>
-                {country
-                  .getStates(parseInt(watch('location.country')))
+                {countryhook
+                  .getStates(parseInt(watch('country')))
                   .map((state, index) => (
                     <option value={index}>{state.name}</option>
                   ))}
               </select>
-              {errors?.location?.state && (
+              {errors?.state && (
                 <ErrorText text="Please Select Valid State" />
               )}
             </div>
@@ -404,23 +406,23 @@ export default function PostPropertyForm({
               <label className="my-1 block text-sm font-semibold">City</label>
               <select
                 className={inputStyle}
-                {...register('location.city', { required: true })}
+                {...register('city', { required: true })}
               >
-                <option value={defaultValues.location.city}>
-                  {defaultValues.location.city == ''
+                <option value={defaultValues.city}>
+                  {defaultValues.city == ''
                     ? 'Select a City'
-                    : defaultValues.location.city}
+                    : defaultValues.city}
                 </option>
-                {country
+                {countryhook
                   .getCities(
-                    parseInt(watch('location.country')),
-                    parseInt(watch('location.state'))
+                    parseInt(watch('country')),
+                    parseInt(watch('state'))
                   )
                   .map((city) => (
                     <option value={city.name}>{city.name}</option>
                   ))}
               </select>
-              {errors?.location?.city && (
+              {errors?.city && (
                 <ErrorText text="Please Select Valid City" />
               )}
             </div>

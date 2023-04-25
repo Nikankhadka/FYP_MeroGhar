@@ -35,9 +35,10 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
         console.log('login succesful')
         // if(res.data.user.is_Admin){}
           toast.success("Login Successful!")
-          loginSignupModal.onClose()
+          router.refresh();
+          return loginSignupModal.onClose()
            
-          return  router.refresh();
+          
           
       }
       toast.error("Login Failed/Invalid Credential")
@@ -86,7 +87,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           e.preventDefault();
           loginSignupModal.onClose()
         }}>
-          <img src="close.png" alt="cros" className="h-4 w-4 " />
+          <img src="/close.png" alt="cros" className="h-4 w-4 " />
         </button>}
       </div>
 

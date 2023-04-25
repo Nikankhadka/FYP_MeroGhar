@@ -8,12 +8,11 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { ErrorText } from '../random'
 
-const inputStyle =
-  'text-md my-1 h-11 w-[90%]  rounded-md border-2  border-gray-400 p-2 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
+const inputStyle='text-md my-1 h-10 w-[90%]  rounded-md border-2  border-gray-400 p-1 text-gray-700 hover:bg-hoverColor focus:border-themeColor'
 
 import 'react-phone-input-2/lib/style.css'
 
-import { checkPhone, postKyc, postPhone } from '../../api/client/user'
+import {postKyc} from '../../api/client/user'
 import { uploadImage } from '../../api/client/uploadImag'
 import { KycData } from '../../interface/form'
 import useModal from '../../customHoooks/useModal'
@@ -30,11 +29,11 @@ interface form {
   firstName: string
   lastName: string
   gender: string
-  address: {
+
     country: string,
     state:string,
     city: string,
-  }
+
   email?: string
   img: any|{
         imgId: string
@@ -44,7 +43,7 @@ interface form {
 
 interface kycprops {
   setopenKyc: React.Dispatch<React.SetStateAction<string>>
-  userData:FetchedMe
+  userData:Partial<FetchedMe>
 }
 
 export default function Kyc({ setopenKyc,userData }: kycprops) {
@@ -67,15 +66,15 @@ export default function Kyc({ setopenKyc,userData }: kycprops) {
     control,
   } = useForm<form>({
     defaultValues:{
-      firstName:kycInfo.firstName,
-      lastName:kycInfo.lastName,
-      gender:kycInfo.gender,
-      address:{
-        country:kycInfo.address.country,
-        state:kycInfo.address.state,
-        city:kycInfo.address.city
-      },
-      email:kycInfo.email,
+      firstName:kycInfo!.firstName,
+      lastName:kycInfo!.lastName,
+      gender:kycInfo!.gender,
+      
+        country:kycInfo!.country,
+        state:kycInfo!.state,
+        city:kycInfo!.city,
+     
+      email:kycInfo!.email,
       //donot put image here since onlyfile can be default 
     }
   })
@@ -88,7 +87,7 @@ export default function Kyc({ setopenKyc,userData }: kycprops) {
       return URL.createObjectURL(img[0])
     } catch (e) {
       console.log(e)
-      return kycInfo.img.imgUrl||''
+      return kycInfo!.img.imgUrl||''
     }
   }
 
@@ -109,12 +108,12 @@ useEffect(()=>{
           lastName:formdata.lastName,
           email:formdata.email,
           gender:formdata.gender,
-          address:{
-            country:kycInfo.address.country==formdata.address.country? formdata.address.country:  country.getCountryData(parseInt(formdata.address.country)).name,
-            state:kycInfo.address.state==formdata.address.state? formdata.address.state: country.getStateData(parseInt(formdata.address.country),parseInt(formdata.address.state)).name,
-            city:formdata.address.city
-          },
-          phoneNumber:kycInfo.phoneNumber,
+         
+            country:kycInfo!.country==formdata.country? formdata.country:  country.getCountryData(parseInt(formdata.country)).name,
+            state:kycInfo!.state==formdata.state? formdata.state: country.getStateData(parseInt(formdata.country),parseInt(formdata.state)).name,
+            city:formdata!.city,
+         
+          phoneNumber:kycInfo!.phoneNumber,
           img:{
             imgId:'',
             imgUrl:""
@@ -133,8 +132,8 @@ useEffect(()=>{
 
       }
       }else{
-        kycdata.kycInfo.img!.imgId=kycInfo.img.imgId;
-        kycdata.kycInfo.img!.imgUrl=kycInfo.img.imgUrl;
+        kycdata.kycInfo.img!.imgId=kycInfo!.img.imgId;
+        kycdata.kycInfo.img!.imgUrl=kycInfo!.img.imgUrl;
       }
 
      
@@ -180,7 +179,7 @@ useEffect(()=>{
 
       <h2 className='text-xl font-semibold mb-5'>Kyc Form</h2>
       <hr className="my-5 border-gray-400" />
-      {kycInfo.phoneNumber==''&&<div>
+      {kycInfo!.phoneNumber==''&&<div>
         <PhoneComp />
         <hr className="my-5 border-gray-400" />
 
@@ -239,46 +238,46 @@ useEffect(()=>{
   <div className='w-full my-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
     <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>Country </label>
-        <select className={inputStyle} defaultValue={kycInfo.address.country} {...register('address.country', { required: true})}>
-        <option value={kycInfo.address.country}>{kycInfo.address.country==''?'Select a Country':kycInfo.address.country}</option>
+        <select className={inputStyle} defaultValue={kycInfo!.country} {...register('country', { required: true})}>
+        <option value={kycInfo!.country}>{kycInfo!.country==''?'Select a Country':kycInfo!.country}</option>
                 {
                     countries.map((country,index)=><option  value={index}>{country.name}</option>)
                 }
         </select>
 
 
-          {errors?.address?.country && ( <ErrorText text='Please Select Valid Country'/>)}
+          {errors?.country && ( <ErrorText text='Please Select Valid Country'/>)}
       </div>
 
       <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>State </label>
-        <select className={inputStyle}  {...register('address.state', { required: true})}>
-        <option value={kycInfo.address.state}>{kycInfo.address.state==''?'Select a State':kycInfo.address.state}</option>
+        <select className={inputStyle}  {...register('state', { required: true})}>
+        <option value={kycInfo!.state}>{kycInfo!.state==''?'Select a State':kycInfo!.state}</option>
                 {
                     
-                    country.getStates(parseInt(watch('address.country'))).map((state,index)=><option value={index}>{state.name}</option>)
+                    country.getStates(parseInt(watch('country'))).map((state,index)=><option value={index}>{state.name}</option>)
                 }
         </select>
-          {errors?.address?.state && ( <ErrorText text='Please Select Valid State'/>)}
+          {errors?.state && ( <ErrorText text='Please Select Valid State'/>)}
         </div>
 
         <div className='w-full'>
         <label className='block my-1 text-sm font-semibold'>City</label>
-        <select className={inputStyle}  {...register('address.city', { required: true})}>
-                <option value={kycInfo.address.city}>{kycInfo.address.city==''?'Select a City':kycInfo.address.city}</option>
+        <select className={inputStyle}  {...register('city', { required: true})}>
+                <option value={kycInfo!.city}>{kycInfo!.city==''?'Select a City':kycInfo!.city}</option>
                 {
                     
-                    country.getCities(parseInt(watch('address.country')),parseInt(watch('address.state'))).map((city)=><option value={city.name}>{city.name}</option>)
+                    country.getCities(parseInt(watch('country')),parseInt(watch('state'))).map((city)=><option value={city.name}>{city.name}</option>)
                 }
         </select>
-          {errors?.address?.city && ( <ErrorText text='Please Select Valid City'/>)}
+          {errors?.city && ( <ErrorText text='Please Select Valid City'/>)}
         </div>
       
       </div>
         
        
 
-{ email.mail==''&& <div className="w-full my-3 md:w-[70%]">
+{ email!.mail==''&& <div className="w-full my-3 md:w-[70%]">
             <label className=" text-sm font-semibold block  text-slate-700">Email</label>
             <input
               type="email"
@@ -310,11 +309,11 @@ useEffect(()=>{
             />
 
             {/* for input and label */}
-            <div className="flex w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-2 shadow-md md:w-[60%] md:flex-row md:items-center">
+            <div className="flex w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-[6px] shadow-md md:w-[60%] md:flex-row md:items-center">
               <label className="text-sm font-semibold block  text-slate-700 ">Upload Image </label>
               <input
                 type="file"
-                {...register(`img`, { required:kycInfo.img.imgUrl==''?true:false })}
+                {...register(`img`, { required:kycInfo!.img.imgUrl==''?true:false })}
               ></input>
 
               {/* donot render this button for 1st index */}

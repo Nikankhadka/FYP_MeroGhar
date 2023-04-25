@@ -22,3 +22,4 @@ export interface PostProperty{
     amenities:string[]
 }
 
+

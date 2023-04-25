@@ -109,14 +109,14 @@ interface phone {
     return (
       <main>
         {/* for phone number verification */}
-        <div className="my-3">
+        <div className="my-3 ">
           {!showOTP && (
             <div>
               <label className=" text-md block font-semibold text-slate-700">
                 Phone Number
               </label>
   
-              <div className=" flex flex-col items-start p-3 sm:flex-row sm:items-center">
+              <div className=" flex flex-col items-start  sm:flex-row sm:items-center">
                 <div className="w-full">
                   <PhoneInput country={'us'} value={ph} onChange={setPh} />
                   <div className="my-2">

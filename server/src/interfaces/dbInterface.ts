@@ -8,17 +8,16 @@ interface kycSchema{
     gender: string
     email: string
     phoneNumber: string
-    address: {
-      country: string,
-      state:string,
-      city: string
-    };
+    country: string,
+    state:string,
+    city: string
     img: {
       imgId: string
       imgUrl: string
     };
   
 }
+
  export interface IUser {
     userId: string
     userName: string
@@ -27,15 +26,12 @@ interface kycSchema{
       imgId: string
       imgUrl: string
     }
-    About:string
+    about:string
     email: {
       mail: string
-      is_verified: boolean
+      isVerified: boolean
     };
-    Token: string
-    two_FA: boolean
-    created_At: Date
-    updated_At: Date
+    token: string
     refreshToken: string[]
     is_Admin: boolean
     kycInfo:kycSchema,
@@ -45,109 +41,108 @@ interface kycSchema{
       approvedBy: string
       pending:boolean
     };
-    listing_Count: number
-    avg_rating: number
-    recieved_Reviewcount: number
-    wishList: {
+    listingCount: number
+    avgRating: number
+    recievedReviewcount: number
+    wishList:{
       listName:string,
-      properties:string[]
+      properties:[string]
     }[],
-    is_banned: {
+    isBanned: {
       strikes: number
       banStart:Date,
       banEnd:Date
       message:string
     }
-    rented_property: Types.ObjectId[]
-    recommendation: Types.ObjectId[]
-    viewed_property: Types.ObjectId[]
+    viewedProperty: Types.ObjectId[]
+    createdAt: Date;
+    updatedAt: Date;
     
  }
  
 
  export interface Property{
-  
     _id: Types.ObjectId;
-    userId: string;
+    userId:Types.ObjectId;
     name: string;
     url: string;
-    location: {
-      country: string;
-      state: string;
-      city: string;
-    };
+    country: string;
+    state: string;
+    city: string;
     discription: string;
-    property_type: string;
-    rules: string[];
-    amenities: string[];
-    price: number;
-    images: {
-      img_id: string;
-      img_url: string;
+    propertyType: string;
+    rules:string;
+    amenities:string[];
+    rate:number;
+    images:{
+      imgId: string;
+      imgUrl: string;
     }[];
     tennants: string[];
-    tennantId: Types.ObjectId;
-    rating_count: number;
+    ratingCount: number;
     viewCount: number;
-    avg_Rating: number;
-    is_banned: {
+    avgRating: number;
+    isBanned: {
       status: boolean;
       message: string;
     };
-    is_verified: {
+    isVerified: {
       status: boolean;
       pending: boolean;
       message: string;
       approvedBy: string | Types.ObjectId;
     };
-    recommendation: Types.ObjectId[];
+    createdAt: Date;
+    updatedAt: Date;
   
 }
 
 
 
 export interface IReview{
-  userId:string,
-  propertyId:Types.ObjectId,
-  rating:{
-    property:number,
-    host:number,
-    value:number
-  },
-  overallRating:number,
-  review:string,
-  report:{
-    status:boolean,
-    message:string,
-    admin:string,
-    adminReview:string
-  }
+  userId: Types.ObjectId;
+  propertyId: Types.ObjectId;
+  rating: number;
+  review: string;
+  
+    reportStatus: boolean;
+    reportMessage: string;
+    admin: Types.ObjectId;
+    adminReview: string;
+  
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
 export interface IBooking{
-  userId:string,
-  propertyId:Types.ObjectId,
-  hostId:string,
-  createdAt:Date,
-  startDate:Date,
-  endDate:Date,
-  guest:number
+  userId: Types.ObjectId;
+  propertyId: Types.ObjectId;
+  hostId: Types.ObjectId;
+  status: string
+  startDate: Date;
+  endDate: Date;
+  guest: number;
+  ownerCheckInStatus: string
+  tenantCheckInStatus: string
+  ownerCheckOutStatus: string
+  tenantCheckOutStatus: string
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
 export interface Payment {
-  tennantId: string;
-  bookingId:string
-  payerId: string;
-  ownerId: string;
-  propertyId: Types.ObjectId;
-  paymentDate: Date;
-  initialAmount: number;
-  serviceCharge: number;
-  totalAmount: number;
-  stay: number;
-  id:string
+    payerId: string;
+    bookingId:Types.ObjectId;
+    paymentDate: Date;
+    initialAmount:number;
+    serviceCharge:number;
+    totalAmount:number;
+    stay: number;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
   // billImg?: string;
   // billId?: string;
 }

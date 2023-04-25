@@ -1,6 +1,6 @@
 import { Request,Response } from "express"
 import joi from "joi"
-import { updateEmailS,addEmailS,getMeS, verifyEmailS,updateProfileS,postKycS, getUserS, getPhoneS,postPhoneS} from "../../services/user/user.service"
+import {addEmailS,getMeS, verifyEmailS,updateProfileS,postKycS, getUserS, getPhoneS,postPhoneS} from "../../services/user/user.service"
 
 
 
@@ -16,7 +16,7 @@ export const getUserC=async(req:Request,res:Response)=>{
 
 export const getMeC=async(req:Request,res:Response)=>{
     try{
-        const userData=await getMeS(req.userData.userId);
+        const userData=await getMeS(req.userData.docId);
         if(userData) return res.status(200).json({success:true,userData})
     }catch(e:any){
         console.log(e)
@@ -106,25 +106,3 @@ export const postPhoneC=async(req:Request,res:Response)=>{
 
 
 
-
-
-
-
-
-export const updateEmailC=async(req:Request,res:Response)=>{
-    try{
-        //validate the email input passed in the body
-        const emailSchema=joi.object({
-            email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        })
-        const{error,value}=emailSchema.validate(req.body,{abortEarly:false})
-        if(error) return res.status(400).json({success:false,message:error.message})
-
-        const updatedEmail=await updateEmailS(req.userData.userId,req.body.email)
-
-
-    }catch(e:any){
-        console.log(e)
-        return res.status(400).json({success:false,error:e.message})
-    }
-}

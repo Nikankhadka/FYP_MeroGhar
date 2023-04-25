@@ -5,7 +5,6 @@ import Wish from '../Svg/wishSvg'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
 import {
-  BsFillClipboardCheckFill,
   BsHouseCheckFill,
   BsFillHouseDashFill,
 } from 'react-icons/bs'
@@ -20,6 +19,7 @@ import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
 import useRandom from '../../customHoooks/randomStore'
 import Api from '../../api/client/axios'
+import{AiFillStar} from 'react-icons/ai'
 
 //admin card
 interface props {
@@ -31,7 +31,7 @@ export default function Card({ user, data, index }: props) {
   const [img,setimg] = useState(0);
   
   
-  const { images, _id, avg_Rating, location, price } = data!
+  const {images,_id, avgRating,country,city,state,rate } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -40,13 +40,13 @@ export default function Card({ user, data, index }: props) {
   const router = useRouter()
 
   return (
-    <main className="mx-auto my-auto h-fit w-[98%] rounded-lg border-2 border-gray-300 bg-white duration-300   hover:shadow-xl">
-      <div className="">
+    <div key={index} className="mx-auto my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
+      <div>
         <Link href={`/Home/rooms/${_id}`} target="_blank">
           <img
-            src={images![img].img_url}
+            src={images![img].imgUrl}
             alt="property"
-            className=" w-full    rounded-lg"
+            className=" w-full h-52 object-cover"
           />
         </Link>
       </div>
@@ -77,21 +77,21 @@ export default function Card({ user, data, index }: props) {
       </div>
 
       {!user && (
-        <div className=" flex items-center justify-between px-2">
+        <div className=" flex items-center justify-between px-3">
           <Wish active={false} />
           <p className="flex items-center">
-            <img src="/rate.png" alt="rate" width={20} height={20} />
-            <span className="text-md text-gray-600">{data?.avg_Rating}</span>
+            <AiFillStar  className='h-4 w-4'/>
+            <span className="text-lg text-gray-600">{avgRating}</span>
           </p>
         </div>
       )}
 
       <div className="my-2 mx-auto w-[95%]">
         <p className="text-sm font-semibold">
-          {location?.country},{location?.state},{location?.city}
+          {country},{state},{city}
         </p>
-        <p className="gray-600 text-sm">
-          <span className="text-sm font-semibold">{price}$</span> Night
+        <p className="gray-600 text-sm mt-1">
+          <span className="text-sm font-semibold">{rate}$</span> Night
         </p>
       </div>
 
@@ -208,6 +208,10 @@ export default function Card({ user, data, index }: props) {
           </button>
         </div>
       )}
-    </main>
+    </div>
   )
 }
+
+
+
+

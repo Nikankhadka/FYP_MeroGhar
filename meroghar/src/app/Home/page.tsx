@@ -6,6 +6,7 @@ import { SecondaryFooter } from "../../components/footer"
 import ClientComp from "../../components/clientComp"
 import { checkSession } from "../../api/server/auth"
 import { getProperties } from "../../api/server/property/getProperty"
+import{AiFillStar} from 'react-icons/ai'
 
 export default async function Home(){
 
@@ -15,7 +16,7 @@ export default async function Home(){
         <main className="w-full ">
 
         {/* for Property Viwed By users */}
-        <div className="w-[95%] mx-auto my-24">
+        <div className="w-[95%] mx-auto">
         Hello check 
 
         <ClientComp>

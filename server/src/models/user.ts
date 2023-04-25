@@ -1,6 +1,6 @@
 
 
-import {Schema,model} from "mongoose"
+import {Schema,model,Types} from "mongoose"
 import { IUser } from "../interfaces/dbInterface";
 
 export const userSchema=new Schema({
@@ -31,7 +31,7 @@ export const userSchema=new Schema({
             }
         },
         
-        About:{
+        about:{
             type:String,
             default:""
         },
@@ -39,26 +39,11 @@ export const userSchema=new Schema({
         //can be manually updated or if user logs in with google then it will be updated automatically
         email:{
             mail:{type:String,default:""},
-            is_verified:{type:Boolean,default:false}
+            isVerified:{type:Boolean,default:false}
         },
 
         //since i will be usig jwt for most of the verificaion purpose rather than generate own token
-        Token:String,
-        two_FA:{
-            type:Boolean,
-            default:false
-        },
-        
-        created_At:{
-            type:Date,
-            default:Date.now,
-            immutable:true
-        },
-        //will be provided on update
-        updated_At:{
-            type:Date,
-            default:Date.now
-        },
+        token:String,
         //will contain the token value for token rotation
         refreshToken:[String],
         is_Admin:{type:Boolean,default:false},
@@ -86,21 +71,21 @@ export const userSchema=new Schema({
                 type:String,
                 default:""
             },
-            address:{
-                country:{
+
+            country:{
                     type:String,
                     default:""
                 },
-                state:{
+            state:{
                     type:String,
                     default:""
                 },
 
-                city:{
+            city:{
                     type:String,
                     default:""
                 },
-            },
+            
             //multiple images of user, citizenship for manual verification
             img:{
                 
@@ -129,15 +114,18 @@ export const userSchema=new Schema({
                 default:false
             },
             message:String,
-            approvedBy:String,
+            approvedBy:{
+                type:Types.ObjectId,
+                ref:"Users"
+            },
         },
 
         //no of property posted by user
-        listing_Count:{type: Number,default:0},
+        listingCount:{type: Number,default:0},
 
         //rating and review count will be updated on write every time user property is reviewd
-        avg_rating:{type: Number,default:0}, 
-        recieved_Reviewcount:{type: Number,default:0},
+        avgRating:{type: Number,default:0}, 
+        recievedReviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
         wishList:{type:[
@@ -163,18 +151,6 @@ export const userSchema=new Schema({
             banEnd:Date,
             message:String
         },
-
-        rentedProperty:{
-            type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
-            default:[]
-        },
-
-        //for recommendation colloborative information data will be rating and review 
-        recommendation:{
-            type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
-            default:undefined
-        },
-
         viewedProperty:{
             type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
             default:[]
@@ -183,7 +159,7 @@ export const userSchema=new Schema({
         
 
 
-})
+},{timestamps:true})
 
 
 

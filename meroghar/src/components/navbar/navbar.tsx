@@ -5,6 +5,7 @@ import InititailModalC from './navmodel'
 import { createRef } from 'react'
 import { ToggleButton } from '../buttons'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -22,6 +23,7 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
   //get auth state and pass into the initial model
   const [open, setopen] = useState(false)
   const menuRef = createRef<HTMLDivElement>()
+  const router=useRouter()
 
 
   useEffect(() => {
@@ -38,6 +40,10 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
     }
   })
 
+  useEffect(()=>{
+    //every time nav bar is rendered refresh the page once 
+    router.refresh();
+  },[])
 
 
 
@@ -55,18 +61,18 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
 
         <Link
           href="/"
-          className="block font-semibold text-mainColor drop-shadow-xl dark:text-themeColor md:text-lg"
+          className="block text-lg font-semibold text-mainColor drop-shadow-xl dark:text-themeColor "
         >
           MeroGhar
         </Link>
       </div>
 
       {/* search Bar */}
-      <div className="  my-2 flex h-11 w-11/12 items-center gap-1 rounded-lg border-2 border-gray-200 bg-white hover:drop-shadow-md md:w-2/6 ">
+      <div className="  my-2 flex h-11  items-center gap-1 rounded-lg border-2 border-gray-200 bg-white hover:drop-shadow-md md:w-2/6 hover:border-themeColor ">
         <input
           type="text"
           className="text-md h-full w-full rounded-lg p-2 shadow-lg focus:outline-mainColor"
-          placeholder="   Search"
+          placeholder="Search"
         />
         <button className=" h-full rounded-lg bg-white px-1 hover:bg-blue-100  ">
           <img src="/search.png" alt="search" className="h-6 w-6 " />
@@ -78,9 +84,9 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
         <ToggleButton theme={theme} />
         <Link
           href="/Account/listings"
-          className=" block rounded-md border-2   border-gray-200 p-2 px-3  text-gray-700 hover:border-themeColor dark:text-gray-300 md:text-sm"
+          className=" block rounded-md border-2  font-semibold  border-gray-200 p-2 px-3  text-gray-700 hover:border-themeColor dark:text-gray-300 md:text-sm"
         >
-          Postroom
+          PostRoom
         </Link>
 
         <div ref={menuRef}>

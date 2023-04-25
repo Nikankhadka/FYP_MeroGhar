@@ -68,7 +68,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <html className={theme=='dark'? 'dark':'light'}>
       <head />
       {/* body sets the root layout for entire application */}
-      <body className={`bg-slate-100 flex flex-col ${font.className}`}>
+      <body className={` flex flex-col ${font.className}`}>
         
 
         {/* conditionally render navbar  */}

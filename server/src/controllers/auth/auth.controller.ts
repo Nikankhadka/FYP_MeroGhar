@@ -96,6 +96,7 @@ export const googleLoginC=async(req:Request,res:Response)=>{
     try{
        
         console.log(req.user);
+        console.log("req url",req.headers);
         const {accessToken,refreshToken,user}=await googleLoginS(req.user)
         
         res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
@@ -132,10 +133,10 @@ export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
     const{refreshToken}=req.cookies
     const verifyToken=await logOutS(refreshToken);
    if(verifyToken) return  res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
-   res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:false})
+   res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
     }catch(e:any){
         //if invalid token use detected clear cookie from imposter
         console.log(e)
-        res.status(204).clearCookie("refreshToken",{httpOnly:true}).json({success:false})
+        res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
     }
 }

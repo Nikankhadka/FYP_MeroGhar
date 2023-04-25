@@ -2,16 +2,10 @@
 
 import Datepicker from 'react-tailwindcss-datepicker'
 import { useState } from 'react'
-import { inputStyle } from '../../styles/variants'
 import Link from 'next/link'
 import { ErrorText } from '../random'
-import Api from '../../api/client/axios'
-import { toast } from 'react-hot-toast'
-import { Router } from 'next/router'
 import { useRouter } from 'next/navigation'
 import moment from 'moment'
-
-
 import useModal from '../../customHoooks/useModal'
 import { Property } from '../../interface/response'
 import useBookingStore from '../../customHoooks/bookingStore'
