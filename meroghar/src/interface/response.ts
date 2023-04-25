@@ -1,4 +1,5 @@
 
+//when another user views my profile information
 export interface FetchedUserData {
     _id:string,
     userName: string
@@ -6,39 +7,41 @@ export interface FetchedUserData {
       imgId: string
       imgUrl: string
     }
-    About:string
+    about:string
     email: {
       mail: string
-      is_verified: boolean
+      isVerified: boolean
     };
-    two_FA: boolean
-    created_At: string
+    
+    createdAt: string
     kyc: {
       isVerified: boolean
     }
     kycInfo:{
         phoneNumber:string
     }
-    listing_Count: number
-    avg_rating: number
-    recieved_Reviewcount: number
+    listingCount: number
+    avgRating: number
+    recievedReviewcount: number
    
   }
 
 
+  //my user detail fetched by me to update kyc information
   export interface FetchedMe{
+    _id:string
     userId: string;
     userName: string;
     profileImg: {
       imgId: string;
       imgUrl: string;
     };
-    About: string;
+    about: string;
     email: {
       mail: string;
-      is_verified: boolean;
+      isVerified: boolean;
     };
-    created_At: Date;
+    createdAt: Date;
     is_Admin: boolean;
     kycInfo: {
       firstName: string;
@@ -46,11 +49,11 @@ export interface FetchedUserData {
       gender: string;
       email: string;
       phoneNumber: string;
-      address: {
+     
         country: string;
         state:string,
         city: string;
-      };
+     
       img: {
         imgId: string;
         imgUrl: string;
@@ -62,12 +65,14 @@ export interface FetchedUserData {
       message: string;
       approvedBy: string;
     };
-    listing_Count: number;
-    avg_rating: number;
-    recieved_Reviewcount: number;
+    listingCount: number;
+    avgRating: number;
+    recievedReviewcount: number;
   }
 
 
+
+  // admin fetches this to view profile kyc profile verifcaiton
  export  interface IUserKyc {
     userId: string;
     userName: string;
@@ -75,24 +80,24 @@ export interface FetchedUserData {
       imgId: string;
       imgUrl: string;
     };
-    About: string;
+    about: string;
     email: {
       mail: string;
-      is_verified: boolean;
+      isVerified: boolean;
     };
-    two_FA: boolean;
-    created_At: Date;
+
+    createdAt: Date;
     kycInfo: {
       firstName: string;
       lastName: string;
       gender: string;
       email: string;
       phoneNumber: string;
-      address: {
+     
         country: string;
         state: string;
         city: string;
-      };
+     
       img: {
         imgId: string;
         imgUrl: string;
@@ -104,58 +109,93 @@ export interface FetchedUserData {
       message: string;
       approvedBy: string;
     };
-    listing_Count: number;
-    avg_rating: number;
-    recieved_Reviewcount: number;
+    listingCount: number;
+    avgRating: number;
+    recievedReviewcount: number;
   }
 
 
 
   export interface Property{
-  
     _id: string;
     userId: string;
     name: string;
     url: string;
-    location: {
+   
       country: string;
       state: string;
       city: string;
-    };
+   
     discription: string;
-    property_type: string;
-    rules: string[];
+    propertyType: string;
+    rules: string;
     amenities: string[];
-    price: number;
+    rate: number;
     images: {
-      img_id: string;
-      img_url: string;
+      imgId: string;
+      imgUrl: string;
     }[];
-    rating_count: number;
+    ratingCount: number;
     viewCount: number;
-    avg_Rating: number;
-    is_banned: {
+    avgRating: number;
+    isBanned: {
       status: boolean;
       message: string;
     };
-    is_verified: {
+    isVerified: {
       status: boolean;
       pending: boolean;
       message: string;
       approvedBy: string;
     };
-    recommendation: string[];
   
+  
+}
+
+export interface IReview{
+  userId: string;
+  propertyId: string
+  rating: number;
+  review: string;
+  
+    reportStatus: boolean;
+    reportMessage: string;
+    admin:string
+    adminReview: string;
+  
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
 export interface IBooking{
-  userId:string,
-  propertyId:string,
-  hostId:string,
-  createdAt:Date,
-  startDate:Date,
-  endDate:Date,
-  guest:number
-  id:string
+  userId: string
+  propertyId: string
+  hostId:string
+  status: string
+  startDate: Date;
+  endDate: Date;
+  guest: number;
+  ownerCheckInStatus: string
+  tenantCheckInStatus: string
+  ownerCheckOutStatus: string
+  tenantCheckOutStatus: string
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
+export interface Payment {
+  payerId: string;
+  bookingId:string
+  paymentDate: Date;
+  initialAmount:number;
+  serviceCharge:number;
+  totalAmount:number;
+  stay: number;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+// billImg?: string;
+// billId?: string;
 }

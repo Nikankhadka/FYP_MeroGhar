@@ -7,12 +7,12 @@ import { bookingModel } from "../../models/booking";
 
 
 //property is not crated only request is send to admin for property post verification
-export const createPropertyS=async(userId:string,propertyData:Partial<Property>):Promise<boolean>=>{
+export const createPropertyS=async(_id:string,propertyData:Partial<Property>):Promise<boolean>=>{
     try{
         console.log('imagges',propertyData)
         const newProperty=await propertyModel.create({
             ...propertyData,
-            userId,
+            userId:_id,
             is_verified:{
             status:false,
             pending:true,
@@ -29,37 +29,6 @@ export const createPropertyS=async(userId:string,propertyData:Partial<Property>)
     }
 }
 
-export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
-    try{
-        //since all admin have access to this simply fetch unverified property set in pending
-        const newLimit=parseInt(limit);
-        const newPage=parseInt(page) 
-        const properties=await propertyModel.find({userId}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
-        if(!properties) throw new Error("No property listedby the user")
-        return properties
-
-    }catch(e){
-        console.log(e)
-        throw e;
-    }
-
-}
-
-export const getPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
-    try{
-        //since all admin have access to this simply fetch unverified property set in pending
-        const newLimit=parseInt(limit);
-        const newPage=parseInt(page) 
-        const properties=await propertyModel.find({}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({name:"asc"})
-        if(!properties) throw new Error("No properties rightNow")
-        return properties
-
-    }catch(e){
-        console.log(e)
-        throw e;
-    }
-
-}
 
 
 export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:Property,user:string,inWishList:boolean}>=>{
@@ -67,7 +36,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
         if(userId!==""){
             console.log("indie user",userId)
             //check whether its a previous tennent 
-            const userdocument=await userModel.findOne({userId});
+            const userdocument=await userModel.findOne({_id:userId});
 
 
             const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified");
@@ -100,6 +69,42 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
 }
 
 
+export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const properties=await propertyModel.find({userId}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        if(!properties) throw new Error("No property listedby the user")
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
+}
+
+export const getPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+    try{
+        //since all admin have access to this simply fetch unverified property set in pending
+        const newLimit=parseInt(limit);
+        const newPage=parseInt(page) 
+        const properties=await propertyModel.find({}).sort({ avgRating: -1, ratingCount: -1, viewCount: -1,createdAt: -1 })
+        .select('-tennants').limit(newLimit*1).skip((newPage-1)*newLimit);
+        if(!properties) throw new Error("No properties rightNow");
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e;
+    }
+
+}
+
+
+
+
 
 export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Property>):Promise<Property>=>{
     try{
@@ -109,7 +114,7 @@ export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Pr
 
         //now update the property information 
         const updatedProperty=await propertyModel.findOneAndUpdate({_id:id,userId},{...updateData,
-        is_verified:{status:false,pending:true,message:"Update needs reverification"}},{new:true});
+        isVerified:{status:false,pending:true,message:"Update needs reverification"}},{new:true});
         
         
        /* updatedProperty!.is_verified.status=false,
@@ -160,9 +165,11 @@ export const deletePropertyS=async(userId:string,propertyId:string):Promise<bool
         //now property delete so decrease listing count from user profile
         const decreaseCount=await userModel.updateOne({userId},{
             $inc:{
-                listing_Count:-1
+                listingCount:-1
             }
         })
+
+        //also decrese ratinf rating-1/2 and also rating count 
 
         if(!decreaseCount) throw new Error("Propety deleted failed to decrease listing count");
 
@@ -186,16 +193,16 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
             const propertyOwner=await propertyModel.findOne({_id:propertyId,userId});
             if(propertyOwner) return false;
             
-            const checkViewed=await userModel.findOne({userId,viewed_property:propertyId});
+            const checkViewed=await userModel.findOne({_id:userId,viewedProperty:propertyId});
             //donot update view if same user views the property
             if(checkViewed) return false;
 
             //now append the product
-            const updateViewedProperty= await userModel.findOneAndUpdate({userId},{$push:{viewed_property:propertyId}},{new:true})
+            const updateViewedProperty= await userModel.findOneAndUpdate({_id:userId},{$push:{viewedProperty:propertyId}},{new:true})
             if(!updateViewedProperty) throw new Error("view update failed")
             //now since appended check the array size of morethan 10 remove first property
-            if(updateViewedProperty.viewed_property.length! >10) {
-                updateViewedProperty?.viewed_property.shift() 
+            if(updateViewedProperty.viewedProperty.length! >10) {
+                updateViewedProperty?.viewedProperty.shift() 
                 await updateViewedProperty?.save()
             }
         }

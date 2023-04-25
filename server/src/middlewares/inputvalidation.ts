@@ -39,7 +39,7 @@ export const validateProfile=async(req:Request,res:Response,next:NextFunction)=>
                 imgId:joi.string().optional(),
                 imgUrl:joi.string().optional()
             }).optional(),
-            About:joi.string().optional()
+            about:joi.string().optional()
         })
 
       
@@ -102,11 +102,11 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
             gender:joi.string().required(),
             // email is not compulsory dynamically render email input in front end
             email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-            address:{
-                country:joi.string().required(),
-                state: joi.string().required(),
-                city: joi.string().required(),
-            },
+           
+            country:joi.string().required(),
+            state: joi.string().required(),
+            city: joi.string().required(),
+            
 
             //when defining complex tyope can use joi.object to define schema,or can simply create object and nest 
             //or like below define array and for its items pass object schema , or direct obj property
@@ -135,20 +135,20 @@ export const validatePropertyInput = async(req: Request, res: Response, next: Ne
     try {
         const PropertySchema = joi.object({
             name: joi.string().required(),
-            location:{
-                country:joi.string().required(),
-                state: joi.string().required(),
-                city: joi.string().required(),
-            },
+            
+            country:joi.string().required(),
+            state: joi.string().required(),
+            city: joi.string().required(),
+            
             discription: joi.string().min(15).required(),
-            property_type: joi.string().required(),
+            propertyType: joi.string().required(),
             rules: joi.string().required(),
             amenities: joi.array().items(joi.string()).required(),
-            price: joi.number().required(),
+            rate: joi.number().required(),
             images: joi.array().items(
                 {
-                    img_id: joi.string().required(),
-                    img_url: joi.string().required(),
+                    imgId: joi.string().required(),
+                    imgUrl: joi.string().required(),
                 }
             ).required()
         });
@@ -168,20 +168,18 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
         console.log(req.body)
         const PropertySchema = joi.object({
             name: joi.string().optional(),
-            location:{
-                country:joi.string().optional(),
-                state: joi.string().optional(),
-                city: joi.string().optional(),
-            },
+            country:joi.string().optional(),
+            state: joi.string().optional(),
+            city: joi.string().optional(),
             discription: joi.string().optional(),
-            property_type: joi.string().optional(),
+            propertyType: joi.string().optional(),
             rules:joi.string().optional(),
             amenities: joi.array().items(joi.string()).optional(),
-            price: joi.number().optional(),
+            rate: joi.number().optional(),
             images:joi.array().items(
                 {
-                    img_id: joi.string().optional(),
-                    img_url: joi.string().optional(),
+                    imgId: joi.string().optional(),
+                    imgUrl: joi.string().optional(),
                     _id:joi.string().optional()
                 }
             ).optional()
@@ -202,12 +200,12 @@ export const validateReviewInput=async(req:Request,res:Response,next:NextFunctio
     try{
         //defined joi schema for input validation of requet body
         const reviewSchema=joi.object({
-            rating:{
-                property:joi.number().min(1).max(5).optional(),
-                host:joi.number().min(1).max(5).optional(),
-                value:joi.number().min(1).max(5).optional()
-            },
-            overallRating:joi.number().min(1).max(5).optional(),
+            // rating:{
+            //     property:joi.number().min(1).max(5).optional(),
+            //     host:joi.number().min(1).max(5).optional(),
+            //     value:joi.number().min(1).max(5).optional()
+            // },
+            rating:joi.number().min(1).max(5).optional(),
             review:joi.string().min(5).max(50).optional()  
         }).xor('rating','review')
 
@@ -227,12 +225,12 @@ export const validateReviewUpdate=async(req:Request,res:Response,next:NextFuncti
     try{
         //defined joi schema for input validation of requet body
         const reviewSchema=joi.object({
-            rating:{
-                property:joi.number().min(1).max(5).optional(),
-                host:joi.number().min(1).max(5).optional(),
-                value:joi.number().min(1).max(5).optional()
-            },
-            overallRating:joi.number().min(1).max(5).optional(),
+            // rating:{
+            //     property:joi.number().min(1).max(5).optional(),
+            //     host:joi.number().min(1).max(5).optional(),
+            //     value:joi.number().min(1).max(5).optional()
+            // },
+            rating:joi.number().min(1).max(5).optional(),
             review:joi.string().min(5).max(50).optional()  
         }).xor('rating','overallRating','review')
 

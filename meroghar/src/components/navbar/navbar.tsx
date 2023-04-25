@@ -40,6 +40,10 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
     }
   })
 
+  useEffect(()=>{
+    //every time nav bar is rendered refresh the page once 
+    router.refresh();
+  },[])
 
 
 

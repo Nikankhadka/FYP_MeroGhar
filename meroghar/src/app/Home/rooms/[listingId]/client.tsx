@@ -12,7 +12,7 @@ import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
 import * as _ from 'lodash'
-import Invoice from '../../../../components/listing/bill'
+
 
 interface RoomProps {
   propertyData: Partial<Property>
@@ -174,6 +174,7 @@ export function RoomClient({
             <p className="text-lg font-bold">76 reviews</p>
           </div>
 
+         
           {/* grid block */}
           <div className="grid-1 grid w-full gap-10 md:grid-cols-2 ">
             {Reviews.map((items) => {

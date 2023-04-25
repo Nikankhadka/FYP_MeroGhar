@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { HiUser,HiIdentification,HiHeart,HiHome } from 'react-icons/hi'
+import { HiUser,HiHeart,HiHome } from 'react-icons/hi'
 import {MdManageAccounts,MdOutlineReviews} from 'react-icons/md'
 
 import{AiFillSetting} from 'react-icons/ai'
@@ -38,7 +38,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
       >
         
         {/* content div */}
-        <div className="h-full z-40 w-64 overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-slate-700  sm:w-full border-2 border-red-500" ref={ref}>
+        <div className="h-full z-40 w-64 overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-slate-700  sm:w-full" ref={ref}>
 
         <div >
             {/* content */}
@@ -58,7 +58,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 }
      
 
-            <Link
+            {/* <Link
               href="/Account"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
@@ -74,7 +74,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Dashboard
               </span>
-            </Link>
+            </Link> */}
 
             <Link
               href="/Account/profile"
@@ -128,7 +128,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               </span>
             </Link>
 
-           {
+           {/* {
             !props.is_Admin&&<Link
             href="#"
             className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
@@ -138,7 +138,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               Message
             </span>
           </Link>
-           }
+           } */}
 
 
             
@@ -210,7 +210,7 @@ const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
                   return router.push('/Home')
                 
             })}}
-              className=" group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+              className="w-full group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <BiLogOut className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">

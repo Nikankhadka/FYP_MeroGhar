@@ -13,7 +13,7 @@ import { FetchedMe } from '../../interface/response'
 
 
 interface props{
-  userData:FetchedMe
+  userData:Partial<FetchedMe>
 }
 
 
@@ -24,9 +24,9 @@ export default function AccountComponent({userData}:props) {
   const confirmModal=useModal()
 
 
-  const {kycInfo,kyc,email,}=userData
+  const {kycInfo,kyc,email,}=userData!
 
-  const kycinfo=kyc.isVerified||kyc.pending
+  const kycinfo=kyc!.isVerified||kyc!.pending
   console.log(kycinfo);
 
 
@@ -34,7 +34,7 @@ export default function AccountComponent({userData}:props) {
 
 
   return (
-    <main className={`mx-auto rounded-lg ${bg}  w-[95%] sm:w-[90%] lg:w-[85%] `} >   
+    <main className={`mx-auto rounded-lg ${bg} `} >   
 
     <div className=' p-3 w-[80%] '>
 
@@ -59,30 +59,30 @@ export default function AccountComponent({userData}:props) {
  {  openKyc=='close'  &&   <div className='mt-4'>
         
         {kycinfo&&<div>
-        <Info title='First Name' value={kycInfo.firstName}/>
+        <Info title='First Name' value={kycInfo!.firstName}/>
         <hr className="my-4 border-gray-400" />
-        <Info title='Last Name' value={kycInfo.lastName}/>
+        <Info title='Last Name' value={kycInfo!.lastName}/>
         <hr className="my-4 border-gray-400" />
-        <Info title='Gender' value={kycInfo.gender}/>
+        <Info title='Gender' value={kycInfo!.gender}/>
         <hr className="my-4 border-gray-400" />
-        <Info title='Address' value={`${kycInfo.address.country},${kycInfo.address.state},${kycInfo.address.city}`} />
+        <Info title='Address' value={`${kycInfo!.country},${kycInfo!.state},${kycInfo!.city}`} />
         <hr className="my-5 border-gray-400" />
         </div>}
         
-        {email.mail!=''&&<div>
-        <Info title='Email' value={email.mail}/>
+        {email!.mail!=''&&<div>
+        <Info title='Email' value={email!.mail}/>
         <hr className="my-4 border-gray-400" />
         </div>}
 
-        {kycInfo.phoneNumber!=''&&<div>
-        <Info title='Phone Number' value={kycInfo.phoneNumber}/>
+        {kycInfo!.phoneNumber!=''&&<div>
+        <Info title='Phone Number' value={kycInfo!.phoneNumber}/>
         <hr className="my-4 border-gray-400" />
         </div>}
 
         {kycinfo&&<div className=' p-3 flex items-center justify-between'>
         <p>
           <h1 className='font-semibold my-2'>Id</h1>
-            <img src={kycInfo.img.imgUrl} alt="imghere" className='block h-auto w-[85%]  sm:w-[60%] rounded-lg my-2'/>
+            <img src={kycInfo!.img.imgUrl} alt="imghere" className='block h-auto w-[85%]  sm:w-[60%] rounded-lg my-2'/>
         </p>
         </div>}
    

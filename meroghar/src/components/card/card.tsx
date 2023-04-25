@@ -5,7 +5,6 @@ import Wish from '../Svg/wishSvg'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
 import {
-  BsFillClipboardCheckFill,
   BsHouseCheckFill,
   BsFillHouseDashFill,
 } from 'react-icons/bs'
@@ -32,7 +31,7 @@ export default function Card({ user, data, index }: props) {
   const [img,setimg] = useState(0);
   
   
-  const { images, _id, avg_Rating, location, price } = data!
+  const {images,_id, avgRating,country,city,state,rate } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -41,11 +40,11 @@ export default function Card({ user, data, index }: props) {
   const router = useRouter()
 
   return (
-    <main className="mx-auto my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
-      <div className="">
+    <div key={index} className="mx-auto my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
+      <div>
         <Link href={`/Home/rooms/${_id}`} target="_blank">
           <img
-            src={images![img].img_url}
+            src={images![img].imgUrl}
             alt="property"
             className=" w-full h-52 object-cover"
           />
@@ -82,17 +81,17 @@ export default function Card({ user, data, index }: props) {
           <Wish active={false} />
           <p className="flex items-center">
             <AiFillStar  className='h-4 w-4'/>
-            <span className="text-lg text-gray-600">{data?.avg_Rating}</span>
+            <span className="text-lg text-gray-600">{avgRating}</span>
           </p>
         </div>
       )}
 
       <div className="my-2 mx-auto w-[95%]">
         <p className="text-sm font-semibold">
-          {location?.country},{location?.state},{location?.city}
+          {country},{state},{city}
         </p>
         <p className="gray-600 text-sm mt-1">
-          <span className="text-sm font-semibold">{price}$</span> Night
+          <span className="text-sm font-semibold">{rate}$</span> Night
         </p>
       </div>
 
@@ -209,7 +208,7 @@ export default function Card({ user, data, index }: props) {
           </button>
         </div>
       )}
-    </main>
+    </div>
   )
 }
 

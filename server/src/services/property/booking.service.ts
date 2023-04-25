@@ -112,7 +112,7 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
 
        const reservations=await bookingModel.find({
         propertyId:propId
-       }).select('startDate endDate -_id').exec();
+       }).select('startDate endDate').exec();
 
        if(!reservations) throw new Error("failed to get Reservation details");
 

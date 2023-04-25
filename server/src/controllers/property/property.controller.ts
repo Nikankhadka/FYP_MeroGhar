@@ -10,7 +10,7 @@ export const createPropertyC=async(req:Request,res:Response)=>{
         // check kyc verifcation 
         if(!req.userData.kycVerified) return res.status(403).json({success:false,error:"Kyc not Verified/Unauthorized user"});
         console.log(req.body)
-        const newProperty=await createPropertyS(req.userData.userId,req.body)
+        const newProperty=await createPropertyS(req.userData.docId,req.body)
         if(newProperty)return res.status(200).json({success:true,message:"Property sent for further verification"})
     }catch(e:any){
         console.log(e);
@@ -24,13 +24,15 @@ export const getPropertyByIdC=async(req:Request,res:Response)=>{
             const propertyData=await getPropertyByIdS(req.params.id,"");
             return res.status(200).json({success:true,propertyData})
         }
-        const propertyData=await getPropertyByIdS(req.params.id,req.userData.userId);
+        const propertyData=await getPropertyByIdS(req.params.id,req.userData.docId);
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);
         res.status(400).json({success:false,error:e.message})
     }
 }
+
+//for search or random query something like that
 export const getPropertiesC=async(req:Request,res:Response)=>{
     try{
         // if(req.userData.userId==""){
@@ -48,7 +50,7 @@ export const getPropertiesC=async(req:Request,res:Response)=>{
 export const getMyPropertiesC=async(req:Request,res:Response)=>{
     try{
 
-        const propertyData=await getMyPropertiesS(req.query.page as string,req.query.limit as string,req.userData.userId)
+        const propertyData=await getMyPropertiesS(req.query.page as string,req.query.limit as string,req.userData.docId)
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);
@@ -62,7 +64,7 @@ export const updatePropertyC=async(req:Request,res:Response)=>{
     try{
         //check kyc verifcation 
         if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});
-        const updatedProperty=await updatePropertyS(req.userData.userId,req.params.id,req.body)
+        const updatedProperty=await updatePropertyS(req.userData.docId,req.params.id,req.body)
         return res.status(200).json({success:true,message:"Property updated and  sent for further verification",updatedProperty})
     }catch(e:any){
         console.log(e);
@@ -103,7 +105,7 @@ export const updateViewCountC=async(req:Request,res:Response)=>{
         }
 
         //since user is authenticated
-        const updateViewCount=await updateViewCountS(req.userData.userId,req.params.id)
+        const updateViewCount=await updateViewCountS(req.userData.docId,req.params.id)
         if(updateViewCount) return res.status(200).json({success:true,message:"view count updated/user recent product view Updated"})
 
         //if user has already viewed property then 

@@ -16,7 +16,7 @@ export default async function Home(){
         <main className="w-full ">
 
         {/* for Property Viwed By users */}
-        <div className="w-[95%] mx-auto my-24">
+        <div className="w-[95%] mx-auto">
         Hello check 
 
         <ClientComp>

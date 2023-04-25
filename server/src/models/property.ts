@@ -9,26 +9,22 @@ const propertySchema=new Schema({
     //     type:Types.ObjectId,
     //     required:false
     // },
-    userId:{type:String,required:true,immutable:true},
+    userId:{type:Types.ObjectId,required:true,immutable:true},
 
     //this will be default generated
     name:{type:String,required:true},
     url:String,
-    location:{
-        country:String,
-        state:String,
-        city:String,
-
-    },
+    country:String,
+    state:String,
+    city:String,
     discription:{type:String,required:true},
-    property_type:{type:String,required:true},
-    
-    rules:[String],
+    propertyType:{type:String,required:true},
+    rules:String,
     amenities:[String],
-    price:Number,
+    rate:Number,
     images:[{
-        img_id:String,
-        img_url:String
+        imgId:String,
+        imgUrl:String
     }],
 
     //id of previus tennats
@@ -36,19 +32,17 @@ const propertySchema=new Schema({
         type:[{type:Schema.Types.ObjectId,ref:"Users"}],
         default:[]
     },
-    
-    tennantId:Schema.Types.ObjectId,
 
     //calculate these on write
-    rating_count:{type:Number,default:0},
+    ratingCount:{type:Number,default:0},
     viewCount:{type:Number,default:0},
-    avg_Rating:{type:Number,default:0},
+    avgRating:{type:Number,default:0},
 
     //admin can bacn the post
-    is_banned:{type:Boolean,default:false,message:String},
+    isBanned:{type:Boolean,default:false,message:String},
 
     //admin verification check
-    is_verified:{
+    isVerified:{
         status:{
             type:Boolean,
             default:false
@@ -57,15 +51,13 @@ const propertySchema=new Schema({
         message:String,
 
         //can be string or obj id can modify later
-        approvedBy:String
+        approvedBy:{
+            type:Types.ObjectId,
+            ref:"Users"
+        }
     },
 
-    //for recommendation it will be updated on write operation of simialr product content based
-    recommendation:{
-        type:[{type:Types.ObjectId}],
-        default:undefined
-    } //store refrenced similar product
-})
+},{timestamps:true})
 
 
 //export the model instance for performing Query operations

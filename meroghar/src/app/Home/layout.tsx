@@ -28,8 +28,10 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       
         {/* this children represents each page component  that is rendered */}
 
-
-         {children}
+        <main className='my-24 '>
+        {children}
+        </main>
+      
         
        
        

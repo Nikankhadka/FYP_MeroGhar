@@ -37,7 +37,7 @@ export const registerAdminS=async(userId:string,password:string):Promise<boolean
 export const getUserKycS=async(id:string):Promise<Partial<IUser>>=>{
     try{
     
-        const userData=await userModel.findOne({$or:[{_id: id },{ userId:id }]}).select("-password -Token  -refreshToken -updated_At -is_Admin -wishList   -rentedProperty -viewedProperty -recommendation ");
+        const userData=await userModel.findOne({$or:[{_id: id },{ userId:id }]}).select("-password -token  -refreshToken  -is_Admin -wishList  -viewedProperty  ");
         if(!userData) throw new Error("Failed to fetch userData")
         return userData;
     }catch(e){
@@ -57,7 +57,7 @@ export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
         const newpage=parseInt(page)
 
         //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
-        const kycRequests=await userModel.find({"kyc.is_verified": false,"kyc.pending": true }).select('userId userName _id profileImg').limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"});
+        const kycRequests=await userModel.find({"kyc.isVerified": false,"kyc.pending": true }).select('userId userName _id profileImg').sort({userId:"asc",createdAt:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
         if(!kycRequests) throw new Error("No user need to be verified right now")
         return kycRequests
 

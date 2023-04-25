@@ -10,7 +10,7 @@ export interface returnUserData {
     About:string
     email: {
       mail: string
-      is_verified: boolean
+      isVerified: boolean
     };
     two_FA: boolean
     created_At: Date

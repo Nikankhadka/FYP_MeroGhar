@@ -30,12 +30,13 @@ export default function Review() {
               <button
                 onClick={(e) => {
                   setrate(index)
+                 
                 }}
               >
                 <AiFillStar className={
                     index<=rate
-                      ? 'h-7  w-7 fill-themeColor stroke-gray-100'
-                      : 'h-7 w-7 fill-gray-400  stroke-gray-300  transition-all  hover:fill-themeColor'
+                      ? 'h-6  w-6 fill-themeColor stroke-gray-100'
+                      : 'h-6 w-6 fill-gray-400  stroke-gray-300  transition-all  hover:fill-themeColor'
                   }/>
                 
                 

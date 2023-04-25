@@ -9,6 +9,7 @@ import Api from '../../api/client/axios'
 import useConfirm from '../../customHoooks/useConfirm'
 import useModal from '../../customHoooks/useModal'
 import { useRouter } from 'next/navigation'
+import useAccount from '../../customHoooks/AccountState'
 interface EditProfile {
   userName?: string
   profileImg?: any|{
@@ -25,10 +26,10 @@ interface Prop{
     userName:string,
     About:string,
     img:string,
-    setEditProfile:React.Dispatch<React.SetStateAction<boolean>>
+   
 }
 
-export function EditBasic({setEditProfile,userName,About,img}:Prop) {
+export function EditBasic({userName,About,img}:Prop) {
   const {
     register,
     handleSubmit,
@@ -45,6 +46,7 @@ export function EditBasic({setEditProfile,userName,About,img}:Prop) {
   const confirm=useConfirm();
   const confirmModal=useModal();
   const router=useRouter()
+  const account=useAccount()
 
   const [error,seterror]=useState(false);
 
@@ -106,7 +108,7 @@ export function EditBasic({setEditProfile,userName,About,img}:Prop) {
             const updateProfile=await Api.patch('/user/v1/updateProfile',{...profileData},{withCredentials:true});
             if(updateProfile.data.success){
                toast.success("User profile Data SuccessFully Updated");
-               setEditProfile(false);
+                account.onClose()
                confirmModal.onClose();
                return router.refresh();
             }
@@ -196,7 +198,7 @@ export function EditBasic({setEditProfile,userName,About,img}:Prop) {
         <div className='flex my-2 items-center justify-between p-2'>
         <button onClick={(e)=>{
             e.preventDefault();
-            setEditProfile(false)
+          account.onClose()
         }} className='underline font-semibold text-sm'>Cancel</button>
         <button type='submit' onClick={handleSubmit(submitHandler)} className='font-semibold text-white py-2 px-4 rounded-lg bg-themeColor hover:bg-mainColor transition-all' >save</button>
         </div>

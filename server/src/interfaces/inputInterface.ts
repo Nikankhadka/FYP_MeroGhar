@@ -16,13 +16,13 @@ export interface KycData{
     lastName:string,
     gender:string,
     email?:string,
-    address:{
-        country:string,
-        city:string
-    },
+    country:string,
+    state:string
+    city:string
+   
     img:{
-        img_id:string,
-        img_url:string
+        imgId:string,
+        imgUrl:string
     },
     phoneNumber?:string,
     }
