@@ -7,8 +7,8 @@ export interface LoginRegisterInput {
 
 
 export interface Images{
-  img_id:string,
-  img_url:string
+  imgId:string,
+  imgUrl:string
 }
 export interface PostProperty{
     name:string,

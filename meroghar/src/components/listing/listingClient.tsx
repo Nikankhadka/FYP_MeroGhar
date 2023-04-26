@@ -3,16 +3,12 @@
 
 import Link from 'next/link'
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
-import {FiEdit} from 'react-icons/fi'
-import {RiDeleteBin6Fill} from 'react-icons/ri'
-import  {PropertyRow, TableHeader } from '../../../components/Row'
-import {useState} from 'react'
-import PostPropertyForm from '../../../components/postproperty'
-import { Property } from '../../../interface/response'
-import Card from '../../../components/card/card'
-import useRandom from '../../../customHoooks/randomStore'
+import PostPropertyForm from '../postproperty'
+import { Property } from '../../interface/response'
+import Card from '../card/card'
+import useRandom from '../../customHoooks/randomStore'
 import { toast } from 'react-hot-toast'
-
+import {AiOutlinePlus} from 'react-icons/ai'
 
 interface Props{
   is_Admin:boolean,
@@ -55,7 +51,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
 
       {/* only for normal user */}
             {!is_Admin&&<button
-              className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 rounded-lg bg-themeColor px-5 py-2.5 text-sm font-medium text-white hover:bg-mainColor focus:outline-none focus:ring-4"
+              className="flex items-center focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 rounded-lg bg-themeColor px-5 py-2.5 text-sm font-medium text-white hover:bg-mainColor focus:outline-none focus:ring-4"
               type="button"
               onClick={(e)=>{
                 e.preventDefault();
@@ -65,6 +61,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
                 list.onList("list")
               }}
               >
+             
               List Property
             </button>}
 

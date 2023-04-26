@@ -1,8 +1,8 @@
 //wil contain my reservations information 
 
-import { checkSession } from "../../../api/server/auth";
-import { NoAuth } from "../../../components/NoAuth";
-import ClientComp from "../../../components/clientComp";
+import { checkSession } from "../../../../api/server/auth";
+import { NoAuth } from "../../../../components/NoAuth";
+import ClientComp from "../../../../components/clientComp";
 import  Link from 'next/link'
 
 
@@ -33,7 +33,7 @@ export default async function MyTrips(){
 //fetch trip/bookings made by me
     return(
         <main className="w-full bg-white ">
-        <div className="my-24 mx-auto w-[95%]  md:w-[84%]  ">
+        <div className="mx-auto w-[95%]  md:w-[84%]  ">
            {
             trips.length==0&&<main className="w-full mt-12 ">
                                  <h1 className="text-3xl my-5 font-semibold">Trips</h1>

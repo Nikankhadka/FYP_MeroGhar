@@ -77,7 +77,7 @@ export const deletePropertyC=async(req:Request,res:Response)=>{
         if(!req.userData.kycVerified) return res.status(401).json({success:false,error:"Kyc not Verified/Unauthorized user"});;
 
         //since user verified now unto to delete
-        const deleteProperty=await deletePropertyS(req.userData.userId,req.params.id)
+        const deleteProperty=await deletePropertyS(req.userData.docId,req.params.id)
         if(deleteProperty) return res.status(200).json({success:true,message:`Property deleted successfully`})
     }catch(e:any){
         console.log(e)

@@ -21,9 +21,9 @@ export default async function AccountSetting(){
 
 
     <ClientComp>
-    <div className={`mx-auto my-5 rounded-lg  w-[95%] sm:w-[90%] lg:w-[80%]`}  >
+   
     <Profile userId={session.session?session.userData.docId:""} profileData={userData} />
-    </div>
+   
     </ClientComp>
     
     

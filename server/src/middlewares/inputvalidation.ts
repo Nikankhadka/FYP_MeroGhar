@@ -29,12 +29,14 @@ export const validateInput=async(req:Request,res:Response,next:NextFunction)=>{
 
 export const validateProfile=async(req:Request,res:Response,next:NextFunction)=>{
     try{
+        // .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$'))
         console.log("validation input")
         console.log(req.body)
         //defined joi schema for input validation of requet body
         const updateProfileSchema=joi.object({
             userName:joi.string().optional(),
-            password:joi.string().optional().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')),
+            oldPassword:joi.string().optional(),
+            newPassword:joi.string().optional(),
             profileImg:joi.object({
                 imgId:joi.string().optional(),
                 imgUrl:joi.string().optional()

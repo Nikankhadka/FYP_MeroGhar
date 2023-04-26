@@ -93,6 +93,7 @@ export interface kycRequests{
     imgUrl:string,
     imgId:string
   }
+  about:string
 }
 
 export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{

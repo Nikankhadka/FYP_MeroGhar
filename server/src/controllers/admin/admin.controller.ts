@@ -78,7 +78,7 @@ export const verifyPropertyRequestsC=async(req:Request,res:Response)=>{
         const{error,value}=propertyVerify.validate(req.body,{abortEarly:false})
         if(error) return res.status(400).json({success:false,message:error.message})
 
-        const requestVerified=await verifyPropertyRequestsS(req.userData.userId,req.params.id,req.body.isVerified,req.body.message);
+        const requestVerified=await verifyPropertyRequestsS(req.userData.docId,req.params.id,req.body.isVerified,req.body.message);
         //since error thrown is the failure otherwise verified or not is part of the query so its ok
         if(requestVerified)return res.status(200).json({success:true,message:`property successfully ${req.body.isVerified}`})
 

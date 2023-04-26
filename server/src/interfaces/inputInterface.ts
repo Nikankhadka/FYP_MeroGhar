@@ -1,7 +1,8 @@
 import { Types } from "mongoose"
 export interface updateProfile{
     userName:string,
-    password:string,
+    oldPassword:string,
+    newPassword:string,
     profile_Img:{
         img_id:string,
         img_url:string

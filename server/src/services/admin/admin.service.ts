@@ -57,7 +57,7 @@ export const getKycRequestsS=async(page:string,limit:string):Promise<IUser[]>=>{
         const newpage=parseInt(page)
 
         //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
-        const kycRequests=await userModel.find({"kyc.isVerified": false,"kyc.pending": true }).select('userId userName _id profileImg').sort({userId:"asc",createdAt:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
+        const kycRequests=await userModel.find({"kyc.isVerified":false,"kyc.pending":true}).select('userId userName _id profileImg about').sort({userId:"asc",createdAt:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
         if(!kycRequests) throw new Error("No user need to be verified right now")
         return kycRequests
 
@@ -95,7 +95,7 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             //since admin deemed kyc info to be invalid just provide the message to the user 
 
             //just make sure the user account is not verified
-            const userCheck=await userModel.findOne({_id:id,kyc:{is_Verified:true}})
+            const userCheck=await userModel.findOne({_id:id,kyc:{isVerified:true}})
             if(userCheck) throw new Error("User cant be done unverified since User is already verified")
 
             const declineUser=await userModel.updateOne({_id:id},{
@@ -132,7 +132,7 @@ export const getPropertyRequestsS=async(page:string,limit:string):Promise<Proper
         //since all admin have access to this simply fetch unverified property set in pending
         const newLimit=parseInt(limit);
         const newPage=parseInt(page) 
-        const propertyRequests=await propertyModel.find({'is_verified.status': false, 'is_verified.pending': true}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        const propertyRequests=await propertyModel.find({'isVerified.status': false, 'isVerified.pending': true}).select('-tennants ').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
         if(!propertyRequests) throw new Error("No property to be verified right now")
         return propertyRequests
 
@@ -150,10 +150,10 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
         if(!status){
             const declineProperty=await propertyModel.updateOne({_id:propertyId},{
                 "$set":{
-                    "is_verified.status":status,
-                    "is_verified.pending":false,
-                    "is_verified.message":message,
-                    "is_verified.approvedBy":adminId
+                    "isVerified.status":status,
+                    "isVerified.pending":false,
+                    "isVerified.message":message,
+                    "isVerified.approvedBy":adminId
                 }})
 
             if(!declineProperty) throw new Error("Property decline failed");
@@ -163,10 +163,10 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
         
         const verifyProperty=await propertyModel.findOneAndUpdate({_id:propertyId},{
             "$set":{
-                "is_verified.status":status,
-                "is_verified.pending":false,
-                "is_verified.message":message,
-                "is_verified.approvedBy":adminId,
+                "isVerified.status":status,
+                "isVerified.pending":false,
+                "isVerified.message":message,
+                "isVerified.approvedBy":adminId,
             }})
 
         if(!verifyProperty) throw new Error("Property verification failed");
@@ -174,7 +174,7 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
         //increase the property post count for user
           const updateCount=await userModel.updateOne({userId:verifyProperty.userId},{
             "$inc":{
-                listing_Count:1
+                listingCount:1
             }
           })
 

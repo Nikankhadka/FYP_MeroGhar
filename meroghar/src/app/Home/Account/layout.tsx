@@ -1,8 +1,7 @@
 
 
-import { checkSession } from '../../api/server/auth';
-import ClientComp from '../../components/clientComp';
-import NavBar from '../../components/navbar/navbar';
+import { checkSession } from '../../../api/server/auth';
+
 import { cookies } from 'next/headers';
 
 
@@ -22,18 +21,16 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       <main className=' flex flex-col'>
       
 
-        <ClientComp>
-        <NavBar authState={session} img={userData.img} theme={theme} />
-        </ClientComp>
+       
       
         {/* this children represents each page component  that is rendered */}
 
-        <main className='my-24'>
-      
-          {children}
         
+        <div className={`mx-auto my-5 rounded-lg  w-[95%] sm:w-[90%] lg:w-[80%]`}  >
+          {children}
+        </div>
       
-        </main>
+      
       
         
        

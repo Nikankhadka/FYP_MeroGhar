@@ -13,15 +13,15 @@ export default  async function KycRequest(){
 
   if(KycRequests.length===0){
     return(
-      <main className="ml-0 my-20  md:ml-[230px] md:my-10 lg:ml-[260px]">
+     
         <p className="text-lg font-semibold text-center"> No Kyc Requests To Verify</p>
-      </main>
+      
     )
   }
 
 
    return(
-    <main  className="ml-0 my-20 border-2 border-red-600 md:ml-[230px] md:my-10 lg:ml-[260px]">
+      <div>
          <div className="mb-1 w-[96%]  p-2 mx-auto">
           <div className="mb-4">
 
@@ -52,7 +52,7 @@ export default  async function KycRequest(){
 
     
      
-    <div className="w-[96%]  p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+    <div className="mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3  ">
     <ClientComp>
     {
       KycRequests.map((data,index)=>{
@@ -71,7 +71,7 @@ export default  async function KycRequest(){
    
 
     <div className="relative md:sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 sm:px-4">
           <Link
             href="#"
             className="bg-themeColor hover:bg-mainColor focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex flex-1 items-center justify-center rounded-lg px-3 py-2 text-center text-sm font-medium text-white focus:ring-4"
@@ -89,6 +89,8 @@ export default  async function KycRequest(){
           </Link>
         </div>
       </div>
-    </main>
+
+      </div>
+  
    )
 }
