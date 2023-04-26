@@ -30,6 +30,7 @@ export default function Profile({ userId, profileData }: ProfileProps) {
     avgRating,
     createdAt,
     userName,
+    password
   } = profileData
 
     const account=useAccount();
@@ -137,7 +138,7 @@ export default function Profile({ userId, profileData }: ProfileProps) {
               </button>
             )}
 
-          {userId == profileData._id! && (
+          {userId == profileData._id!&&password&&(
                         <button
                         onClick={(e) => {
                           e.preventDefault()
@@ -171,7 +172,7 @@ export default function Profile({ userId, profileData }: ProfileProps) {
           <EditBasic
             img={profileImg!.imgUrl}
             userName={userName!}
-            About={about!}
+            about={about!}
           />
         
       </div>}

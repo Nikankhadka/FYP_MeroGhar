@@ -65,7 +65,7 @@ export const postEmailTemplate=(userEmail:string,token:string,):mailBody=>{
     return {
         to:userEmail,
         from:"nikantest@zohomail.com",
-        subject:"Update Email Request",
+        subject:"Verify Email Request",
         text:"",
         html:` <p>Verify Email by Clicking the link Given below.....</p>
         <a href="http://localhost:2900/user/v1/verifyEmail/${token}" >verify Email</a>

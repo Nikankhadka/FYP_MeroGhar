@@ -16,11 +16,13 @@ import { useRouter } from 'next/navigation'
 
 interface phone {
     phoneNumber: string
-  }
+    setphonemail: React.Dispatch<React.SetStateAction<string>>;
+}
   
- export  function PhoneComp() {
+
+ export  function PhoneComp({phoneNumber,setphonemail}:phone) {
     const [otp, setOtp] = useState('')
-    const [ph, setPh] = useState('')
+    const [ph, setPh] = useState(phoneNumber)
     const [error, seterror] = useState('')
     const [loading, setLoading] = useState(false)
     const [showOTP, setShowOTP] = useState(false)
@@ -112,7 +114,7 @@ interface phone {
         <div className="my-3 ">
           {!showOTP && (
             <div>
-              <label className=" text-md block font-semibold text-slate-700">
+              <label className=" mb-2 text-md block font-semibold text-slate-700">
                 Phone Number
               </label>
   
@@ -136,6 +138,8 @@ interface phone {
                   SendCode
                 </button>
               </div>
+
+              <button className='text-sm font-semibold underline mt-2' onClick={(e)=>setphonemail('close')}>Cancel</button>
             </div>
           )}
   
@@ -147,8 +151,8 @@ interface phone {
   
           {showOTP && (
             <div>
-              <h1 className=" my-2 text-lg font-bold text-gray-700">
-                Enter Your Otp
+              <h1 className=" my-2 text-lg font-semibold text-gray-700">
+                Enter Your OTP
               </h1>
               <OtpInput
                 value={otp}
@@ -180,19 +184,23 @@ interface phone {
                     e.preventDefault()
                     setShowOTP(false)
                   }}
-                  className="text-md font-bold text-gray-700 underline"
+                  className="text-md font-semibold text-gray-700 underline"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={onOTPVerify}
-                  className="rounded-lg border border-white bg-themeColor p-2 px-4 text-white transition-all hover:bg-mainColor"
+                  className="rounded-lg border font-semibold border-white bg-themeColor p-2 px-4 text-white transition-all hover:bg-mainColor"
                 >
                   Verify Code
                 </button>
               </div>
+
+              
             </div>
           )}
+
+         
         </div>
       </main>
     )

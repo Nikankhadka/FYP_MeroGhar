@@ -16,7 +16,7 @@ interface EditProfile {
     imgId:string,
     imgUrl:string
   }
-  About?: string
+  about?: string
 }
 
 const inputStyle =
@@ -24,12 +24,12 @@ const inputStyle =
 
 interface Prop{
     userName:string,
-    About:string,
+    about:string,
     img:string,
    
 }
 
-export function EditBasic({userName,About,img}:Prop) {
+export function EditBasic({userName,about,img}:Prop) {
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ export function EditBasic({userName,About,img}:Prop) {
   } = useForm<EditProfile>({
     defaultValues:{
       userName,
-      About
+      about
     }
   })
 
@@ -65,7 +65,7 @@ export function EditBasic({userName,About,img}:Prop) {
 
 
       const submitHandler:SubmitHandler<EditProfile>=async(formdata)=>{
-        if(formdata.userName==""&&formdata.About==""&&formdata.profileImg.length===0){
+        if(formdata.userName==""&&formdata.about==""&&formdata.profileImg.length===0){
           return seterror(true);
         }
         seterror(false)
@@ -74,7 +74,7 @@ export function EditBasic({userName,About,img}:Prop) {
           try{
             let profileData:EditProfile={
               userName:formdata.userName,
-              About:formdata.About,
+              about:formdata.about,
               profileImg:{
                 imgUrl:"",
                 imgId:""
@@ -86,8 +86,8 @@ export function EditBasic({userName,About,img}:Prop) {
               delete profileData.userName;
             }
   
-            if(formdata.About==""){
-              delete profileData.About;
+            if(formdata.about==""){
+              delete profileData.about;
             }
   
             if(formdata.profileImg.length===0){
@@ -186,7 +186,7 @@ export function EditBasic({userName,About,img}:Prop) {
             <textarea rows={5}
             placeholder="Desription"
             className={inputStyle}
-            {...register('About')}>
+            {...register('about')}>
 
            </textarea>
            
