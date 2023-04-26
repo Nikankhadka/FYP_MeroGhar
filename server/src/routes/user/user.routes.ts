@@ -13,7 +13,8 @@ router.get('/getUser/:id',getUserC)
 //get user data for account setting
 router.get('/getMe',verifyaccessToken(true),getMeC)
 
-router.post("/addEmail",addEmailC)
+router.post("/addEmail",verifyaccessToken(true),addEmailC)
+
 router.patch("/updateProfile",verifyaccessToken(true),validateProfile,updateProfileC)
 
 //use the same api end point to update kyc information

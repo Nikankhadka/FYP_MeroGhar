@@ -28,12 +28,14 @@ export const getMeC=async(req:Request,res:Response)=>{
 export const addEmailC=async(req:Request,res:Response)=>{
     try{
         //validate the email input passed in the body
+        console.log("validation")
         const emailSchema=joi.object({
             email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         })
         const{error,value}=emailSchema.validate(req.body,{abortEarly:false})
         if(error) return res.status(400).json({success:false,message:error.message})
 
+        console.log("email successfully in controller")
         const postEmail=await addEmailS(req.userData.userId,req.body.email)
         if(postEmail) return res.status(200).json({success:true,message:"Email addes Please Verify Email"})
 
@@ -47,7 +49,7 @@ export const addEmailC=async(req:Request,res:Response)=>{
 export const verifyEmailC=async(req:Request,res:Response)=>{
     try{
         const emailVerified=await verifyEmailS(req.params.token);
-        if(emailVerified) return res.status(200).redirect("http://localhost:3000")
+        if(emailVerified) return res.status(200).redirect("http://localhost:3000/Home")
 
     }catch(e:any){
         console.log(e)

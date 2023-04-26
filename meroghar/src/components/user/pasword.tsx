@@ -1,6 +1,6 @@
 'use client';
 
-import {AiTwotoneSetting} from 'react-icons/ai'
+import {useState} from 'react'
 import {useForm,SubmitHandler} from 'react-hook-form'
 import { ErrorText } from '../random';
 import { bg } from '../../styles/variants';
@@ -17,7 +17,8 @@ export default function Password(){
     const account=useAccount();
 
     const {register,handleSubmit,watch,formState: { errors },control} = useForm<passwordform>()
-
+    const [error,seterror]=useState(false)
+    
     const onSubmit: SubmitHandler<passwordform> =async(formdata)=>{
         console.log(formdata)
       }
@@ -69,6 +70,8 @@ export default function Password(){
                 onClick={handleSubmit(onSubmit)}
             >Update</button>
         </div>
+
+        {error&&<ErrorText text='Old password Wrong/Invalid New password' />}
         </form>
         </div>
         

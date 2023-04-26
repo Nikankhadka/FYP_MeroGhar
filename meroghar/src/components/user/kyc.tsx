@@ -74,7 +74,7 @@ export default function Kyc({ setopenKyc,userData }: kycprops) {
         state:kycInfo!.state,
         city:kycInfo!.city,
      
-      email:kycInfo!.email,
+      
       //donot put image here since onlyfile can be default 
     }
   })
@@ -106,7 +106,7 @@ useEffect(()=>{
         kycInfo: {
           firstName:formdata.firstName,
           lastName:formdata.lastName,
-          email:formdata.email,
+          email:kycInfo!.email,
           gender:formdata.gender,
          
             country:kycInfo!.country==formdata.country? formdata.country:  country.getCountryData(parseInt(formdata.country)).name,
@@ -179,11 +179,6 @@ useEffect(()=>{
 
       <h2 className='text-xl font-semibold mb-5'>Kyc Form</h2>
       <hr className="my-5 border-gray-400" />
-      {kycInfo!.phoneNumber==''&&<div>
-        <PhoneComp />
-        <hr className="my-5 border-gray-400" />
-
-        </div>}
       
       <form>
 
@@ -277,23 +272,6 @@ useEffect(()=>{
         
        
 
-{ email!.mail==''&& <div className="w-full my-3 md:w-[70%]">
-            <label className=" text-sm font-semibold block  text-slate-700">Email</label>
-            <input
-              type="email"
-              placeholder="Email"
-              className={inputStyle}
-              {...register('email', {
-                required: true,
-                pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              })}
-            />
-            {errors?.email && (
-              <ErrorText text="Please Enter Valid Email/Formatted Email" />
-            )}
-
-            <p className='text-sm font-semibold text-themeColor my-2'>New Mail/verify Existing Email</p>
-    </div>}
         
         <div className="w-full my-6">
           <div className="my-2 flex  w-full flex-col items-center gap-y-3">

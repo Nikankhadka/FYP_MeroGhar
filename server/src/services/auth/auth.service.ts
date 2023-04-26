@@ -206,12 +206,13 @@ export const googleLoginS=async(profileData:googleProfile):Promise<{accessToken:
             userName,
             email:{
                 mail:email,
-                is_verified:true
+                isVerified:true
             },
             profileImg:{
                 imgId:"",
                 imgUrl:profile_Img
             },
+
             kycInfo:{
                 email:email
             }

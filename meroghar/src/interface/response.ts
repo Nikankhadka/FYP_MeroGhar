@@ -67,6 +67,7 @@ export interface FetchedUserData {
     };
     listingCount: number;
     avgRating: number;
+    password:string
     recievedReviewcount: number;
   }
 

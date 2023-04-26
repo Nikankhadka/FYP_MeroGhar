@@ -142,19 +142,10 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
         const kycVerified=await userModel.findOne({userId,"kyc.isVerified":true})
         if(kycVerified) throw new Error("kyc is already verified cant post new kyc information")
 
-        console.log("inside post kyc before sending email")
-        //first validate email input
-         if(KycData.kycInfo.email){
-            console.log("inside kyc email");
-            const addEmail=await addEmailS(userId,KycData.kycInfo.email);
-            //since email is not verified needs to go through verification as above email property in the KycData will be deleted
-            if(addEmail) delete KycData.kycInfo.email;
-        }
-
         const postKyc=await userModel.findOneAndUpdate({userId},{...KycData,kyc:{isVerified:false,
             pending:true,
             message:"",
-            approvedBy:""
+            //approved by paxi halnu
             }},{new:true})
 
         if(!postKyc) throw new Error("Kyc post failed")
@@ -178,7 +169,7 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
 export const getPhoneS=async(phoneNumber:string):Promise<boolean>=>{
     try{
         console.log("check Phone")
-        const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
+        const checkPhone=await userModel.findOne({'kycInfo.phoneNumber':phoneNumber});
         if(checkPhone) throw new Error("user With provided Phone Number Exist please try new Number");
 
         console.log('phone checked')
@@ -194,7 +185,7 @@ export const getPhoneS=async(phoneNumber:string):Promise<boolean>=>{
 // this same api can be used to update phone number
 export const postPhoneS=async(userId:string,phoneNumber:string):Promise<boolean>=>{
     try{
-        const checkPhone=await userModel.findOne({kycInfo:{phoneNumber}});
+        const checkPhone=await userModel.findOne({'kycInfo.phoneNumber':phoneNumber});
         if(checkPhone) throw new Error("user With provided Phone Number Exist please try new Number");
 
         const postPhone=await userModel.findOneAndUpdate({userId}, { $set: { 'kycInfo.phoneNumber':phoneNumber} },{new:true});
