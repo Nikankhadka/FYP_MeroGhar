@@ -1,7 +1,7 @@
 import { getKycs } from "../../../api/server/user/getUser"
 import ClientComp from "../../../components/clientComp"
 import Profile from "../../../components/user/profile"
-import UserCard from "../../../components/user/userCard"
+import UserCard from "../../../components/card/userCard"
 import Link from "next/link"
 import { AiOutlineLeft,AiOutlineRight } from "react-icons/ai"
 

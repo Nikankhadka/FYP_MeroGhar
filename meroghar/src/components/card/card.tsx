@@ -40,56 +40,76 @@ export default function Card({ user, data, index }: props) {
   const router = useRouter()
 
   return (
-    <div key={index} className="mx-auto my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
-      <div>
-        <Link href={`/Home/rooms/${_id}`} target="_blank">
-          <img
-            src={images![img].imgUrl}
-            alt="property"
-            className=" w-full h-52 object-cover"
-          />
-        </Link>
+    <div key={index} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
+  <div className="relative group">
+  <Link href={`/Home/rooms/${_id}`} target="_blank">
+    <img
+      src={images![img].imgUrl}
+      alt="property"
+      className="w-full h-56 object-cover"
+    />
+  </Link>
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between">
+    <button
+      onClick={(e) => {
+        if (img == 0) {
+          return console.log('o here')
+        }
+        return setimg(img - 1)
+      }}
+      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+    >
+      <img src="/left.png" alt="arrow" height={9} width={9} />
+    </button>
+    <button
+      onClick={(e) => {
+        if (img == images?.length! - 1) {
+          return console.log('o here')
+        }
+        return setimg(img + 1)
+      }}
+      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+    >
+      <img src="/arrow.png" alt="arrow" height={9} width={9} />
+    </button>
+    <div className="absolute bottom-2 flex justify-center w-full">
+      <div className="flex items-center space-x-1">
+        {[...Array(images?.length || 0)].map((_, index) => (
+          <svg
+            key={index}
+            className={`w-2 h-2 ${
+              img === index ? 'text-black' : 'text-gray-300'
+            }`}
+            viewBox="0 0 8 8"
+            fill="white"
+          >
+            <circle cx="4" cy="4" r="3" />
+          </svg>
+        ))}
       </div>
-      <div className="my-2 flex  justify-center gap-3">
-        <button
-          onClick={(e) => {
-            if (img == 0) {
-              return console.log('o here')
-            }
-            return setimg(img - 1)
-          }}
-          className=" rounded-full bg-gray-100  bg-opacity-70 p-3 transition-all  hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
-        >
-          <img src="/left.png" alt="arrow" height={9} width={9} />
-        </button>
-
-        <button
-          onClick={(e) => {
-            if (img == images?.length! - 1) {
-              return console.log('o here')
-            }
-            return setimg(img + 1)
-          }}
-          className=" rounded-full bg-gray-100  bg-opacity-70 p-3 transition-all  hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
-        >
-          <img src="/arrow.png" alt="arrow" height={9} width={9} />
-        </button>
-      </div>
-
+    </div>
+    <div className="absolute top-3 right-1">
       {!user && (
-        <div className=" flex items-center justify-between px-3">
+        <div className="relative">
           <Wish active={false} />
-          <p className="flex items-center">
-            <AiFillStar  className='h-4 w-4'/>
-            <span className="text-lg text-gray-600">{avgRating}</span>
-          </p>
         </div>
       )}
+    </div>
+  </div>
+</div>
+
 
       <div className="my-2 mx-auto w-[95%]">
+        <div className='flex items-center justify-between'>
         <p className="text-sm font-semibold">
-          {country},{state},{city}
+          {country},{city}
         </p>
+        <div className="flex items-center">
+            <AiFillStar  className='h-4 w-4'/>
+            <span className="text-lg text-gray-600">{avgRating}</span>
+          </div>
+        </div>
+       
         <p className="gray-600 text-sm mt-1">
           <span className="text-sm font-semibold">{rate}$</span> Night
         </p>
