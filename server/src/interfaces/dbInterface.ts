@@ -119,25 +119,21 @@ export interface IBooking{
   userId: Types.ObjectId;
   propertyId: Types.ObjectId;
   hostId: Types.ObjectId;
-  amount:number,
+  paymentId:Types.ObjectId
   status: string
   startDate: Date;
   endDate: Date;
   guest: number;
-  ownerCheckInStatus: string
-  tenantCheckInStatus: string
-  ownerCheckOutStatus: string
-  tenantCheckOutStatus: string
+  checkInStatus: string
+  checkOutStatus: string
   createdAt: Date;
   updatedAt: Date;
 }
 
 
 export interface Payment {
-    userId:Types.ObjectId,
     payerId: string;
     bookingId:Types.ObjectId;
-    propertyId: Types.ObjectId;
     paymentDate: Date;
     initialAmount:number;
     serviceCharge:number;

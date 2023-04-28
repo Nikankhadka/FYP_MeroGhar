@@ -3,10 +3,9 @@ import { Payment } from "../interfaces/dbInterface"
 
  const paymentSchema=new mongoose.Schema({
         //make string for now
-        userId:{type:Types.ObjectId,ref:"Users"},
+        
         payerId:String,
         bookingId:{type:Types.ObjectId,ref:"Bookings"},
-        propertyId:{type:Types.ObjectId,ref:"Properties"},
         paymentDate:{type:Date,default:Date.now},
         initialAmount:Number,
         serviceCharge:Number,
