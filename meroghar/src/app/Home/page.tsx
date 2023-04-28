@@ -24,7 +24,7 @@ export default async function Home(){
             {
                 properties.map((property,index)=>{
                     return(
-                        <Card index={index} data={property}/>
+                        <Card use="card" index={index} data={property}/>
                     )
                 })
             }

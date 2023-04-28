@@ -17,6 +17,7 @@ const bookingSchema=new Schema({
     startDate:Date,
     endDate:Date,
     guest:Number,
+    amount:Number,
 
     //check in and check out  
     ownerCheckInStatus: {

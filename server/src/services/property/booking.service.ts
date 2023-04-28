@@ -60,17 +60,12 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
             hostId:checkProperty.userId,
             startDate,
             endDate,
-            guest
+            guest,
+            amount:totalAmount
         });
 
         await newBooking.save();
-
-        //add user document id to this property ko tennant information
-        const userdoc=await userModel.findOne({userId});
-        const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
-            tennants:userdoc!._id}},{new:true});
-
-        if(!addTennant)  throw new Error("failed to add user to tennant")
+       
         //now also create a paymentdoc
 
         const newPayment=await paymentModel.create({
@@ -79,8 +74,7 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
           payerId,
           Stay,
           paymentDate:new Date(),
-          tennantId:userId,
-          ownerId:checkProperty.userId,
+          userId,
           initialAmount,
           serviceCharge,
           totalAmount,
@@ -125,8 +119,8 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
 
 export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
     try{
-        const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
-        .limit(limit!);
+        const reservations=await paymentModel.find({userId}).skip((page! - 1) * limit!)
+        .limit(limit!).populate('')
         if(!reservations) throw new Error("Failed to Fetch reservation for user");
         return reservations;
      
@@ -135,3 +129,12 @@ export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promi
         throw e;
     }
 }
+
+
+//when booking completes then tennant is added onto the property information
+// const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
+//   tennants:userdoc!._id}},{new:true});
+ //add user document id to this property ko tennant information
+//  const userdoc=await userModel.findOne({userId});
+       
+// if(!addTennant)  throw new Error("failed to add user to tennant")

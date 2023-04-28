@@ -13,7 +13,7 @@ export const createPropertyS=async(_id:string,propertyData:Partial<Property>):Pr
         const newProperty=await propertyModel.create({
             ...propertyData,
             userId:_id,
-            is_verified:{
+            isVerified:{
             status:false,
             pending:true,
             message:""

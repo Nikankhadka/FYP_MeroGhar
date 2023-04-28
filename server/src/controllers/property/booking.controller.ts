@@ -28,18 +28,6 @@ export const checkBookingC=async(req:Request,res:Response)=>{
 
 export const getBookingC=async(req:Request,res:Response)=>{
     try{
-
-        //     console.log('getbookings')
-        
-        // // check kyc verification first from req.userdata.kyc
-        // if(req.userData.userId==""){
-        //     console.log('gg')
-        //     const reservations=await getBookingS(req.params.id,"");
-        //     console.log(reservations)
-        //     return res.status(200).json({success:true,reservations})
-        // }
-        // console.log('afterres')
-        // // page and limit is required for pagination and shit 
         
         const reservations=await getBookingS(req.params.id);
        
@@ -52,7 +40,7 @@ export const getBookingC=async(req:Request,res:Response)=>{
 
 export const getMyBookingC=async(req:Request,res:Response)=>{
     try{
-        const page=Number(req.query.page);
+        const page=Number(req.query.page||1);
         const limit=Number(req.query.limit||10);
         const reservations=await getMyBookingS(req.userData.docId,page,limit);
        

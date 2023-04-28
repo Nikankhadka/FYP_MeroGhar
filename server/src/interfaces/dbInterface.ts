@@ -119,6 +119,7 @@ export interface IBooking{
   userId: Types.ObjectId;
   propertyId: Types.ObjectId;
   hostId: Types.ObjectId;
+  amount:number,
   status: string
   startDate: Date;
   endDate: Date;
@@ -133,8 +134,10 @@ export interface IBooking{
 
 
 export interface Payment {
+    userId:Types.ObjectId,
     payerId: string;
     bookingId:Types.ObjectId;
+    propertyId: Types.ObjectId;
     paymentDate: Date;
     initialAmount:number;
     serviceCharge:number;

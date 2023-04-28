@@ -84,7 +84,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
                     properties!.map((property,index)=>{
                         return(
                             // property card
-                            <Card user={is_Admin? 'admin':'user'} data={property} index={index}/>
+                            <Card use={is_Admin? 'adminlisting':'userlisting'} data={property} index={index}/>
                     
                             
                         )

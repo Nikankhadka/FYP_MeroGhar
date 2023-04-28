@@ -32,12 +32,14 @@ export function RoomClient({
   const {
     images,
     name,
-    price,
-    location,
-    avg_Rating,
-    rating_count,
+    rate,
+    country,
+    state,
+    city,
+    avgRating,
+    ratingCount,
     userId,
-    property_type,
+    propertyType,
     discription,
     amenities,
     rules,
@@ -47,7 +49,7 @@ export function RoomClient({
   return (
     <main className="w-full bg-white ">
     
-      <div className="my-24 mx-auto w-[95%] md:w-[75%]">
+      <div className=" mx-auto w-[95%] md:w-[82%]">
         <div>
           <h3 className=" text-center text-xl font-semibold md:text-left ">
             {_.startCase(name)}
@@ -62,7 +64,7 @@ export function RoomClient({
                 href="/address"
                 className="block text-sm font-semibold underline"
               >
-                {location?.country},{location?.state},{location?.city}
+                {country},{state},{city}
               </Link>
             </div>
 
@@ -91,7 +93,7 @@ export function RoomClient({
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
                 <h3 className=" text-md md:text-lg font-semibold">
-                  {_.startCase(property_type)} Hosted by {userId}
+                  {_.startCase(propertyType)} Hosted by {userId}
                 </h3>
               </div>
 
@@ -110,13 +112,13 @@ export function RoomClient({
             <div>
               <div className="flex items-center gap-x-3 ">
                 <BsHouses className="h-7 w-7" />
-                <p className="text-sm font-semibold">{_.startCase(property_type)}</p>
+                <p className="text-sm font-semibold">{_.startCase(propertyType)}</p>
               </div>
 
               <div className="my-4 flex items-center gap-x-3">
                 <HiOutlineMapPin className="h-7 w-7" />
                 <p className="text-sm font-semibold">
-                  {location?.country},{location?.state},{location?.city}
+                  {country},{state},{city}
                 </p>
               </div>
             </div>

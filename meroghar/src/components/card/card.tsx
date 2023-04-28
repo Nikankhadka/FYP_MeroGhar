@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { Arrow } from '../buttons'
+
 import Wish from '../Svg/wishSvg'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
@@ -19,19 +19,20 @@ import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
 import useRandom from '../../customHoooks/randomStore'
 import Api from '../../api/client/axios'
-import{AiFillStar} from 'react-icons/ai'
+import{AiFillStar ,AiFillHourglass,AiFillCheckCircle} from 'react-icons/ai'
+import { RxCrossCircled } from 'react-icons/rx'
 
 //admin card
 interface props {
-  user?: string
+  use?: string
   data?: Partial<Property>
   index: number
 }
-export default function Card({ user, data, index }: props) {
+export default function Card({ use, data, index }: props) {
   const [img,setimg] = useState(0);
   
   
-  const {images,_id, avgRating,country,city,state,rate } = data!
+  const {images,_id,avgRating,country,city,state,rate,name,isVerified } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -41,15 +42,15 @@ export default function Card({ user, data, index }: props) {
 
   return (
     <div key={index} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
-  <div className="relative group">
+  <div className="relative group ">
   <Link href={`/Home/rooms/${_id}`} target="_blank">
     <img
       src={images![img].imgUrl}
       alt="property"
-      className="w-full h-56 object-cover"
+      className="w-full h-56 object-cover "
     />
   </Link>
-  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between">
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between  ">
     <button
       onClick={(e) => {
         if (img == 0) {
@@ -78,10 +79,10 @@ export default function Card({ user, data, index }: props) {
           <svg
             key={index}
             className={`w-2 h-2 ${
-              img === index ? 'text-black' : 'text-gray-300'
+              img === index ? 'fill-white' : 'fill-gray-500'
             }`}
             viewBox="0 0 8 8"
-            fill="white"
+           
           >
             <circle cx="4" cy="4" r="3" />
           </svg>
@@ -89,7 +90,7 @@ export default function Card({ user, data, index }: props) {
       </div>
     </div>
     <div className="absolute top-3 right-1">
-      {!user && (
+      {use=='card' && (
         <div className="relative">
           <Wish active={false} />
         </div>
@@ -99,23 +100,37 @@ export default function Card({ user, data, index }: props) {
 </div>
 
 
-      <div className="my-2 mx-auto w-[95%]">
+      <div className="my-3 p-1 mx-auto w-[95%]">
         <div className='flex items-center justify-between'>
-        <p className="text-sm font-semibold">
-          {country},{city}
+        <p className="text-md font-semibold">
+         {name}
         </p>
         <div className="flex items-center">
             <AiFillStar  className='h-4 w-4'/>
             <span className="text-lg text-gray-600">{avgRating}</span>
           </div>
         </div>
+        
+     { use=='adminlisting'||use=='userlisting'&&<div className='my-2' >
+        <p className='text-sm text-gray-600 font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
+        {isVerified?.pending&&'Pending'} {isVerified?.pending==isVerified?.status&&"Rejected"}{isVerified?.status&&'Verified'}
+        {isVerified?.pending&&  <AiFillHourglass className='h-5 w-5' />} {isVerified?.pending==isVerified?.status&&<RxCrossCircled className='h-5 w-5 '/>}{isVerified?.status&&<AiFillCheckCircle className='h-5 w-5'/>}
+      
+          </span>
+          </p>
+
+      </div> }
+
+      <p className='text-sm my-2 font-semibold text-gray-600 underline'>{country},{state},{city}</p>
        
-        <p className="gray-600 text-sm mt-1">
+     
+       
+        <p className="gray-600 text-sm ">
           <span className="text-sm font-semibold">{rate}$</span> Night
         </p>
       </div>
 
-      {user == 'admin' && (
+      {use == 'adminlisting' && (
         <div className="my-2 mx-auto mt-4 w-[95%] ">
           <button
             type="button"
@@ -180,7 +195,7 @@ export default function Card({ user, data, index }: props) {
         </div>
       )}
 
-      {user == 'user' && (
+      {use == 'userlisting' && (
         <div className="my-2 mx-auto mt-4 w-[95%] ">
           <button
             type="button"

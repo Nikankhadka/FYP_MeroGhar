@@ -13,6 +13,8 @@ router.get("/propertyBooking/:id",getBookingC)
 router.use(verifyaccessToken(true))
 router.post('/:id',validateBooking,postBookingC);
 router.get('/:id',validateBooking,checkBookingC);
+
+
 //bookings made by me
 router.get('/myBookings',verifyRole(false),getMyBookingC)
 

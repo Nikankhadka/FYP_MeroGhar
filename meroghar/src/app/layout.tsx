@@ -15,6 +15,7 @@ import ToasterProvider from '../components/toast/toastProvider';
 import { ConfirmModal } from '../components/modals/confirmModal';
 import { MessageModal } from '../components/modals/kycmessage';
 import { BookingModal } from '../components/modals/bookingModal';
+import ResetPassword from '../components/modals/forgotpassword';
 //seup conditional root layout for admin and normal user so only url for somethings might differ
 
 const getUser=async()=>{
@@ -84,6 +85,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
            <ConfirmModal />
            <MessageModal />
            <BookingModal />
+           <ResetPassword />
           
            
         </ClientComp>
