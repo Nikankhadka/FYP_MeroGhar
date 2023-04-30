@@ -84,13 +84,13 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
 
 
   return (
-    <main className="w-[95%] bg-white border-2 shadow-none my-4 p-3 rounded-xl md:w-[35%] md:shadow-lg  md:border-gray-200 ">
+    <main className="w-[95%] bg-white border-2 shadow-none my-4  rounded-xl md:w-[35%] md:shadow-lg  md:border-gray-200 ">
     
     <div className='flex justify-around items-center my-5'>
-        <p className='text-lg font-semibold'>${propertyData.price}<span className=' text-sm font-semibold'>/Night</span></p>
+        <p className='text-lg font-semibold'>${propertyData.rate}<span className=' text-sm font-semibold'>/Night</span></p>
         <div className='flex '>
             <img src="/rate.png" alt="rate"  className='h-5 w-5'/>
-            <span>{propertyData.avg_Rating}</span>
+            <span>{propertyData.avgRating}</span>
             <button className='block mx-2 underline text-sm font-semibold text-gray-600'>reviews</button>
         </div>
     </div>

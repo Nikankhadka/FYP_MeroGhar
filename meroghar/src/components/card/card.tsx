@@ -1,14 +1,14 @@
 'use client'
 import Link from 'next/link'
-import { Arrow } from '../buttons'
+
 import Wish from '../Svg/wishSvg'
-import { RiDeleteBin6Fill } from 'react-icons/ri'
+
 import { FiEdit } from 'react-icons/fi'
 import {
   BsHouseCheckFill,
   BsFillHouseDashFill,
 } from 'react-icons/bs'
-import { Property } from '../../interface/response'
+import { IBooking, Property } from '../../interface/response'
 // hover:-translate-y-1 hover:scale-105
 import { useState } from 'react'
 import useModal from '../../customHoooks/useModal'
@@ -19,19 +19,25 @@ import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
 import useRandom from '../../customHoooks/randomStore'
 import Api from '../../api/client/axios'
-import{AiFillStar} from 'react-icons/ai'
+import { RiDeleteBin6Fill } from 'react-icons/ri'
+import{AiFillStar ,AiFillHourglass,AiFillCheckCircle,AiOutlineCheckCircle} from 'react-icons/ai'
+import { RxCrossCircled } from 'react-icons/rx'
+import { Payment } from '../../interface/response'
 
 //admin card
 interface props {
-  user?: string
-  data?: Partial<Property>
+  use?: string
+  data?: Partial<Property>,
+  booking?:Partial<IBooking>
+  payment?:Partial<Payment>
   index: number
+  wish?:boolean
 }
-export default function Card({ user, data, index }: props) {
+export default function Card({ use, data, index,wish}: props) {
   const [img,setimg] = useState(0);
   
   
-  const {images,_id, avgRating,country,city,state,rate } = data!
+  const {images,_id,avgRating,country,city,state,rate,name,isVerified } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -40,62 +46,97 @@ export default function Card({ user, data, index }: props) {
   const router = useRouter()
 
   return (
-    <div key={index} className="mx-auto my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
-      <div>
-        <Link href={`/Home/rooms/${_id}`} target="_blank">
-          <img
-            src={images![img].imgUrl}
-            alt="property"
-            className=" w-full h-52 object-cover"
-          />
-        </Link>
+    <div key={index} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
+  <div className="relative group ">
+  <Link href={`/Home/rooms/${_id}`} target="_blank">
+    <img
+      src={images![img].imgUrl}
+      alt="property"
+      className="w-full h-56 object-cover cursor-pointer "
+    />
+  </Link>
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between">
+    <button
+      onClick={(e) => {
+        if (img == 0) {
+          return console.log('o here')
+        }
+        return setimg(img - 1)
+      }}
+      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+    >
+      <img src="/left.png" alt="arrow" height={9} width={9} />
+    </button>
+    <button
+      onClick={(e) => {
+        if (img == images?.length! - 1) {
+          return console.log('o here')
+        }
+        return setimg(img + 1)
+      }}
+      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+    >
+      <img src="/arrow.png" alt="arrow" height={9} width={9} />
+    </button>
+    <div className="absolute bottom-2 flex justify-center w-full">
+      <div className="flex items-center space-x-1">
+        {[...Array(images?.length || 0)].map((_, index) => (
+          <svg
+            key={index}
+            className={`w-2 h-2 ${
+              img === index ? 'fill-white' : 'fill-gray-500'
+            }`}
+            viewBox="0 0 8 8"
+           
+          >
+            <circle cx="4" cy="4" r="3" />
+          </svg>
+        ))}
       </div>
-      <div className="my-2 flex  justify-center gap-3">
-        <button
-          onClick={(e) => {
-            if (img == 0) {
-              return console.log('o here')
-            }
-            return setimg(img - 1)
-          }}
-          className=" rounded-full bg-gray-100  bg-opacity-70 p-3 transition-all  hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
-        >
-          <img src="/left.png" alt="arrow" height={9} width={9} />
-        </button>
-
-        <button
-          onClick={(e) => {
-            if (img == images?.length! - 1) {
-              return console.log('o here')
-            }
-            return setimg(img + 1)
-          }}
-          className=" rounded-full bg-gray-100  bg-opacity-70 p-3 transition-all  hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
-        >
-          <img src="/arrow.png" alt="arrow" height={9} width={9} />
-        </button>
-      </div>
-
-      {!user && (
-        <div className=" flex items-center justify-between px-3">
-          <Wish active={false} />
-          <p className="flex items-center">
-            <AiFillStar  className='h-4 w-4'/>
-            <span className="text-lg text-gray-600">{avgRating}</span>
-          </p>
+    </div>
+    <div className="absolute top-3 right-1">
+      {use=='card' && (
+        <div className="relative">
+          <Wish active={wish!} id={_id!}  />
         </div>
       )}
+    </div>
+  </div>
+</div>
 
-      <div className="my-2 mx-auto w-[95%]">
-        <p className="text-sm font-semibold">
-          {country},{state},{city}
+
+      <div className="my-3 p-1 mx-auto w-[95%]">
+        <div className='flex items-center justify-between'>
+        <p className="text-md font-semibold">
+         {name}
         </p>
-        <p className="gray-600 text-sm mt-1">
+        <div className="flex items-center">
+            <AiFillStar  className='h-4 w-4'/>
+            <span className="text-lg text-gray-600">{avgRating}</span>
+          </div>
+        </div>
+        
+     { use=='adminlisting'||use=='userlisting'&&<div className='my-2' >
+        <p className='text-sm text-gray-600 font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
+        {isVerified?.pending&&'Pending'} {isVerified?.pending==isVerified?.status&&"Rejected"}{isVerified?.status&&'Verified'}
+        {isVerified?.pending&&  <AiFillHourglass className='h-5 w-5' />} {isVerified?.pending==isVerified?.status&&<RxCrossCircled className='h-5 w-5 '/>}{isVerified?.status&&<AiFillCheckCircle className='h-5 w-5'/>}
+      
+          </span>
+          </p>
+
+      </div> }
+
+      <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
+       
+
+     
+       
+        <p className="gray-600 text-sm ">
           <span className="text-sm font-semibold">{rate}$</span> Night
         </p>
       </div>
 
-      {user == 'admin' && (
+      {use == 'adminlisting' && (
         <div className="my-2 mx-auto mt-4 w-[95%] ">
           <button
             type="button"
@@ -160,7 +201,7 @@ export default function Card({ user, data, index }: props) {
         </div>
       )}
 
-      {user == 'user' && (
+      {use == 'userlisting' && (
         <div className="my-2 mx-auto mt-4 w-[95%] ">
           <button
             type="button"
@@ -205,6 +246,57 @@ export default function Card({ user, data, index }: props) {
           >
             <RiDeleteBin6Fill className="mr-2 h-4 w-4" />
             Delete
+          </button>
+        </div>
+      )}
+
+
+
+  {use == 'trips' && (
+        <div className="my-2 mx-auto mt-4 w-[95%] ">
+          <button
+            type="button"
+            className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
+            onClick={(e) => {
+              e.preventDefault()
+              list.setIndex(index)
+              list.onList('edit')
+            }}
+          >
+            <AiOutlineCheckCircle className="mr-2 h-5 w-5" />
+            CheckIn
+          </button>
+
+          <button
+            type="button"
+            className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            onClick={(e) => {
+              confirm.onContent({
+                header: 'Are You Sure To Delete Property?',
+                actionBtn: 'Delete',
+                onAction: () => {
+                  Api.delete(`/property/v1/deleteProperty/${_id}`, {
+                    withCredentials: true,
+                  })
+                    .then((res) => {
+                      toast.success(`Property ${_id!} deleted successfully`)
+                      modal.onClose()
+                      return router.refresh()
+                    })
+                    .catch((e) => {
+                      toast.error(
+                        'Failed to delete Property/Property Booked currently'
+                      )
+                      return modal.onClose()
+                    })
+                },
+              })
+
+              modal.onOpen('confirm')
+            }}
+          >
+            <RiDeleteBin6Fill className="mr-2 h-5 w-5" />
+            Booking
           </button>
         </div>
       )}

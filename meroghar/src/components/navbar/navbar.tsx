@@ -86,7 +86,7 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
           href="/Account/listings"
           className=" block rounded-md border-2  font-semibold  border-gray-200 p-2 px-3  text-gray-700 hover:border-themeColor dark:text-gray-300 md:text-sm"
         >
-          PostRoom
+          Post Room
         </Link>
 
         <div ref={menuRef}>

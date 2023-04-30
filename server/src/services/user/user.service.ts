@@ -117,12 +117,15 @@ export const updateProfileS=async(userId:string,profileData:Partial<updateProfil
     try{
 
         //special condition for password cant change into old password and also hash password before saving into db
-        if(profileData.password){
+        if(profileData.oldPassword){
             const user=await userModel.findOne({userId});
-            if(await compare(profileData.password,user?.password!)) throw new Error("Please Enter New password to  Update,Same Password used")
+            if(!await compare(profileData.oldPassword,user?.password!)) throw new Error("Please Enter Valid Old Password");
+            if(await compare(profileData.newPassword!,user?.password!)) throw new Error("Please Enter Valid New Password");
 
-            //since password is new need to hash the password 
-            profileData.password=await hash(profileData.password,process.env.salt_rounds!);
+            //now simple has and save the new password
+            user!.password=await hash(profileData.newPassword!,8);
+            await user?.save();
+            return true
         }
 
         console.log('ready to update profile')

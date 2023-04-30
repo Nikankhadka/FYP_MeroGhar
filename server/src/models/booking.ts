@@ -11,34 +11,23 @@ const bookingSchema=new Schema({
     },
     status:{
         type: String,
-        enum: ['booked', 'cancelled','completed'],
-        default: 'booked'
+        enum: ['Booked', 'Cancelled','Completed'],
+        default: 'Booked'
     },
     startDate:Date,
     endDate:Date,
     guest:Number,
+   paymentId:{type:Types.ObjectId,ref:"payments"},
 
     //check in and check out  
-    ownerCheckInStatus: {
-        type: String,
-        enum: ['pending', 'confirmed', 'rejected'],
-        default: 'pending'
-      },
-    tenantCheckInStatus: {
-        type: String,
-        enum: ['pending', 'confirmed', 'rejected'],
-        default: 'pending'
-      },
-    ownerCheckOutStatus: {
-        type: String,
-        enum: ['pending', 'confirmed', 'rejected'],
-        default: 'pending'
-      },
-    tenantCheckOutStatus: {
-        type: String,
-        enum: ['pending', 'confirmed', 'rejected'],
-        default: 'pending'
-     }
+    checkInStatus: {
+      type:Boolean,
+      default: false,
+    },
+    checkOutStatus: {
+      type:Boolean,
+      default: false,
+    }
 
 
     //like pending or verified something like that

@@ -3,8 +3,8 @@
 import {useState} from 'react'
 interface Props{
     images:{
-        img_id:string,
-        img_url:string
+        imgId:string,
+        imgUrl:string
     }[]
 }
 
@@ -18,7 +18,7 @@ export default function Carousel({images}:Props){
     <div className="relative h-[250px] sm:h-[324px] overflow-hidden rounded-lg md:h-96 ">
         
         <div className="duration-700 ease-in-out " >
-            <img src={images[img].img_url} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
+            <img src={images[img].imgUrl} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
         </div>
     </div>
    
@@ -51,6 +51,23 @@ export default function Carousel({images}:Props){
             <span className="sr-only">Next</span>
         </span>
     </button>
+
+    <div className="absolute bottom-2 flex justify-center w-full">
+      <div className="flex items-center space-x-1">
+        {[...Array(images?.length || 0)].map((_, index) => (
+          <svg
+            key={index}
+            className={`w-2 h-2 ${
+              img === index ? 'fill-white' : 'fill-gray-500'
+            }`}
+            viewBox="0 0 8 8"
+           
+          >
+            <circle cx="4" cy="4" r="3" />
+          </svg>
+        ))}
+      </div>
+    </div>
 </div>
     )
 }

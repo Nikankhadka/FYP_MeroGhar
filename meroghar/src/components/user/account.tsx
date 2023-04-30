@@ -16,10 +16,11 @@ import { ErrorText } from '../random'
 import { PhoneComp } from './phone'
 import EmailComp from './emailcomp'
 interface props {
-  userData: Partial<FetchedMe>
+  userData: Partial<FetchedMe>,
+  is_Admin:boolean
 }
 
-export default function AccountComponent({ userData }: props) {
+export default function AccountComponent({ userData,is_Admin}: props) {
   // for kyc form component
   const [openKyc, setopenKyc] = useState('close')
   const confirmModal = useModal()
@@ -43,7 +44,7 @@ export default function AccountComponent({ userData }: props) {
 
         {/* if kyc does not exist */}
 
-        {!kycinfo && (
+        {!kycinfo &&!is_Admin&& (
           <div className="my-3 flex items-center justify-between rounded-lg bg-slate-300 p-3 ">
             <h1 className="">Provide Kyc information ?</h1>
             <button
@@ -63,7 +64,7 @@ export default function AccountComponent({ userData }: props) {
 
         {openKyc == 'close' && (
           <div className="mt-4">
-            {kycinfo && (
+            {kycinfo &&!is_Admin&& (
               <div>
                 <Info title="First Name" value={kycInfo!.firstName} />
                 <hr className="my-4 border-gray-400" />
@@ -108,7 +109,7 @@ export default function AccountComponent({ userData }: props) {
             </div>
           
 
-            <div>
+           {!is_Admin&&<div>
               {phonemail!='phone'&&<div className=" flex items-center justify-between">
                 <p>
                   <h1 className="my-1 font-semibold">Phone Number</h1>
@@ -132,9 +133,9 @@ export default function AccountComponent({ userData }: props) {
               }
 
               <hr className="my-4 border-gray-400" />
-            </div>
+            </div>}
 
-            {kycinfo && (
+            {kycinfo &&!is_Admin&&(
               <div className=" flex items-center justify-between p-3">
                 <p>
                   <h1 className="my-2 font-semibold">Id</h1>
@@ -147,7 +148,7 @@ export default function AccountComponent({ userData }: props) {
               </div>
             )}
 
-            {kycinfo && (
+            {kycinfo&&!is_Admin&& (
               <div>
                 <hr className="my-5 border-gray-400" />
                 <div className="flex justify-end">

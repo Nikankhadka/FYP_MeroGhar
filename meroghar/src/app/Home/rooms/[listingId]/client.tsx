@@ -32,28 +32,31 @@ export function RoomClient({
   const {
     images,
     name,
-    price,
-    location,
-    avg_Rating,
-    rating_count,
+    rate,
+    country,
+    state,
+    city,
+    avgRating,
+    ratingCount,
     userId,
-    property_type,
+    propertyType,
     discription,
     amenities,
     rules,
+    _id
   } = propertyData
   const Reviews = ['sdafas', 'fdasfas', 'fdasfs']
 
   return (
     <main className="w-full bg-white ">
     
-      <div className="my-24 mx-auto w-[95%] md:w-[75%]">
+      <div className=" mx-auto w-[95%] md:w-[82%]">
         <div>
-          <h3 className=" text-center text-xl font-semibold md:text-left ">
+          <h3 className=" text-lg md:text-xl font-semibold text-left ">
             {_.startCase(name)}
           </h3>
 
-          <div className="w-full  flex flex-wrap justify-between">
+          <div className="w-full  flex gap-y-2 flex-wrap justify-between">
             <div className=" flex items-center justify-around gap-3 ">
               
 
@@ -62,13 +65,13 @@ export function RoomClient({
                 href="/address"
                 className="block text-sm font-semibold underline"
               >
-                {location?.country},{location?.state},{location?.city}
+                {country},{state},{city}
               </Link>
             </div>
 
             <div className="flex items-center gap-x-3">
               <button className="flex items-center gap-1 rounded-lg p-1 hover:bg-hoverColor ">
-                <Wish active={inWishList} />
+                <Wish active={inWishList} id={_id!} user={user}/>
                 <span className="text-sm font-semibold underline">Save</span>
               </button>
 
@@ -91,7 +94,7 @@ export function RoomClient({
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
                 <h3 className=" text-md md:text-lg font-semibold">
-                  {_.startCase(property_type)} Hosted by {userId}
+                  {_.startCase(propertyType)} Hosted by {userId}
                 </h3>
               </div>
 
@@ -104,24 +107,24 @@ export function RoomClient({
               </Link>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
 
             {/* basic property Information  */}
             <div>
               <div className="flex items-center gap-x-3 ">
                 <BsHouses className="h-7 w-7" />
-                <p className="text-sm font-semibold">{_.startCase(property_type)}</p>
+                <p className="text-sm font-semibold">{_.startCase(propertyType)}</p>
               </div>
 
               <div className="my-4 flex items-center gap-x-3">
                 <HiOutlineMapPin className="h-7 w-7" />
                 <p className="text-sm font-semibold">
-                  {location?.country},{location?.state},{location?.city}
+                  {country},{state},{city}
                 </p>
               </div>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
             {/* discription */}
             <div>
               <h3 className=" text-md md:text-lg font-semibold text-black">
@@ -129,7 +132,7 @@ export function RoomClient({
               </h3>
               <p className="text-sm sm:text-md mt-2 text-gray-800 ">{_.startCase(discription)}</p>
             </div>
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
 
             {/* Amenities */}
             <div>
@@ -145,7 +148,7 @@ export function RoomClient({
               </div>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
             {/* for Rules */}
             <div>
               <h3 className="text-lg font-semibold text-black">Rules</h3>
@@ -157,14 +160,14 @@ export function RoomClient({
           {!is_Admin&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
         </div>
 
-        {<div>
-          <hr className="my-8 border-gray-400" />
+        {user=='tennant'&&<div>
+        <hr className="my-8 border-gray-200" />
           <Review />
           
         </div>}
        
 
-        <hr className="my-8 border-gray-400" />
+        <hr className="my-8 border-gray-200" />
         {/* REViews Section */}
         <div>
           {/* header block */}

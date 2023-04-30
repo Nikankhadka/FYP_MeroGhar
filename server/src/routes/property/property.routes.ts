@@ -19,6 +19,9 @@ router.get("/getProperty/:id",verifyaccessToken(false),getPropertyByIdC)
 router.get("/getProperty",verifyaccessToken(false),getPropertiesC)
 router.patch("/updateViewCount/:id",verifyaccessToken(false),verifyRole(false),updateViewCountC)
 
+//this is used to fetch users listing in profile view and same can be used to fetch my properties 
+router.get("/myProperties/:id",getMyPropertiesC)
+
 router.use(verifyaccessToken(true));
 router.use(verifyRole(false));
 //view count sepeerate api for more accurate view count of the product
@@ -26,7 +29,9 @@ router.use(verifyRole(false));
 router.post("/createProperty",validatePropertyInput,createPropertyC)
 router.patch("/updateProperty/:id",validatePropertyUpdate,updatePropertyC)
 router.delete("/deleteProperty/:id",deletePropertyC)
-router.get("/myProperties",getMyPropertiesC)
+
+
+
 
 //api to fetch user previously viwed property 
 router.get('/getViewedProperty',)

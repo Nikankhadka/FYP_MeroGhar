@@ -13,7 +13,7 @@ export const createPropertyS=async(_id:string,propertyData:Partial<Property>):Pr
         const newProperty=await propertyModel.create({
             ...propertyData,
             userId:_id,
-            is_verified:{
+            isVerified:{
             status:false,
             pending:true,
             message:""
@@ -43,7 +43,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             if(!propertyData) throw new Error("No property with the given id")
             
             //check whether property is in wishlist of the user
-            const inWishList = userdocument!.wishList?.some((wish) => wish.properties.includes(id)) ?? false;
+            const inWishList = userdocument!.wishList?.some((wish)=>wish.toString()==id) ?? false;
 
 
             if(propertyData?.tennants?.includes(userdocument!._id?.toString()) ?? false) return {property:propertyData,user:"tennant",inWishList}
@@ -53,6 +53,10 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
 
             //now for normal user/admin 
+            if(userdocument?.is_Admin){
+                return {property:propertyData,user:"admin",inWishList}
+            }
+            
             return {property:propertyData,user:"user",inWishList}
 
             
@@ -69,12 +73,13 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
 }
 
 
+//get properties for a  userid
 export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
     try{
         //since all admin have access to this simply fetch unverified property set in pending
         const newLimit=parseInt(limit);
         const newPage=parseInt(page) 
-        const properties=await propertyModel.find({userId}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        const properties=await propertyModel.find({userId}).select('-tennants -tennantId ').limit(newLimit*1).skip((newPage-1)*newLimit).sort({createdAt:1})
         if(!properties) throw new Error("No property listedby the user")
         return properties
 

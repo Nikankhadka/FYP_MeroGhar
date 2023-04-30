@@ -72,6 +72,10 @@ export interface FetchedUserData {
   }
 
 
+export interface wishlist{
+  wishList:Partial<Property>[]
+}
+
 
   // admin fetches this to view profile kyc profile verifcaiton
  export  interface IUserKyc {
@@ -170,33 +174,33 @@ export interface IReview{
 
 
 export interface IBooking{
-  userId: string
-  propertyId: string
-  hostId:string
+  _id:string,
+  userId: Partial<FetchedUserData>
+  propertyId:Partial<Property>
+  hostId: string
+  paymentId:Partial<Payment>
   status: string
   startDate: Date;
   endDate: Date;
   guest: number;
-  ownerCheckInStatus: string
-  tenantCheckInStatus: string
-  ownerCheckOutStatus: string
-  tenantCheckOutStatus: string
+  checkInStatus:boolean
+  checkOutStatus: boolean
   createdAt: Date;
   updatedAt: Date;
 }
 
 
 export interface Payment {
-  payerId: string;
-  bookingId:string
-  paymentDate: Date;
-  initialAmount:number;
-  serviceCharge:number;
-  totalAmount:number;
-  stay: number;
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-// billImg?: string;
-// billId?: string;
+    payerId: string;
+    bookingId:string
+    paymentDate: Date;
+    initialAmount:number;
+    serviceCharge:number;
+    totalAmount:number;
+    stay: number;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+  // billImg?: string;
+  // billId?: string;
 }

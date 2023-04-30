@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getBookingS, postBookingS,getMyBookingS, checkBookingS } from "../../services/property/booking.service";
+import { getBookingS, postBookingS,getMyBookingS, confirmCheckOutS, checkBookingS,getOnBookingS, confirmCheckInS} from "../../services/property/booking.service";
 
 
 export const postBookingC=async(req:Request,res:Response)=>{
@@ -28,18 +28,6 @@ export const checkBookingC=async(req:Request,res:Response)=>{
 
 export const getBookingC=async(req:Request,res:Response)=>{
     try{
-
-        //     console.log('getbookings')
-        
-        // // check kyc verification first from req.userdata.kyc
-        // if(req.userData.userId==""){
-        //     console.log('gg')
-        //     const reservations=await getBookingS(req.params.id,"");
-        //     console.log(reservations)
-        //     return res.status(200).json({success:true,reservations})
-        // }
-        // console.log('afterres')
-        // // page and limit is required for pagination and shit 
         
         const reservations=await getBookingS(req.params.id);
        
@@ -52,12 +40,49 @@ export const getBookingC=async(req:Request,res:Response)=>{
 
 export const getMyBookingC=async(req:Request,res:Response)=>{
     try{
-        const page=Number(req.query.page);
+        const page=Number(req.query.page||1);
         const limit=Number(req.query.limit||10);
+        console.log('inside controller')
         const reservations=await getMyBookingS(req.userData.docId,page,limit);
        
         if(reservations)  return res.status(200).json({success:true,reservations})
         return res.status(400).json({success:false,error: "Please provide proper information of Host Id and property Id"})
+    }catch(e:any){
+        res.status(500).json({success:false,error:e.message})
+    }
+}
+
+export const getOnBookingC=async(req:Request,res:Response)=>{
+    try{
+        const page=Number(req.query.page||1);
+        const limit=Number(req.query.limit||10);
+        const reservations=await getOnBookingS(req.userData.docId,page,limit);
+       
+        if(reservations)  return res.status(200).json({success:true,reservations})
+        return res.status(400).json({success:false,error: "Please provide proper information of Host Id and property Id"})
+    }catch(e:any){
+        res.status(500).json({success:false,error:e.message})
+    }
+}
+
+
+export const confirmCheckInC=async(req:Request,res:Response)=>{
+    try{
+        
+        const checkInConfirmed=await confirmCheckInS(req.userData.docId,req.params.id);
+        if(checkInConfirmed)  return res.status(200).json({success:true,message:"Check in confirmed"})
+        return res.status(400).json({success:false,error: "Check In confirmation failed"})
+    }catch(e:any){
+        res.status(500).json({success:false,error:e.message})
+    }
+}
+
+export const confirmCheckOutC=async(req:Request,res:Response)=>{
+    try{
+        
+        const checkOutConfirmed=await confirmCheckOutS(req.userData.docId,req.params.id);
+        if(checkOutConfirmed)  return res.status(200).json({success:true,message:"Check Out confirmed"})
+        return res.status(400).json({success:false,error: "Check Out confirmation failed"})
     }catch(e:any){
         res.status(500).json({success:false,error:e.message})
     }

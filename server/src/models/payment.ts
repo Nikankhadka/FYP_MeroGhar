@@ -3,6 +3,7 @@ import { Payment } from "../interfaces/dbInterface"
 
  const paymentSchema=new mongoose.Schema({
         //make string for now
+        
         payerId:String,
         bookingId:{type:Types.ObjectId,ref:"Bookings"},
         paymentDate:{type:Date,default:Date.now},

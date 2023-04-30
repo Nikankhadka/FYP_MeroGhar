@@ -128,15 +128,9 @@ export const userSchema=new Schema({
         recievedReviewcount:{type: Number,default:0},
 
         //document id of refrenced product donot create new document in different collection
-        wishList:{type:[
-            {
-                listName:String,
-                properties:{type:[{type:Schema.Types.ObjectId,ref:"properties"}]}
-            }
-            
-        ],
+        wishList:{type:[{type:Schema.Types.ObjectId,ref:"Properties"}],
         default:[]
-    }
+        }
         ,
            
         

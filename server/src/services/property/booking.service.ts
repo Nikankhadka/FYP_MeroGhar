@@ -60,27 +60,19 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
             hostId:checkProperty.userId,
             startDate,
             endDate,
-            guest
+            guest,
+            
         });
 
         await newBooking.save();
-
-        //add user document id to this property ko tennant information
-        const userdoc=await userModel.findOne({userId});
-        const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
-            tennants:userdoc!._id}},{new:true});
-
-        if(!addTennant)  throw new Error("failed to add user to tennant")
+       
         //now also create a paymentdoc
 
         const newPayment=await paymentModel.create({
           bookingId:newBooking._id,
-          propertyId:propId,
           payerId,
           Stay,
           paymentDate:new Date(),
-          tennantId:userId,
-          ownerId:checkProperty.userId,
           initialAmount,
           serviceCharge,
           totalAmount,
@@ -88,6 +80,10 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
         });
 
         await newPayment.save();
+
+        //now modify the booking doc to store payment id 
+         newBooking.paymentId=newPayment._id;
+         await newBooking.save()
         if(!newPayment)  throw new Error("failed to store Payment Information");
 
       return true
@@ -125,8 +121,9 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
 
 export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
     try{
+      console.log("inside my bookings service")
         const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
-        .limit(limit!);
+        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('userId','_id userName profileImg userId').sort({createdtAt:1}).exec()
         if(!reservations) throw new Error("Failed to Fetch reservation for user");
         return reservations;
      
@@ -135,3 +132,61 @@ export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promi
         throw e;
     }
 }
+
+export const getOnBookingS=async(hostId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
+  try{
+      const reservations=await bookingModel.find({hostId}).skip((page! - 1) * limit!)
+      .limit(limit!).populate("propertyId").populate('userId','_id userName profileImg userId').populate('paymentId').exec();
+      if(!reservations) throw new Error("Failed to Fetch reservation for user");
+      return reservations;
+   
+  }catch(e){
+      console.log(e);
+      throw e;
+  }
+}
+
+export const confirmCheckInS=async(userId:string,bookingId:string):Promise<boolean>=>{
+  try{
+      
+      const booking=await bookingModel.findOne({_id:bookingId,hostId:userId})
+      if(!booking) throw new Error("invalid booking id")
+
+      if(booking.checkInStatus) throw new Error ("Check in status True Verified!");
+
+      booking.checkInStatus=true;
+      await booking.save();
+      return true;
+  }catch(e){
+      console.log(e);
+      throw e;
+  }
+}
+
+export const confirmCheckOutS=async(userId:string,bookingId:string):Promise<boolean>=>{
+  try{
+      
+    const booking=await bookingModel.findOne({_id:bookingId,hostId:userId})
+    if(!booking) throw new Error("invalid booking id")
+
+    if(!booking.checkInStatus) throw new Error ("First verify check In");
+    if(booking.checkOutStatus) throw new Error ("ALready Checked Out!");
+
+    booking.checkOutStatus=true;
+    booking.status='Completed'
+    await booking.save();
+    return true
+    
+  }catch(e){
+      console.log(e);
+      throw e;
+  }
+}
+
+//when booking completes then tennant is added onto the property information
+// const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
+//   tennants:userdoc!._id}},{new:true});
+ //add user document id to this property ko tennant information
+//  const userdoc=await userModel.findOne({userId});
+       
+// if(!addTennant)  throw new Error("failed to add user to tennant")

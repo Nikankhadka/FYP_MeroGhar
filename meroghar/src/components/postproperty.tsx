@@ -119,8 +119,8 @@ export default function PostPropertyForm({
         const uploadedImg = await uploadImage(image[0])
 
         await images.push({
-          img_id: uploadedImg.imgId,
-          img_url: uploadedImg.imgUrl,
+          imgId: uploadedImg.imgId,
+          imgUrl: uploadedImg.imgUrl,
         })
       }
 
@@ -174,7 +174,7 @@ export default function PostPropertyForm({
           const imgurl = URL.createObjectURL(image[0])
           console.log('uploaded img')
           const { imgId, imgUrl } = await uploadImage(image[0])
-          images.push({ img_id: imgId, img_url: imgUrl })
+          images.push({ imgId: imgId, imgUrl: imgUrl })
         } catch (e) {
           console.log(e)
           console.log('object')
@@ -238,7 +238,7 @@ export default function PostPropertyForm({
   }
 
   return (
-    <main className="my-2 flex w-full flex-col items-center justify-center bg-slate-100 p-3">
+    <main className="my-2 flex w-full flex-col items-center justify-center  p-3">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto flex  w-full flex-col items-center p-3 lg:w-full"
@@ -349,7 +349,7 @@ export default function PostPropertyForm({
                 type="number"
                 placeholder="Price"
                 className={inputStyle}
-                {...register('rate', { required: true, minLength: 1 })}
+                {...register('rate', { required: true, minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
               />
               {errors.rate && <ErrorText text="Please Enter Valid Price" />}
             </div>

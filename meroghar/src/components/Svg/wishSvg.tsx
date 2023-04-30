@@ -2,16 +2,54 @@
 
 interface WishProps{
     active:boolean
+    id:string
+    user?:string
 }
 
 import { useState } from "react"
+import Api from "../../api/client/axios"
+import { toast } from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import useModal from "../../customHoooks/useModal"
 
-export default function Wish({active}:WishProps){
+export default function Wish({active,id,user}:WishProps){
     const[isActive,setIsActive]=useState(active)
 
+    const router=useRouter()
+    const modal=useModal()
+    console.log('in wishList',isActive)
     return(
         <button onClick={(e)=>{
-            setIsActive(!isActive)
+          if(user=='') return modal.onOpen('login')
+          if(user=='admin') return toast.error("Admin Cannot Have Favourites");
+          if(user=='owner') return toast.error("owner not allowed!!")
+
+           
+          if(!isActive){
+            const res=Api.post(`/property/v1/wishList/${id}`,{},{withCredentials:true}).then((res)=>{
+              console.log('added to wish list');
+              toast.success("Property Added to wishList");
+              setIsActive(true)
+             return  router.refresh();
+            }).catch((e)=>{
+             return  toast.error("Failed to Add property to WishList!");
+            })
+          }
+
+         // for deleting wishlist
+          if(active){
+            console.log('inside active')
+            const res=Api.delete(`/property/v1/wishList/${id}`,{withCredentials:true}).then((res)=>{
+              console.log("Wishlist removed");
+              toast.success("Property Removed from Favourites!!");
+              setIsActive(false)
+              return router.refresh();
+            }).catch((e)=>{
+              return toast.error("Failed to Remove Property From Favourites!!")
+            })
+          }
+            
+
         }}>
             <svg
             xmlns="http://www.w3.org/2000/svg"

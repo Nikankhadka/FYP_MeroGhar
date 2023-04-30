@@ -44,10 +44,7 @@ interface kycSchema{
     listingCount: number
     avgRating: number
     recievedReviewcount: number
-    wishList:{
-      listName:string,
-      properties:[string]
-    }[],
+    wishList:[Types.ObjectId],
     isBanned: {
       strikes: number
       banStart:Date,
@@ -119,14 +116,13 @@ export interface IBooking{
   userId: Types.ObjectId;
   propertyId: Types.ObjectId;
   hostId: Types.ObjectId;
+  paymentId:Types.ObjectId
   status: string
   startDate: Date;
   endDate: Date;
   guest: number;
-  ownerCheckInStatus: string
-  tenantCheckInStatus: string
-  ownerCheckOutStatus: string
-  tenantCheckOutStatus: string
+  checkInStatus: boolean
+  checkOutStatus: boolean
   createdAt: Date;
   updatedAt: Date;
 }

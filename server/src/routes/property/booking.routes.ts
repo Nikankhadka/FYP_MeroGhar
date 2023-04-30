@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { verifyRole, verifyaccessToken } from "../../middlewares/auth.middleware";
 import { validateBooking } from "../../middlewares/inputvalidation";
-import { checkBookingC, getBookingC, getMyBookingC, postBookingC } from "../../controllers/property/booking.controller";
-import { verifyAccessTokenS } from "../../services/auth/auth.service";
+import { checkBookingC, confirmCheckInC, confirmCheckOutC, getBookingC, getMyBookingC, getOnBookingC, postBookingC } from "../../controllers/property/booking.controller";
+
 
 
 const router=Router();
@@ -11,10 +11,17 @@ const router=Router();
 router.get("/propertyBooking/:id",getBookingC)
 
 router.use(verifyaccessToken(true))
-router.post('/:id',validateBooking,postBookingC);
-router.get('/:id',validateBooking,checkBookingC);
+router.use(verifyRole(false))
+
+router.post('/:id',validateBooking,postBookingC)
+
+
 //bookings made by me
-router.get('/myBookings',verifyRole(false),getMyBookingC)
+router.get('/myBookings',getMyBookingC)
+router.get('/onBookings',getOnBookingC)
+
+router.patch('/confirmCheckIn/:id',confirmCheckInC)
+router.patch('/confirmCheckOut/:id',confirmCheckOutC)
 
 
 
