@@ -31,13 +31,13 @@ export async function getPropertyRequests(page:number,limit:number):Promise<Part
   }
 
 
-
-export async function getMyProperties(page:number,limit:number):Promise<Partial<Property>[]>{
+//use this to get properties of a owner
+export async function getMyProperties(userId:string,page:number,limit:number):Promise<Partial<Property>[]>{
     try{
       
         
         const res = await fetch(
-            `http://localhost:2900/property/v1/myProperties?page=${page}&limit=${limit}`,
+            `http://localhost:2900/property/v1/myProperties/${userId}?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',

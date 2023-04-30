@@ -2,13 +2,13 @@
 import Link from 'next/link'
 
 import Wish from '../Svg/wishSvg'
-import { RiDeleteBin6Fill } from 'react-icons/ri'
+
 import { FiEdit } from 'react-icons/fi'
 import {
   BsHouseCheckFill,
   BsFillHouseDashFill,
 } from 'react-icons/bs'
-import { Property } from '../../interface/response'
+import { IBooking, Property } from '../../interface/response'
 // hover:-translate-y-1 hover:scale-105
 import { useState } from 'react'
 import useModal from '../../customHoooks/useModal'
@@ -19,13 +19,17 @@ import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
 import useRandom from '../../customHoooks/randomStore'
 import Api from '../../api/client/axios'
-import{AiFillStar ,AiFillHourglass,AiFillCheckCircle} from 'react-icons/ai'
+import { RiDeleteBin6Fill } from 'react-icons/ri'
+import{AiFillStar ,AiFillHourglass,AiFillCheckCircle,AiOutlineCheckCircle} from 'react-icons/ai'
 import { RxCrossCircled } from 'react-icons/rx'
+import { Payment } from '../../interface/response'
 
 //admin card
 interface props {
   use?: string
-  data?: Partial<Property>
+  data?: Partial<Property>,
+  booking?:Partial<IBooking>
+  payment?:Partial<Payment>
   index: number
 }
 export default function Card({ use, data, index }: props) {
@@ -47,10 +51,10 @@ export default function Card({ use, data, index }: props) {
     <img
       src={images![img].imgUrl}
       alt="property"
-      className="w-full h-56 object-cover "
+      className="w-full h-56 object-cover cursor-pointer "
     />
   </Link>
-  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between  ">
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between pointer-events-none ">
     <button
       onClick={(e) => {
         if (img == 0) {
@@ -90,7 +94,7 @@ export default function Card({ use, data, index }: props) {
       </div>
     </div>
     <div className="absolute top-3 right-1">
-      {use=='card' && (
+      {use=='card'||'trips' && (
         <div className="relative">
           <Wish active={false} />
         </div>
@@ -121,8 +125,9 @@ export default function Card({ use, data, index }: props) {
 
       </div> }
 
-      <p className='text-sm my-2 font-semibold text-gray-600 underline'>{country},{state},{city}</p>
+      <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
        
+
      
        
         <p className="gray-600 text-sm ">
@@ -240,6 +245,57 @@ export default function Card({ use, data, index }: props) {
           >
             <RiDeleteBin6Fill className="mr-2 h-4 w-4" />
             Delete
+          </button>
+        </div>
+      )}
+
+
+
+  {use == 'trips' && (
+        <div className="my-2 mx-auto mt-4 w-[95%] ">
+          <button
+            type="button"
+            className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
+            onClick={(e) => {
+              e.preventDefault()
+              list.setIndex(index)
+              list.onList('edit')
+            }}
+          >
+            <AiOutlineCheckCircle className="mr-2 h-5 w-5" />
+            CheckIn
+          </button>
+
+          <button
+            type="button"
+            className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            onClick={(e) => {
+              confirm.onContent({
+                header: 'Are You Sure To Delete Property?',
+                actionBtn: 'Delete',
+                onAction: () => {
+                  Api.delete(`/property/v1/deleteProperty/${_id}`, {
+                    withCredentials: true,
+                  })
+                    .then((res) => {
+                      toast.success(`Property ${_id!} deleted successfully`)
+                      modal.onClose()
+                      return router.refresh()
+                    })
+                    .catch((e) => {
+                      toast.error(
+                        'Failed to delete Property/Property Booked currently'
+                      )
+                      return modal.onClose()
+                    })
+                },
+              })
+
+              modal.onOpen('confirm')
+            }}
+          >
+            <RiDeleteBin6Fill className="mr-2 h-5 w-5" />
+            Booking
           </button>
         </div>
       )}

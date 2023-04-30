@@ -121,8 +121,9 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
 
 export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
     try{
+      console.log("inside my bookings service")
         const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
-        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').exec();
+        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('userId','_id userName profileImg userId').sort({createdtAt:1}).exec()
         if(!reservations) throw new Error("Failed to Fetch reservation for user");
         return reservations;
      
@@ -148,44 +149,14 @@ export const getOnBookingS=async(hostId:string,page?:number,limit?:number):Promi
 export const confirmCheckInS=async(userId:string,bookingId:string):Promise<boolean>=>{
   try{
       
-      const booking=await bookingModel.findOne({_id:bookingId, $or: [{ userId: userId }, { hostId: userId }]});
+      const booking=await bookingModel.findOne({_id:bookingId,hostId:userId})
       if(!booking) throw new Error("invalid booking id")
-      //check for user or host id 
-      if(booking.userId.toString()==userId){
-        //check previous check in status 
-        if(booking.checkInStatus=='confirmed') throw new Error('check in status confirmed');
 
-        if(booking.checkInStatus=='pending'){
-          booking.checkInStatus='tenantConfirmed';
-          await booking.save();
-          return true;
-        }
-        if(booking.checkInStatus=='ownerConfirmed'){
-          booking.checkInStatus='confirmed';
-          await booking.save();
-          return true;
-        }
-         
-      }
+      if(booking.checkInStatus) throw new Error ("Check in status True Verified!");
 
-      
-        //check previous check in status 
-        if(booking.checkInStatus=='confirmed') throw new Error('check in status confirmed');
-
-        if(booking.checkInStatus=='pending'){
-          booking.checkInStatus='ownerConfirmed';
-          await booking.save();
-          return true;
-        }
-        if(booking.checkInStatus=='tenantConfirmed'){
-          booking.checkInStatus='confirmed';
-          await booking.save();
-          return true;
-        }
-         
-      throw new Error("Some thing went wrong")
-     
-    
+      booking.checkInStatus=true;
+      await booking.save();
+      return true;
   }catch(e){
       console.log(e);
       throw e;
@@ -195,45 +166,16 @@ export const confirmCheckInS=async(userId:string,bookingId:string):Promise<boole
 export const confirmCheckOutS=async(userId:string,bookingId:string):Promise<boolean>=>{
   try{
       
-      const booking=await bookingModel.findOne({_id:bookingId, $or: [{ userId: userId }, { hostId: userId }]});
-      if(!booking) throw new Error("invalid booking id")
-      //check for user or host id 
-      if(booking.userId.toString()==userId){
-        //check previous check in status 
-        if(booking.checkOutStatus=='confirmed') throw new Error('check out status confirmed');
+    const booking=await bookingModel.findOne({_id:bookingId,hostId:userId})
+    if(!booking) throw new Error("invalid booking id")
 
-        if(booking.checkOutStatus=='pending'){
-          booking.checkOutStatus='tenantConfirmed';
-          await booking.save();
-          return true;
-        }
-        if(booking.checkOutStatus=='ownerConfirmed'){
-          booking.checkOutStatus='confirmed';
-          booking.status='completed';
-          await booking.save();
-          return true;
-        }
-         
-      }
+    if(!booking.checkInStatus) throw new Error ("First verify check In");
+    if(booking.checkOutStatus) throw new Error ("ALready Checked Out!");
 
-      
-        //check previous check in status 
-        if(booking.checkOutStatus=='confirmed') throw new Error('check Out status confirmed');
-
-        if(booking.checkOutStatus=='pending'){
-          booking.checkInStatus='ownerConfirmed';
-          await booking.save();
-          return true;
-        }
-        if(booking.checkOutStatus=='tenantConfirmed'){
-          booking.checkInStatus='confirmed';
-          booking.status='completed'
-          await booking.save();
-          return true;
-        }
-         
-      throw new Error("Some thing went wrong")
-     
+    booking.checkOutStatus=true;
+    booking.status='Completed'
+    await booking.save();
+    return true
     
   }catch(e){
       console.log(e);

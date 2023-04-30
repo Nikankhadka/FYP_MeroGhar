@@ -3,7 +3,8 @@ import { checkSession } from "../../../api/server/auth";
 import ClientComp from "../../../components/clientComp";
 import { getMe } from "../../../api/server/user/getUser";
 import Profile from "../../../components/user/profile";
-import { bg } from "../../../styles/variants";
+import { getMyProperties } from "../../../api/server/property/getProperty";
+
 
 
 
@@ -11,10 +12,10 @@ import { bg } from "../../../styles/variants";
 
 export default async function AccountSetting(){
 
-  const session=await checkSession();
+  const {session,userData}=await checkSession();
 
-  const userData= await getMe();
-  const{userName,createdAt,profileImg,kyc,recievedReviewcount,avgRating,email,kycInfo} =userData
+  const user= await getMe();
+  const listings=await getMyProperties(userData.docId,1,5)
 
     return(
     
@@ -22,7 +23,7 @@ export default async function AccountSetting(){
 
     <ClientComp>
    
-    <Profile userId={session.session?session.userData.docId:""} profileData={userData} />
+    <Profile userId={session?userData.docId:""} profileData={user} listings={listings} is_Admin={false} />
    
     </ClientComp>
     

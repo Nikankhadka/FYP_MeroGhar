@@ -11,24 +11,22 @@ const bookingSchema=new Schema({
     },
     status:{
         type: String,
-        enum: ['booked', 'cancelled','completed'],
-        default: 'booked'
+        enum: ['Booked', 'Cancelled','Completed'],
+        default: 'Booked'
     },
     startDate:Date,
     endDate:Date,
     guest:Number,
-   paymentId:{type:Types.ObjectId,ref:"Payments"},
+   paymentId:{type:Types.ObjectId,ref:"payments"},
 
     //check in and check out  
     checkInStatus: {
-      type: String,
-      enum: ['pending', 'confirmed', 'rejected', 'ownerConfirmed', 'tenantConfirmed'],
-      default: 'pending',
+      type:Boolean,
+      default: false,
     },
     checkOutStatus: {
-      type: String,
-      enum: ['pending', 'confirmed', 'rejected','ownerConfirmed','tenantConfirmed'],
-      default: 'pending',
+      type:Boolean,
+      default: false,
     }
 
 

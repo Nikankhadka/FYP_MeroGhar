@@ -24,13 +24,13 @@ export function BookingModal(){
     const billref=createRef<HTMLDivElement>()
     const bookingStore=useBookingStore()
     const router=useRouter();
-    const {images,property_type,name,avg_Rating,userId,price,_id}=bookingStore.propertyData;
+    const {images,propertyType,name,avgRating,userId,rate,_id}=bookingStore.propertyData;
     const {guest,startDate,endDate}=bookingStore.bookingInfo
 
     const start = dayjs(startDate);
     const end = dayjs(endDate);
     const totalDays = end.diff(start,'day') + 1;
-    const  basePrice=totalDays*price!
+    const  basePrice=totalDays*rate!
     const taxPrice=(basePrice/100)*18;
     const totalCost=basePrice+taxPrice;
 
@@ -144,19 +144,19 @@ export function BookingModal(){
         <Modal isOpen={bookingModal.isOpen}>
         <main className={style1}>
 
-{         !bill && <div className="w-full overflow-scroll p-4 border-2 border-red-500">
-                <div className="flex  gap-x-4 flex-wrap">
-                    <img src={images![0].img_url} alt="propertyImage" className="w-[95%] mx-auto sm:m-0 h-40 sm:h-48  rounded-lg" />
+{         !bill && <div className="w-full p-4 ">
+                <div className="flex flex-col items-center justify-center" >
+                    <img src={images![0].imgUrl} alt="propertyImage" className="w-[95%] sm:m-0 h-40 sm:h-48  rounded-lg" />
                     
                     <div className="p-2 flex flex-row items-center w-full justify-around " >
 
                     <div >
-                    <p className="text-sm text-gray-600">{property_type}</p>
+                    <p className="text-sm text-gray-600">{propertyType}</p>
                     <h1 className="text-md font-semibold">{name}</h1>
                     </div>
                   
-                    <div>
-                    <p  className="text-sm flex items-center gap-x-1"><AiFillStar/>{avg_Rating}</p>
+                    <div className="">
+                    <p  className="text-sm flex items-center gap-x-1"><AiFillStar/>{avgRating}</p>
                     <p className='mt-2 text-sm font-semibold'>{userId}</p>
                     </div>
                    
@@ -252,7 +252,7 @@ export function BookingModal(){
             {/* this div is for bill download after the payment and booking has been finalized */}
             {bill&&<div className="w-full">
             <div ref={billref} >
-            <Invoice paymentId={paymentid} price={price!} nights={totalDays} tennantId="Random1" propertyId={_id!} hostId={userId!} initialPrice={basePrice} taxAndServiceChargePrice={taxPrice} totalPrice={totalCost} />
+            <Invoice paymentId={paymentid} rate={rate!} nights={totalDays} tennantId="Random1" propertyName={name!} hostId={userId!} initialPrice={basePrice} taxAndServiceChargePrice={taxPrice} totalPrice={totalCost} />
             </div>
         
             <div className="w-[95%] ml-2 p-2 flex items-center justify-between">

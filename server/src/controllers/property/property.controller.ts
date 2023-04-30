@@ -47,10 +47,12 @@ export const getPropertiesC=async(req:Request,res:Response)=>{
     }
 }
 
+
+//get properties for id 
 export const getMyPropertiesC=async(req:Request,res:Response)=>{
     try{
 
-        const propertyData=await getMyPropertiesS(req.query.page as string,req.query.limit as string,req.userData.docId)
+        const propertyData=await getMyPropertiesS(req.query.page as string,req.query.limit as string,req.params.id)
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);

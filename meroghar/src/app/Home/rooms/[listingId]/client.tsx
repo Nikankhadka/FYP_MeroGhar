@@ -51,11 +51,11 @@ export function RoomClient({
     
       <div className=" mx-auto w-[95%] md:w-[82%]">
         <div>
-          <h3 className=" text-center text-xl font-semibold md:text-left ">
+          <h3 className=" text-lg md:text-xl font-semibold text-left ">
             {_.startCase(name)}
           </h3>
 
-          <div className="w-full  flex flex-wrap justify-between">
+          <div className="w-full  flex gap-y-2 flex-wrap justify-between">
             <div className=" flex items-center justify-around gap-3 ">
               
 
@@ -106,7 +106,7 @@ export function RoomClient({
               </Link>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
 
             {/* basic property Information  */}
             <div>
@@ -123,7 +123,7 @@ export function RoomClient({
               </div>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
             {/* discription */}
             <div>
               <h3 className=" text-md md:text-lg font-semibold text-black">
@@ -131,7 +131,7 @@ export function RoomClient({
               </h3>
               <p className="text-sm sm:text-md mt-2 text-gray-800 ">{_.startCase(discription)}</p>
             </div>
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
 
             {/* Amenities */}
             <div>
@@ -147,7 +147,7 @@ export function RoomClient({
               </div>
             </div>
 
-            <hr className="my-5 border-gray-400" />
+            <hr className="my-8 border-gray-200" />
             {/* for Rules */}
             <div>
               <h3 className="text-lg font-semibold text-black">Rules</h3>
@@ -159,14 +159,14 @@ export function RoomClient({
           {!is_Admin&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
         </div>
 
-        {<div>
-          <hr className="my-8 border-gray-400" />
+        {user=='tennant'&&<div>
+        <hr className="my-8 border-gray-200" />
           <Review />
           
         </div>}
        
 
-        <hr className="my-8 border-gray-400" />
+        <hr className="my-8 border-gray-200" />
         {/* REViews Section */}
         <div>
           {/* header block */}

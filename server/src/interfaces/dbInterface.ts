@@ -124,8 +124,8 @@ export interface IBooking{
   startDate: Date;
   endDate: Date;
   guest: number;
-  checkInStatus: string
-  checkOutStatus: string
+  checkInStatus: boolean
+  checkOutStatus: boolean
   createdAt: Date;
   updatedAt: Date;
 }

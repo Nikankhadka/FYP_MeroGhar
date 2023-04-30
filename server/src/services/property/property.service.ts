@@ -69,12 +69,13 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
 }
 
 
+//get properties for a  userid
 export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
     try{
         //since all admin have access to this simply fetch unverified property set in pending
         const newLimit=parseInt(limit);
         const newPage=parseInt(page) 
-        const properties=await propertyModel.find({userId}).select('-tennants -tennantId -recommendation').limit(newLimit*1).skip((newPage-1)*newLimit).sort({userId:"asc"})
+        const properties=await propertyModel.find({userId}).select('-tennants -tennantId ').limit(newLimit*1).skip((newPage-1)*newLimit).sort({createdAt:1})
         if(!properties) throw new Error("No property listedby the user")
         return properties
 

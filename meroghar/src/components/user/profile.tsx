@@ -8,17 +8,19 @@ import { EditBasic } from './editProfile'
 import { useState } from 'react'
 import Link from 'next/link'
 import Card from '../card/card'
-import { FetchedMe, FetchedUserData } from '../../interface/response'
+import { FetchedMe, FetchedUserData, Property } from '../../interface/response'
 import { bg } from '../../styles/variants'
 import useAccount from '../../customHoooks/AccountState'
 import AccountComponent from './account'
 import Password from './pasword'
 interface ProfileProps {
   userId: string
-  profileData: Partial<FetchedMe>
+  profileData: Partial<FetchedMe>,
+  listings?:Partial<Property>[],
+  is_Admin:boolean
 }
 
-export default function Profile({ userId, profileData }: ProfileProps) {
+export default function Profile({ userId, profileData,listings,is_Admin}: ProfileProps) {
   const {
     profileImg,
     kycInfo,
@@ -114,8 +116,8 @@ export default function Profile({ userId, profileData }: ProfileProps) {
 
         <hr className="my-5 border-gray-400" />
 
-        <div className='w-full  flex gap-x-1 sm:gap-x-3 '>
-            {userId == profileData._id! && (
+        {userId == profileData._id!&& <div className='w-full  flex gap-x-1 sm:gap-x-3 '>
+            
               <button
                 onClick={(e) => {
                   e.preventDefault()
@@ -125,8 +127,8 @@ export default function Profile({ userId, profileData }: ProfileProps) {
               >
                 Edit Profile
               </button>
-            )}
-            {userId == profileData._id! && (
+           
+            
               <button
               onClick={(e) => {
                 e.preventDefault()
@@ -136,9 +138,9 @@ export default function Profile({ userId, profileData }: ProfileProps) {
               >
                 Account-Settings
               </button>
-            )}
+            
 
-          {userId == profileData._id!&&password&&(
+          {password&&(
                         <button
                         onClick={(e) => {
                           e.preventDefault()
@@ -151,7 +153,7 @@ export default function Profile({ userId, profileData }: ProfileProps) {
             )}
 
 
-          </div>
+          </div>}
 
          {/* this all will not be rendered on  */}
          {account.openComponent=='close'&& (
@@ -163,6 +165,21 @@ export default function Profile({ userId, profileData }: ProfileProps) {
           </div>
         )}
 
+        
+        <hr className='text-gray-300 mt-5 mb-3' />
+
+     {!is_Admin&& <div className='p-2'>
+          <h1 className='text-lg ms:text-xl my-2 font-semibold '>{profileData.userName}'s Listings</h1>
+          <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2'>
+            {
+              listings!.map((data,index)=>{
+                return(
+                 <Card data={data} index={index}/>
+                )
+              })
+            }
+          </div>
+      </div>}
        
       </div>
 
@@ -178,12 +195,15 @@ export default function Profile({ userId, profileData }: ProfileProps) {
       </div>}
 
      {account.openComponent=='account'&&<div className='my-3'>
-      <AccountComponent  userData={profileData}/>
+      <AccountComponent  userData={profileData} is_Admin={is_Admin}/>
       </div>}
 
       {account.openComponent=='password'&&<div className='my-3'>
         <Password />
       </div>}
+
+
+   
 
 
     </main>

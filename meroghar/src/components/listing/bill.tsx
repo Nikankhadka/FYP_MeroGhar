@@ -4,9 +4,9 @@ interface InvoiceProps {
     tennantId: string;
     //can be anyone jsut saved for reference
     nights:number,
-    price:number,
+    rate:number,
     hostId: string;
-    propertyId: string;
+    propertyName: string;
     initialPrice: number;
     taxAndServiceChargePrice: number;
     totalPrice: number;
@@ -15,14 +15,14 @@ interface InvoiceProps {
 const Invoice =(props:InvoiceProps) => {
   const { 
     tennantId, 
-    propertyId,
+    propertyName,
     hostId,
     initialPrice,
     taxAndServiceChargePrice,
     totalPrice,
     paymentId,
     nights,
-    price,
+    rate,
   } = props;
 
   return (
@@ -75,8 +75,8 @@ const Invoice =(props:InvoiceProps) => {
       <tbody>
         <tr className=' w-full  p-2  flex items-center justify-around'>
           <td className="text-center">{nights}</td>
-          <td>{propertyId}</td>
-          <td className="">${price}/Night</td>
+          <td>{propertyName}</td>
+          <td className="">${rate}/Night</td>
           <td className="">${initialPrice}</td>
         </tr>
       </tbody>

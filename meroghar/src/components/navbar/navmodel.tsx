@@ -55,15 +55,15 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
   return(
     <div  ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2    ">
-        <Link  href='/wishlists' className={`${btnstyle} font-semibold`}>Trips</Link>
-        <Link  href='/wishlists' className={`${btnstyle} font-semibold`}>WishLists</Link>
-        <Link  href='/Bookings' className={`${btnstyle} font-semibold`}>Reservations</Link>
+        <Link  href='/Home/Account/trips' className={`${btnstyle} font-semibold`}>Trips</Link>
+        <Link  href='/Home/Account/wishlists' className={`${btnstyle} font-semibold`}>WishLists</Link>
+        <Link  href='/Home/Account/reservations' className={`${btnstyle} font-semibold`}>Reservations</Link>
         
        
         
         <hr />
-        <Link  href='/Account/listings' className={`${btnstyle}`}>Manage Listings</Link>
-        <Link  href='/Account' className={`${btnstyle}`}>Account</Link>
+        <Link  href='/Home/Account/listings' className={`${btnstyle}`}>Manage Listings</Link>
+        <Link  href='/Home/Account' className={`${btnstyle}`}>Account</Link>
         <hr />
         <button className={btnstyle}  onClick={(e)=>{
                 e.preventDefault();

@@ -71,7 +71,7 @@ export default async function getReservations(propertyId:string,user:string,page
             }
           ).then(res=>res.json())
     
-        if(!res.success) throw new Error("failed to fetch Property reservations")
+          if(!res.success) throw new Error(`${res.error}`)
         
         console.log("my properties",res);
         return res.reservations;
@@ -79,4 +79,54 @@ export default async function getReservations(propertyId:string,user:string,page
         
     }catch(e){
        throw e;
-    }}
+  }}
+
+
+  export async function getMyBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
+    try{
+      
+       
+        const res = await fetch(
+            `http://localhost:2900/property/v1/booking/myBookings?page=${page}&limit=${limit}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: { cookie: getAccessToken()},
+              cache:'no-store'
+            }
+          ).then(res=>res.json())
+    
+          if(!res.success) throw new Error(`${res.error}`)
+        
+        console.log("my properties",res);
+        return res.reservations;
+  
+        
+    }catch(e){
+       throw e;
+  }}
+
+
+export async function getOnBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
+    try{
+      
+       
+        const res = await fetch(
+            `http://localhost:2900/property/v1/booking/onBookings`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: { cookie: getAccessToken()},
+              cache:'no-store'
+            }
+          ).then(res=>res.json())
+    
+        if(!res.success) throw new Error(`${res.error}`)
+        
+        console.log("my properties",res);
+        return res.reservations;
+  
+        
+    }catch(e){
+       throw e;
+  }}

@@ -6,9 +6,9 @@ import ListingComp from "../../../../components/listing/listingClient";
 
 
 export default async function Listing(){
-    
-    const properties=await getMyProperties(1,10);
     const {session,userData}=await checkSession()
+    const properties=await getMyProperties(userData.docId,1,10);
+    
 
     return(
         <ClientComp>

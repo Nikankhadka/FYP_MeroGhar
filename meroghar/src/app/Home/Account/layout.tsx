@@ -26,7 +26,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         {/* this children represents each page component  that is rendered */}
 
         
-        <div className={`mx-auto  rounded-lg  w-[95%] sm:w-[90%] lg:w-[85%]`}  >
+        <div className={`mx-auto  rounded-lg  w-[98%] sm:w-[90%] lg:w-[85%]`}  >
           {children}
         </div>
       

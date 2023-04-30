@@ -42,6 +42,7 @@ export const getMyBookingC=async(req:Request,res:Response)=>{
     try{
         const page=Number(req.query.page||1);
         const limit=Number(req.query.limit||10);
+        console.log('inside controller')
         const reservations=await getMyBookingS(req.userData.docId,page,limit);
        
         if(reservations)  return res.status(200).json({success:true,reservations})
