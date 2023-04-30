@@ -31,8 +31,9 @@ interface props {
   booking?:Partial<IBooking>
   payment?:Partial<Payment>
   index: number
+  wish?:boolean
 }
-export default function Card({ use, data, index }: props) {
+export default function Card({ use, data, index,wish}: props) {
   const [img,setimg] = useState(0);
   
   
@@ -54,7 +55,7 @@ export default function Card({ use, data, index }: props) {
       className="w-full h-56 object-cover cursor-pointer "
     />
   </Link>
-  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between pointer-events-none ">
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between">
     <button
       onClick={(e) => {
         if (img == 0) {
@@ -94,9 +95,9 @@ export default function Card({ use, data, index }: props) {
       </div>
     </div>
     <div className="absolute top-3 right-1">
-      {use=='card'||'trips' && (
+      {use=='card' && (
         <div className="relative">
-          <Wish active={false} />
+          <Wish active={wish!} id={_id!}  />
         </div>
       )}
     </div>

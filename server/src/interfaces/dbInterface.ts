@@ -44,10 +44,7 @@ interface kycSchema{
     listingCount: number
     avgRating: number
     recievedReviewcount: number
-    wishList:{
-      listName:string,
-      properties:[string]
-    }[],
+    wishList:[Types.ObjectId],
     isBanned: {
       strikes: number
       banStart:Date,

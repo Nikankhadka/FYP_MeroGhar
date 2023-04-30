@@ -43,7 +43,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             if(!propertyData) throw new Error("No property with the given id")
             
             //check whether property is in wishlist of the user
-            const inWishList = userdocument!.wishList?.some((wish) => wish.properties.includes(id)) ?? false;
+            const inWishList = userdocument!.wishList?.some((wish)=>wish.toString()==id) ?? false;
 
 
             if(propertyData?.tennants?.includes(userdocument!._id?.toString()) ?? false) return {property:propertyData,user:"tennant",inWishList}
@@ -53,6 +53,10 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
 
             //now for normal user/admin 
+            if(userdocument?.is_Admin){
+                return {property:propertyData,user:"admin",inWishList}
+            }
+            
             return {property:propertyData,user:"user",inWishList}
 
             

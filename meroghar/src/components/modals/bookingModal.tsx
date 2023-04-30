@@ -16,7 +16,7 @@ import Modal from "./modal"
 import Invoice from "../listing/bill"
 import {createRef, useState} from 'react'
 import { toast } from "react-hot-toast"
-import KhaltiCheckout from "khalti-checkout-web";
+// import KhaltiCheckout from "khalti-checkout-web";
 
 
 export function BookingModal(){
@@ -95,9 +95,9 @@ export function BookingModal(){
         };
         
         
-        const checkout = new KhaltiCheckout(config);
+        // const checkout = new KhaltiCheckout(config);
         //the amount passed is in paisa so make sure to *100 and amount should be less than 200 for test
-        checkout.show({amount:2000})
+        // checkout.show({amount:2000})
         
     }
 

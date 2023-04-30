@@ -72,6 +72,10 @@ export interface FetchedUserData {
   }
 
 
+export interface wishlist{
+  wishList:Partial<Property>[]
+}
+
 
   // admin fetches this to view profile kyc profile verifcaiton
  export  interface IUserKyc {

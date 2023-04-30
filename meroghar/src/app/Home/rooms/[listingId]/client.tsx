@@ -43,6 +43,7 @@ export function RoomClient({
     discription,
     amenities,
     rules,
+    _id
   } = propertyData
   const Reviews = ['sdafas', 'fdasfas', 'fdasfs']
 
@@ -70,7 +71,7 @@ export function RoomClient({
 
             <div className="flex items-center gap-x-3">
               <button className="flex items-center gap-1 rounded-lg p-1 hover:bg-hoverColor ">
-                <Wish active={inWishList} />
+                <Wish active={inWishList} id={_id!} user={user}/>
                 <span className="text-sm font-semibold underline">Save</span>
               </button>
 
