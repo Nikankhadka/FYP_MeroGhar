@@ -17,7 +17,7 @@ const bookingSchema=new Schema({
     startDate:Date,
     endDate:Date,
     guest:Number,
-   paymentId:{type:Types.ObjectId,ref:"payments"},
+   paymentId:{type:Types.ObjectId,ref:"Payments"},
 
     //check in and check out  
     checkInStatus: {

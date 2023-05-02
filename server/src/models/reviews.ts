@@ -6,6 +6,7 @@ import { IReview } from "../interfaces/dbInterface";
 const reviewSchema=new Schema({
         userId:{type:Types.ObjectId,required:true},
         propertyId:{type:Types.ObjectId,required:true},
+        hostId:{type:Types.ObjectId,required:true},
         rating:{
                 type:Number,
                 default:0

@@ -32,8 +32,9 @@ interface props {
   payment?:Partial<Payment>
   index: number
   wish?:boolean
+  user?:string
 }
-export default function Card({ use, data, index,wish}: props) {
+export default function Card({ use, data, index,wish,user}: props) {
   const [img,setimg] = useState(0);
   
   
@@ -52,10 +53,10 @@ export default function Card({ use, data, index,wish}: props) {
     <img
       src={images![img].imgUrl}
       alt="property"
-      className="w-full h-56 object-cover cursor-pointer "
+      className="w-full h-56 object-cover "
     />
   </Link>
-  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between">
+  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between pointer-events-none">
     <button
       onClick={(e) => {
         if (img == 0) {
@@ -97,7 +98,7 @@ export default function Card({ use, data, index,wish}: props) {
     <div className="absolute top-3 right-1">
       {use=='card' && (
         <div className="relative">
-          <Wish active={wish!} id={_id!}  />
+          <Wish active={wish!} id={_id!} user={user} />
         </div>
       )}
     </div>

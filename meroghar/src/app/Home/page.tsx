@@ -14,7 +14,7 @@ export default async function Home(){
     const properties=await getProperties(1,10)
     const {session,userData}=await checkSession()
    
-  if(!session)return(
+  if(!session||userData.is_Admin)return(
         <main className="w-full ">
 
         {/* for Property Viwed By users */}
@@ -27,7 +27,7 @@ export default async function Home(){
                 properties.map((property,index)=>{
                     
                     return(
-                        <Card use="card" index={index} data={property}/>
+                        <Card use="card" index={index} data={property} user={userData.is_Admin?'admin':''} />
                     )
                 })
             }
@@ -58,12 +58,12 @@ export default async function Home(){
                     if(wishList.wishList.some((id)=>id._id==property._id)){
                         console.log("inwishlist")
                         return(
-                            <Card use="card" index={index} wish={true} data={property} />
+                            <Card use="card" index={index} wish={true} data={property} user={userData.is_Admin?'admin':(userData.docId==property.userId?'owner':"user")} />
                         )
                     }
                     
                     return(
-                        <Card use="card" index={index} wish={false} data={property} />
+                        <Card use="card" index={index} wish={false} data={property} user={userData.is_Admin?'admin':(userData.docId==property.userId?'owner':"user")} />
                     )
                 })
             }

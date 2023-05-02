@@ -4,14 +4,16 @@ import Link from 'next/link'
 
 import Carousel from '../../../../components/carousel'
 import { BookProperty } from '../../../../components/listing/booking'
-import Review from '../../../../components/reviewCard'
+import Review from '../../../../components/review'
 import Wish from '../../../../components/Svg/wishSvg'
-import NavBar from '../../../../components/navbar/navbar'
+import {BiDotsHorizontalRounded} from 'react-icons/bi'
 import { Property } from '../../../../interface/response'
 import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
 import * as _ from 'lodash'
+import { AiFillStar } from 'react-icons/ai'
+import ReviewCard from '../../../../components/reviewCard'
 
 
 interface RoomProps {
@@ -94,15 +96,15 @@ export function RoomClient({
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
                 <h3 className=" text-md md:text-lg font-semibold">
-                  {_.startCase(propertyType)} Hosted by {userId}
+                  {_.startCase(propertyType)} Hosted by {userId?.userName}
                 </h3>
               </div>
 
-              <Link href={`/user/${userId}`} className="block" target='_blank'>
+              <Link href={`/Home/user/${userId?._id}`} className="block" target='_blank'>
                 <img
-                  src="/user.png"
-                  alt="user"
-                  className="h-13 w-13 rounded-full p-1 ring-2 ring-gray-200"
+                  src={`${userId?.profileImg?.imgUrl}`}
+                  alt="userProfile"
+                  className="h-14 w-14 rounded-full  border-2 border-gray-300"
                 />
               </Link>
             </div>
@@ -162,19 +164,19 @@ export function RoomClient({
 
         {user=='tennant'&&<div>
         <hr className="my-8 border-gray-200" />
-          <Review />
+          <ReviewCard />
           
         </div>}
        
 
-        <hr className="my-8 border-gray-200" />
+        <hr className="my-10 border-gray-200" />
         {/* REViews Section */}
         <div>
           {/* header block */}
           <div className="my-8 flex items-center gap-x-2">
-            <img src="/rate.png" alt="rate" className="block h-7 w-7" />
-            <p className="text-lg font-bold">5.00</p>
-            <p className="text-lg font-bold">76 reviews</p>
+           <AiFillStar className='h-5 w-5 mt-1' />
+            <p className="text-lg sm:text-xl font-semibold">{avgRating}</p>
+            <p className=" text-lg sm:text-xl font-semibold">{ratingCount} reviews</p>
           </div>
 
          
@@ -182,43 +184,7 @@ export function RoomClient({
           <div className="grid-1 grid w-full gap-10 md:grid-cols-2 ">
             {Reviews.map((items) => {
               return (
-                <div className="rounded-lg p-2">
-                  <div className="flex w-full items-center gap-x-3 ">
-                    <img
-                      src="/user.png"
-                      alt="User"
-                      className="block h-10 w-10"
-                    />
-                    <p>
-                      <span className="text-md block font-bold">UserId</span>
-                      <span className="text-sm text-gray-700 ">
-                        Date October
-                      </span>
-                    </p>
-                  </div>
-
-                  <p className="my-2 flex items-center gap-x-2">
-                    <img src="/rate.png" alt="rate" className="block h-7 w-7" />
-                    <span className="block text-sm font-bold">5.0</span>
-                  </p>
-                  <p className="text-md my-3 text-gray-700">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged
-                  </p>
-
-                  {/* send api request to report this review so it can be checked by admin  can only be seen by owner*/}
-                  <button className="flex items-center gap-x-2 underline">
-                    <img src="/flag.png" alt="flag" className="block h-5 w-5" />
-                    <span className="block text-sm font-bold text-gray-700">
-                      Report Review
-                    </span>
-                  </button>
-                </div>
+                <Review />
               )
             })}
           </div>

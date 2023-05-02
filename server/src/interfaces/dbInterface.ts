@@ -19,6 +19,7 @@ interface kycSchema{
 }
 
  export interface IUser {
+  _id: Types.ObjectId;
     userId: string
     userName: string
     password: string
@@ -60,7 +61,7 @@ interface kycSchema{
 
  export interface Property{
     _id: Types.ObjectId;
-    userId:Types.ObjectId;
+    userId:Types.ObjectId|Partial<IUser>
     name: string;
     url: string;
     country: string;
@@ -75,7 +76,7 @@ interface kycSchema{
       imgId: string;
       imgUrl: string;
     }[];
-    tennants: string[];
+    tennants:[Types.ObjectId]|[Partial<IUser>]
     ratingCount: number;
     viewCount: number;
     avgRating: number;
@@ -97,7 +98,9 @@ interface kycSchema{
 
 
 export interface IReview{
+  _id: Types.ObjectId;
   userId: Types.ObjectId;
+  hostId: Types.ObjectId;
   propertyId: Types.ObjectId;
   rating: number;
   review: string;
@@ -113,6 +116,7 @@ export interface IReview{
 
 
 export interface IBooking{
+  _id: Types.ObjectId;
   userId: Types.ObjectId;
   propertyId: Types.ObjectId;
   hostId: Types.ObjectId;
@@ -129,6 +133,7 @@ export interface IBooking{
 
 
 export interface Payment {
+  _id: Types.ObjectId;
     payerId: string;
     bookingId:Types.ObjectId;
     paymentDate: Date;
