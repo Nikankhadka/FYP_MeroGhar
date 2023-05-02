@@ -18,6 +18,6 @@ import { Payment } from "../interfaces/dbInterface"
         // billId:String, 
 },{timestamps:true})
 
-const paymentModel=model<Payment>('payments',paymentSchema);
+const paymentModel=model<Payment>('Payments',paymentSchema);
 
 export default paymentModel;

@@ -79,6 +79,7 @@ export interface wishlist{
 
   // admin fetches this to view profile kyc profile verifcaiton
  export  interface IUserKyc {
+  _id:string
     userId: string;
     userName: string;
     profileImg: {
@@ -123,7 +124,8 @@ export interface wishlist{
 
   export interface Property{
     _id: string;
-    userId: string;
+    // this is owner detail
+    userId: Partial<IUserKyc>
     name: string;
     url: string;
    
@@ -140,6 +142,8 @@ export interface wishlist{
       imgId: string;
       imgUrl: string;
     }[];
+    // this is tennnat detail only fetched by owner in api request
+    tennants:Partial<IUserKyc>[]
     ratingCount: number;
     viewCount: number;
     avgRating: number;

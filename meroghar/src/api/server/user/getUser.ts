@@ -4,7 +4,7 @@ import { FetchedMe, FetchedUserData, IUserKyc } from "../../../interface/respons
 import Api from "../../client/axios"
 import { getAccessToken } from '../auth';
 
-export async function getUser(userId:string):Promise<FetchedUserData>{
+export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
             `http://localhost:2900/user/v1/getUser/${userId}`,

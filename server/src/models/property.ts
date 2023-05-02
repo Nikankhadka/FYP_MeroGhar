@@ -9,7 +9,11 @@ const propertySchema=new Schema({
     //     type:Types.ObjectId,
     //     required:false
     // },
-    userId:{type:Types.ObjectId,required:true,immutable:true},
+    userId:{type:Types.ObjectId,
+        ref:"Users",
+        required:true,
+        immutable:true
+    },
 
     //this will be default generated
     name:{type:String,required:true},

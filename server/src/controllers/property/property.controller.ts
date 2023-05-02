@@ -20,7 +20,7 @@ export const createPropertyC=async(req:Request,res:Response)=>{
 
 export const getPropertyByIdC=async(req:Request,res:Response)=>{
     try{
-        if(req.userData.userId==""){
+        if(req.userData.docId==""){
             const propertyData=await getPropertyByIdS(req.params.id,"");
             return res.status(200).json({success:true,propertyData})
         }

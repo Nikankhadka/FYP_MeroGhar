@@ -24,7 +24,7 @@ interface Props{
 }
 
 
-export function BookingRow({bookingData,trips}:Props) {
+export function BookingTable({bookingData,trips}:Props) {
   const router=useRouter();
   const confirm=useConfirm();
   const modal=useModal();
@@ -261,12 +261,13 @@ export function BookingRow({bookingData,trips}:Props) {
                 
                 </td>}
 
+              {/* for both client and owner */}
               {data.checkInStatus&&<td className="space-x-2 text-sm font-semibold text-gray-600 whitespace-nowrap p-4">
                 
                 <div className='flex items-center gap-x-2'>
-                <BsHouseCheckFill className='h-6 w-6' />
+                {(trips?data.checkInStatus:data.checkOutStatus)&&<BsHouseCheckFill className='h-6 w-6' />}
                {data.status=='Completed'&&<p>  Booking Completed!   </p>}
-               {(data.checkInStatus&&data.status!="Completed")&& <p>  Checked In!   </p>}
+               {(trips&&data.checkInStatus&&data.status!="Completed")&& <p>  Checked In!   </p>}
                 </div>
               
                 

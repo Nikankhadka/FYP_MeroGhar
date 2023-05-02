@@ -105,7 +105,7 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
       //   if(!reservations) throw new Error("Failed to Fetch reservation for user");
       //   return reservations;
       //  }
-
+      console.log('inside getbooking',propId)
        const reservations=await bookingModel.find({
         propertyId:propId
        }).select('startDate endDate').exec();
@@ -175,6 +175,18 @@ export const confirmCheckOutS=async(userId:string,bookingId:string):Promise<bool
     booking.checkOutStatus=true;
     booking.status='Completed'
     await booking.save();
+
+    //now simply add user to the tennats list in the property 
+    const tennantExist=await propertyModel.findOne({_id:booking.propertyId,tennants:booking.userId});
+    if(tennantExist) return true;
+
+    const newTennant=await propertyModel.findOneAndUpdate({_id:booking.propertyId},{
+      $push:{
+        tennants:booking.userId
+      }
+    },{new:true});
+
+    if(!newTennant) throw new Error("failed to add tennat after checkout");
     return true
     
   }catch(e){

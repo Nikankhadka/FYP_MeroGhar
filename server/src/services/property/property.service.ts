@@ -39,30 +39,41 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             const userdocument=await userModel.findOne({_id:userId});
 
 
-            const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned -is_verified");
+            const propertyData=await propertyModel.findOne({_id:id}).select("-isBanned -isVerified").populate('userId','_id userName profileImg createdAt').populate("tennants",'_id  userName profileImg');
             if(!propertyData) throw new Error("No property with the given id")
             
+            console.log("propertyData",propertyData)
+            //copydata which can be manipulated
+            let copyData=propertyData;
+         
+
             //check whether property is in wishlist of the user
             const inWishList = userdocument!.wishList?.some((wish)=>wish.toString()==id) ?? false;
 
-
-            if(propertyData?.tennants?.includes(userdocument!._id?.toString()) ?? false) return {property:propertyData,user:"tennant",inWishList}
+          //delete tennant informations in next js server if the user is not owner 
+            if(propertyData.tennants.some((tennant)=>tennant._id?.toString()==userId)){
+                copyData.tennants=[{}]
+                console.log(copyData)
+                return {property:copyData,user:"tennant",inWishList}
+            } 
 
             //check whether it is the property owner 
-            const ownedProperty=await propertyModel.findOne({_id:id,userId});
-            if(ownedProperty) return {property:ownedProperty,user:"owner",inWishList};
+         
+            if(propertyData.userId.toString()==userId) return {property:propertyData,user:"owner",inWishList};
 
             //now for normal user/admin 
             if(userdocument?.is_Admin){
-                return {property:propertyData,user:"admin",inWishList}
+                copyData.tennants=[{}]
+                return {property:copyData,user:"admin",inWishList}
             }
             
-            return {property:propertyData,user:"user",inWishList}
+            copyData.tennants=[{}]
+            return {property:copyData,user:"user",inWishList}
 
             
         }
         console.log("no user inside service")
-        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants -tennantId -is_banned  -is_verified");
+        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants  -isBanned  -isVerified").populate('userId','_id userName profileImg createdAt');
         if(!propertyData) throw new Error("Proper data fetching failed")
         return {property:propertyData,user:"",inWishList:false};
         

@@ -28,8 +28,9 @@ export const checkBookingC=async(req:Request,res:Response)=>{
 
 export const getBookingC=async(req:Request,res:Response)=>{
     try{
-        
+        console.log("controllerlevel bookingid check",req.params.id)
         const reservations=await getBookingS(req.params.id);
+       
        
         if(reservations)  return res.status(200).json({success:true,reservations})
         return res.status(400).json({success:false,error: "Please provide proper information of Host Id and property Id"})

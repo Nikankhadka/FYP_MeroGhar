@@ -3,8 +3,15 @@
 import { useState } from 'react'
 import {AiFillStar} from 'react-icons/ai'
 import { ErrorText } from './random';
+import { FetchedMe } from '../interface/response';
 
-export default function Review() {
+interface Props{
+  userData:Partial<FetchedMe>,
+  propertyId:string,
+  edit?:boolean
+  
+}
+export default function ReviewCard() {
   const [rate, setrate] = useState(0)
   const [review,setreview]=useState("");
   const [err,seterr]=useState(false);
@@ -57,7 +64,10 @@ export default function Review() {
           ></textarea>
 
           {err&&<ErrorText  text='please Provide rating and review Both!'/>}
-          <button type='button' className="my-2  block rounded-lg font-semibold bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor"
+
+          <div className=' w-[97%] mx-auto flex  justify-between items-center'>
+          <button className='text-md font-semibold underline'>Cancel</button>
+          <button type='button' className="my-3 ml-1  block rounded-lg font-semibold bg-themeColor p-2 px-3 text-center text-sm text-white hover:bg-mainColor"
           onClick={(e)=>{
             e.preventDefault;
             if(rate+1<1||review.length<=2){
@@ -68,6 +78,8 @@ export default function Review() {
           >
             Submit
           </button>
+          </div>
+          
         </form>
       </div>
     </main>

@@ -40,6 +40,8 @@ export default async function Room({ params }: { params: IParams }) {
       endDate: reservation.endDate!
     }
   })
+
+  console.log('property population',property)
   
   return (
     <ClientComp>
