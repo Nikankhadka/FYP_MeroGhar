@@ -162,15 +162,17 @@ export interface wishlist{
 }
 
 export interface IReview{
-  userId: string;
-  propertyId: string
+  _id: string
+  userId:Partial<FetchedMe>
+  hostId: string;
+  propertyId: string;
   rating: number;
   review: string;
   
-    reportStatus: boolean;
-    reportMessage: string;
-    admin:string
-    adminReview: string;
+  reportStatus: boolean;
+  reportMessage: string;
+  admin: string;
+  adminReview: string;
   
   createdAt: Date;
   updatedAt: Date;

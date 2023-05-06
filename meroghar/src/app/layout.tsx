@@ -13,7 +13,7 @@ import { RegisterModal } from '../components/modals/registerModal';
 
 import ToasterProvider from '../components/toast/toastProvider';
 import { ConfirmModal } from '../components/modals/confirmModal';
-import { MessageModal } from '../components/modals/kycmessage';
+import { MessageModal } from '../components/modals/rejectReportModal';
 import { BookingModal } from '../components/modals/bookingModal';
 import ResetPassword from '../components/modals/forgotpassword';
 //seup conditional root layout for admin and normal user so only url for somethings might differ

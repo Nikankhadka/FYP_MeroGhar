@@ -111,9 +111,9 @@ export default function Card({ use, data, index,wish,user}: props) {
         <p className="text-md font-semibold">
          {name}
         </p>
-        <div className="flex items-center">
+        <div className="flex items-center gap-x-[2px]">
             <AiFillStar  className='h-4 w-4'/>
-            <span className="text-lg text-gray-600">{avgRating}</span>
+            <span className="mb-[3px] text-lg text-gray-600">{avgRating}</span>
           </div>
         </div>
         

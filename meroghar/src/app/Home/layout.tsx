@@ -23,7 +23,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       
 
         <ClientComp>
-        <NavBar authState={session} img={userData.img} theme={theme} />
+        <NavBar authState={session} img={userData.img} theme={theme} is_Admin={userData.is_Admin} />
         </ClientComp>
       
         {/* this children represents each page component  that is rendered */}
