@@ -1,6 +1,6 @@
 
 import {Router} from "express"
-import { registerUserC,LoginC,refreshTokenC,googleLoginC,facebookLoginC,logOutC} from "../../controllers/auth/auth.controller"
+import { registerUserC,LoginC,refreshTokenC,googleLoginC,forgotPasswordPatchC,facebookLoginC,logOutC, forgotPasswordC} from "../../controllers/auth/auth.controller"
 import { validateInput } from "../../middlewares/inputvalidation"
 import dbConnect from "../../configs/db"
 import passport from "passport"
@@ -26,6 +26,10 @@ router.get("/google-callback",passport.authenticate("google",{session:false}),go
 router.get("/facebook-login",passport.authenticate("facebook",{scope:['email'],session:false}))
 router.get("/facebook-callback",passport.authenticate("facebook",{session:false}),facebookLoginC)
 
+
+//reset password/forgot password
+router.post('/forgotPassword/:email',forgotPasswordC)
+router.get('/forgotPasswordPatch/:token',forgotPasswordPatchC)
 
 
 

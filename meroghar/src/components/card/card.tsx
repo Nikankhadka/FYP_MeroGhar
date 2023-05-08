@@ -38,7 +38,7 @@ export default function Card({ use, data, index,wish,user}: props) {
   const [img,setimg] = useState(0);
   
   
-  const {images,_id,avgRating,country,city,state,rate,name,isVerified } = data!
+  const {images,_id,avgRating,country,city,state,rate,name,isVerified,isBooked } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -137,7 +137,7 @@ export default function Card({ use, data, index,wish,user}: props) {
       <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
 
      
-      <p className='text-sm mb-2 font-semibold text-black '>Booked</p>
+      {isBooked&&<p className='text-sm mb-2 font-semibold text-black '>Booked</p>}
       
         
     

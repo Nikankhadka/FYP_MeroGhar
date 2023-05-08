@@ -74,6 +74,31 @@ export const postEmailTemplate=(userEmail:string,token:string,):mailBody=>{
 }
 
 
+export const forgotPasswordTemplate=(userEmail:string,token:string,):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"forgot password/Change Password Request",
+        text:"",
+        html:` <p>Verify Email by Clicking the link Given below.....</p>
+        <a href="http://localhost:2900/auth/v1/forgotPasswordPatch/${token}" >verify Email to Genrate New Password</a>
+         `
+    }
+}
+
+export const forgotPasswordPatchTemplate=(userEmail:string,password:string,):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"forgot Password/New Password",
+        text:"",
+        html:` <p>This is the new Password given below.....</p>
+            <h1>${password} </h1>
+         `
+    }
+}
+
+
 export const updateEmailTemplate=(userEmail:string,token:string,newMail:string):mailBody=>{
     return {
         to:userEmail,

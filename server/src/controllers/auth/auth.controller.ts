@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {NextFunction, Request,Response} from "express"
-import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS} from "../../services/auth/auth.service"
+import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS,forgotPasswordPatchS, forgotPasswordS} from "../../services/auth/auth.service"
 import {
 	ReasonPhrases,
 	StatusCodes,
@@ -138,5 +138,30 @@ export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
         //if invalid token use detected clear cookie from imposter
         console.log(e)
         res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
+    }
+}
+
+
+
+export const forgotPasswordC=async(req:Request,res:Response)=>{
+    try{
+        const emailVerification=await forgotPasswordS(req.params.email);
+        if(!emailVerification) res.status(400).json({success:false,error:"Invalid Input/Email Bad request"});
+        res.status(200).json({success:true,error:"Verify Email to Reset Password"});
+    }catch(e:any){
+        console.log(e)
+        res.status(400).json({success:false,error:e.message});
+    }
+}
+
+
+export const forgotPasswordPatchC=async(req:Request,res:Response)=>{
+    try{
+        const passwordChanged=await forgotPasswordPatchS(req.params.token);
+        if(!passwordChanged) res.status(400).json({success:false,error:"Invalid Input Failed to Verify Email"});
+        res.status(200).redirect('http://localhost:3000/Home/login')
+    }catch(e:any){
+        console.log(e)
+        res.status(400).json({success:false,error:e.message});
     }
 }

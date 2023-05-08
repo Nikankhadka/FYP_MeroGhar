@@ -64,7 +64,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
         const token=await jwt.sign({
             userId,
             Email,  
-    },process.env.mailSecret!,{expiresIn:"1h"});
+    },process.env.mailSecret!,{expiresIn:"10h"});
 
         const emailUpdate=await userModel.updateOne({userId},{ "$set": {
              "email.mail":Email,
