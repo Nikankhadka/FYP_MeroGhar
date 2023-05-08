@@ -4,9 +4,9 @@ import { IReview } from "../interfaces/dbInterface";
 
 //document for eeach review wiill be generated
 const reviewSchema=new Schema({
-        userId:{type:Types.ObjectId,required:true},
-        propertyId:{type:Types.ObjectId,required:true},
-        hostId:{type:Types.ObjectId,required:true},
+        userId:{type:Types.ObjectId,required:true,ref:"Users"},
+        propertyId:{type:Types.ObjectId,required:true,ref:"Properties"},
+        hostId:{type:Types.ObjectId,required:true,ref:"Users"},
         rating:{
                 type:Number,
                 default:0

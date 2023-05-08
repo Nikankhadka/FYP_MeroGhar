@@ -1,7 +1,7 @@
 //this controller will contain necessary request handler for authentication and authorization
 
 import {NextFunction, Request,Response} from "express"
-import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS} from "../../services/auth/auth.service"
+import{registerUserS, LoginS,verifyRefreshTokenS, googleLoginS,facebookLoginS, logOutS,forgotPasswordPatchS, forgotPasswordS} from "../../services/auth/auth.service"
 import {
 	ReasonPhrases,
 	StatusCodes,
@@ -40,9 +40,9 @@ export const LoginC=async(req:Request,res:Response)=>{
 
             if(success) {
                
-           return  res.cookie("accessToken",accessToken,{maxAge:900000 ,httpOnly:true})
+           return  res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
             .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true})
-            .cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true})
+            .cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true})
             .status(200).send({success:true, message:"user successfully logged in",user});
             } 
 
@@ -77,8 +77,8 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
       //now attach the token to cookie and send it to client
     
       //if client side request then set else use response data to set in Nextjs middleware
-      res.cookie("accessToken",tokens.newaccessToken,{maxAge:900000,httpOnly:true})
-      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+      res.cookie("accessToken",tokens.newaccessToken,{maxAge:1800000,httpOnly:true})
+      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
       .status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newaccessToken,refreshToken:tokens.newrefreshToken,user});
 
 
@@ -99,8 +99,8 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         console.log("req url",req.headers);
         const {accessToken,refreshToken,user}=await googleLoginS(req.user)
         
-        res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
       .status(StatusCodes.OK).redirect("http://localhost:3000/Home")
 
     }catch(e:any){
@@ -116,8 +116,8 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
        
         console.log(req.user);
         const {accessToken,refreshToken,user}=await facebookLoginS(req.user)
-        res.cookie("accessToken",accessToken,{maxAge:900000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:720000,httpOnly:true,sameSite:"strict"})
+        res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
       .status(200).redirect("http://localhost:3000/Home")
 
     }catch(e:any){
@@ -138,5 +138,30 @@ export const logOutC=async(req:Request,res:Response,next:NextFunction)=>{
         //if invalid token use detected clear cookie from imposter
         console.log(e)
         res.status(204).clearCookie("refreshToken",{httpOnly:true}).clearCookie("accessToken",{httpOnly:true}).clearCookie("session",{httpOnly:true}).json({success:true,message:'user logged out'})
+    }
+}
+
+
+
+export const forgotPasswordC=async(req:Request,res:Response)=>{
+    try{
+        const emailVerification=await forgotPasswordS(req.params.email);
+        if(!emailVerification) res.status(400).json({success:false,error:"Invalid Input/Email Bad request"});
+        res.status(200).json({success:true,error:"Verify Email to Reset Password"});
+    }catch(e:any){
+        console.log(e)
+        res.status(400).json({success:false,error:e.message});
+    }
+}
+
+
+export const forgotPasswordPatchC=async(req:Request,res:Response)=>{
+    try{
+        const passwordChanged=await forgotPasswordPatchS(req.params.token);
+        if(!passwordChanged) res.status(400).json({success:false,error:"Invalid Input Failed to Verify Email"});
+        res.status(200).redirect('http://localhost:3000/Home/login')
+    }catch(e:any){
+        console.log(e)
+        res.status(400).json({success:false,error:e.message});
     }
 }

@@ -38,7 +38,7 @@ export default function Card({ use, data, index,wish,user}: props) {
   const [img,setimg] = useState(0);
   
   
-  const {images,_id,avgRating,country,city,state,rate,name,isVerified } = data!
+  const {images,_id,avgRating,country,city,state,rate,name,isVerified,isBooked } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -47,6 +47,13 @@ export default function Card({ use, data, index,wish,user}: props) {
   const router = useRouter()
 
   return (
+    <div>
+      
+  {use=='userlisting'&&isVerified?.message!==''&&<div className=' mx-auto border-2 rounded-lg w-[97%] p-2 '>
+    <span className='flex items-center gap-x-1 text-red-500'>{isVerified?.message}</span>
+    </div>}
+
+
     <div key={index} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
   <div className="relative group ">
   <Link href={`/Home/rooms/${_id}`} target="_blank">
@@ -111,9 +118,9 @@ export default function Card({ use, data, index,wish,user}: props) {
         <p className="text-md font-semibold">
          {name}
         </p>
-        <div className="flex items-center">
+        <div className="flex items-center gap-x-[2px]">
             <AiFillStar  className='h-4 w-4'/>
-            <span className="text-lg text-gray-600">{avgRating}</span>
+            <span className="mb-[3px] text-lg text-gray-600">{avgRating}</span>
           </div>
         </div>
         
@@ -123,12 +130,18 @@ export default function Card({ use, data, index,wish,user}: props) {
         {isVerified?.pending&&  <AiFillHourglass className='h-5 w-5' />} {isVerified?.pending==isVerified?.status&&<RxCrossCircled className='h-5 w-5 '/>}{isVerified?.status&&<AiFillCheckCircle className='h-5 w-5'/>}
       
           </span>
-          </p>
+      </p>
 
       </div> }
 
       <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
-       
+
+     
+      {isBooked&&<p className='text-sm mb-2 font-semibold text-black '>Booked</p>}
+      
+        
+    
+     
 
      
        
@@ -302,6 +315,9 @@ export default function Card({ use, data, index,wish,user}: props) {
         </div>
       )}
     </div>
+    </div>
+
+
   )
 }
 

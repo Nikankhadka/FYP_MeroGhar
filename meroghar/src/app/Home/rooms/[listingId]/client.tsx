@@ -6,14 +6,14 @@ import Carousel from '../../../../components/carousel'
 import { BookProperty } from '../../../../components/listing/booking'
 import Review from '../../../../components/review'
 import Wish from '../../../../components/Svg/wishSvg'
-import {BiDotsHorizontalRounded} from 'react-icons/bi'
-import { Property } from '../../../../interface/response'
+import { IReview, Property } from '../../../../interface/response'
 import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
 import * as _ from 'lodash'
 import { AiFillStar } from 'react-icons/ai'
-import ReviewCard from '../../../../components/reviewCard'
+
+import ReviewInput from '../../../../components/reviewInput'
 
 
 interface RoomProps {
@@ -21,7 +21,9 @@ interface RoomProps {
   inWishList: boolean
   user: string
   reservations: Reservation[],
-  is_Admin:boolean
+  is_Admin:boolean,
+  reviews:IReview[],
+  currentUser?:string
 }
 
 export function RoomClient({
@@ -29,7 +31,8 @@ export function RoomClient({
   inWishList,
   user,
   reservations,
-  is_Admin
+  is_Admin,
+  reviews,currentUser
 }: RoomProps) {
   const {
     images,
@@ -162,29 +165,35 @@ export function RoomClient({
           {!is_Admin&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
         </div>
 
+        <hr className="my-8 border-gray-200" /> 
+
+        <div className='text-lg pb-3 border-b-2 border-gray-700 w-fit sm:text-xl font-semibold my-10'>
+          Review Section
+        </div>
+          
         {user=='tennant'&&<div>
-        <hr className="my-8 border-gray-200" />
-          <ReviewCard />
+        
+          <ReviewInput rating={1} Review='' userData={userId!} propertyId={_id!} edit={false}/>
           
         </div>}
        
 
-        <hr className="my-10 border-gray-200" />
+        
         {/* REViews Section */}
         <div>
           {/* header block */}
-          <div className="my-8 flex items-center gap-x-2">
-           <AiFillStar className='h-5 w-5 mt-1' />
-            <p className="text-lg sm:text-xl font-semibold">{avgRating}</p>
+          <div className="my-8 flex items-center gap-x-1">
+           <AiFillStar className='h-5 w-5 mt-[6px]' />
+            <p className="text-lg sm:text-xl font-semibold">{avgRating}</p>/
             <p className=" text-lg sm:text-xl font-semibold">{ratingCount} reviews</p>
           </div>
 
          
           {/* grid block */}
-          <div className="grid-1 grid w-full gap-10 md:grid-cols-2 ">
-            {Reviews.map((items) => {
+          <div className="grid-1 grid w-full gap-7 md:grid-cols-2 ">
+            {reviews.map((data) => {
               return (
-                <Review />
+                <Review reviewData={data} currentUser={currentUser!} />
               )
             })}
           </div>

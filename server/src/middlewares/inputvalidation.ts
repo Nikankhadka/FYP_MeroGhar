@@ -103,7 +103,7 @@ export const validateKyc=async(req:Request,res:Response,next:NextFunction)=>{
             lastName:joi.string().required(),
             gender:joi.string().required(),
             // email is not compulsory dynamically render email input in front end
-            email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+            email:joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net','np'] } }).optional(),
            
             country:joi.string().required(),
             state: joi.string().required(),
@@ -201,15 +201,16 @@ export const validatePropertyUpdate = async (req: Request, res: Response, next: 
 export const validateReviewInput=async(req:Request,res:Response,next:NextFunction)=>{
     try{
         //defined joi schema for input validation of requet body
+        console.log('reviewInput',req.body)
         const reviewSchema=joi.object({
             // rating:{
             //     property:joi.number().min(1).max(5).optional(),
             //     host:joi.number().min(1).max(5).optional(),
             //     value:joi.number().min(1).max(5).optional()
             // },
-            rating:joi.number().min(1).max(5).optional(),
-            review:joi.string().min(5).max(50).optional()  
-        }).xor('rating','review')
+            rating:joi.number().min(1).max(5).required(),
+            review:joi.string().min(5).max(50).required()  
+        }).required()
 
         const{error,value}=reviewSchema.validate(req.body,{abortEarly:false})
         if(error) return res.status(422).json({success:false,message:error.message})

@@ -4,6 +4,7 @@ import { getPropertyById } from '../../../../api/server/property/getProperty'
 import ClientComp from '../../../../components/clientComp'
 import { RoomClient } from './client'
 import { checkSession } from '../../../../api/server/auth'
+import { getReviews } from '../../../../api/server/property/getReviews'
 
 // type Params = {
 //   params: {
@@ -26,10 +27,14 @@ export default async function Room({ params }: { params: IParams }) {
 
   const propertyData =getPropertyById(params.listingId)
   const reservationsData =getPropertyBookings(params.listingId)
+  const reviewsList=getReviews(params.listingId,1,10);
   const {session,userData}=await checkSession()
-  const [{ property, user, inWishList }, reservations] = await Promise.all([
+
+  // parallel fetching
+  const [{ property, user, inWishList }, reservations,reviews] = await Promise.all([
     propertyData,
     reservationsData,
+    reviewsList
   ])
 
   const updatedReservations = reservations.map(reservation => {
@@ -51,6 +56,8 @@ export default async function Room({ params }: { params: IParams }) {
         user={user}
         is_Admin={userData.is_Admin}
         inWishList={inWishList}
+        reviews={reviews}
+        currentUser={userData.docId}
       />
     </ClientComp>
   )

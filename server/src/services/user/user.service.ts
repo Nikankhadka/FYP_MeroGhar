@@ -64,7 +64,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
         const token=await jwt.sign({
             userId,
             Email,  
-    },process.env.mailSecret!,{expiresIn:"1h"});
+    },process.env.mailSecret!,{expiresIn:"10h"});
 
         const emailUpdate=await userModel.updateOne({userId},{ "$set": {
              "email.mail":Email,
@@ -153,13 +153,6 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
 
         if(!postKyc) throw new Error("Kyc post failed")
 
-        //now update admin notification setting 
-        // const adminRequest=await userModel.updateMany({is_Admin:true},{
-        //     "$push":{
-        //         "kycVerificationRequests":postKyc._id,
-        //     }
-        // })
-        // if(!adminRequest) throw new Error("Failed to push kyc for admin approval")
         return true;
 
     }catch(e){

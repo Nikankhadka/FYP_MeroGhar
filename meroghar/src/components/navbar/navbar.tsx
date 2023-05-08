@@ -13,13 +13,14 @@ interface NavProps {
   theme: string,
   authState:boolean,
   img:string
+  is_Admin:boolean
 
 }
 
 
 
 
-const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
+const NavBar = ({ theme,authState,img,is_Admin}: NavProps): JSX.Element => {
   //get auth state and pass into the initial model
   const [open, setopen] = useState(false)
   const menuRef = createRef<HTMLDivElement>()
@@ -98,7 +99,7 @@ const NavBar = ({ theme,authState,img}: NavProps): JSX.Element => {
             <img src={img==''? '/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
           </button>
 
-          {open && <InititailModalC authState={authState} ref={menuRef} />}
+          {open && <InititailModalC authState={authState} ref={menuRef} is_Admin={is_Admin} />}
           
           
           {/* <LoginSignup login={true} modal={true} /> */}

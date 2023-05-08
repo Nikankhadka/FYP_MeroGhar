@@ -15,9 +15,10 @@ import * as dotenv from "dotenv"
 import {LSR1, refreshTService} from "../../interfaces/Auth"
 import { googleProfile } from "../../interfaces/Auth";
 import { generateTokens } from "../../utils/token";
-import {signupMailTemplate } from "../../configs/mailtemplate";
+import {forgotPasswordPatchTemplate, forgotPasswordTemplate, signupMailTemplate } from "../../configs/mailtemplate";
 import { sendMail } from "../../utils/zohoMailer";
 import { Types } from "mongoose";
+import { generateRandomPassword } from "../../utils/random";
 
 
 gg
@@ -291,4 +292,58 @@ export const logOutS=async(refreshToken:string):Promise<boolean>=>{
     console.log(e)
     return false;
    }
+}
+
+
+export const forgotPasswordS=async(email:string):Promise<boolean>=>{
+    try{
+        const emailExist=await userModel.findOne({"email.mail":email,'email.isVerified':true,"password":{ $ne:"" },'userId':{$ne:email}}).exec()
+        if(!emailExist) throw new Error("Invalid Email/Email Does not Exist!!!");
+
+        //now generate jwt token based on email and userId
+            //send verification or request mail to change mail and also store token in db to avoid misuse
+        const token=await jwt.sign({
+               Email:emailExist.email,
+               userId:emailExist.userId  
+        },process.env.mailSecret!,{expiresIn:"10h"});
+
+            //function to send mail 
+         sendMail(forgotPasswordTemplate(email,token))
+
+         return true;
+
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+export const forgotPasswordPatchS=async(token:string):Promise<boolean>=>{
+    try{
+       
+        const {userId,Email}= <jwt.verifyEmailPayload>jwt.verify(token,process.env.mailSecret!);
+
+
+        console.log('token verified')
+        //validate userId and Email in db 
+        const userValid=await userModel.findOne({userId,email:Email});
+        if(!userValid) throw new Error("failed to Verify User Invalid user and Email");
+
+        
+        //now generate random password and chnage users password
+        const password=generateRandomPassword(7);
+
+        userValid.password=await hash(password,8);
+        await userValid.save();
+
+        //now send this new passwor in mail
+        sendMail(forgotPasswordPatchTemplate(userValid.email.mail,password));
+        return true;
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
 }

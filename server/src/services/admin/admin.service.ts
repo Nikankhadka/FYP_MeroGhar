@@ -167,7 +167,8 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
                 "isVerified.pending":false,
                 "isVerified.message":message,
                 "isVerified.approvedBy":adminId,
-            }})
+                
+            }},{new:true})
 
         if(!verifyProperty) throw new Error("Property verification failed");
 

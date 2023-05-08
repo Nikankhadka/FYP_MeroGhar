@@ -10,17 +10,19 @@ import { ConfirmModal } from '../modals/confirmModal'
 import { bg } from '../../styles/variants'
 import { FetchedMe } from '../../interface/response'
 import { inputStyle } from '../../styles/variants'
-
+import{AiFillStar ,AiFillHourglass,AiFillCheckCircle,AiOutlineCheckCircle} from 'react-icons/ai'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { ErrorText } from '../random'
 import { PhoneComp } from './phone'
 import EmailComp from './emailcomp'
+import { RxCrossCircled } from 'react-icons/rx'
 interface props {
+  userId?:string
   userData: Partial<FetchedMe>,
   is_Admin:boolean
 }
 
-export default function AccountComponent({ userData,is_Admin}: props) {
+export default function AccountComponent({ userData,is_Admin,userId}: props) {
   // for kyc form component
   const [openKyc, setopenKyc] = useState('close')
   const confirmModal = useModal()
@@ -30,6 +32,9 @@ export default function AccountComponent({ userData,is_Admin}: props) {
   const kycinfo = kyc!.isVerified || kyc!.pending
   console.log(kycinfo)
 
+  //for only kyc infor 
+  const AdminKycView=(userId!==userData._id)&&is_Admin
+
   const [phonemail, setphonemail] = useState('close')
 
   return (
@@ -37,10 +42,22 @@ export default function AccountComponent({ userData,is_Admin}: props) {
       <div className=" w-[97%] sm:w-[80%] p-3 ">
         {/* for kyc header */}
 
-        <h2 className="text-xl font-semibold  text-gray-700">
+        <h2 className="text-2xl font-semibold  text-gray-700">
           {' '}
           Personal Information
         </h2>
+
+      {!is_Admin&&<div className='my-6' >
+        <p className='text-md text-black font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
+        {kyc?.pending&&'Pending'} {kyc?.pending==kyc!.isVerified&&"Rejected!!/Please Apply Again!!"}{kyc?.isVerified&&'Verified'}
+        {kyc!.pending&&  <AiFillHourglass className='h-5 w-5' />} {kyc?.pending==kyc!.isVerified&&<RxCrossCircled className='h-5 w-5 '/>}{kyc?.isVerified&&<AiFillCheckCircle className='h-5 w-5'/>}
+      
+      </span>
+      </p>
+
+     {kyc?.message!==''&&<p className='font-semibold my-2'>Message: <span className='text-sm text-red-500'>{kyc?.message}</span></p>}
+
+      </div> }
 
         {/* if kyc does not exist */}
 
@@ -91,12 +108,12 @@ export default function AccountComponent({ userData,is_Admin}: props) {
                   </p>
                 </p>
 
-                <button
+    {     AdminKycView&&<button
                   onClick={(e) => setphonemail('email')}
                   className="text-sm font-semibold underline"
                 >
                   {kycInfo?.email == '' ? 'Add' : 'Edit'}
-                </button>
+                </button>}
               </div>}
 
               {
@@ -118,12 +135,12 @@ export default function AccountComponent({ userData,is_Admin}: props) {
                   </p>
                 </p>
 
-                <button
+               {   AdminKycView&&<button
                   onClick={(e) => setphonemail('phone')}
                   className="text-sm font-semibold underline"
                 >
                   {kycInfo?.phoneNumber == '' ? 'Add' : 'Edit'}
-                </button>
+                </button>}
               </div>}
 
               {
@@ -152,7 +169,7 @@ export default function AccountComponent({ userData,is_Admin}: props) {
               <div>
                 <hr className="my-5 border-gray-400" />
                 <div className="flex justify-end">
-                  <button
+                  {  AdminKycView&&<button
                     className="text-md font-semibold text-gray-700 underline"
                     onClick={(e) => {
                       e.preventDefault()
@@ -160,7 +177,7 @@ export default function AccountComponent({ userData,is_Admin}: props) {
                     }}
                   >
                     Edit All
-                  </button>
+                  </button>}
                 </div>
               </div>
             )}

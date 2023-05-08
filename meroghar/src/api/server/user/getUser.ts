@@ -58,7 +58,7 @@ export async function getMe():Promise<FetchedMe>{
 
 
 //fetch information of user whose kyc needs to be verified basic profile view by admin
-export async function getUserKyc(userId:string):Promise<IUserKyc>{
+export async function getUserKyc(userId:string):Promise<FetchedMe>{
   try{
     
       

@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { postReviewC } from "../../controllers/property/review.controller";
+import { deleteReviewC, getReviewsC, postReviewC,updateReviewC } from "../../controllers/property/review.controller";
 import { verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
 import { validateReviewInput } from "../../middlewares/inputvalidation";
 
 const router=Router()
 
 
-
+router.get("/:id",getReviewsC)
 
 //crud opeartion except for read needs user access 
 router.use(verifyaccessToken(true));
@@ -14,7 +14,14 @@ router.use(verifyRole(false))
 
 router.post("/:id",validateReviewInput,postReviewC)
 
-hello
+
+//pass review id here
+router.patch("/:id",validateReviewInput,updateReviewC)
+router.patch("/reportReview/:id",validateReviewInput,updateReviewC)
+router.delete("/:id",deleteReviewC)
+
+
+
 
 
 

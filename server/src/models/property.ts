@@ -25,6 +25,7 @@ const propertySchema=new Schema({
     propertyType:{type:String,required:true},
     rules:String,
     amenities:[String],
+
     rate:Number,
     images:[{
         imgId:String,
@@ -43,7 +44,11 @@ const propertySchema=new Schema({
     avgRating:{type:Number,default:0},
 
     //admin can bacn the post
-    isBanned:{type:Boolean,default:false,message:String},
+    isBanned:{
+        status:{type:Boolean,default:false},
+        message:{type:String,default:""}
+    },
+    isBooked:{type:Boolean,default:false},
 
     //admin verification check
     isVerified:{

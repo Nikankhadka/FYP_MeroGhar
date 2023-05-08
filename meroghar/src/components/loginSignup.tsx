@@ -115,8 +115,8 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
             {...register('password', {
               required: true,
               minLength: 4,
-              pattern:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+              // pattern:
+              //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
             })}
           />
           <p className='text-sm text-gray-500'>minimum 6 Letters  A capital small A number and Special character</p>

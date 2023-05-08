@@ -27,9 +27,11 @@ export default function UserCard({userData}:UserProps){
     return(
     <main className="w-[95%] sm:w-[80%] mx-auto p-4 rounded-lg border-2 bg-white border-gray-200  hover:shadow-xl  duration-300 ">
      
-      <div className="my-3">
+      <Link href={`/Home/user/${_id}`} target="_space">
+      <div className="mt-2 mb-4 w-fit">
         <img src={profileImg.imgUrl!=''?profileImg.imgUrl:'/user.png'} alt="property" className="  rounded-full h-28 w-28 " />
       </div>
+      </Link>
 
       <div className="mt-3 text-gray-700 text-md font-semibold ">{_.capitalize(userName)}</div>
       <p className="mt-1  text-gray-500 text-sm font-semibold">{about} dfsa sd fsadf sadf asd fsd fasdfsdfsdf</p>
