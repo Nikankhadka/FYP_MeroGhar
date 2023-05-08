@@ -14,10 +14,12 @@ router.use(verifyRole(false))
 
 router.post("/:id",validateReviewInput,postReviewC)
 
+
 //pass review id here
 router.patch("/:id",validateReviewInput,updateReviewC)
 router.patch("/reportReview/:id",validateReviewInput,updateReviewC)
 router.delete("/:id",deleteReviewC)
+
 
 
 
