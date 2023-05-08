@@ -297,7 +297,7 @@ export const logOutS=async(refreshToken:string):Promise<boolean>=>{
 
 export const forgotPasswordS=async(email:string):Promise<boolean>=>{
     try{
-        const emailExist=await userModel.findOne({"email.mail":email,'email.isVerified':true}).exec()
+        const emailExist=await userModel.findOne({"email.mail":email,'email.isVerified':true,"password":{ $ne:"" },'userId':{$ne:email}}).exec()
         if(!emailExist) throw new Error("Invalid Email/Email Does not Exist!!!");
 
         //now generate jwt token based on email and userId
@@ -325,10 +325,13 @@ export const forgotPasswordPatchS=async(token:string):Promise<boolean>=>{
        
         const {userId,Email}= <jwt.verifyEmailPayload>jwt.verify(token,process.env.mailSecret!);
 
+
+        console.log('token verified')
         //validate userId and Email in db 
         const userValid=await userModel.findOne({userId,email:Email});
         if(!userValid) throw new Error("failed to Verify User Invalid user and Email");
 
+        
         //now generate random password and chnage users password
         const password=generateRandomPassword(7);
 
@@ -336,7 +339,7 @@ export const forgotPasswordPatchS=async(token:string):Promise<boolean>=>{
         await userValid.save();
 
         //now send this new passwor in mail
-        sendMail(forgotPasswordPatchTemplate(Email,password));
+        sendMail(forgotPasswordPatchTemplate(userValid.email.mail,password));
         return true;
 
     }catch(e){
