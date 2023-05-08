@@ -43,8 +43,10 @@ export const postReviewS=async(userId:string,id:string,reviewData:Partial<IRevie
         if(!bookingCount) throw new Error("User Has not Completed any bookings/not Eligible to provide review");
 
         //now get review count:
-        const reviewCount=await reviewModel.countDocuments({userId,propertyId:id});
-        if(!reviewCount) throw new Error("Failed to fetch Review Count/server Error");
+        let reviewCount=await reviewModel.countDocuments({userId,propertyId:id});
+        if(!reviewCount) {
+            reviewCount=0;
+        }
 
         if(reviewCount>=bookingCount) throw new Error("Tennant already has provided Review For the booking");
 

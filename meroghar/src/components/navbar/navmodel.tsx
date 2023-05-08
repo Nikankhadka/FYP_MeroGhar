@@ -67,7 +67,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
         <Link  href='/Home/Account/listings' className={`${btnstyle}`}>Manage Listings</Link>
        </div>}
 
-        <Link  href={`${props.is_Admin?"/Admin":"/Home/Account"}`} className={`${btnstyle}`}>{props.is_Admin?"Dashboard":"Account"}</Link>
+        <Link  href={`${props.is_Admin?"/Admin":"/Home/Account"}`} className={`${btnstyle} ${props.is_Admin?'font-semibold':''}`}>{props.is_Admin?"Dashboard":"Account"}</Link>
         <hr />
         <button className={btnstyle}  onClick={(e)=>{
                 e.preventDefault();

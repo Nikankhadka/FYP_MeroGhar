@@ -116,7 +116,7 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
 
         <hr className="my-5 border-gray-400" />
 
-        {userId == profileData._id!&& <div className='w-full  flex gap-x-1 sm:gap-x-3 '>
+        {userId==profileData._id!&& <div className='w-full  flex gap-x-1 sm:gap-x-3 '>
             
               <button
                 onClick={(e) => {
@@ -193,6 +193,14 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
           />
         
       </div>}
+
+
+      {/* this is for admin exclusive */}
+      {
+        is_Admin&&userId!==profileData._id&&account.openComponent=='close'&&<div className='my-3'>
+        <AccountComponent  userData={profileData} is_Admin={false} userId={userId}/>
+        </div>
+      }
 
      {account.openComponent=='account'&&<div className='my-3'>
       <AccountComponent  userData={profileData} is_Admin={is_Admin}/>

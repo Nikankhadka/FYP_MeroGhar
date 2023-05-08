@@ -30,7 +30,7 @@ export function MessageModal(){
       const verify=useVerify();
       const router=useRouter()
 
-    if(confirmModal.isOpen=='verify'||confirmModal.isOpen=='reject'){
+    if(confirmModal.isOpen=='reject'){
         
     
     return(
@@ -64,7 +64,7 @@ export function MessageModal(){
                     verify.action.onReject(data.message)
                   
                   
-                })} className={`py-2 px-4 text-white font-semibold rounded-lg ${confirmModal.isOpen=='verify'? 'bg-themeColor hover:bg-mainColor':'bg-red-500 hover:bg-red-700'}`}>{confirmModal.isOpen=='verify'?'Verify':"Reject"}</button>
+                })} className={`py-2 px-4 text-white font-semibold rounded-lg ${'bg-red-500 hover:bg-red-700'}`}>Reject</button>
             </div>
 
           </div>

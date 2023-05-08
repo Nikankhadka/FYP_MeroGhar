@@ -151,6 +151,7 @@ export interface wishlist{
       status: boolean;
       message: string;
     };
+    isBooked:boolean,
     isVerified: {
       status: boolean;
       pending: boolean;

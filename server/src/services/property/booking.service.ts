@@ -53,6 +53,8 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
             ]
           });
         if(existingBooking) return false;
+
+
        
         const newBooking=await bookingModel.create({
             propertyId:propId,
@@ -154,6 +156,16 @@ export const confirmCheckInS=async(userId:string,bookingId:string):Promise<boole
 
       if(booking.checkInStatus) throw new Error ("Check in status True Verified!");
 
+      //validate check in date but since this owner controlled i will not do that 
+      //update the booking status for property for the current date 
+      const booked=await propertyModel.findOneAndUpdate({_id:booking.propertyId},{
+        $set:{
+          isBooked:true
+        }
+      },{new:true});
+      if(!booked) throw new Error("failed to Chnage the booking status of the property")
+      
+
       booking.checkInStatus=true;
       await booking.save();
       return true;
@@ -183,6 +195,9 @@ export const confirmCheckOutS=async(userId:string,bookingId:string):Promise<bool
     const newTennant=await propertyModel.findOneAndUpdate({_id:booking.propertyId},{
       $push:{
         tennants:booking.userId
+      },
+      $set:{
+        isBooked:false
       }
     },{new:true});
 

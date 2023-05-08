@@ -167,7 +167,7 @@ export function RoomClient({
 
         <hr className="my-8 border-gray-200" /> 
 
-        <div className='text-lg sm:text-xl font-semibold mb-10 underline'>
+        <div className='text-lg pb-3 border-b-2 border-gray-700 w-fit sm:text-xl font-semibold my-10'>
           Review Section
         </div>
           
@@ -178,7 +178,7 @@ export function RoomClient({
         </div>}
        
 
-        <hr className="my-10 border-gray-200" />
+        
         {/* REViews Section */}
         <div>
           {/* header block */}

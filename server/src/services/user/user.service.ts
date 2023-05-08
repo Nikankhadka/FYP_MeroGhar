@@ -153,13 +153,6 @@ export const postKycS=async(userId:string,KycData:KycData):Promise<boolean>=>{
 
         if(!postKyc) throw new Error("Kyc post failed")
 
-        //now update admin notification setting 
-        // const adminRequest=await userModel.updateMany({is_Admin:true},{
-        //     "$push":{
-        //         "kycVerificationRequests":postKyc._id,
-        //     }
-        // })
-        // if(!adminRequest) throw new Error("Failed to push kyc for admin approval")
         return true;
 
     }catch(e){
