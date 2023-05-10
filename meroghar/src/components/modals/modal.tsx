@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { IoMdClose } from "react-icons/io";
-import LoginSignup from "../loginSignup";
+import { useEffect, useState } from "react";
+
 import useModal from "../../customHoooks/useModal";
 import { createRef } from "react";
 

@@ -125,7 +125,7 @@ export interface wishlist{
   export interface Property{
     _id: string;
     // this is owner detail
-    userId: Partial<IUserKyc>
+    userId: Partial<IUserKyc>|string,
     name: string;
     url: string;
    

@@ -1,15 +1,12 @@
 
 
 import Link from "next/link"
-import { forwardRef, useState} from "react"
-import LoginSignup from "../loginSignup"
-import useLoginModal from "../../customHoooks/useModal"
+import { forwardRef} from "react"
 
-import Modal from "../modals/modal"
 import useModal from "../../customHoooks/useModal"
 import Api from "../../api/client/axios"
 import { toast } from "react-hot-toast"
-import {redirect, useRouter} from 'next/navigation'
+import { useRouter} from 'next/navigation'
 
 
 const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover:bg-hoverColor"

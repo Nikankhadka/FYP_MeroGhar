@@ -38,7 +38,7 @@ export default function Card({ use, data, index,wish,user}: props) {
   const [img,setimg] = useState(0);
   
   
-  const {images,_id,avgRating,country,city,state,rate,name,isVerified,isBooked } = data!
+  const {images,_id,avgRating,country,city,rate,name,isVerified,isBooked } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -58,7 +58,7 @@ export default function Card({ use, data, index,wish,user}: props) {
   <div className="relative group ">
   <Link href={`/Home/rooms/${_id}`} target="_blank">
     <img
-      src={images![img].imgUrl}
+      src={images![img]!.imgUrl}
       alt="property"
       className="w-full h-56 object-cover "
     />
@@ -66,6 +66,7 @@ export default function Card({ use, data, index,wish,user}: props) {
   <div className="absolute inset-0 left-2 right-2  flex items-center justify-between pointer-events-none">
     <button
       onClick={(e) => {
+        e.preventDefault()
         if (img == 0) {
           return console.log('o here')
         }
@@ -76,8 +77,9 @@ export default function Card({ use, data, index,wish,user}: props) {
       <img src="/left.png" alt="arrow" height={9} width={9} />
     </button>
     <button
-      onClick={(e) => {
-        if (img == images?.length! - 1) {
+      onClick={() => {
+        
+        if (img == images!.length! - 1) {
           return console.log('o here')
         }
         return setimg(img + 1)
@@ -233,7 +235,7 @@ export default function Card({ use, data, index,wish,user}: props) {
           <button
             type="button"
             className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-            onClick={(e) => {
+            onClick={() => {
               confirm.onContent({
                 header: 'Are You Sure To Delete Property?',
                 actionBtn: 'Delete',
@@ -241,12 +243,13 @@ export default function Card({ use, data, index,wish,user}: props) {
                   Api.delete(`/property/v1/deleteProperty/${_id}`, {
                     withCredentials: true,
                   })
-                    .then((res) => {
+                    .then(() => {
+                     
                       toast.success(`Property ${_id!} deleted successfully`)
                       modal.onClose()
                       return router.refresh()
                     })
-                    .catch((e) => {
+                    .catch(() => {
                       toast.error(
                         'Failed to delete Property/Property Booked currently'
                       )
@@ -284,7 +287,7 @@ export default function Card({ use, data, index,wish,user}: props) {
           <button
             type="button"
             className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-            onClick={(e) => {
+            onClick={() => {
               confirm.onContent({
                 header: 'Are You Sure To Delete Property?',
                 actionBtn: 'Delete',
@@ -292,12 +295,12 @@ export default function Card({ use, data, index,wish,user}: props) {
                   Api.delete(`/property/v1/deleteProperty/${_id}`, {
                     withCredentials: true,
                   })
-                    .then((res) => {
+                    .then(() => {
                       toast.success(`Property ${_id!} deleted successfully`)
                       modal.onClose()
                       return router.refresh()
                     })
-                    .catch((e) => {
+                    .catch(() => {
                       toast.error(
                         'Failed to delete Property/Property Booked currently'
                       )

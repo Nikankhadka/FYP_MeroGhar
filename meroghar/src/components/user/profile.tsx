@@ -5,10 +5,10 @@ import { HiStar, HiMinus } from 'react-icons/hi'
 
 import { HiCheck } from 'react-icons/hi'
 import { EditBasic } from './editProfile'
-import { useState } from 'react'
+
 import Link from 'next/link'
 import Card from '../card/card'
-import { FetchedMe, FetchedUserData, Property } from '../../interface/response'
+import { FetchedMe, Property } from '../../interface/response'
 import { bg } from '../../styles/variants'
 import useAccount from '../../customHoooks/AccountState'
 import AccountComponent from './account'
@@ -27,7 +27,6 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
     email,
     kyc,
     about,
-    listingCount,
     recievedReviewcount,
     avgRating,
     createdAt,

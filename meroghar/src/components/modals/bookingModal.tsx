@@ -16,7 +16,7 @@ import Modal from "./modal"
 import Invoice from "../listing/bill"
 import {createRef, useState} from 'react'
 import { toast } from "react-hot-toast"
-// import KhaltiCheckout from "khalti-checkout-web";
+
 
 
 export function BookingModal(){
@@ -25,7 +25,7 @@ export function BookingModal(){
     const bookingStore=useBookingStore()
     const router=useRouter();
     const {images,propertyType,name,avgRating,userId,rate,_id}=bookingStore.propertyData;
-    const {guest,startDate,endDate}=bookingStore.bookingInfo
+    const {startDate,endDate}=bookingStore.bookingInfo
 
     const start = dayjs(startDate);
     const end = dayjs(endDate);
@@ -39,67 +39,7 @@ export function BookingModal(){
     const [paymentid,setpaymentid]=useState('');
     const [payerid,setpayerid]=useState('');
 
-    const khaltiHandler=async()=>{
-       
-        let config = {
-            // replace this key with yours
-            "publicKey": "test_public_key_9df6a476434945f4a118424a7bead0e2",
-            "productIdentity": `6441ff003c81cbd8e21c4fee`,
-            "productName": `6441ff003c81cbd8e21c4fee`,
-            "productUrl": `localhost:3000/rooms/6441ff003c81cbd8e21c4fee`,
-            "eventHandler": {
-                onSuccess (payload:any) {
-                    console.log(payload);
-                    // const body={
-                    //     startDate:bookingStore.bookingInfo.startDate,
-                    //     endDate:bookingStore.bookingInfo.endDate,
-                    //     guest:bookingStore.bookingInfo.guest,
-                    //     payerId:details.payer.payer_id,
-                    //     paymentId:details.id,
-                    //     initialAmount:basePrice,
-                    //     serviceCharge:taxPrice,
-                    //     totalAmount:totalCost,
-                    //     stay:totalDays
-                    //     }
-                    //     setpayerid(details.payer.payer_id)
-                    //     setpaymentid(details.id)
-
-                    //     console.log("bookingBody",body)
-                    //     try{
-                    //     const newBooking=Api.post(`/property/v1/booking/${_id}`,body,{withCredentials:true}).then((res)=>{
-                    //         toast.success(`Booking/Payment completed by ${name}`);
-
-                    //     return  setbill(true);
-                    //     }).catch((e)=>{
-                    //         toast.error("Booking/Payment Failed")
-                    //         return bookingStore.setError(true)
-                    //     })
-                        
-                    //     }catch(e:any){
-                        
-                    //     toast.error("This booking conflicts with an existing booking/Error occurred.");
-                    //     return bookingStore.setError(true)
-                    //     }
-
-                },
-                // onError handler is optional
-                onError (error:any) {
-                    console.log(error)
-                   
-                },
-                onClose () {
-                    console.log('widget is closing');
-                }
-            },
-            "paymentPreference": ["KHALTI", "EBANKING","MOBILE_BANKING", "CONNECT_IPS", "SCT"],
-        };
-        
-        
-        // const checkout = new KhaltiCheckout(config);
-        //the amount passed is in paisa so make sure to *100 and amount should be less than 200 for test
-        // checkout.show({amount:2000})
-        
-    }
+    
 
     const uploadBill=async()=>{
         const element = billref.current;
@@ -146,7 +86,7 @@ export function BookingModal(){
 
 {         !bill && <div className="w-full p-4 ">
                 <div className="flex flex-col items-center justify-center" >
-                    <img src={images![0].imgUrl} alt="propertyImage" className="w-[95%] sm:m-0 h-40 sm:h-48  rounded-lg" />
+                    <img src={images![0]!.imgUrl} alt="propertyImage" className="w-[95%] sm:m-0 h-40 sm:h-48  rounded-lg" />
                     
                     <div className="p-2 flex flex-row items-center w-full justify-around " >
 
@@ -157,7 +97,7 @@ export function BookingModal(){
                   
                     <div className="">
                     <p  className="text-sm flex items-center gap-x-1"><AiFillStar/>{avgRating}</p>
-                    <p className='mt-2 text-sm font-semibold'>{userId}</p>
+                    <p className='mt-2 text-sm font-semibold'>{userId as string}</p>
                     </div>
                    
                     </div>
@@ -188,7 +128,7 @@ export function BookingModal(){
                 </div>
 
                 <div className="mt-5">
-                <button className="bg-violet-500 mb-2 w-full h-10 rounded-sm text-white font-semibold hover:bg-violet-700 transition-all" onClick={khaltiHandler}> Khalti</button>
+               
                 <PayPalScriptProvider options={{ "client-id":'AQBVm0xUYDKKY-d-Jf3xUHDSgGpDkw2N_9cvIXP_ty4BQZ_GWJidp5fWZRDgwjlSDsYq1Wv9SBJnbK-d'}}>
                 <PayPalButtons style={{ layout: "horizontal",color:"blue" ,height:40,tagline:false }} createOrder={(data, actions) => {
                     return actions.order.create({
@@ -201,7 +141,7 @@ export function BookingModal(){
                         ],
                     });
                 }}
-                onApprove={(data, actions:any) => {
+                onApprove={( actions:any) => {
                     return actions.order.capture().then(async(details:any) => {
                         const name = details.payer.name.given_name;
                         
@@ -233,7 +173,7 @@ export function BookingModal(){
 
                         return  setbill(true);
                         
-                        }catch(e:any){
+                        }catch(e){
                         
                         toast.error("This booking conflicts with an existing booking/Error occurred.");
                         return bookingStore.setError(true)
@@ -252,7 +192,7 @@ export function BookingModal(){
             {/* this div is for bill download after the payment and booking has been finalized */}
             {bill&&<div className="w-full">
             <div ref={billref} >
-            <Invoice paymentId={paymentid} rate={rate!} nights={totalDays} tennantId="Random1" propertyName={name!} hostId={userId!} initialPrice={basePrice} taxAndServiceChargePrice={taxPrice} totalPrice={totalCost} />
+            <Invoice paymentId={paymentid} rate={rate!} nights={totalDays} tennantId="Random1" propertyName={name!} hostId={userId as string} initialPrice={basePrice} taxAndServiceChargePrice={taxPrice} totalPrice={totalCost} />
             </div>
         
             <div className="w-[95%] ml-2 p-2 flex items-center justify-between">

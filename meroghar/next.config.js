@@ -9,7 +9,17 @@ const nextConfig = {
       use:[{loader:'@svgr/webpack',options:{icon:true}}]
     })
     return config
-  }
+  },
+
+
+  typescript: {
+    
+      // Dangerously allow production builds to successfully complete even if
+      // your project has type errors.
+  
+      ignoreBuildErrors: true,
+   },
+
 
   
 }

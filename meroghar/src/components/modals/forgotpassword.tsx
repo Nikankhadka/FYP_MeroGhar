@@ -2,7 +2,7 @@
 
 import useModal from "../../customHoooks/useModal"
 import PasswordReset from "../fogotpassword"
-import ConfirmComp from "./confirmComp"
+
 
 
 import Modal from "./modal"

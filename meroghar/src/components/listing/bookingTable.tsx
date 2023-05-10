@@ -1,11 +1,9 @@
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import {
-  AiFillStar,
-  AiFillHourglass,
-  AiFillCheckCircle,
+
   AiOutlineCheckCircle,
 } from 'react-icons/ai'
-import { FetchedUserData, IBooking, Payment, Property } from '../../interface/response'
+import {  IBooking, } from '../../interface/response'
 import {BiCalendarEdit} from 'react-icons/bi'
 import {BsHouseCheckFill} from 'react-icons/bs'
 import Link from 'next/link'
@@ -107,7 +105,7 @@ export function BookingTable({bookingData,trips}:Props) {
                 </td>
                 
                 <Link href={`/Home/rooms/${data.propertyId?._id}` } target='_space' ><td className="mr-12 flex items-center space-x-3 whitespace-nowrap p-4">
-                  <img className="h-16 w-20 rounded-lg" src={data.propertyId?.images![0].imgUrl} />
+                  <img className="h-16 w-20 rounded-lg" src={data.propertyId?.images![0]!.imgUrl} />
 
                   <div className="text-base font-semibold  text-gray-800 dark:text-white">
                     {data.propertyId?.name}
@@ -144,16 +142,16 @@ export function BookingTable({bookingData,trips}:Props) {
                   <button
                     type="button"
                     className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
-                   onClick={(e)=>{
+                   onClick={()=>{
                     
                     confirm.onContent({
                       header:"Are you Sure You want to Check In!",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then((res)=>{
+                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then(()=>{
                         console.log("user checkedIn");
                         toast.success("Checked In Successfully!");
                         return router.refresh();
                       })
-                      .catch((e)=>{
+                      .catch(()=>{
                         toast.error("Check In Failed/Check In repeated!!");
                         return router.refresh();
                       })},
@@ -186,16 +184,16 @@ export function BookingTable({bookingData,trips}:Props) {
                   <button
                     type="button"
                     className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
-                   onClick={(e)=>{
+                   onClick={()=>{
                     
                     confirm.onContent({
                       header:"Are you Sure You want to Check In!",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then((res)=>{
+                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then(()=>{
                         console.log("user checkedIn");
                         toast.success("Checked In Successfully!");
                         return router.refresh();
                       })
-                      .catch((e)=>{
+                      .catch(()=>{
                         toast.error("Check In Failed/Check In repeated!!");
                         return router.refresh();
                       })},
@@ -235,12 +233,12 @@ export function BookingTable({bookingData,trips}:Props) {
                     confirm.onContent({
                       header:"Are you Sure You want to Check Out!",
                       actionBtn:"Check Out",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckOut/${data._id}`,{},{withCredentials:true}).then((res)=>{
+                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckOut/${data._id}`,{},{withCredentials:true}).then(()=>{
                         console.log("user checkedIn");
                         toast.success("Checked Out Successfully!");
                         return router.refresh();
                       })
-                      .catch((e)=>{
+                      .catch(()=>{
                         toast.error("Check In Failed!!");
                         return router.refresh();
                       })},

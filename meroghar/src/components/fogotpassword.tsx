@@ -9,18 +9,18 @@ import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
 export default function PasswordReset(){
-    const [email,setemail]=useState('')
+    
     const router=useRouter();
-    const {register,handleSubmit, watch, formState:{ errors }}=useForm<{email:string}>({defaultValues:{
+    const {register,handleSubmit, formState:{ errors }}=useForm<{email:string}>({defaultValues:{
     email:""
     }})
     const onSubmit:SubmitHandler<{email:string}>=(formdata)=>{
         console.log(formdata)
-        Api.post(`/auth/v1/forgotPassword/${formdata.email}`).then((res)=>{
+        Api.post(`/auth/v1/forgotPassword/${formdata.email}`).then(()=>{
             toast.success("Please authorize Password Reset Mail send");
             router.refresh()
 
-        }).catch((e)=>{
+        }).catch(()=>{
             toast.error("Failed to Verify Email/Please Provide valid mail")
         })
     }

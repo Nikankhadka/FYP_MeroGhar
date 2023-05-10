@@ -8,7 +8,7 @@ dotenv.config()
         const accessToken=await sign({
             
          docId,userId,is_Admin,kycVerified
-        },process.env.accessToken!,{expiresIn:"900s"})
+        },process.env.accessToken!,{expiresIn:"1800s"})
 
         const refreshToken=await sign({
             docId,userId,is_Admin,kycVerified

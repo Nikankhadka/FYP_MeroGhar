@@ -6,7 +6,6 @@ import { loginSignupModal } from '../interface/buttons'
 import { LoginRegisterInput } from '../interface/request'
 import { ErrorText } from './random'
 import axios from 'axios'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {useState} from 'react'
 import { useRouter } from 'next/navigation'
@@ -18,12 +17,12 @@ import { toast } from 'react-hot-toast'
 
 export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Element {
   
-  const {register,handleSubmit,watch,formState: { errors }} = useForm<LoginRegisterInput>()
+  const {register,handleSubmit,formState: { errors }} = useForm<LoginRegisterInput>()
 
     const loginSignupModal=useModal();
   const router=useRouter();
-  const[invalid,setinvalid]=useState(false);
-  const[alert,setalert]=useState(false)
+  
+ 
 
   const onSubmit: SubmitHandler<LoginRegisterInput> = async(data) => {
     console.log(data)
@@ -43,7 +42,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
       }
       toast.error("Login Failed/Invalid Credential")
      return  router.push('/Home')
-      }catch(e:any){
+      }catch(e){
         toast.error("Login Failed/Invalid Credential")
         return  router.push('/Home')
       }
@@ -60,7 +59,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
       
     }
     throw new Error(`${res.data.error}`)
-    }catch(e:any){
+    }catch(e){
       toast.error("User Registration Failed!");
       
     }
@@ -133,7 +132,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
             </Link>
           )}
 
-           {invalid&&<p className='text-sm text-red-600 my-3'>Invalid UserId/Password</p>}
+           {/* {invalid&&<p className='text-sm text-red-600 my-3'>Invalid UserId/Password</p>} */}
           <input
             type="submit"
             className="text-md my-1 w-[95%] cursor-pointer rounded-md bg-themeColor p-2 text-white hover:bg-mainColor"

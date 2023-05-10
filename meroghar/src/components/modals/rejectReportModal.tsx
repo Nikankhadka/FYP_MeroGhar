@@ -1,17 +1,17 @@
 'use client'
 
 import useModal from "../../customHoooks/useModal"
-import ConfirmComp from "./confirmComp"
 
-import { RxCross1 } from "react-icons/rx"
+
+
 import Modal from "./modal"
 
 import { inputStyle } from "../../styles/variants"
-import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
+import { useForm,  } from 'react-hook-form'
 import { ErrorText } from "../random"
-import { verifyKyc } from "../../api/client/admin"
+
 import useVerify from "../../customHoooks/useVerify"
-import { toast } from "react-hot-toast"
+
 import { useRouter } from "next/navigation"
 interface formProps{
     message:string
@@ -28,8 +28,7 @@ export function MessageModal(){
         control,
       } = useForm<formProps>()
       const verify=useVerify();
-      const router=useRouter()
-
+    
     if(confirmModal.isOpen=='reject'){
         
     

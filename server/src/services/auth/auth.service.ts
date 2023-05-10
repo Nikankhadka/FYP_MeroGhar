@@ -154,7 +154,7 @@ export const verifyRefreshTokenS=async(refreshToken:string):Promise<refreshTServ
                     //since token was valid perfect now create new tokens
                     const newaccessToken=await jwt.sign({
                         userId, is_Admin,kycVerified,docId:foundUser._id
-                    },process.env.accessToken!,{expiresIn:"900s"})
+                    },process.env.accessToken!,{expiresIn:"1800s"})
             
                     const newrefreshToken=await jwt.sign({
                         userId,is_Admin,kycVerified,docId:foundUser._id
