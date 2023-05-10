@@ -7,7 +7,7 @@ info:
     schemas:
         - http
         - https
-
+gg
 # component portion defined the main portion of the api documentation
 components:
   securitySchemes:
