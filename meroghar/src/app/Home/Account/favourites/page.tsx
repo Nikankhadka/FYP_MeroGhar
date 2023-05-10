@@ -26,7 +26,7 @@ export default async  function Favourites(){
                 wishList.wishList.map((data,index)=>{
                     
                     return(
-                        <Card data={data} index={index} use="card" wish={true}/>
+                        <Card data={data} key={index} use="card" wish={true}/>
                     )
                 })
             }

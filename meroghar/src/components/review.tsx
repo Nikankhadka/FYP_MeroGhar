@@ -22,14 +22,15 @@ import { useRouter } from 'next/navigation'
 interface Props {
   reviewData: IReview
   currentUser: string
+  key:number
 }
-export default function Review({ reviewData, currentUser }: Props) {
+export default function Review({ reviewData, currentUser,key}: Props) {
   const [Edit, setEdit] = useState('')
   const confirm=useConfirm();
   const modal=useModal()
   const router=useRouter();
   return (
-    <div className="rounded-lg bg-white border-2 border-gray-100 p-4 shadow-lg">
+    <div key={key} className="rounded-lg bg-white border-2 border-gray-100 p-4 shadow-lg">
       {Edit == '' && (
         <div>
           <div className="flex items-center justify-between">

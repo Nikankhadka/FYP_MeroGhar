@@ -47,6 +47,7 @@ export default function ReviewInput({userData,propertyId,edit,rating,Review,setE
           {ratings.map((ratevalue,index) => {
             return (
               <button
+              key={index}
                 onClick={(e) => {
                   setrate(index)
                  

@@ -30,11 +30,11 @@ interface props {
   data?: Partial<Property>,
   booking?:Partial<IBooking>
   payment?:Partial<Payment>
-  index: number
+  key: number
   wish?:boolean
   user?:string
 }
-export default function Card({ use, data, index,wish,user}: props) {
+export default function Card({ use, data, key,wish,user}: props) {
   const [img,setimg] = useState(0);
   
   
@@ -54,7 +54,7 @@ export default function Card({ use, data, index,wish,user}: props) {
     </div>}
 
 
-    <div key={index} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
+    <div key={key} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
   <div className="relative group ">
   <Link href={`/Home/rooms/${_id}`} target="_blank">
     <img
@@ -224,7 +224,7 @@ export default function Card({ use, data, index,wish,user}: props) {
             className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
             onClick={(e) => {
               e.preventDefault()
-              list.setIndex(index)
+              list.setIndex(key)
               list.onList('edit')
             }}
           >
@@ -276,7 +276,7 @@ export default function Card({ use, data, index,wish,user}: props) {
             className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
             onClick={(e) => {
               e.preventDefault()
-              list.setIndex(index)
+              list.setIndex(key)
               list.onList('edit')
             }}
           >

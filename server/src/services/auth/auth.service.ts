@@ -7,7 +7,14 @@ declare module "jsonwebtoken" {
        is_Admin:boolean,
        kycVerified:boolean
    }
+ export   interface verifyEmailPayload{
+    Email:string,
+    userId:string
+   }
 }
+
+
+
 
 import * as jwt from "jsonwebtoken"
 import {hash,compare} from "bcrypt"
@@ -21,7 +28,7 @@ import { Types } from "mongoose";
 import { generateRandomPassword } from "../../utils/random";
 
 
-gg
+
 
 
 
