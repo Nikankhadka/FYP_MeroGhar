@@ -57,7 +57,7 @@ export default  async function KycRequest(){
     {
       KycRequests.map((data,index)=>{
         return(
-          <UserCard userData={data} />
+          <UserCard userData={data} key={index} />
         )
       })
     }

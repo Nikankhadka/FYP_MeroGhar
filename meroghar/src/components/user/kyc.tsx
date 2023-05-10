@@ -219,8 +219,8 @@ useEffect(()=>{
               {...register('gender', { required: true })}
             >
                 <option value="" >Select Gender</option>
-              {gender.map((type) => (
-                <option value={type}>{type}</option>
+              {gender.map((type,index) => (
+                <option key={index} value={type}>{type}</option>
               ))}
             </select>
 
@@ -236,7 +236,7 @@ useEffect(()=>{
         <select className={inputStyle} defaultValue={kycInfo!.country} {...register('country', { required: true})}>
         <option value={kycInfo!.country}>{kycInfo!.country==''?'Select a Country':kycInfo!.country}</option>
                 {
-                    countries.map((country,index)=><option  value={index}>{country.name}</option>)
+                    countries.map((country,index)=><option key={index} value={index}>{country.name}</option>)
                 }
         </select>
 
@@ -250,7 +250,7 @@ useEffect(()=>{
         <option value={kycInfo!.state}>{kycInfo!.state==''?'Select a State':kycInfo!.state}</option>
                 {
                     
-                    country.getStates(parseInt(watch('country'))).map((state,index)=><option value={index}>{state.name}</option>)
+                    country.getStates(parseInt(watch('country'))).map((state,index)=><option key={index} value={index}>{state.name}</option>)
                 }
         </select>
           {errors?.state && ( <ErrorText text='Please Select Valid State'/>)}
@@ -262,7 +262,7 @@ useEffect(()=>{
                 <option value={kycInfo!.city}>{kycInfo!.city==''?'Select a City':kycInfo!.city}</option>
                 {
                     
-                    country.getCities(parseInt(watch('country')),parseInt(watch('state'))).map((city)=><option value={city.name}>{city.name}</option>)
+                    country.getCities(parseInt(watch('country')),parseInt(watch('state'))).map((city,index)=><option key={index} value={city.name}>{city.name}</option>)
                 }
         </select>
           {errors?.city && ( <ErrorText text='Please Select Valid City'/>)}

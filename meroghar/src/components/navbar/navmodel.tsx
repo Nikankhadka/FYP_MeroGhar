@@ -11,7 +11,7 @@ import { useRouter} from 'next/navigation'
 
 const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover:bg-hoverColor"
 
- interface InitiailModal{
+ interface NavModal{
     authState:boolean
     is_Admin:boolean
    
@@ -19,7 +19,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
  type Ref = HTMLDivElement;
 
- const InititailModalC =forwardRef<Ref,InitiailModal>((props,ref):JSX.Element=>{
+ export const NavModal=forwardRef<Ref,NavModal>((props,ref)=>{
     const modal=useModal();
     const router=useRouter()
 
@@ -87,4 +87,3 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 })
 
 
-export default  InititailModalC

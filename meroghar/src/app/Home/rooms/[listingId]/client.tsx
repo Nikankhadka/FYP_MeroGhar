@@ -143,9 +143,9 @@ export function RoomClient({
             <div>
               <h3 className="text-md md:text-lg font-semibold text-black">What this place offers</h3>
               <div className="my-1">
-                {amenities!.map((items) => {
+                {amenities!.map((items,index) => {
                   return (
-                    <div className="my-1 flex items-center gap-x-4">
+                    <div key={index} className="my-1 flex items-center gap-x-4">
                       <p className='text-sm sm:text-md text-gray-700 '>{items}</p>
                     </div>
                   )
@@ -191,9 +191,9 @@ export function RoomClient({
          
           {/* grid block */}
           <div className="grid-1 grid w-full gap-7 md:grid-cols-2 ">
-            {reviews.map((data) => {
+            {reviews.map((data,index) => {
               return (
-                <Review reviewData={data} currentUser={currentUser!} />
+                <Review  key={index} reviewData={data} currentUser={currentUser!} />
               )
             })}
           </div>

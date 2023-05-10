@@ -110,8 +110,8 @@ export function SearchModal(){
                 className={inputStyle}
                 {...register('propertyType', { required: true })}
               >
-                {propertyOptions.map((type) => (
-                  <option value={type}>{type}</option>
+                {propertyOptions.map((type,index) => (
+                  <option key={index} value={type}>{type}</option>
                 ))}
               </select>
 
@@ -142,7 +142,7 @@ export function SearchModal(){
                     
                 </option>
                 {countries.map((country, index) => (
-                  <option value={index}>{country.name}</option>
+                  <option key={index} value={index}>{country.name}</option>
                 ))}
               </select>
 
@@ -165,7 +165,7 @@ export function SearchModal(){
                 {countryhook
                   .getStates(parseInt(watch('country')))
                   .map((state, index) => (
-                    <option value={index}>{state.name}</option>
+                    <option key={index} value={index}>{state.name}</option>
                   ))}
               </select>
               {errors?.state && (
@@ -189,8 +189,8 @@ export function SearchModal(){
                     parseInt(watch('country')),
                     parseInt(watch('state'))
                   )
-                  .map((city) => (
-                    <option value={city.name}>{city.name}</option>
+                  .map((city,index) => (
+                    <option key={index} value={city.name}>{city.name}</option>
                   ))}
               </select>
               {errors?.city && (
