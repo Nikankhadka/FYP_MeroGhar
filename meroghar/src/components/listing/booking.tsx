@@ -4,7 +4,7 @@ import Datepicker from 'react-tailwindcss-datepicker'
 import { useState } from 'react'
 import Link from 'next/link'
 import { ErrorText } from '../random'
-import { useRouter } from 'next/navigation'
+
 import moment from 'moment'
 import useModal from '../../customHoooks/useModal'
 import { Property } from '../../interface/response'
@@ -28,7 +28,7 @@ export function BookProperty({reservations,user,propertyData}:Booking) {
         });
  
         console.log(reservations)
-  const router=useRouter();
+
   const[guest,setguest]=useState(0)
 
      

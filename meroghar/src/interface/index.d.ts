@@ -2,14 +2,11 @@ export {};
 
 declare global {
   interface Window {
-    recaptchaVerifier: any; // 👈️ turn off type checking
-    confirmationResult:any
+    recaptchaVerifier: firebase.auth.RecaptchaVerifier;
+    confirmationResult: firebase.auth.ConfirmationResult;
   }
 }
 
 
-declare module 'khalti-checkout-web'{
-  const value:any,
-  
-}
+
 

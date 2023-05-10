@@ -13,7 +13,7 @@ export default function ConfirmComp(){
                
             <div className="w-full border-2 border-blue-500 md:w-[570px]  rounded-lg bg-white px-4 pt-5 pb-4   shadow-xl  ">
             <div className="flex items-center justify-end ">
-              <button onClick={(e)=>{
+              <button onClick={()=>{
                   
                   modal.onClose();
               }}><RxCross1 className="h-5 w-5 rounded-full hover:bg-slate-200" /></button>
@@ -28,7 +28,7 @@ export default function ConfirmComp(){
             <div className="flex justify-around">
               <button className="rounded-lg bg-gray-600 px-4 py-2 text-white transition-all hover:bg-gray-800"
               
-              onClick={(e)=>{
+              onClick={()=>{
                 modal.onClose();
                  
               }}>

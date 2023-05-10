@@ -8,7 +8,7 @@ import { Property } from '../../interface/response'
 import Card from '../card/card'
 import useRandom from '../../customHoooks/randomStore'
 import { toast } from 'react-hot-toast'
-import {AiOutlinePlus} from 'react-icons/ai'
+
 
 interface Props{
   is_Admin:boolean,
@@ -71,7 +71,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
       </div>
      
 
-     {properties?.length!>0&&<div>
+     {properties!.length!>0&&<div>
                {/* only available for kyc verified user */}
         
           

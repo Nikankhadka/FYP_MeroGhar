@@ -3,7 +3,7 @@
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
 
 import { ErrorText } from './random'
-import { PropertyForm } from '../interface/form'
+import { PropertyForm} from '../interface/form'
 
 import { Images } from '../interface/request'
 import { PostPropery, UpdatePropery } from '../api/client/property'
@@ -32,8 +32,9 @@ export default function PostPropertyForm({
   isUpdate,
   propertyData,
 }: postProperty) {
+  
   let defaultValues: PropertyForm = {
-    images: ['default'],
+    images:['default'],
     name: '',
    
       country: '',

@@ -6,7 +6,7 @@ import Carousel from '../../../../components/carousel'
 import { BookProperty } from '../../../../components/listing/booking'
 import Review from '../../../../components/review'
 import Wish from '../../../../components/Svg/wishSvg'
-import { IReview, Property } from '../../../../interface/response'
+import { IReview, IUserKyc, Property } from '../../../../interface/response'
 import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
@@ -99,13 +99,13 @@ export function RoomClient({
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
                 <h3 className=" text-md md:text-lg font-semibold">
-                  {_.startCase(propertyType)} Hosted by {userId?.userName}
+                  {_.startCase(propertyType)} Hosted by {(userId as IUserKyc).userName}
                 </h3>
               </div>
 
-              <Link href={`/Home/user/${userId?._id}`} className="block" target='_blank'>
+              <Link href={`/Home/user/${(userId as IUserKyc)._id}`} className="block" target='_blank'>
                 <img
-                  src={`${userId?.profileImg?.imgUrl}`}
+                src={`${(userId as IUserKyc).profileImg!.imgUrl}`}
                   alt="userProfile"
                   className="h-14 w-14 rounded-full  border-2 border-gray-300"
                 />
@@ -173,7 +173,7 @@ export function RoomClient({
           
         {user=='tennant'&&<div>
         
-          <ReviewInput rating={1} Review='' userData={userId!} propertyId={_id!} edit={false}/>
+          <ReviewInput rating={1} Review='' userData={(userId as IUserKyc)} propertyId={_id!} edit={false}/>
           
         </div>}
        

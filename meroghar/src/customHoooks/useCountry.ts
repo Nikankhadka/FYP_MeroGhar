@@ -1,4 +1,4 @@
-import { Content } from 'next/font/google';
+
 import { create } from 'zustand';
 
 //this same modal store can be used for any other modal through out the application
@@ -24,19 +24,19 @@ interface ModalStore {
 
 const useCountry = create<ModalStore>((set) => ({
     Countries:Country.getAllCountries(),
-    getCountryData:(index)=>{
+    getCountryData:(index):ICountry=>{
         const countries=Country.getAllCountries();
-        return countries[index];
+        return countries[index]!;
     },
-    getStateData:(countryIndex:number,stateIndex:number)=>{
+    getStateData:(countryIndex:number,stateIndex:number):IState=>{
         const countries=Country.getAllCountries();
-        const states=State.getStatesOfCountry(countries[countryIndex].isoCode);
-        return states[stateIndex];
+        const states=State.getStatesOfCountry(countries[countryIndex]!.isoCode);
+        return states[stateIndex]!;
     },
     getStates:(countryIndex)=>{
         try{
         const countries=Country.getAllCountries();
-        return State.getStatesOfCountry(countries[countryIndex].isoCode);
+        return State.getStatesOfCountry(countries[countryIndex]!.isoCode);
         }catch(e){
         return []
         }
@@ -45,8 +45,8 @@ const useCountry = create<ModalStore>((set) => ({
     getCities:(countryIndex,stateIndex)=>{
         try{
             const countries=Country.getAllCountries();
-            const states=State.getStatesOfCountry(countries[countryIndex].isoCode)
-            return City.getCitiesOfState(countries[countryIndex].isoCode,states[stateIndex].isoCode);
+            const states=State.getStatesOfCountry(countries[countryIndex]!.isoCode)
+            return City.getCitiesOfState(countries[countryIndex]!.isoCode,states[stateIndex]!.isoCode);
         }catch(e){
             return [];
         }

@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import FooterChild from './Svg/footerchild'
+
 import {TfiWorld} from 'react-icons/tfi'
-import {FiSearch,FiMessageSquare} from 'react-icons/fi'
+import {FiSearch} from 'react-icons/fi'
 import {AiOutlineHeart} from 'react-icons/ai'
 import {VscAccount} from 'react-icons/vsc'
 

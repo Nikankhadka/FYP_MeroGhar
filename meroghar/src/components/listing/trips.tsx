@@ -4,9 +4,7 @@
 import Link from 'next/link'
 import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
 
-import { IBooking, Property } from '../../interface/response'
-import Card from '../card/card'
-import useRandom from '../../customHoooks/randomStore'
+import { IBooking, } from '../../interface/response'
 import { BookingTable } from './bookingTable'
 
 
@@ -39,7 +37,7 @@ export default function TripBookingClient({trips,bookings}:Props) {
       </div>
      
 
-        {bookings?.length!>0&&<div>
+        {bookings!.length!>0&&<div>
                {/* only available for kyc verified user */}
         
         
@@ -56,7 +54,7 @@ export default function TripBookingClient({trips,bookings}:Props) {
       
 
       {/* paginatioon footer */}
-      {bookings?.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+      {bookings!.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
         <div className="flex items-center space-x-3">
           <Link
             href="#"
