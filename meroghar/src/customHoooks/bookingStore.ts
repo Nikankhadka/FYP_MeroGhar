@@ -16,6 +16,11 @@ interface ModalStore {
   setPropertyData:(Data:Partial<Property>)=> void;
   bookingInfo:Booking
   setbookingInfo:(Data:Booking)=> void;
+  billData:{
+    payerId:string,
+    paymentId:string
+  }
+  setBillData:(Data:{payerId:string,paymentId:string})=> void;
   
 }
 
@@ -29,6 +34,11 @@ const useBookingStore=create<ModalStore>((set) => ({
         endDate:new Date()
         
     },
+    billData:{
+      payerId:'',
+      paymentId:""
+    },
+    setBillData:(data)=>{set({billData:data})},
     setError:(state:boolean)=>set({error:state}),
     setPropertyData:(data)=>set({propertyData:data}),
     setbookingInfo:(data)=>set({bookingInfo:data})

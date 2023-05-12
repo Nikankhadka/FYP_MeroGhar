@@ -7,10 +7,7 @@ declare module "jsonwebtoken" {
        is_Admin:boolean,
        kycVerified:boolean
    }
- export   interface verifyEmailPayload{
-    Email:string,
-    userId:string
-   }
+
 }
 
 

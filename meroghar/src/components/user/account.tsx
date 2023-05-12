@@ -29,11 +29,14 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
 
   const { kycInfo, kyc, email } = userData!
 
-  const kycinfo = kyc!.isVerified || kyc!.pending
+  console.log("kyc",kycInfo);
+  const kycinfo = (kyc!.isVerified || kyc!.pending)
+  const userMatch=userData._id==userId
   console.log(kycinfo)
 
   //for only kyc infor 
-  const AdminKycView=(userId!==userData._id)&&is_Admin
+  const AdminKycView=((userId!)!=userData._id)&&is_Admin;
+  console.log("Admin kyc view",AdminKycView,userId,userData._id,is_Admin);
 
   const [phonemail, setphonemail] = useState('close')
 
@@ -47,7 +50,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
           Personal Information
         </h2>
 
-      {!is_Admin&&<div className='my-6' >
+      {(userMatch&&!is_Admin)&&<div className='my-6' >
         <p className='text-md text-black font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
         {kyc?.pending&&'Pending'} {kyc?.pending==kyc!.isVerified&&"Rejected!!/Please Apply Again!!"}{kyc?.isVerified&&'Verified'}
         {kyc!.pending&&  <AiFillHourglass className='h-5 w-5' />} {kyc?.pending==kyc!.isVerified&&<RxCrossCircled className='h-5 w-5 '/>}{kyc?.isVerified&&<AiFillCheckCircle className='h-5 w-5'/>}
@@ -81,7 +84,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
 
         {openKyc == 'close' && (
           <div className="mt-4">
-            {kycinfo &&!is_Admin&& (
+            {kycinfo &&(userMatch||is_Admin)&& (
               <div>
                 <Info title="First Name" value={kycInfo!.firstName} />
                 <hr className="my-4 border-gray-400" />
@@ -100,7 +103,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
             )}
 
           <div>
-              {phonemail!='email'&&<div className=" flex items-center justify-between">
+              {phonemail!='email'&&(userMatch||is_Admin)&&<div className=" flex items-center justify-between">
                 <p>
                   <h1 className="my-1 font-semibold">Email</h1>
                   <p className="text-sm text-gray-600">
@@ -108,7 +111,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
                   </p>
                 </p>
 
-    {     AdminKycView&&<button
+    {     !AdminKycView&&<button
                   onClick={(e) => setphonemail('email')}
                   className="text-sm font-semibold underline"
                 >
@@ -126,7 +129,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
             </div>
           
 
-           {!is_Admin&&<div>
+           {(userMatch||is_Admin)&&<div>
               {phonemail!='phone'&&<div className=" flex items-center justify-between">
                 <p>
                   <h1 className="my-1 font-semibold">Phone Number</h1>
@@ -135,7 +138,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
                   </p>
                 </p>
 
-               {   AdminKycView&&<button
+               {   !AdminKycView&&<button
                   onClick={(e) => setphonemail('phone')}
                   className="text-sm font-semibold underline"
                 >
@@ -152,7 +155,7 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
               <hr className="my-4 border-gray-400" />
             </div>}
 
-            {kycinfo &&!is_Admin&&(
+            {kycinfo &&(userMatch||is_Admin)&&(
               <div className=" flex items-center justify-between p-3">
                 <p>
                   <h1 className="my-2 font-semibold">Id</h1>
@@ -169,7 +172,8 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
               <div>
                 <hr className="my-5 border-gray-400" />
                 <div className="flex justify-end">
-                  {  AdminKycView&&<button
+
+                  {  !AdminKycView&&<button
                     className="text-md font-semibold text-gray-700 underline"
                     onClick={(e) => {
                       e.preventDefault()

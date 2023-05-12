@@ -29,7 +29,9 @@ export const sendMail=(mailOptions:mailBody):boolean=>{
         return true;
 
     }catch(e){
+        console.log("Maid send failed")
         throw e;
+        
         
     }
 }

@@ -99,31 +99,120 @@ export const forgotPasswordPatchTemplate=(userEmail:string,password:string,):mai
 }
 
 
-export const updateEmailTemplate=(userEmail:string,token:string,newMail:string):mailBody=>{
-    return {
-        to:userEmail,
-        from:"nikantest@zohomail.com",
-        subject:"Update Email Request",
-        text:"",
-        html:` <p>Verify Email to update Your Email Adress with New Email Adress:${newMail}</p>
-        <a href="http://localhost:2900/user/v1/updateMailRequest/${token}" >Accept Email Update</a>
-         `
-    }
-}
-
-
 
 export const verifyEmailTemplate=(userName:string,userEmail:string):mailBody=>{
     return {
         to:userEmail,
         from:"nikantest@zohomail.com",
-        subject:"New User Signup/Registration",
+        subject:"Email Verification",
         text:"",
-        html:`<h1> Welcome to MeroGahr 👋 ${userName}</h1>
+        html:`<h1> Email has been Sucessfully Verified  👋 ${userName}</h1>
         <h3>We are excited to have You with us in your Journey of renting and Renting out property </h3>
         <p>if u have not Verified Yourself by filling kyc form here it is ... </P>
         <br>
-        <a href="http://localhost:2900/user/v1/kycVerification">Kyc Form </a>
+        <a href="http://localhost:3000/user/v1/kycVerification">Kyc Form </a>
          `
     }
 }
+
+
+export const verifyKycTemplate=(userName:string,userEmail:string,state:boolean,message?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"Kyc Verification",
+        text:"",
+        html:state?`<h1> Kyc Successfully Verified 👋 ${userName}</h1>
+        <h3>We are excited to have You with us in your Journey of renting and Renting out property </h3>
+        <a href="http://localhost:3000/Home">Rent With Us</a>
+         `:
+
+        `<h1> Kyc Verification Failed  ${userName}</h1>
+        <h3>Please Provide Proper kycinformation!!</h3>
+        <h2>${message}</h2>
+        <a href="http://localhost:3000/Home">Rent With Us</a>
+         `
+    }
+}
+
+export const userPropTemplate=(userName:string,userEmail:string,state:boolean,propId:string,img?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"Property Post/Delete Verification",
+        text:"",
+        html:state?`<h1> property Posted/updated Successfully! 👋 ${userName}</h1>
+        <h2>${propId}</h2>
+        <img src=${img} />
+        <h3>Property Has been Posted/updated and send for further Verification/ you will be notified after it has been verified </h3>
+      
+         `:
+
+         `<h1> property deleted Successfully! 👋 ${userName}</h1>
+         <h2>${propId}</h2>
+         <h3>Property Has been deleted thankYour for providing service</h3>
+         <a href="http://localhost:3000/Home">Rent With Us</a>
+          `
+    }
+}
+
+
+
+export const adminPropTemplate=(userName:string,userEmail:string,state:boolean,propId:string,img?:string,message?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"property Verification",
+        text:"",
+        html:state?`<h1> property Verified Successfully! 👋 ${userName}</h1>
+        <h2>${propId}</h2>
+        <img src=${img} />
+        <h3>Property Has been verified now u can host property </h3>
+      
+         `:
+
+         `<h1> property not Verified/Rejected ${userName}</h1>
+         <h2>${propId}</h2>
+         <img src=${img} />
+         <h3>${message}</h3>
+         <a href="http://localhost:3000/Home/listProperty">Rent With Us</a>
+          `
+    }
+}
+
+export const userBookingTemplate=(userName:string,userEmail:string,propId:string,bill:string,state:boolean,img?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"Property Hosted/booked",
+        text:"",
+        attachments: [
+            {
+              filename: 'bill.pdf',
+              content: bill.split('base64,')[1], // Extract the base64-encoded PDF data
+              encoding: 'base64'
+            }
+          ],
+          html:state?`<h1> property Booked  Successfully!</h1>
+          <h2>${propId}</h2>
+          <img src="${img}" width="500" height="300" />
+
+          <h3>Property Has been verified and Booked Your Bill is attched  </h3>
+          <h4>Enjoy Your Stay!!! </h4>
+      
+       
+      
+         `:
+
+         `<h1> property Booked  Successfully! by ${userName}</h1>
+         <h2>'property Title:' ${propId}</h2>
+         <img src=${img} />
+         <h3>user Has been verified and Booked Your Bill is attched  </h3>
+         <h4>Enjoy Hosting !!! </h4>
+     
+          `
+
+    }
+}
+
+

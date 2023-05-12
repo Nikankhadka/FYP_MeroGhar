@@ -1,9 +1,11 @@
+import { userBookingTemplate } from "../../configs/mailtemplate";
 import { IBooking } from "../../interfaces/dbInterface";
 import { BookingInput } from "../../interfaces/inputInterface";
 import { bookingModel } from "../../models/booking";
 import paymentModel from "../../models/payment";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
+import { sendMail } from "../../utils/zohoMailer";
 
 
 export const checkBookingS=async(propId:string,startDate:Date,endDate:Date)=>{
@@ -36,7 +38,7 @@ export const checkBookingS=async(propId:string,startDate:Date,endDate:Date)=>{
 //modify query later to only work on verified proeprty and verified user
 export const postBookingS=async(propId:string,userId:string,bookingDetail:Partial<BookingInput>):Promise<boolean>=>{
     try{
-        const{startDate,endDate,guest,payerId,initialAmount,serviceCharge,totalAmount,paymentId,Stay}=bookingDetail
+        const{startDate,endDate,guest,payerId,initialAmount,serviceCharge,totalAmount,paymentId,Stay,bill}=bookingDetail
         const checkProperty=await propertyModel.findOne({_id:propId});
         if(!checkProperty) throw new Error("invalid Property Id/Does not Exist");
         
@@ -88,6 +90,13 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
          await newBooking.save()
         if(!newPayment)  throw new Error("failed to store Payment Information");
 
+        //send mail with billing 
+        const user=await userModel.findOne({_id:newBooking.userId});
+        const host=await userModel.findOne({_id:checkProperty.userId});
+
+        const usermail=sendMail(userBookingTemplate(user!.userName,user!.email.mail,checkProperty.name,bill!,true,checkProperty.images[0].imgUrl))
+        const hostmail=sendMail(userBookingTemplate(user!.userName,host!.email.mail,checkProperty.name,bill!,false,checkProperty.images[0].imgUrl))
+        
       return true
 
     }catch(e){

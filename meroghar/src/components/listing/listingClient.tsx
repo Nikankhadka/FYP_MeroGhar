@@ -34,7 +34,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
             </h1>
           </div>
           <div className="block items-center justify-between dark:divide-gray-700 sm:flex md:divide-x md:divide-gray-100">
-            <div className="mb-4 flex items-center sm:mb-0">
+            {is_Admin&&<div className="mb-4 flex items-center sm:mb-0">
               <form className="sm:pr-3">
                 <label className="sr-only">Search</label>
                 <div className="relative mt-1 w-48 sm:w-64 xl:w-96">
@@ -47,7 +47,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
                   />
                 </div>
               </form>
-            </div>
+            </div>}
 
       {/* only for normal user */}
             {!is_Admin&&<button

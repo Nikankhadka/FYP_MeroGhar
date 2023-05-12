@@ -19,7 +19,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 
  type Ref = HTMLDivElement;
 
- export const NavModal=forwardRef<Ref,NavModal>((props,ref)=>{
+ const NavModal=forwardRef<Ref,NavModal>((props,ref)=>{
     const modal=useModal();
     const router=useRouter()
 
@@ -87,3 +87,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
 })
 
 
+
+NavModal.displayName = 'NavModal';
+
+export default NavModal;

@@ -16,6 +16,7 @@ router.use(verifyRole(false))
 router.post('/:id',validateBooking,postBookingC)
 
 
+
 //bookings made by me
 router.get('/myBookings',getMyBookingC)
 router.get('/onBookings',getOnBookingC)
