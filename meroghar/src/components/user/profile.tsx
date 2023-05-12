@@ -197,12 +197,12 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
       {/* this is for admin exclusive */}
       {
         is_Admin&&userId!==profileData._id&&account.openComponent=='close'&&<div className='my-3'>
-        <AccountComponent  userData={profileData} is_Admin={false} userId={userId}/>
+        <AccountComponent  userData={profileData} is_Admin={true} userId={userId}/>
         </div>
       }
 
      {account.openComponent=='account'&&<div className='my-3'>
-      <AccountComponent  userData={profileData} is_Admin={is_Admin}/>
+      <AccountComponent  userData={profileData} is_Admin={is_Admin} userId={userId}/>
       </div>}
 
       {account.openComponent=='password'&&<div className='my-3'>

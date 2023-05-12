@@ -26,7 +26,7 @@ type Ref = HTMLDivElement;
 import {useState} from 'react'
 
 // takes in role and renders some element while others dont 
-export const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
+const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
     const trans='-translate-x-full '
     const [account,setaccount]=useState(false)
@@ -231,3 +231,6 @@ export const SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 })
 
 
+SideBar.displayName = 'SideBar';
+
+export default SideBar;

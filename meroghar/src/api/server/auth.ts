@@ -26,16 +26,18 @@ export const authCheck=async(is_Admin:boolean)=>{
   }
 }
 
+export interface SessionUser{
+  docId:string,
+  userId:string,
+  is_Admin:boolean,
+  img:string,
+  kycVerified:boolean
+}
 
-interface sessionData{
+
+export interface sessionData{
   session:boolean,
-  userData:{
-    docId:string,
-    userId:string,
-    is_Admin:boolean,
-    img:string,
-    kycVerified:boolean
-  }
+  userData:SessionUser
 }
 //for common routes can only be accessed by user/non user
 export const checkSession=async():Promise<sessionData>=>{

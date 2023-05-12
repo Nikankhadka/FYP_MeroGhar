@@ -25,8 +25,8 @@ import dbConnect from "./configs/db"
 
 //app level middleware setup
 dotenv.config() 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.json({limit:'10mb'}));
+app.use(express.urlencoded({extended:true,limit:'10mb'}))
 app.use(cors({
     //defines the origin of the request
     origin:"http://localhost:3000",

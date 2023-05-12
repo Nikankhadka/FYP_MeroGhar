@@ -41,5 +41,6 @@ export interface BookingInput {
     totalAmount: number;
     paymentId: string;
     Stay: number;
+    bill:string
   }
   

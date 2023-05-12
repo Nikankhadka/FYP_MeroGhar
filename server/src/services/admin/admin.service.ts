@@ -3,6 +3,8 @@ import {hash} from "bcrypt"
 import { IUser, Property } from "../../interfaces/dbInterface";
 import { verifyKyc } from "../../interfaces/admin";
 import { propertyModel } from "../../models/property";
+import { sendMail } from "../../utils/zohoMailer";
+import { adminPropTemplate, verifyKycTemplate } from "../../configs/mailtemplate";
 
 
 
@@ -77,15 +79,22 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             if(!checkKycData) throw new Error("Invalid id and Misuse of admin detected")
 
             //since admin has verified and data is also valid now update the userDocument 
-            const verifyUser=await userModel.updateOne({_id:id},{
+            const verifyUser=await userModel.findOneAndUpdate({_id:id},{
                 "$set":{
                     "kyc.isVerified":true,
-                    "kyc.message":"KYC information valid",
+                    "kyc.message":"",
                     "kyc.approvedBy":adminId,
                     'kyc.pending':false
                 }
-            })
+            },{new:true})
             if(!verifyUser) throw new Error("user not able to verify")
+
+            if(!verifyUser.email.isVerified) throw new Error("Email not Verified/Failed to Verifu User");
+
+            const notifyUser=sendMail(verifyKycTemplate(verifyUser.userName,verifyUser.email.mail,true))
+
+            
+          
 
             return true;
         }
@@ -98,7 +107,7 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             const userCheck=await userModel.findOne({_id:id,kyc:{isVerified:true}})
             if(userCheck) throw new Error("User cant be done unverified since User is already verified")
 
-            const declineUser=await userModel.updateOne({_id:id},{
+            const declineUser=await userModel.findOneAndUpdate({_id:id},{
                 "$set":{
                     "kyc.isVerified":false,
                     "kyc.message":kycData.message,
@@ -107,6 +116,10 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
                 }
             })
             if(!declineUser) throw new Error("User kyc Decline failed")
+
+            if(declineUser.email.mail){
+                const notifyUser=sendMail(verifyKycTemplate(declineUser.userName,declineUser.email.mail,false,kycData.message))
+            }
         
             return true;
         //the default task would be clear admin kyc request either way 
@@ -148,15 +161,19 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
 
         //if kyc is to be unverifed just update the document 
         if(!status){
-            const declineProperty=await propertyModel.updateOne({_id:propertyId},{
+            const declineProperty=await propertyModel.findOneAndUpdate({_id:propertyId},{
                 "$set":{
                     "isVerified.status":status,
                     "isVerified.pending":false,
                     "isVerified.message":message,
                     "isVerified.approvedBy":adminId
-                }})
+                }},{new:true})
 
             if(!declineProperty) throw new Error("Property decline failed");
+            
+            const user=await userModel.findOne({_id:declineProperty.userId});
+            const notify=sendMail(adminPropTemplate(user!.userName,user!.email.mail,false,declineProperty.name,declineProperty.images[0].imgUrl,message))
+
             return true;
         }
 
@@ -171,7 +188,11 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
             }},{new:true})
 
         if(!verifyProperty) throw new Error("Property verification failed");
+        
+        const user=await userModel.findOne({_id:verifyProperty.userId});
+        const notify=sendMail(adminPropTemplate(user!.userName,user!.email.mail,true,verifyProperty.name,verifyProperty.images[0].imgUrl))
 
+            
         //increase the property post count for user
           const updateCount=await userModel.updateOne({userId:verifyProperty.userId},{
             "$inc":{

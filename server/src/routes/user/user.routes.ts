@@ -20,7 +20,7 @@ router.patch("/updateProfile",verifyaccessToken(true),validateProfile,updateProf
 //use the same api end point to update kyc information
 router.post("/postKyc",verifyaccessToken(true),validateKyc,postKycC)
 
-router.patch("/updateUser",verifyaccessToken,)
+
 
 //add middleware for both of these
 router.get("/verifyPhone/:phone",verifyaccessToken(true),getPhoneC)

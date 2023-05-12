@@ -10,7 +10,7 @@ declare module 'jsonwebtoken' {
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv"
 import { sendMail } from "../../utils/zohoMailer";
-import { updateEmailTemplate,postEmailTemplate } from "../../configs/mailtemplate";
+import {postEmailTemplate,verifyEmailTemplate } from "../../configs/mailtemplate";
 import { KycData, updateProfile } from "../../interfaces/inputInterface";
 import { compare, hash } from "bcrypt";
 import { IUser } from "../../interfaces/dbInterface";
@@ -53,10 +53,11 @@ export const getMeS=async(_id:string):Promise<Partial<IUser>>=>{
     }
 }
 
+//same api for post and update email
 export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
     try{
         //first check whethe this email exist or not in our system 
-        const emailExist =await userModel.findOne({"email.mail":Email});
+        const emailExist =await userModel.findOne({"email.mail":Email,'email.isVerified':true});
         if(emailExist) throw new Error("Account with this email already Exist in the System")
 
 
@@ -98,12 +99,14 @@ export const verifyEmailS=async(token:string):Promise<boolean>=>{
         if(tokenMatch.userId!==userId) throw new Error("Token Data not matched with acutal users Token")
         
         //since user token is verified now update document and verify email 
-        const emailUpdate=await userModel.updateOne({userId},{ "$set": {
+        const emailUpdate=await userModel.findOneAndUpdate({userId},{ "$set": {
             "email.isVerified":true,
             "kycInfo.email":tokenMatch.email?.mail
-            }})
+            }},{new:true});
         
         if(!emailUpdate) throw new Error("Email verification failed")
+
+        const verifyMailRequest=sendMail(verifyEmailTemplate(emailUpdate.userName,Email))
         return true;
 
     }catch(e){

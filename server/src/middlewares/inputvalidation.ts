@@ -75,6 +75,7 @@ export const validateBooking=async(req:Request,res:Response,next:NextFunction)=>
             paymentId:joi.string().required(),
             //for how many days
             stay:joi.number().required(),
+            bill:joi.string().required(),
            // propertyId:joi.string().required(), in route param
 
 

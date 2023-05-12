@@ -3,6 +3,8 @@ import { Property } from "../../interfaces/dbInterface";
 import { propertyModel } from "../../models/property";
 import { userModel } from "../../models/user";
 import { bookingModel } from "../../models/booking";
+import { sendMail } from "../../utils/zohoMailer";
+import { userPropTemplate } from "../../configs/mailtemplate";
 
 
 
@@ -22,6 +24,10 @@ export const createPropertyS=async(_id:string,propertyData:Partial<Property>):Pr
 
         await newProperty.save(); 
         if(!newProperty) throw new Error("Property post failed")
+
+        const userdata=await userModel.findOne({_id});
+        const notify=sendMail(userPropTemplate(userdata!.userName,userdata!.email.mail,true,newProperty.name,newProperty.images[0].imgUrl))
+
         return true;
     }catch(e){
         console.log(e);
@@ -138,6 +144,11 @@ export const updatePropertyS=async(userId:string,id:string,updateData:Partial<Pr
         updatedProperty!.is_verified.message="Property updated so need Reverification"**/
 
         if(!updatedProperty) throw new Error("Property Update Failed")
+
+
+        const userdata=await userModel.findOne({_id:userId});
+        const notify=sendMail(userPropTemplate(userdata!.userName,userdata!.email.mail,true,updatedProperty.name,updatedProperty.images[0].imgUrl))
+
         return updatedProperty
 
     }catch(e){
@@ -188,6 +199,11 @@ export const deletePropertyS=async(userId:string,propertyId:string):Promise<bool
         //also decrese ratinf rating-1/2 and also rating count 
 
         if(!decreaseCount) throw new Error("Propety deleted failed to decrease listing count");
+
+        //send property deleted notification
+        const userdata=await userModel.findOne({_id:userId});
+        const notify=sendMail(userPropTemplate(userdata!.userName,userdata!.email.mail,false,checkProperty.name,checkProperty.images[0].imgUrl))
+
 
         return true;
     }catch(e){
