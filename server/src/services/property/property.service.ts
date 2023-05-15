@@ -5,7 +5,18 @@ import { userModel } from "../../models/user";
 import { bookingModel } from "../../models/booking";
 import { sendMail } from "../../utils/zohoMailer";
 import { userPropTemplate } from "../../configs/mailtemplate";
-
+export interface queryParams{
+    minRate:number,
+    maxRate:number,
+    propertyType:string,
+    country:string,
+    state:string,
+    city:string,
+    // startDate?:string,
+    // endDate?:string,
+    rating:number,
+    amenities:string[],
+  }
 
 
 //property is not crated only request is send to admin for property post verification
@@ -107,15 +118,68 @@ export const getMyPropertiesS=async(page:string,limit:string,userId:string):Prom
 
 }
 
-export const getPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+
+
+
+export const getPropertiesS=async(page:string,limit:string,queryParams:queryParams):Promise<Property[]>=>{
     try{
         //since all admin have access to this simply fetch unverified property set in pending
         const newLimit=parseInt(limit);
         const newPage=parseInt(page) 
-        const properties=await propertyModel.find({}).sort({ avgRating: -1, ratingCount: -1, viewCount: -1,createdAt: -1 })
-        .select('-tennants').limit(newLimit*1).skip((newPage-1)*newLimit);
-        if(!properties) throw new Error("No properties rightNow");
-        return properties
+
+
+        
+        // Define the query conditions based on the provided inputs
+        let matchConditions:any = {};
+        
+        if (queryParams.minRate>0) {
+
+            if(queryParams.maxRate>queryParams.minRate){
+            matchConditions.rate = { $gte: queryParams.minRate, $lte: queryParams.maxRate };
+            }
+            matchConditions.rate = { $gte: queryParams.minRate};
+        }
+        
+        if (queryParams.propertyType&&queryParams.propertyType !='') {
+          matchConditions.propertyType = queryParams.propertyType;
+        }
+        
+        if (queryParams.country&&queryParams.country !='') {
+          matchConditions.country = queryParams.country;
+        }
+        
+        if ( queryParams.state&&queryParams.state !='') {
+          matchConditions.state = queryParams.state;
+        }
+        
+        if (queryParams.city&& queryParams.city !='') {
+          matchConditions.city = queryParams.city;
+        }
+        
+        if (queryParams.rating && queryParams.rating >= 1) {
+          matchConditions.avgRating = { $gte: queryParams.rating};
+        }
+        
+        if (queryParams.amenities && queryParams.amenities.length > 0) {
+          matchConditions.amenities = { $all: queryParams.amenities };
+        }
+        
+      
+        console.log('match conditian',matchConditions)
+        // Calculate the skip value for pagination
+        const skip = (newPage - 1) * newLimit;
+        
+       // Perform the query using Mongoose
+            const properties = await propertyModel.find(matchConditions)
+            .sort({ avgRating: -1, ratingCount: -1, createdAt: -1 })
+            .select('-tennants')
+            .limit(newLimit)
+            .skip(skip);
+        // Use the retrieved properties as needed
+        console.log(properties);
+        
+        return properties;
+
 
     }catch(e){
         console.log(e)
@@ -253,3 +317,142 @@ export const updateViewCountS=async(userId:string,propertyId:string):Promise<boo
         throw e;
     }
 }
+
+
+
+// const mongoose = require('mongoose');
+
+// // Define the schema for the property collection
+// const PropertySchema = new mongoose.Schema({
+//   title: String,
+//   rate: Number,
+//   propertyType: String,
+//   country: String,
+//   state: String,
+//   city: String,
+//   rating: Number,
+//   amenities: [String]
+//   // ... other property fields
+// });
+
+// // Define the schema for the booking collection
+// const BookingSchema = new mongoose.Schema({
+//   propertyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Property' },
+//   startDate: Date,
+//   endDate: Date
+// });
+
+// // Create the models based on the schemas
+// const Property = mongoose.model('Property', PropertySchema);
+// const Booking = mongoose.model('Booking', BookingSchema);
+
+// // Search properties available on certain dates with additional filters
+// const searchProperties = async (
+//   startDate,
+//   endDate,
+//   minRate,
+//   maxRate,
+//   propertyType,
+//   country,
+//   state,
+//   city,
+//   rating,
+//   amenities
+// ) => {
+//   const matchConditions = {};
+
+//   if (minRate !== undefined && maxRate !== undefined) {
+//     matchConditions.rate = { $gte: minRate, $lte: maxRate };
+//   }
+
+//   if (propertyType) {
+//     matchConditions.propertyType = propertyType;
+//   }
+
+//   if (country) {
+//     matchConditions.country = country;
+//   }
+
+//   if (state) {
+//     matchConditions.state = state;
+//   }
+
+//   if (city) {
+//     matchConditions.city = city;
+//   }
+
+//   if (rating !== undefined) {
+//     matchConditions.rating = { $gte: rating };
+//   }
+
+//   if (amenities && amenities.length > 0) {
+//     matchConditions.amenities = { $all: amenities };
+//   }
+
+//   const properties = await Property.aggregate([
+//     // Match properties that satisfy the filtering conditions
+//     {
+//       $match: matchConditions
+//     },
+//     // Lookup bookings and filter properties with overlapping bookings
+//     {
+//       $lookup: {
+//         from: 'bookings',
+//         let: { propertyId: '$_id' },
+//         pipeline: [
+//           {
+//             $match: {
+//               $expr: {
+//                 $and: [
+//                   { $eq: ['$propertyId', '$$propertyId'] },
+//                   { $lt: ['$endDate', startDate] },
+//                   { $gt: ['$startDate', endDate] }
+//                 ]
+//               }
+//             }
+//           }
+//         ],
+//         as: 'bookings'
+//       }
+//     },
+//     // Filter properties with no overlapping bookings
+//     {
+//       $match: {
+//         bookings: { $size: 0 }
+//       }
+//     }
+//   ]);
+
+//   return properties;
+// };
+
+// // Usage
+// const providedStartDate = new Date('2023-05-01');
+// const providedEndDate = new Date('2023-05-10');
+// const minRate = 0;
+// const maxRate = 1000;
+// const propertyType = 'Apartment';
+// const country = 'USA';
+// const state = 'California';
+// const city = 'Los Angeles';
+// const rating = 4.5;
+// const amenities = ['Swimming Pool', 'Gym'];
+
+// searchProperties(
+//   providedStartDate,
+//   providedEndDate,
+//   minRate,
+//   maxRate,
+//   propertyType,
+//   country,
+//   state,
+//   city,
+//   rating,
+//   amenities
+// )
+//   .then(properties => {
+//     console.log('Available properties:', properties);
+//   })
+//   .catch(err => {
+//     console.error('Error searching properties:', err);
+//   });

@@ -1,7 +1,9 @@
 
+import { SearchForm } from "../../../components/modals/searchModal";
 import { Property } from "../../../interface/response";
 import { getAccessToken } from "../auth";
 
+import qs from "query-string";
 
 
 //for admin verificationnpm
@@ -83,17 +85,30 @@ export async function getPropertyById(id:string):Promise<{property:Partial<Prope
       }}
 
 
-export async function getProperties(page:number,limit:number):Promise<Partial<Property>[]>{
+
+
+export async function getProperties(page:number,limit:number,queryParams:SearchForm):Promise<Partial<Property>[]>{
         try{
           
+          //check transform query params into url string 
+         
+          const url = qs.stringifyUrl({
+            url: 'http://localhost:2900/property/v1/getProperty',
+            query:{page,limit,...queryParams},
+          }, { skipNull: true });
+
+
+          console.log("Query params and data url",url)
+
             console.log(getAccessToken());
             const res = await fetch(
-                `http://localhost:2900/property/v1/getProperty?page=${page}&limit=${limit}`,
+                url,
                 {
                   method: 'GET',
                   credentials: 'include',
                   headers: { cookie: getAccessToken()},
-                  cache:'no-store'
+                  cache:'no-store',
+                  
                 }
               ).then(res=>res.json())
         

@@ -1,15 +1,22 @@
-
-
+import { SearchForm } from "../../components/modals/searchModal"
 import ClientComp from "../../components/clientComp"
 import { checkSession } from "../../api/server/auth"
 import { getProperties } from "../../api/server/property/getProperty"
 import { getFavourites } from "../../api/server/property/getwishlist"
 import { HomeClient } from "./HomeClient"
 
+// this is not route parameters hai 
+interface HomeProps{
+  searchParams:SearchForm
+}
 
-export default async function Home(){
 
-    const properties=await getProperties(1,10)
+export default async function Home({searchParams}:HomeProps){
+
+    console.log("queryParams",searchParams);
+
+
+    const properties=await getProperties(1,10,searchParams)
     const {session,userData}=await checkSession()
 
 

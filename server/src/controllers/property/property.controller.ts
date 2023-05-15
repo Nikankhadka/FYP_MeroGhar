@@ -35,11 +35,45 @@ export const getPropertyByIdC=async(req:Request,res:Response)=>{
 //for search or random query something like that
 export const getPropertiesC=async(req:Request,res:Response)=>{
     try{
-        // if(req.userData.userId==""){
-        //     const propertyData=await getPropertyByIdS(req.params.id,"");
-        //     return res.status(200).json({success:true,propertyData})
-        // }
-        const propertyData=await getPropertiesS(req.query.page as string,req.query.limit as string);
+        let queryParams: any = {};
+
+            if (req.query.minRate !== undefined) {
+            queryParams.minRate = parseInt(req.query.minRate as string);
+            }
+
+            if (req.query.maxRate !== undefined) {
+            queryParams.maxRate = parseInt(req.query.maxRate as string);
+            }
+
+            if (req.query.propertyType !== undefined) {
+            queryParams.propertyType = req.query.propertyType as string;
+            }
+
+            if (req.query.country !== undefined) {
+            queryParams.country = req.query.country as string;
+            }
+
+            if (req.query.state !== undefined) {
+            queryParams.state = req.query.state as string;
+            }
+
+            if (req.query.city !== undefined) {
+            queryParams.city = req.query.city as string;
+            }
+
+            if (req.query.rating !== undefined) {
+            queryParams.rating = parseInt(req.query.rating as string);
+            }
+
+            if (req.query.amenities !== undefined) {
+            queryParams.amenities = req.query.amenities as string[];
+            }
+
+        
+        console.log("req.query",queryParams);
+
+
+        const propertyData=await getPropertiesS(req.query.page as string,req.query.limit as string,queryParams);
         return res.status(200).json({success:true,propertyData})
     }catch(e:any){
         console.log(e);
