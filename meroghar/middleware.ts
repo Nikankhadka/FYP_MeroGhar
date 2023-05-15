@@ -26,7 +26,7 @@ export default async function checkAuth(req: NextRequest) {
 
   } catch (e) {
     console.log(e)
-    NextResponse.redirect('http://localhost:3000/login')
+    NextResponse.redirect('http://localhost:3000/Home/login')
   }
 }
 
@@ -94,5 +94,6 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
   }catch(e){
     console.log(e)
+    return NextResponse.redirect('http://localhost:3000/Home/login')
   }
 }

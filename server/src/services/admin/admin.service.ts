@@ -182,7 +182,7 @@ export const verifyPropertyRequestsS=async(adminId:string,propertyId:string,stat
             "$set":{
                 "isVerified.status":status,
                 "isVerified.pending":false,
-                "isVerified.message":message,
+                "isVerified.message":'',
                 "isVerified.approvedBy":adminId,
                 
             }},{new:true})

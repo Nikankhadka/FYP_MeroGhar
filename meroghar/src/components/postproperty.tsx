@@ -33,6 +33,7 @@ export default function PostPropertyForm({
   propertyData,
 }: postProperty) {
   
+  console.log('propertty data on updatye',propertyData,isUpdate)
   let defaultValues: PropertyForm = {
     images:['default'],
     name: '',
@@ -259,7 +260,7 @@ export default function PostPropertyForm({
                 {/* initially the value default does not read file casuing to return empty string */}
                 <img
                   src={imageUrl(index)}
-                  alt='adsfsad'
+                  alt='Image Here'
                   className={
                     imageUrl(index) == ''
                       ? 'hidden'

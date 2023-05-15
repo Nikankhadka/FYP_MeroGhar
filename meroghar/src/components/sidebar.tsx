@@ -77,7 +77,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
             </Link> */}
 
             <Link
-              href="/Account/profile"
+              href="/Admin"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiUser className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -99,17 +99,27 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
            } 
 
             {props.is_Admin&&<Link
-              href="/Account/users"
+              href="/Admin/kycRequest"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <ImUserCheck className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
-                Users
+                Kyc Requests
+              </span>
+            </Link>}
+
+            {props.is_Admin&&<Link
+              href="/Admin/users"
+              className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+            >
+              <ImUserCheck className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
+              <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
+                User List
               </span>
             </Link>}
 
             <Link
-              href={props.is_Admin?'/Account/listings':'/Account/listings'}
+              href={props.is_Admin?'/Admin/listingRequest':'/Account/listings'}
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiHome className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -118,7 +128,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               </span>
             </Link>
 
-            <Link
+            {/* <Link
               href="/Account/reviews"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
@@ -126,7 +136,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Reviews
               </span>
-            </Link>
+            </Link> */}
 
            {/* {
             !props.is_Admin&&<Link

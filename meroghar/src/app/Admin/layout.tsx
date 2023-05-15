@@ -3,7 +3,7 @@ import SideBar from '../../components/sidebar';
 import DashboardNav from '../../components/navbar/DashboardNav';
 import ClientComp from '../../components/clientComp';
 import { checkSession } from '../../api/server/auth';
-
+import { redirect } from 'next/navigation';
 
 
 
@@ -13,6 +13,9 @@ export default async function Layout({children}: {children: React.ReactNode}) {
 
 
   const {session,userData}=await checkSession()
+
+  if(!session) return redirect('/')
+  if(!userData.is_Admin) return redirect('/')
   
 
   return (

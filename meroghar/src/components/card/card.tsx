@@ -31,13 +31,14 @@ interface props {
   booking?:Partial<IBooking>
   payment?:Partial<Payment>
   key: number
+  index?:number,
   wish?:boolean
   user?:string
 }
-export default function Card({ use, data, key,wish,user}: props) {
+export default function Card({ use, data, key,wish,user,index}: props) {
   const [img,setimg] = useState(0);
   
-  
+ 
   const {images,_id,avgRating,country,city,rate,name,isVerified,isBooked } = data!
 
   const modal = useModal()
@@ -49,7 +50,7 @@ export default function Card({ use, data, key,wish,user}: props) {
   return (
     <div>
       
-  {use=='userlisting'&&isVerified?.message!==''&&<div className=' mx-auto border-2 rounded-lg w-[97%] p-2 '>
+  {use=='userlisting'&&isVerified!.message!==''&&(!isVerified!.status)&&<div className=' mx-auto border-2 rounded-lg w-[97%] p-2 '>
     <span className='flex items-center gap-x-1 text-red-500'>{isVerified?.message}</span>
     </div>}
 
@@ -224,7 +225,7 @@ export default function Card({ use, data, key,wish,user}: props) {
             className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
             onClick={(e) => {
               e.preventDefault()
-              list.setIndex(key)
+              list.setIndex(index!)
               list.onList('edit')
             }}
           >

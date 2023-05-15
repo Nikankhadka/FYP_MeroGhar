@@ -42,7 +42,8 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
                 
             }}  className={btnstyle}>Sign Up</button>
             <hr />
-            <Link href="/Account/listings" className={btnstyle}>Post Property</Link>
+
+            <button onClick={(e)=>modal.onOpen('login')} className={btnstyle}>Post Property</button>
            
 
             

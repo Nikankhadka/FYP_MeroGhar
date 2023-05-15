@@ -34,6 +34,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
             </h1>
           </div>
           <div className="block items-center justify-between dark:divide-gray-700 sm:flex md:divide-x md:divide-gray-100">
+
             {is_Admin&&<div className="mb-4 flex items-center sm:mb-0">
               <form className="sm:pr-3">
                 <label className="sr-only">Search</label>
@@ -55,9 +56,12 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
               type="button"
               onClick={(e)=>{
                 e.preventDefault();
-                if(!kycVerified){
-                  return toast.error("Please Verify Kyc to List Property!")
-                }
+
+                // if(!kycVerified){
+                //   return toast.error("Please Verify Kyc to List Property!")
+                // }
+
+
                 list.onList("list")
               }}
               >
@@ -76,15 +80,16 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
         
           
 
-           {list.listPorperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+           {list.listProperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
              
     
                
                 {
                     properties!.map((property,index)=>{
+                      
                         return(
                             // property card
-                            <Card use={is_Admin? 'adminlisting':'userlisting'} data={property} key={index}/>
+                            <Card use={is_Admin? 'adminlisting':'userlisting'} data={property} key={index} index={index}/>
                     
                             
                         )
@@ -100,15 +105,15 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
 
           {/* property lisiting form  */}
         {
-          list.listPorperty=='list'&&<PostPropertyForm isUpdate={false}/>
+          list.listProperty=='list'&&<PostPropertyForm isUpdate={false}/>
         }
          {
-          list.listPorperty=='edit'&&<PostPropertyForm isUpdate={true} propertyData={properties[list.propIndex]}/>
+          list.listProperty=='edit'&&<PostPropertyForm isUpdate={true} propertyData={properties[list.propIndex]}/>
         }
      
 
       {/* paginatioon footer */}
-      {list.listPorperty=='close'&&properties?.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+      {list.listProperty=='close'&&properties?.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
         <div className="flex items-center space-x-3">
           <Link
             href="#"

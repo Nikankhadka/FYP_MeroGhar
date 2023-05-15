@@ -5,7 +5,7 @@ import { validateReviewInput } from "../../middlewares/inputvalidation";
 
 const router=Router()
 
-
+//review for the property
 router.get("/:id",getReviewsC)
 
 //crud opeartion except for read needs user access 
