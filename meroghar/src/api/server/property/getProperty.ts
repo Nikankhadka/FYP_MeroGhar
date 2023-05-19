@@ -123,3 +123,34 @@ export async function getProperties(page:number,limit:number,queryParams:SearchF
         }
 
 }
+
+
+
+
+
+///for admin exclusive to fetch all properties information 
+
+export async function getAllProperties(page:number,limit:number,):Promise<Partial<Property>[]>{
+  try{
+    
+      
+      const propertyData = await fetch(
+          `http://localhost:2900/admin/v1/allProperties/?page=${page}&limit=${limit}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { cookie: getAccessToken()},
+            cache:'no-store'
+          }
+        ).then(res=>res.json())
+  
+      if(!propertyData.success) throw new Error("failed to fetch property information")
+      
+      console.log("prorties Data",propertyData);
+      return propertyData.properties;
+
+      
+  }catch(e){
+     throw e;
+  }
+}

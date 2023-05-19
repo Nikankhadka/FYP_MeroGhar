@@ -1,12 +1,126 @@
 import { userModel } from "../../models/user";
 import {hash} from "bcrypt"
-import { IUser, Property } from "../../interfaces/dbInterface";
+import { IBooking, IUser, Property } from "../../interfaces/dbInterface";
 import { verifyKyc } from "../../interfaces/admin";
 import { propertyModel } from "../../models/property";
 import { sendMail } from "../../utils/zohoMailer";
 import { adminPropTemplate, verifyKycTemplate } from "../../configs/mailtemplate";
+import { bookingModel } from "../../models/booking";
 
 
+// paginated kyc requests
+export const getAllUserS=async(page:string,limit:string):Promise<IUser[]>=>{
+    try{
+
+        const newlimit=parseInt(limit)
+        const newpage=parseInt(page)
+
+        //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
+        const users=await userModel.find({is_Admin:false}).select('userName _id profileImg about isBanned').sort({createdAt:-1,userName:'asc'}).skip((newpage-1)*newlimit).limit(newlimit*1);
+        if(!users) throw new Error("No user found")
+        return users
+
+    }catch(e){
+        console.log(e)
+        throw e
+    }
+}
+
+
+// paginated kyc requests
+export const getAllPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+    try{
+
+        const newlimit=parseInt(limit)
+        const newpage=parseInt(page)
+
+        //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
+        const properties=await propertyModel.find({'isVerified.status':true}).select('name userId images avgRating isBanned').populate('userId','userName _id profileImg') .sort({createdAt:-1,userName:'asc',avgRating:-1 ,ratingCount:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
+        if(!properties) throw new Error("No properties Found")
+        return properties
+
+    }catch(e){
+        console.log(e)
+        throw e
+    }
+}
+
+
+export const getAllBookingS=async(page:string,limit:string):Promise<IBooking[]>=>{
+    try{
+
+        const newlimit=parseInt(limit)
+        const newpage=parseInt(page)
+
+        const reservations=await bookingModel.find({}).skip((newpage! - 1) * newlimit!)
+        .limit(newlimit!).populate('propertyId','name _id images avgRating').populate('paymentId').populate('userId','_id userName profileImg').populate('hostId','_id userName profileImg').sort({createdtAt:-1}).exec()
+        if(!reservations) throw new Error("Failed to Fetch reservation");
+        return reservations;
+
+    }catch(e){
+        console.log(e)
+        throw e
+    }
+}
+
+
+
+export const banUnbanUserS=async(id:string,ban:boolean,message?:string)=>{
+    try{
+
+        const userExist=await userModel.findOne({_id:id});
+        if(!userExist) throw new Error("User Does not Exist");
+
+        if(ban){
+            userExist.isBanned.status=true;
+            userExist.isBanned.message=message!;
+            await userExist.save()
+
+            //now ban users all property
+            const banProperties=await propertyModel.findOneAndUpdate({userId:id},{
+                $set:{
+                    'isBanned.status':true,
+                    'isBanned.message':message
+                }
+            },{new:true});
+
+            if(!banProperties) throw new Error("Property Banning Failed")
+            
+
+            //also freeze ban all bookings
+
+            // const banBookings=await bookingModel.findOneAndUpdate({})
+
+            return true;
+        }
+
+            userExist.isBanned.status=false;
+            userExist.isBanned.message='';
+            await userExist.save()
+
+            //now ban users all property
+            const unbanProperties=await propertyModel.findOneAndUpdate({userId:id},{
+                $set:{
+                    'isBanned.status':false,
+                    'isBanned.message':''
+                }
+            },{new:true});
+
+            if(!unbanProperties) throw new Error("Property unBanning Failed")
+            
+
+            //also freeze ban all bookings
+
+            // const banBookings=await bookingModel.findOneAndUpdate({})
+
+            return true;
+
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
     try{

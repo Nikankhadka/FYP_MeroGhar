@@ -167,7 +167,7 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
         
         <hr className='text-gray-300 mt-5 mb-3' />
 
-     {account.openComponent=='close'&& !is_Admin&& <div className='p-2'>
+     {account.openComponent=='close'&& listings!.length>=0&& <div className='p-2'>
           <h1 className='text-lg ms:text-xl my-2 mb-6 font-semibold '>{profileData.userName}s Listings</h1>
           <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2'>
             {

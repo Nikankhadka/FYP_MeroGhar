@@ -26,14 +26,15 @@ import * as lodash from 'lodash'
 
 interface Props{
 trips:boolean
+is_Admin?:boolean
 bookings:Partial<IBooking>[]
   
 }
 
-export default function TripBookingClient({trips,bookings}:Props) {
+export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
   const router=useRouter();
   const confirm=useConfirm();
-  const modal=useModal();
+  const modal=useModal()
   console.log(trips);
 
 
@@ -107,7 +108,7 @@ export default function TripBookingClient({trips,bookings}:Props) {
 
   return (
     <main>
-      <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex lg:mt-1.5">
+     {!is_Admin!&&<div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex lg:mt-1.5">
         <div className="mb-1 mx-auto w-full sm:w-[98%]">
           <div className="mb-4">
 
@@ -117,7 +118,7 @@ export default function TripBookingClient({trips,bookings}:Props) {
           </div>
          
         </div>
-      </div>
+      </div>}
      
 
         {bookings!.length!>0&&<div>
@@ -152,7 +153,14 @@ export default function TripBookingClient({trips,bookings}:Props) {
                     className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
                   >
                    {trips? 'Host':"Tennant"}
-                  </th>
+                  </th> 
+                 {is_Admin&&<th
+                    scope="col"
+                    className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
+                  >
+                   Host
+                  </th>}
+
                   <th
                     scope="col"
                     className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
@@ -172,12 +180,12 @@ export default function TripBookingClient({trips,bookings}:Props) {
                     Amount
                   </th>
                   
-                  <th
+                 {!is_Admin&&<th
                     scope="col"
                     className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
                   >
                     Actions
-                  </th>
+                  </th>}
                 </tr>
               </thead>
 
@@ -209,6 +217,10 @@ export default function TripBookingClient({trips,bookings}:Props) {
               <Link href={`/Home/user/${data.userId?._id}`} className='underline'>  {lodash.capitalize(data.userId?.userName)}</Link>  
                </td>
 
+{            is_Admin&& <td className="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-900 dark:text-gray-400 xl:max-w-xs">
+              <Link href={`/Home/user/${data.hostId?._id}`} className='underline'>  {lodash.capitalize(data.hostId?.userName)}</Link>  
+               </td>}
+
                 <td className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
                   {moment(data.startDate).format('DD/MM/YY')}
                 </td>
@@ -220,8 +232,9 @@ export default function TripBookingClient({trips,bookings}:Props) {
                 </td>
 
               
-                {/* for owner */}
-                {(!trips&&!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
+             {!is_Admin&& <div>
+                 {/* for owner */}
+                 {(!trips&&!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
                   <button
                     type="button"
                     
@@ -303,6 +316,8 @@ export default function TripBookingClient({trips,bookings}:Props) {
                   </td>
                 }
 
+              </div>}
+               
 
               </tr>
             </tbody>

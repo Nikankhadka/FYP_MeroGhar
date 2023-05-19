@@ -149,7 +149,7 @@ export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promi
 export const getOnBookingS=async(hostId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
   try{
       const reservations=await bookingModel.find({hostId}).skip((page! - 1) * limit!)
-      .limit(limit!).populate("propertyId").populate('userId','_id userName profileImg userId').populate('paymentId').exec();
+      .limit(limit!).populate("propertyId").populate('userId','_id userName profileImg userId').populate('paymentId').sort({createdtAt:-1}).exec();
       if(!reservations) throw new Error("Failed to Fetch reservation for user");
       return reservations;
    

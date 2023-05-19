@@ -29,7 +29,7 @@ import {useState} from 'react'
 const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
     const trans='-translate-x-full '
-    const [account,setaccount]=useState(false)
+   
     const router=useRouter()
 
   return (
@@ -167,7 +167,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
            <div className='w-[full] mx-auto '>
             <Link
-              href="/Account/Account-settings"
+              href="/Admin/account"
               className=" group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <MdManageAccounts className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />

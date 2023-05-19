@@ -130,3 +130,33 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
     }catch(e){
        throw e;
   }}
+
+
+
+
+  //for user exclusive 
+
+  export async function getAllBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
+    try{
+      
+        
+        const bookings = await fetch(
+            `http://localhost:2900/admin/v1/allBookings/?page=${page}&limit=${limit}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: { cookie: getAccessToken()},
+              cache:'no-store'
+            }
+          ).then(res=>res.json())
+    
+        if(!bookings.success) throw new Error("failed to fetch bookings information")
+        
+        console.log("userAccount Data",bookings);
+        return bookings.bookings;
+  
+        
+    }catch(e){
+       throw e;
+    }
+  }
