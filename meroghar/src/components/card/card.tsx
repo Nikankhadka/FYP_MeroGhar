@@ -13,7 +13,7 @@ import { IBooking, Property } from '../../interface/response'
 import { useState } from 'react'
 import useModal from '../../customHoooks/useModal'
 import useConfirm from '../../customHoooks/useConfirm'
-import useVerify from '../../customHoooks/useVerify'
+import useVerify from '../../customHoooks/useReject'
 import { toast } from 'react-hot-toast'
 import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
@@ -23,6 +23,7 @@ import { RiDeleteBin6Fill } from 'react-icons/ri'
 import{AiFillStar ,AiFillHourglass,AiFillCheckCircle,AiOutlineCheckCircle} from 'react-icons/ai'
 import { RxCrossCircled } from 'react-icons/rx'
 import { Payment } from '../../interface/response'
+import useReject from '../../customHoooks/useReject'
 
 //admin card
 interface props {
@@ -43,7 +44,7 @@ export default function Card({ use, data, key,wish,user,index}: props) {
 
   const modal = useModal()
   const confirm = useConfirm()
-  const verify = useVerify()
+  const reject = useReject()
   const list = useRandom()
   const router = useRouter()
 
@@ -140,7 +141,7 @@ export default function Card({ use, data, key,wish,user,index}: props) {
       <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
 
      
-      {isBooked&&<p className='text-sm mb-2 font-semibold text-black '>Booked</p>}
+      {/* {isBooked&&<p className='text-sm mb-2 font-semibold text-black '>Booked</p>} */}
       
         
     
@@ -193,12 +194,17 @@ export default function Card({ use, data, key,wish,user,index}: props) {
               console.log('reject')
               //set id
 
-              verify.onContent({
+              //simpley button
+              reject.setbtn("Reject");
+
+              reject.onContent({
                 onReject: async (message: string) => {
                   const res = await verifyProperty(_id!, {
                     isVerified: false,
                     message,
                   })
+
+               
                   if (res) {
                     toast.success('Property Post Rejected')
                     modal.onClose()

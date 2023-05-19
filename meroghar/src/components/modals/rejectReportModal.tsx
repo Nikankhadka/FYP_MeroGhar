@@ -10,7 +10,7 @@ import { inputStyle } from "../../styles/variants"
 import { useForm,  } from 'react-hook-form'
 import { ErrorText } from "../random"
 
-import useVerify from "../../customHoooks/useVerify"
+import useReject from "../../customHoooks/useReject"
 
 import { useRouter } from "next/navigation"
 interface formProps{
@@ -27,7 +27,7 @@ export function MessageModal(){
         formState: { errors },
         control,
       } = useForm<formProps>()
-      const verify=useVerify();
+      const reject=useReject();
     
     if(confirmModal.isOpen=='reject'){
         
@@ -60,10 +60,13 @@ export function MessageModal(){
 
 
                 <button type='submit' onClick={handleSubmit(async(data)=>{
-                    verify.action.onReject(data.message)
+
+                  //only meessage needs to be passed since id is already access while rendering the model 
+                  //and action for the model has beeen set before rendering the modal
+                    reject.action.onReject(data.message)
                   
                   
-                })} className={`py-2 px-4 text-white font-semibold rounded-lg ${'bg-red-500 hover:bg-red-700'}`}>Reject</button>
+                })} className={`py-2 px-4 text-white font-semibold rounded-lg ${'bg-red-500 hover:bg-red-700'}`}>{reject.btn}</button>
             </div>
 
           </div>

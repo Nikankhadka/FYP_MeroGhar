@@ -7,6 +7,9 @@ interface ModalStore {
   id:string,
   setId:(id:string)=>void
 
+  btn:string,
+  setbtn:(btn:string)=>void
+
   action:{
     onReject:(message:string)=>void
   }
@@ -16,15 +19,21 @@ interface ModalStore {
   
 }
 
-const useVerify = create<ModalStore>((set) => ({
+const useReject = create<ModalStore>((set) => ({
   id:" header:string, header:string,",
+  setId:(id:string)=>set({id:id}),
+  btn:'Reject',
+  setbtn:(btn:string)=>set({btn:btn}),
+
+  //here action contains on reject function which is called finally
   action:{
      onReject:(message:string)=>console.log('Action Called ',message)
-},
-  setId:(id:string)=>set({id:id}),
+  },
+  
+  //on content is used to set action function before the model renders 
   onContent:(newContent)=> set({action:newContent}), 
 
 }));
 
 
-export default useVerify;
+export default useReject;

@@ -11,7 +11,7 @@ import { useState } from "react"
 import { ICountry } from "country-state-city"
 import { amenities } from "../../configs/constant"
 import qs from "query-string"
-import { formatISO } from 'date-fns';
+
 export interface SearchForm{
   minRate:number,
   maxRate:number,
@@ -115,7 +115,7 @@ export function SearchModal(){
         <Modal isOpen={modal.isOpen}>
 
         {/* enitre login hai */}
-        <div className="bg-white  w-full h-[600px] overflow-y-scroll md:w-[600px] rounded-lg">
+        <div className="bg-white  w-full h-[500px] overflow-y-scroll md:w-[600px] rounded-lg">
 
         <header className=" top-0 sticky bg-white text-center text-md p-3 sm:text-lg font-semibold border-b-2 border-gray-200">
         Filters

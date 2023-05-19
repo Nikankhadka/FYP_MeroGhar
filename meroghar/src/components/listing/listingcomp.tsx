@@ -80,7 +80,7 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
         
           
 
-           {list.listProperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+           {list.listProperty=='close'&&<div className="w-[96%] p-2 mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  ">
              
     
                

@@ -45,6 +45,7 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
         const existingBooking = await bookingModel.findOne({
             $and: [
               { propertyId: propId },
+              {status:'Booked'},
               {
                 $or: [
                   { startDate: { $lte: endDate }, endDate: { $gte: endDate } },
@@ -118,7 +119,8 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
       //  }
       console.log('inside getbooking',propId)
        const reservations=await bookingModel.find({
-        propertyId:propId
+        propertyId:propId,
+        status:'Booked'
        }).select('startDate endDate').exec();
 
        if(!reservations) throw new Error("failed to get Reservation details");
@@ -134,7 +136,7 @@ export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promi
     try{
       console.log("inside my bookings service")
         const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
-        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('userId','_id userName profileImg userId').sort({createdtAt:1}).exec()
+        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('userId','_id userName profileImg userId').sort({createdtAt:-1}).exec()
         if(!reservations) throw new Error("Failed to Fetch reservation for user");
         return reservations;
      
@@ -219,10 +221,28 @@ export const confirmCheckOutS=async(userId:string,bookingId:string):Promise<bool
   }
 }
 
-//when booking completes then tennant is added onto the property information
-// const addTennant=propertyModel.findOneAndUpdate({_id:propId},{$push:{
-//   tennants:userdoc!._id}},{new:true});
- //add user document id to this property ko tennant information
-//  const userdoc=await userModel.findOne({userId});
-       
-// if(!addTennant)  throw new Error("failed to add user to tennant")
+
+
+export const cancelBookingS=async(userId:string,bookingId:string):Promise<boolean>=>{
+  try{
+      
+    const booking=await bookingModel.findOne({_id:bookingId})
+    if(!booking) throw new Error("invalid booking id")
+
+    if(booking.hostId.toString()==userId){
+      //now cancel bookign through host 
+      booking.status='ownerCancelled';
+      await booking.save();
+      return true;
+    }
+
+    //else throw tennanat
+    booking.status='tenantCancelled';
+    await booking.save();
+    return true;
+    
+  }catch(e){
+      console.log(e);
+      throw e;
+  }
+}

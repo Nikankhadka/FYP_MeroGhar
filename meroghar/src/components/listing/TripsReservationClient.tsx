@@ -1,12 +1,18 @@
+
+'use client'
+
+import Link from 'next/link'
+import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
+
+import { IBooking, } from '../../interface/response'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import {
 
   AiOutlineCheckCircle,
 } from 'react-icons/ai'
-import {  IBooking, } from '../../interface/response'
+
 import {BiCalendarEdit} from 'react-icons/bi'
-import {BsHouseCheckFill} from 'react-icons/bs'
-import Link from 'next/link'
+import {BsHouseCheckFill,BsFillHouseSlashFill} from 'react-icons/bs'
 import moment from 'moment'
 import Api from '../../api/client/axios'
 import { toast } from 'react-hot-toast'
@@ -15,21 +21,108 @@ import useConfirm from '../../customHoooks/useConfirm'
 import useModal from '../../customHoooks/useModal'
 import * as lodash from 'lodash'
 
+
+
+
 interface Props{
-  bookingData:Partial<IBooking>[],
-  trips:boolean
- 
+trips:boolean
+bookings:Partial<IBooking>[]
+  
 }
 
-
-export function BookingTable({bookingData,trips}:Props) {
+export default function TripBookingClient({trips,bookings}:Props) {
   const router=useRouter();
   const confirm=useConfirm();
   const modal=useModal();
   console.log(trips);
 
+
+      const onCheckIn=(id:string)=>{
+        //first set content for the store
+        confirm.onContent({
+          header:"Are you Sure You want to Check In!",
+          onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${id}`,{},{withCredentials:true}).then(()=>{
+            console.log("user checkedIn");
+            toast.success("Checked In Successfully!");
+            return router.refresh();
+          })
+          .catch(()=>{
+            toast.error("Check In Failed/Check In repeated!!");
+            return router.refresh();
+          })},
+          actionBtn:"Check In"
+        });
+
+        //now open confirm modal 
+        modal.onOpen("confirm");
+      }
+
+
+
+      const onCheckOut=(id:string)=>{
+        confirm.onContent({
+          header:"Are you Sure You want to Check Out!",
+          actionBtn:"Check Out",
+          onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckOut/${id}`,{},{withCredentials:true}).then(()=>{
+            console.log("user checkedIn");
+            toast.success("Checked Out Successfully!");
+            return router.refresh();
+          })
+          .catch(()=>{
+            toast.error("Check In Failed!!");
+            return router.refresh();
+          })},
+         
+        });
+
+        //now open confirm modal 
+        modal.onOpen("confirm");
+      }
+
+
+
+      //booking id
+      const cancelBooking=(id:string)=>{
+        //set content for modal
+        confirm.onContent({
+          header:"Are you Sure to Cancel Booking!",
+          actionBtn:"Delete",
+          onAction:()=>{
+            Api.patch(`property/v1/booking/cancelBooking/${id}`,{},{withCredentials:true}).then((res)=>{
+               toast.success("booking cancelled Successfully");
+               router.refresh();
+               return modal.onClose()
+            }).catch((e)=>{
+              console.log(e);
+              return toast.error("failed to cancel booking")
+            })
+          }
+        })
+
+       return  modal.onOpen('confirm');
+      }
+      
+    
+
+
   return (
-    <div className="flex flex-col">
+    <main>
+      <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex lg:mt-1.5">
+        <div className="mb-1 mx-auto w-full sm:w-[98%]">
+          <div className="mb-4">
+
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+             {trips? "Trips !":"Reservations on Your Properties !"}
+            </h1>
+          </div>
+         
+        </div>
+      </div>
+     
+
+        {bookings!.length!>0&&<div>
+          {/* only available for kyc verified user */}
+          <div className="flex flex-col">
       <div className="overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden shadow">
@@ -78,12 +171,7 @@ export function BookingTable({bookingData,trips}:Props) {
                   >
                     Amount
                   </th>
-                  <th
-                    scope="col"
-                    className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
-                  >
-                   Bill
-                  </th>
+                  
                   <th
                     scope="col"
                     className="p-4 text-left text-xs font-bold uppercase text-gray-500 dark:text-gray-400"
@@ -94,7 +182,7 @@ export function BookingTable({bookingData,trips}:Props) {
               </thead>
 
         {
-          bookingData.map((data,index)=>{
+          bookings.map((data,index)=>{
             console.log(data);
             return(
               <tbody key={index} className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -131,40 +219,14 @@ export function BookingTable({bookingData,trips}:Props) {
                  $ {data.paymentId?.totalAmount}
                 </td>
 
-                <td className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
-                <button className='px-3 text-sm font-semibold py-1 border-gray-500 border-[1px] rounded-lg hover:bg-gray-200'>
-                  Bill
-                </button>
-                </td>
-
+              
                 {/* for owner */}
-                {(!trips&&!data.checkInStatus)&&<td className="space-x-2 whitespace-nowrap p-4">
+                {(!trips&&!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
                   <button
                     type="button"
-                    className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
-                   onClick={()=>{
                     
-                    confirm.onContent({
-                      header:"Are you Sure You want to Check In!",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then(()=>{
-                        console.log("user checkedIn");
-                        toast.success("Checked In Successfully!");
-                        return router.refresh();
-                      })
-                      .catch(()=>{
-                        toast.error("Check In Failed/Check In repeated!!");
-                        return router.refresh();
-                      })},
-                      actionBtn:"Check In"
-                    });
-
-                    //now open confirm modal 
-                    modal.onOpen("confirm");
-                   
-
-                   }}
-
-                  >
+                    className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
+                   onClick={(e)=>onCheckIn(data._id!)}>
                     <AiOutlineCheckCircle className="mr-2 h-5 w-5" />
                     CheckIn
                   </button>
@@ -173,38 +235,19 @@ export function BookingTable({bookingData,trips}:Props) {
                     type="button"
                     className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                    
-                  >
+                    onClick={(e)=>cancelBooking(data._id!)} >
                     <RiDeleteBin6Fill className="mr-2 h-5 w-5" />
                     Cancel Booking
                   </button>
                 </td>}
 
                 {/* for tennant */}
-                {trips&&(!data.checkInStatus)&&<td className="space-x-2 whitespace-nowrap p-4">
+                {trips&&(!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
                   <button
                     type="button"
                     className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
-                   onClick={()=>{
-                    
-                    confirm.onContent({
-                      header:"Are you Sure You want to Check In!",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${data._id}`,{},{withCredentials:true}).then(()=>{
-                        console.log("user checkedIn");
-                        toast.success("Checked In Successfully!");
-                        return router.refresh();
-                      })
-                      .catch(()=>{
-                        toast.error("Check In Failed/Check In repeated!!");
-                        return router.refresh();
-                      })},
-                      actionBtn:"Check In"
-                    });
-
-                    //now open confirm modal 
-                    modal.onOpen("confirm");
                    
-
-                   }}
+          
 
                   >
                     <BiCalendarEdit className="mr-2 h-5 w-5" />
@@ -214,44 +257,20 @@ export function BookingTable({bookingData,trips}:Props) {
                   <button
                     type="button"
                     className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-                   
-                  >
+                  
+                    onClick={(e)=>cancelBooking(data._id!)}>
                     <RiDeleteBin6Fill className="mr-2 h-5 w-5" />
                     Cancel Booking
                   </button>
                 </td>}
 
 
-                {(!trips&&!data.checkOutStatus&&data.checkInStatus)&&<td className="space-x-2 whitespace-nowrap p-4">
+                {(!trips&&!data.checkOutStatus&&data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
                   <button
                     type="button"
                     className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
                     
-                    onClick={(e)=>{
-                 
-
-                    confirm.onContent({
-                      header:"Are you Sure You want to Check Out!",
-                      actionBtn:"Check Out",
-                      onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckOut/${data._id}`,{},{withCredentials:true}).then(()=>{
-                        console.log("user checkedIn");
-                        toast.success("Checked Out Successfully!");
-                        return router.refresh();
-                      })
-                      .catch(()=>{
-                        toast.error("Check In Failed!!");
-                        return router.refresh();
-                      })},
-                     
-                    });
-
-                    //now open confirm modal 
-                    modal.onOpen("confirm");
-                   
-
-                   }}
-
-                  >
+                    onClick={(e)=>onCheckOut(data._id!)}>
                     <AiOutlineCheckCircle className="mr-2 h-5 w-5" />
                     CheckOut
                   </button>
@@ -271,6 +290,19 @@ export function BookingTable({bookingData,trips}:Props) {
                 
                 </td>}
 
+              {
+                (data.status=='tenantCancelled'||data.status=="ownerCancelled")&&<td className="space-x-2 text-sm font-semibold text-gray-600 whitespace-nowrap p-4">
+                
+                  <div className='flex items-center gap-x-2'>
+                   <BsFillHouseSlashFill className='h-6 w-6' />
+                  <p>Booking Cancelled!   </p>
+               
+                  </div>
+                
+                  
+                  </td>
+                }
+
 
               </tr>
             </tbody>
@@ -283,5 +315,40 @@ export function BookingTable({bookingData,trips}:Props) {
         </div>
       </div>
     </div>
+        
+            
+         
+
+                
+             
+            
+         </div>}
+       
+
+
+      
+
+      {/* paginatioon footer */}
+      {bookings!.length!>5&&<div className="sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+        <div className="flex items-center space-x-3">
+          <Link
+            href="#"
+            className="bg-themeColor hover:bg-mainColor focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex flex-1 items-center justify-center rounded-lg px-3 py-2 text-center text-sm font-medium text-white focus:ring-4"
+          >
+          <AiOutlineLeft className="mr-1 -ml-1 h-3 w-3 " strokeWidth='3'/>
+            Previous
+          </Link>
+          <Link
+            href="#"
+            className="bg-themeColor hover:bg-mainColor focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex flex-1 items-center justify-center rounded-lg px-3 py-2 text-center text-sm font-medium text-white focus:ring-4"
+          >
+            
+            Next
+            <AiOutlineRight className="ml-1 -mr-1 h-3 w-3 " strokeWidth='3'/>
+          </Link>
+        </div>
+      </div>}
+
+    </main>
   )
 }

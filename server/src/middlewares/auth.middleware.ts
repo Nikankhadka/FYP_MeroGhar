@@ -13,6 +13,7 @@ export const verifyaccessToken=(verify:boolean)=>{
         // check authentication since it is asked
         if(verify){
         console.log("inside token verification")
+        console.log(req.cookies)
         if(!req.cookies.accessToken) return res.status(401).json({success:false,message:"access token not found"});
         const {accessToken}=req.cookies;
         

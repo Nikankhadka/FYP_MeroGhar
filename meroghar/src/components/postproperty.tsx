@@ -57,7 +57,7 @@ export default function PostPropertyForm({
     defaultValues.state = propertyData.state || defaultValues.state,
     defaultValues.city = propertyData.city || defaultValues.city,
     defaultValues.discription = propertyData.discription || ''
-    defaultValues.rules = propertyData.rules![0] || ''
+    defaultValues.rules = propertyData.rules! || ''
     defaultValues.amenities = propertyData.amenities || []
     defaultValues.rate = propertyData.rate || 0
     defaultValues.propertyType = propertyData.propertyType || 'hotel'

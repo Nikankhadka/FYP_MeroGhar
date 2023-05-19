@@ -28,9 +28,10 @@ export default async function Room({ params }: { params: IParams }) {
   const propertyData =getPropertyById(params.listingId)
   const reservationsData =getPropertyBookings(params.listingId)
   const reviewsList=getReviews(params.listingId,1,10);
+  
   const {session,userData}=await checkSession()
 
-  // parallel fetching
+  //here user represents who uare tennant owner admin or non logged in 
   const [{ property, user, inWishList }, reservations,reviews] = await Promise.all([
     propertyData,
     reservationsData,

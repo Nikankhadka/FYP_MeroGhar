@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 import Carousel from '../../../../components/carousel'
-import { BookProperty } from '../../../../components/listing/booking'
+import { BookProperty } from '../../../../components/listing/BookProperty'
 import Review from '../../../../components/review'
 import Wish from '../../../../components/Svg/wishSvg'
 import { IReview, IUserKyc, Property } from '../../../../interface/response'
@@ -19,10 +19,13 @@ import ReviewInput from '../../../../components/reviewInput'
 interface RoomProps {
   propertyData: Partial<Property>
   inWishList: boolean
+  // user is owener tennnat admin 
   user: string
   reservations: Reservation[],
   is_Admin:boolean,
   reviews:IReview[],
+
+  //current user is passed to check if user has provided review then allow to edit 
   currentUser?:string
 }
 
@@ -50,8 +53,8 @@ export function RoomClient({
     rules,
     _id
   } = propertyData
-  const Reviews = ['sdafas', 'fdasfas', 'fdasfs']
-
+ 
+    console.log("userType",user)
   return (
     <main className="w-full bg-white ">
     
@@ -157,7 +160,7 @@ export function RoomClient({
             {/* for Rules */}
             <div>
               <h3 className="text-lg font-semibold text-black">Rules</h3>
-              <p className="text-sm sm:text-md text-gray-700">{_.startCase(rules![0])}</p>
+              <p className="text-sm sm:text-md text-gray-700">{_.startCase(rules!)}</p>
             </div>
           </div>
           {/* interactive component for contacting owner */}

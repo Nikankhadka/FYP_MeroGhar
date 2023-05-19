@@ -13,7 +13,7 @@ import { RegisterModal } from '../components/modals/registerModal';
 import ToasterProvider from '../components/toast/toastProvider';
 import { ConfirmModal } from '../components/modals/confirmModal';
 import { MessageModal } from '../components/modals/rejectReportModal';
-import { BookingModal } from '../components/modals/bookingModal';
+import { BookingModal } from '../components/modals/bookingBillModal';
 import ResetPassword from '../components/modals/forgotpassword';
 import { SearchModal } from '../components/modals/searchModal';
 

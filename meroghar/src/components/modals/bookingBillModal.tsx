@@ -1,6 +1,8 @@
 'use client'
 
 
+// used for both booking modal and also renders the bill once the booking and payment is completed
+
 import useBookingStore from "../../customHoooks/bookingStore"
 import useModal from "../../customHoooks/useModal"
 import {AiFillStar} from 'react-icons/ai'
@@ -12,7 +14,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import dayjs  from "dayjs"
 import Modal from "./modal"
-import Invoice from "../listing/bill"
+import Invoice from "../listing/invoiceUI"
 import {createRef, useState} from 'react'
 import { toast } from "react-hot-toast"
 

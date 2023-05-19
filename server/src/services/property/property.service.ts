@@ -76,7 +76,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
 
             //check whether it is the property owner 
          
-            if(propertyData.userId.toString()==userId) return {property:propertyData,user:"owner",inWishList};
+            if(propertyData.userId._id?.toString()==userId) return {property:propertyData,user:"owner",inWishList};
 
             //now for normal user/admin 
             if(userdocument?.is_Admin){

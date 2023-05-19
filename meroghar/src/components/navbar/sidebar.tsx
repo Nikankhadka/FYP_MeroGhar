@@ -8,14 +8,14 @@ import {MdManageAccounts,MdOutlineReviews} from 'react-icons/md'
 import{AiFillSetting} from 'react-icons/ai'
 import {RiLockPasswordFill,RiAdminFill} from 'react-icons/ri'
 
-import{BsFillChatLeftFill} from 'react-icons/bs'
+import{BsFillHouseCheckFill} from 'react-icons/bs'
 import {ImUserCheck} from 'react-icons/im'
 
 import {BiLogOut} from 'react-icons/bi'
 import { forwardRef } from 'react'
-import Api from '../api/client/axios'
+import Api from '../../api/client/axios'
 import toast from 'react-hot-toast'
-import { redirect, useRouter } from 'next/navigation'
+import {useRouter } from 'next/navigation'
 interface props{
     is_Admin:boolean
     menu:boolean
@@ -58,7 +58,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 }
      
 
-            {/* <Link
+            <Link
               href="/Account"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
@@ -74,29 +74,19 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Dashboard
               </span>
-            </Link> */}
+            </Link>
 
             <Link
-              href="/Admin"
+              href="/Admin/users"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiUser className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
-                Profile
+                Users
               </span>
             </Link>
 
-           {
-            !props.is_Admin&&<Link
-            href="/Account/wishlists"
-            className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
-          >
-            <HiHeart className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
-            <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
-              Wishlist
-            </span>
-          </Link>
-           } 
+ 
 
             {props.is_Admin&&<Link
               href="/Admin/kycRequest"
@@ -108,18 +98,10 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               </span>
             </Link>}
 
-            {props.is_Admin&&<Link
-              href="/Admin/users"
-              className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
-            >
-              <ImUserCheck className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
-              <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
-                User List
-              </span>
-            </Link>}
+          
 
             <Link
-              href={props.is_Admin?'/Admin/listingRequest':'/Account/listings'}
+              href={'Admin/listing'}
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <HiHome className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
@@ -127,6 +109,20 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
                 Listings
               </span>
             </Link>
+
+
+            <Link
+              href={'/Admin/listingRequest'}
+              className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+            >
+              <BsFillHouseCheckFill className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
+              <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
+                Listing Requests
+              </span>
+            </Link>
+
+
+
 
             {/* <Link
               href="/Account/reviews"
@@ -137,6 +133,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
                 Reviews
               </span>
             </Link> */}
+
 
            {/* {
             !props.is_Admin&&<Link
@@ -153,8 +150,9 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
 
             
 
-           <div className='border-2 border-slate-400 rounded-lg'>
-           <button
+           <div className='rounded-lg'>
+
+           {/* <button
                className="w-full group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
               onClick={(e)=>{
                 e.preventDefault();
@@ -165,12 +163,12 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Settings
               </span>
-            </button>
+            </button> */}
 
-            {account&&<div className='w-[95%] mx-auto '>
+           <div className='w-[full] mx-auto '>
             <Link
               href="/Account/Account-settings"
-              className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
+              className=" group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <MdManageAccounts className="h-6 w-6 fill-gray-500 transition duration-75 group-hover:fill-gray-900 dark:fill-gray-400 dark:group-hover:fill-white" />
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
@@ -178,7 +176,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               </span>
             </Link>
 
-            <Link
+            {/* <Link
               href="/Account/password"
               className="my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
@@ -186,9 +184,9 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Change Password
               </span>
-            </Link>
+            </Link> */}
 
-            </div>}
+            </div>
            </div>
             
 

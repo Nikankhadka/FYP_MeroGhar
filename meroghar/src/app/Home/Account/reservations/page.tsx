@@ -5,7 +5,7 @@ import {getOnBookings } from "../../../../api/server/property/getReservation";
 import { NoAuth } from "../../../../components/NoAuth";
 import ClientComp from "../../../../components/clientComp";
 import  Link from 'next/link'
-import TripBookingClient from "../../../../components/listing/trips";
+import TripBookingClient from "../../../../components/listing/TripsReservationClient";
 
 
 export default async function MyTrips(){

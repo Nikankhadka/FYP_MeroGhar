@@ -9,7 +9,7 @@ import useConfirm from "../../customHoooks/useConfirm"
 import { verifyKyc } from "../../api/client/admin"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import useVerify from "../../customHoooks/useVerify"
+import useReject from "../../customHoooks/useReject"
 import * as _ from 'lodash'
 
 interface UserProps{
@@ -19,7 +19,8 @@ interface UserProps{
 export default function UserCard({userData}:UserProps){
   const modal=useModal();
   const confirm=useConfirm()
-  const verify=useVerify()
+  //store 
+  const reject=useReject()
   const router=useRouter()
   const{userName,userId,_id,profileImg,about}=userData
 
@@ -75,9 +76,14 @@ export default function UserCard({userData}:UserProps){
           onClick={(e)=>{
             e.preventDefault();
             console.log('reject')
-            verify.onContent({
+
+            //set btn name 
+            reject.setbtn('Reject')
+
+            reject.onContent({
               onReject:async(message:string)=>{
-                const res=await verifyKyc(_id,{isVerified:false,message});
+                try{
+                  const res=await verifyKyc(_id,{isVerified:false,message});
                   if(res){
                     toast.success("User kyc Rejected");
                     modal.onClose();
@@ -85,6 +91,11 @@ export default function UserCard({userData}:UserProps){
                   }
                   toast.error("Kyc rejection Failed!");
                   return modal.onClose();
+                }catch(e){
+                  console.log(e)
+                 return  toast.error("Kyc rejection Failed!");
+                }
+              
               }
             })
 
