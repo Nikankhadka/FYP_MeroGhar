@@ -12,6 +12,9 @@ type Params = {
 export default async function UserProfile({ params: { userId } }: Params) {
   
   const { session, userData } = await checkSession()
+
+
+  //fetch user properties for the id 
   const listings=await getMyProperties(userId,1,5)
 
   if(userData.docId==userId){

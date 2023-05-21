@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Property } from '../interface/response';
 
-//this same modal store can be used for any other modal through out the application
+//this is used to store booking information whic is accessed by booking/billing modal to contrinue payment and generate bill
 interface Booking{
     
         guest:number,

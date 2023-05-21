@@ -1,9 +1,11 @@
 'server-only'
 import { cookies } from 'next/headers';
-import { FetchedMe, FetchedUserData, IUserKyc } from "../../../interface/response";
+import { FetchedMe, FetchedUserData } from "../../../interface/response";
 import Api from "../../client/axios"
 import { getAccessToken } from '../auth';
 
+
+//get user 
 export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
@@ -56,6 +58,34 @@ export async function getMe():Promise<FetchedMe>{
 }
 
 
+// for admin exclusive get all users
+export async function getAllUsers(page:number,limit:number,):Promise<Partial<FetchedMe>[]>{
+  try{
+    
+      
+      const userData = await fetch(
+          `http://localhost:2900/admin/v1/allUsers/?page=${page}&limit=${limit}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { cookie: getAccessToken()},
+            cache:'no-store'
+          }
+        ).then(res=>res.json())
+  
+      if(!userData.success) throw new Error("failed to fetch users information")
+      
+      console.log("userAccount Data",userData);
+      return userData.users;
+
+      
+  }catch(e){
+     throw e;
+  }
+}
+
+
+
 
 //fetch information of user whose kyc needs to be verified basic profile view by admin
 export async function getUserKyc(userId:string):Promise<FetchedMe>{
@@ -96,6 +126,7 @@ export interface kycRequests{
   about:string
 }
 
+//for admin get kyc requests
 export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
   try{
     

@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getBookingS, postBookingS,getMyBookingS, confirmCheckOutS, checkBookingS,getOnBookingS, confirmCheckInS} from "../../services/property/booking.service";
+import { getBookingS, postBookingS,getMyBookingS, confirmCheckOutS, checkBookingS,getOnBookingS, confirmCheckInS,cancelBookingS} from "../../services/property/booking.service";
 
 
 export const postBookingC=async(req:Request,res:Response)=>{
@@ -84,6 +84,18 @@ export const confirmCheckOutC=async(req:Request,res:Response)=>{
         const checkOutConfirmed=await confirmCheckOutS(req.userData.docId,req.params.id);
         if(checkOutConfirmed)  return res.status(200).json({success:true,message:"Check Out confirmed"})
         return res.status(400).json({success:false,error: "Check Out confirmation failed"})
+    }catch(e:any){
+        res.status(500).json({success:false,error:e.message})
+    }
+}
+
+
+export const cancelBookingC=async(req:Request,res:Response)=>{
+    try{
+        
+        const cancelConfirmed=await cancelBookingS(req.userData.docId,req.params.id)
+        if(cancelConfirmed)  return res.status(200).json({success:true,message:"booking cancelled sucessfully!"})
+        return res.status(400).json({success:false,error: "booking cancellation failed"})
     }catch(e:any){
         res.status(500).json({success:false,error:e.message})
     }

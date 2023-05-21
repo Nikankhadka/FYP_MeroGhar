@@ -9,6 +9,8 @@ import moment from 'moment'
 import useModal from '../../customHoooks/useModal'
 import { Property } from '../../interface/response'
 import useBookingStore from '../../customHoooks/bookingStore'
+import { AiFillStar } from 'react-icons/ai'
+import { toast } from 'react-hot-toast'
 
 interface Booking{
   reservations:{
@@ -50,10 +52,17 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
 
 
   const onReserve=async(e:any)=>{
+    const momentStartDate=moment(date.startDate);
+    const momentEndDate=moment(date.endDate);
+
     e.preventDefault();
 
     if(user==''){
       return modal.onOpen('login');
+    }
+
+    if(user=='owner'){
+      return toast.error("Owner cant book Owned Property")
     }
   
 
@@ -67,8 +76,24 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
       console.log('same date')
       return bookingStore.setError(true);
     }
-    //now check for bookingg 
+
+     //now check for bookingg date to not overlap or something 
+   const checkOverLap= reservations.some(({startDate,endDate})=>{
+      const startDateI = moment(startDate);
+      const endDateI = moment(endDate);
+
+      return (
+        (startDateI.isSameOrBefore(momentEndDate) && endDateI.isSameOrAfter(momentEndDate)) ||
+        (startDateI.isSameOrBefore(momentStartDate) && endDateI.isSameOrAfter(momentStartDate)) ||
+        (startDateI.isSameOrAfter(momentStartDate) && endDateI.isSameOrBefore(momentEndDate))
+      );
+    })
+
+    if(checkOverLap) return bookingStore.setError(true);
   
+
+    //set eroro false 
+    bookingStore.setError(false);
 
     bookingStore.setPropertyData(propertyData);
     bookingStore.setbookingInfo({
@@ -88,10 +113,10 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
     
     <div className='flex justify-around items-center my-5'>
         <p className='text-lg font-semibold'>${propertyData.rate}<span className=' text-sm font-semibold'>/Night</span></p>
-        <div className='flex '>
-            <img src="/rate.png" alt="rate"  className='h-5 w-5'/>
-            <span>{propertyData.avgRating}</span>
-            <button className='block mx-2 underline text-sm font-semibold text-gray-600'>reviews</button>
+        <div className='flex  gap-x-[2px] '>
+            <AiFillStar className='h-5 w-5' />
+            <span className=''>{propertyData.avgRating}</span>
+          
         </div>
     </div>
     
@@ -119,9 +144,9 @@ maxDate.setDate(currentDate.getDate()); // set the day to be the same as the cur
    
     <hr className=' border-gray-300 my-2'/>
     {/* pass form value from rouet then use catch all routes to access query values */}
-    <button type='submit'  className='block w-full my-2 font-semibold text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor' onClick={onReserve} >reserve</button>
+    <button type='submit'  className='block w-full my-4 font-semibold text-sm text-center p-3 px-3 rounded-lg bg-themeColor text-white hover:bg-mainColor' onClick={onReserve} >reserve</button>
 
-    <Link href="#" className='w-full block my-3 text-center  text-sm underline'>Contact Host</Link>
+    {/* <Link href="#" className='w-full block my-3 text-center  text-sm underline'>Contact Host</Link> */}
 
    
 

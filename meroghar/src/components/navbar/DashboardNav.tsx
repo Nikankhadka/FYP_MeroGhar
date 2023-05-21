@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import {RxHamburgerMenu} from 'react-icons/rx'
-import SideBar from "../sidebar"
+import SideBar from "./sidebar"
  
 import {useState,useEffect,createRef} from 'react'
 
@@ -51,7 +51,7 @@ export default function DashboardNav(){
           className=" flex items-center gap-2  "
         >
           <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
-          <span className="block font-semibold text-mainColor drop-shadow-xl dark:text-themeColor md:text-lg"> MeroGhar</span>
+          <span className="block font-semibold text-lg text-mainColor drop-shadow-xl dark:text-themeColor md:text-xl"> MeroGhar</span>
         </Link>
         </main>
     )

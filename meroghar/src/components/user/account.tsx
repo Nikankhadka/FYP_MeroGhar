@@ -52,13 +52,13 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
 
       {(userMatch&&!is_Admin)&&<div className='my-6' >
         <p className='text-md text-black font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
-        {kyc?.pending&&'Pending'} {kyc?.pending==kyc!.isVerified&&"Rejected!!/Please Apply Again!!"}{kyc?.isVerified&&'Verified'}
+        {kyc?.pending&&'Pending'} {(kyc!.pending==kyc!.isVerified)&& (kyc!.message =='')&&"Rejected!!/Please Apply Again!!"}{kyc?.isVerified&&'Verified'}
         {kyc!.pending&&  <AiFillHourglass className='h-5 w-5' />} {kyc?.pending==kyc!.isVerified&&<RxCrossCircled className='h-5 w-5 '/>}{kyc?.isVerified&&<AiFillCheckCircle className='h-5 w-5'/>}
       
       </span>
       </p>
 
-     {kyc?.message!==''&&<p className='font-semibold my-2'>Message: <span className='text-sm text-red-500'>{kyc?.message}</span></p>}
+     {kyc!.message !==''&&<p className='font-semibold my-2'>Message: <span className='text-sm text-red-500'>{kyc!.message}</span></p>}
 
       </div> }
 

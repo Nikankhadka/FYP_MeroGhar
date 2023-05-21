@@ -47,9 +47,7 @@ interface kycSchema{
     recievedReviewcount: number
     wishList:[Types.ObjectId],
     isBanned: {
-      strikes: number
-      banStart:Date,
-      banEnd:Date
+      status:boolean,
       message:string
     }
     viewedProperty: Types.ObjectId[]

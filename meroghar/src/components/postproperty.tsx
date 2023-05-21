@@ -33,6 +33,7 @@ export default function PostPropertyForm({
   propertyData,
 }: postProperty) {
   
+  console.log('propertty data on updatye',propertyData,isUpdate)
   let defaultValues: PropertyForm = {
     images:['default'],
     name: '',
@@ -56,7 +57,7 @@ export default function PostPropertyForm({
     defaultValues.state = propertyData.state || defaultValues.state,
     defaultValues.city = propertyData.city || defaultValues.city,
     defaultValues.discription = propertyData.discription || ''
-    defaultValues.rules = propertyData.rules![0] || ''
+    defaultValues.rules = propertyData.rules! || ''
     defaultValues.amenities = propertyData.amenities || []
     defaultValues.rate = propertyData.rate || 0
     defaultValues.propertyType = propertyData.propertyType || 'hotel'
@@ -107,6 +108,7 @@ export default function PostPropertyForm({
   const onSubmit: SubmitHandler<PropertyForm> = async (formdata) => {
 
     const postConfirmation = async () => {
+      modal.setLoading(true)
       const amenities = formdata.amenities.filter((item) => item != '')
 
       const { name, country,state,city, discription, rate, propertyType, rules } =
@@ -151,11 +153,13 @@ export default function PostPropertyForm({
           toast.success('Property Posted Successfully')
           modal.onClose()
           list.onList('close')
+          modal.setLoading(false)
           return router.refresh()
         }
       } catch (e: any) {
         console.log(e)
         toast.error(`property Post Failed/${e.message}`)
+        modal.setLoading(false)
         modal.onClose()
       }
     }
@@ -163,6 +167,8 @@ export default function PostPropertyForm({
     //now for update property
 
     const updateConfirmation = async () => {
+
+      modal.setLoading(true)
       const amenities = formdata.amenities.filter((item) => item != '')
 
       const { name, country,state,city, discription, rate, propertyType, rules } =
@@ -216,11 +222,13 @@ export default function PostPropertyForm({
           toast.success('Property updated Successfully/Needs Reverification')
           modal.onClose()
           list.onList('close')
+          modal.setLoading(false)
           return router.refresh()
         }
       } catch (e: any) {
         console.log(e)
         toast.error(`property update Failed/${e.message}`)
+        modal.setLoading(false)
         modal.onClose()
       }
     }
@@ -259,7 +267,7 @@ export default function PostPropertyForm({
                 {/* initially the value default does not read file casuing to return empty string */}
                 <img
                   src={imageUrl(index)}
-                  alt='adsfsad'
+                  alt='Image Here'
                   className={
                     imageUrl(index) == ''
                       ? 'hidden'

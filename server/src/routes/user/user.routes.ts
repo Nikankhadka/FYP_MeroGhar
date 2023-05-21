@@ -5,26 +5,29 @@ import { validateKyc, validateProfile } from "../../middlewares/inputvalidation"
 
 const router=Router();
 
+//email link should be verified by mail 
 router.get("/verifyEmail/:token",verifyEmailC)
 
-//get user data for normal as well as currrent user
+//get user data for normal as well as currrent user/admin
 router.get('/getUser/:id',getUserC)
 
+
+router.use(verifyaccessToken(true));
 //get user data for account setting
-router.get('/getMe',verifyaccessToken(true),getMeC)
+router.get('/getMe',getMeC)
 
-router.post("/addEmail",verifyaccessToken(true),addEmailC)
+router.post("/addEmail",addEmailC)
 
-router.patch("/updateProfile",verifyaccessToken(true),validateProfile,updateProfileC)
+router.patch("/updateProfile",validateProfile,updateProfileC)
 
 //use the same api end point to update kyc information
-router.post("/postKyc",verifyaccessToken(true),validateKyc,postKycC)
+router.post("/postKyc",validateKyc,postKycC)
 
 
 
 //add middleware for both of these
-router.get("/verifyPhone/:phone",verifyaccessToken(true),getPhoneC)
-router.post("/verifyPhone/:phone",verifyaccessToken(true),postPhoneC)
+router.get("/verifyPhone/:phone",getPhoneC)
+router.post("/verifyPhone/:phone",postPhoneC)
 
 
 

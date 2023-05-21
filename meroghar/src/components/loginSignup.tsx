@@ -40,10 +40,10 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           
           
       }
-      toast.error("Login Failed/Invalid Credential")
-     return  router.push('/Home')
+      toast.error(res.data.error)
+      return  router.push('/Home')
       }catch(e){
-        toast.error("Login Failed/Invalid Credential")
+        toast.error("Login Failed/Invalid Credential/UserBanned")
         return  router.push('/Home')
       }
       
@@ -55,12 +55,13 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     if(res.data.success){
      
       toast.success("User Registeres Successfully!")
-      loginSignupModal.onOpen('login')
+     return  loginSignupModal.onOpen('login')
       
     }
+
     throw new Error(`${res.data.error}`)
-    }catch(e){
-      toast.error("User Registration Failed!");
+    }catch(e:any){
+     return  toast.error(e.message);
       
     }
     
@@ -118,7 +119,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
               //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
             })}
           />
-          <p className='text-sm text-gray-500'>minimum 6 Letters  A capital small A number and Special character</p>
+         
           {errors.password && (
           <ErrorText text="Please Enter Valid Password" />
           )}

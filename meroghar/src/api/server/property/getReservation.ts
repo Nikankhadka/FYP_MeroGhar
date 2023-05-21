@@ -4,6 +4,7 @@ import Api from "../../client/axios";
 
 import { getAccessToken } from "../auth";
   
+
 export default async function getReservations(propertyId:string,user:string,page?:number,limit?:number){
     try {
       
@@ -56,7 +57,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }
 
 
-
+//get bookings made on property for calender use
   export async function getPropertyBookings(id:string):Promise<Partial<IBooking>[]>{
     try{
       
@@ -82,6 +83,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }}
 
 
+  //bookings made by me
   export async function getMyBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
     try{
       
@@ -107,6 +109,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }}
 
 
+  //get bookings made on my property
 export async function getOnBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
     try{
       
@@ -130,3 +133,33 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
     }catch(e){
        throw e;
   }}
+
+
+
+
+  //for admin exclusive to check bookgin
+
+  export async function getAllBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
+    try{
+      
+        
+        const bookings = await fetch(
+            `http://localhost:2900/admin/v1/allBookings/?page=${page}&limit=${limit}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: { cookie: getAccessToken()},
+              cache:'no-store'
+            }
+          ).then(res=>res.json())
+    
+        if(!bookings.success) throw new Error("failed to fetch bookings information")
+        
+        console.log("userAccount Data",bookings);
+        return bookings.bookings;
+  
+        
+    }catch(e){
+       throw e;
+    }
+  }

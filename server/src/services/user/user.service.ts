@@ -18,7 +18,7 @@ import { returnUserData } from "../../interfaces/userResponse";
 dotenv.config()
 
 
-
+//get user for basiclly not for admin and acutal usser
 export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     try{
         
@@ -41,6 +41,8 @@ export const getUserS=async(id:string):Promise<Partial<returnUserData>>=>{
     }
 }
 
+
+//get my data 
 export const getMeS=async(_id:string):Promise<Partial<IUser>>=>{
     try{
         const userData=await userModel.findOne({_id}).select(" -token  -refreshToken  -wishList   -viewedProperty ");
@@ -52,6 +54,7 @@ export const getMeS=async(_id:string):Promise<Partial<IUser>>=>{
         throw e;
     }
 }
+
 
 //same api for post and update email
 export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
@@ -86,7 +89,7 @@ export const addEmailS=async(userId:string,Email:string):Promise<boolean>=>{
     }
 }
 
-
+//verufy emial
 export const verifyEmailS=async(token:string):Promise<boolean>=>{
     try{
         //first match the token in db 
@@ -115,7 +118,7 @@ export const verifyEmailS=async(token:string):Promise<boolean>=>{
     }
 }
 
-
+//update
 export const updateProfileS=async(userId:string,profileData:Partial<updateProfile>):Promise<boolean>=>{
     try{
 

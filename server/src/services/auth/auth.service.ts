@@ -74,8 +74,8 @@ export const registerUserS=async(userId:string,password:string):Promise<boolean>
 export const LoginS=async(userId:string,password:string):Promise<LSR1>=>{
     try{
         console.log("inside login service");
-        const foundUser=await userModel.findOne({userId});
-         if(!foundUser)  throw new Error("User Not Found")
+        const foundUser=await userModel.findOne({userId,'isBanned.status':false});
+         if(!foundUser)  throw new Error("valid User Not Found")
         //if string variable does not take Strig\undefined then use ! to tell typescript that it will not be undefined
         const verifiedUser=await compare(password,foundUser.password!);
         if(!verifiedUser) throw new Error("Invalid User Credentials")

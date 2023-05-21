@@ -20,9 +20,10 @@ export default function Wish({active,id,user}:WishProps){
     console.log('in wishList',isActive)
     return(
         <button onClick={(e)=>{
+          console.log(user)
           if(user=='') return modal.onOpen('login')
           if(user=='admin') return toast.error("Admin Cannot Have Favourites");
-          if(user=='owner') return toast.error("owner not allowed!!")
+          if(user=='owner') return toast.error("owner cant add to WishList!!")
 
            
           if(!isActive){

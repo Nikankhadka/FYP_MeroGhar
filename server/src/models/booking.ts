@@ -11,7 +11,7 @@ const bookingSchema=new Schema({
     },
     status:{
         type: String,
-        enum: ['Booked', 'Cancelled','Completed'],
+        enum: ['Booked', 'ownerCancelled','Completed','tenantCancelled'],
         default: 'Booked'
     },
     startDate:Date,

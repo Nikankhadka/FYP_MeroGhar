@@ -1,6 +1,6 @@
 import { getKycs } from "../../../api/server/user/getUser"
 import ClientComp from "../../../components/clientComp"
-import Profile from "../../../components/user/profile"
+
 import UserCard from "../../../components/card/userCard"
 import Link from "next/link"
 import { AiOutlineLeft,AiOutlineRight } from "react-icons/ai"
@@ -14,7 +14,7 @@ export default  async function KycRequest(){
   if(KycRequests.length===0){
     return(
      
-        <p className="text-lg font-semibold text-center"> No Kyc Requests To Verify</p>
+        <h1 className="text-lg md:text-xl font-semibold md:font-bold text-center"> No Kyc Requests To Verify !!!</h1>
       
     )
   }
@@ -29,7 +29,8 @@ export default  async function KycRequest(){
               User Kyc Requests
             </h1>
           </div>
-          <div className="block items-center justify-between dark:divide-gray-700 sm:flex md:divide-x md:divide-gray-100">
+
+          {/* <div className="block items-center justify-between dark:divide-gray-700 sm:flex md:divide-x md:divide-gray-100">
             <div className="mb-4 flex items-center sm:mb-0">
               <form className="sm:pr-3">
                 <label className="sr-only">Search</label>
@@ -45,14 +46,14 @@ export default  async function KycRequest(){
               </form>
             </div>
 
-          </div>
+          </div> */}
         </div>
      
         <hr className="my-5 border-gray-400" /> 
 
     
      
-    <div className="mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3  ">
+    <div className="mx-auto my-2 grid  gap-y-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3  ">
     <ClientComp>
     {
       KycRequests.map((data,index)=>{
@@ -70,7 +71,7 @@ export default  async function KycRequest(){
 
    
 
-    <div className="relative md:sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
+   {KycRequests.length>10&&<div className="relative md:sticky bottom-0 right-0 w-full  border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:justify-between">
         <div className="flex items-center space-x-3 sm:px-4">
           <Link
             href="#"
@@ -88,7 +89,7 @@ export default  async function KycRequest(){
             <AiOutlineRight className="ml-1 -mr-1 h-3 w-3 " strokeWidth='3'/>
           </Link>
         </div>
-      </div>
+      </div>}
 
       </div>
   

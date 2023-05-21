@@ -65,6 +65,10 @@ export interface FetchedUserData {
       message: string;
       approvedBy: string;
     };
+    isBanned:{
+      status:boolean,
+      message:string
+    }
     listingCount: number;
     avgRating: number;
     password:string
@@ -77,55 +81,13 @@ export interface wishlist{
 }
 
 
-  // admin fetches this to view profile kyc profile verifcaiton
- export  interface IUserKyc {
-  _id:string
-    userId: string;
-    userName: string;
-    profileImg: {
-      imgId: string;
-      imgUrl: string;
-    };
-    about: string;
-    email: {
-      mail: string;
-      isVerified: boolean;
-    };
-
-    createdAt: Date;
-    kycInfo: {
-      firstName: string;
-      lastName: string;
-      gender: string;
-      email: string;
-      phoneNumber: string;
-     
-        country: string;
-        state: string;
-        city: string;
-     
-      img: {
-        imgId: string;
-        imgUrl: string;
-      };
-    };
-    kyc: {
-      isVerified: boolean;
-      pending: boolean;
-      message: string;
-      approvedBy: string;
-    };
-    listingCount: number;
-    avgRating: number;
-    recievedReviewcount: number;
-  }
 
 
 
   export interface Property{
     _id: string;
     // this is owner detail
-    userId: Partial<IUserKyc>|string,
+    userId: Partial<FetchedMe>|string,
     name: string;
     url: string;
    
@@ -143,7 +105,7 @@ export interface wishlist{
       imgUrl: string;
     }[];
     // this is tennnat detail only fetched by owner in api request
-    tennants:Partial<IUserKyc>[]
+    tennants:Partial<FetchedMe>[]
     ratingCount: number;
     viewCount: number;
     avgRating: number;
@@ -158,7 +120,8 @@ export interface wishlist{
       message: string;
       approvedBy: string;
     };
-  
+  createdAt:Date,
+  updatedAt:Date
   
 }
 
@@ -184,7 +147,7 @@ export interface IBooking{
   _id:string,
   userId: Partial<FetchedUserData>
   propertyId:Partial<Property>
-  hostId: string
+  hostId: Partial<FetchedUserData>
   paymentId:Partial<Payment>
   status: string
   startDate: Date;

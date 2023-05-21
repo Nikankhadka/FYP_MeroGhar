@@ -10,26 +10,27 @@ import useCountry from "../../customHoooks/useCountry"
 import { useState } from "react"
 import { ICountry } from "country-state-city"
 import { amenities } from "../../configs/constant"
+import qs from "query-string"
 
-
-interface SearchForm{
+export interface SearchForm{
   minRate:number,
   maxRate:number,
   propertyType:string,
   country:string,
   state:string,
   city:string,
-  startDate:Date,
-  endDate:Date,
+  // startDate?:string,
+  // endDate?:string,
   rating:number,
   amenities:string[]
 }
 
 
 import Modal from "./modal"
+import { useRouter } from "next/navigation"
 
 export function SearchModal(){
-    const modal=useModal()
+  const modal=useModal()
   const list = useRandom()
   const {
     register,
@@ -38,7 +39,16 @@ export function SearchModal(){
     formState: { errors },
     control,
   } = useForm<SearchForm>({
-   
+    defaultValues:{
+      country:"",
+      state:"",
+      city:"",
+      propertyType:'',
+      amenities:[''],
+      minRate:0,
+      maxRate:0,
+      rating:0
+    },
     mode: 'onChange',
   })
 
@@ -46,7 +56,55 @@ export function SearchModal(){
  
     const countryhook = useCountry()
     const [countries, setCountries] = useState<ICountry[]>(countryhook.Countries)
-   
+    const router=useRouter()
+
+    //form handler 
+    const onSubmit:SubmitHandler<SearchForm>=(formdata)=>{
+      try{
+        //filter amenities 
+        const amenities = formdata.amenities.filter((item) => item != '')
+        formdata.amenities=amenities;
+        
+       let query:any={...formdata}
+
+       if(query.country!=''){
+        query.country=countryhook.getCountryData(parseInt(formdata.country)).name
+        
+       }
+
+       if(query.state !=''){
+         countryhook.getStateData(
+          parseInt(formdata.country),
+          parseInt(formdata.state)
+        ).name
+       }
+
+
+       console.log('query',query)
+
+
+        // if (query.startDate) {
+        //   query.startDate! = formatISO(query.startDate);
+        // }
+    
+        // if (query.endDate) {
+        //   query.endDate! = formatISO(query.endDate);
+        // }
+
+        const url = qs.stringifyUrl({
+          url: '/Home',
+          query:query,
+        }, { skipNull: true });
+
+        modal.onClose();
+        return router.push(url);
+
+
+
+      }catch(e){
+        console.log(e)
+      }
+    }
 
 
     if(modal.isOpen!='search'){
@@ -57,7 +115,7 @@ export function SearchModal(){
         <Modal isOpen={modal.isOpen}>
 
         {/* enitre login hai */}
-        <div className="bg-white  w-full h-[600px] overflow-y-scroll md:w-[600px] rounded-lg">
+        <div className="bg-white  w-full h-[500px] overflow-y-scroll md:w-[600px] rounded-lg">
 
         <header className=" top-0 sticky bg-white text-center text-md p-3 sm:text-lg font-semibold border-b-2 border-gray-200">
         Filters
@@ -73,24 +131,24 @@ export function SearchModal(){
 
         {/* price input */}
         <div className="w-full sm:w-fit">
-              <label className="my-1 block text-sm font-semibold">MinRate</label>
+              <label className="my-1 block text-sm font-semibold">MinRate/Night</label>
               <input
                 type="number"
-                placeholder="Price"
+                placeholder="Min price"
                 className={inputStyle}
-                {...register('minRate', { required: true, minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
+                {...register('minRate', {minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
               />
               {errors.minRate && <ErrorText text="Please Enter Valid Price" />}
             </div>
          
 
           <div className="w-full sm:w-fit">
-              <label className="my-1 block text-sm font-semibold">MaxRate</label>
+              <label className="my-1 block text-sm font-semibold">MaxRate/Night</label>
               <input
                 type="number"
-                placeholder="Price"
+                placeholder="Max Price"
                 className={inputStyle}
-                {...register('maxRate', { required: true, minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
+                {...register('maxRate', {minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
               />
               {errors.maxRate && <ErrorText text="Please Enter Valid Price" />}
             </div>
@@ -108,8 +166,14 @@ export function SearchModal(){
               </label>
               <select
                 className={inputStyle}
-                {...register('propertyType', { required: true })}
+                {...register('propertyType')}
               >
+
+            <option value={''}>
+                 
+                 Select Property Type
+                 
+             </option>
                 {propertyOptions.map((type,index) => (
                   <option key={index} value={type}>{type}</option>
                 ))}
@@ -134,7 +198,7 @@ export function SearchModal(){
               </label>
               <select
                 className={inputStyle}
-                {...register('country', { required: true })}
+                {...register('country')}
               >
                 <option value={''}>
                  
@@ -155,7 +219,7 @@ export function SearchModal(){
               <label className="my-1 block text-sm font-semibold">State </label>
               <select
                 className={inputStyle}
-                {...register('state', { required: true })}
+                {...register('state')}
               >
                 <option value={''}>
                   
@@ -177,7 +241,7 @@ export function SearchModal(){
               <label className="my-1 block text-sm font-semibold">City</label>
               <select
                 className={inputStyle}
-                {...register('city', { required: true })}
+                {...register('city')}
               >
                 <option value={''}>
                  
@@ -209,11 +273,11 @@ export function SearchModal(){
              
               <input
                 type="number"
-                placeholder="Price"
+                placeholder="Min Rate"
                 className={inputStyle}
-                {...register('minRate', { required: true, minLength: 1, min:{value:0,message:"Please enter non negative no."} })}
+                {...register('rating', {maxLength: 1, min:{value:0,message:"Please enter valid value."} ,max:{value:5,message:"Please enter valid value"} })}
               />
-              {errors.minRate && <ErrorText text="Please Enter Valid Price" />}
+              {errors.minRate && <ErrorText text="Please Enter Valid Rating" />}
             </div>
 
         
@@ -253,8 +317,13 @@ export function SearchModal(){
           </div>
 
         <div className=" bottom-0 sticky w-full py-2 bg-white border-t-2 flex items-center justify-between">
-          <button className="ml-3 text-md font-semibold underline text-black">Cancel</button>
-        <button className=" mr-3 px-4 py-2 font-semibold text-white bg-themeColor hover:bg-mainColor rounded-lg"> Search</button>
+          <button className="ml-3 text-md font-semibold underline text-black"
+          onClick={(e)=>{
+            e.preventDefault();
+           return  modal.onClose()
+          }}
+          >Cancel</button>
+        <button type="submit" className=" mr-3 px-4 py-2 font-semibold text-white bg-themeColor hover:bg-mainColor rounded-lg" onClick={handleSubmit(onSubmit)}> Search</button>
         </div>
 
 

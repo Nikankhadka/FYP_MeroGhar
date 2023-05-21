@@ -42,7 +42,8 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
                 
             }}  className={btnstyle}>Sign Up</button>
             <hr />
-            <Link href="/Account/listings" className={btnstyle}>Post Property</Link>
+
+            <button onClick={(e)=>modal.onOpen('login')} className={btnstyle}>Post Property</button>
            
 
             
@@ -55,7 +56,7 @@ const btnstyle="w-full text-sm text-gray-600 text-left p-2 px-3 rounded-md hover
     <div  ref={ref} className="absolute top-[68px]  w-60  border-2 border-gray-100 overflow-hidden translate-x-[-69%] p-1 shadow-xl bg-white  rounded-lg z-50  flex flex-col gap-2    ">
     {!props.is_Admin&&<div className="flex flex-col gap-2 ">
        <Link  href='/Home/Account/trips' className={`${btnstyle} font-semibold`}>Trips</Link>
-        <Link  href='/Home/Account/wishlists' className={`${btnstyle} font-semibold`}>WishLists</Link>
+        <Link  href='/Home/Account/favourites' className={`${btnstyle} font-semibold`}>WishLists</Link>
         <Link  href='/Home/Account/reservations' className={`${btnstyle} font-semibold`}>Reservations</Link>
         
        
