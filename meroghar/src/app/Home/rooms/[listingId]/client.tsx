@@ -6,7 +6,7 @@ import Carousel from '../../../../components/carousel'
 import { BookProperty } from '../../../../components/listing/BookProperty'
 import Review from '../../../../components/review'
 import Wish from '../../../../components/Svg/wishSvg'
-import { IReview, IUserKyc, Property } from '../../../../interface/response'
+import { FetchedMe, IReview, Property } from '../../../../interface/response'
 import { Reservation } from './page'
 import {BsHouses} from 'react-icons/bs'
 import {HiOutlineMapPin} from 'react-icons/hi2'
@@ -18,11 +18,18 @@ import ReviewInput from '../../../../components/reviewInput'
 
 interface RoomProps {
   propertyData: Partial<Property>
+
+  //check if in wishlist
   inWishList: boolean
   // user is owener tennnat admin 
   user: string
+  //onlydates
   reservations: Reservation[],
+
+  //some features are not availabel for admin
   is_Admin:boolean,
+
+  //listout reviews and also check if current user provided review for edit and delete
   reviews:IReview[],
 
   //current user is passed to check if user has provided review then allow to edit 
@@ -51,6 +58,9 @@ export function RoomClient({
     discription,
     amenities,
     rules,
+    isBanned,
+    isVerified,
+  
     _id
   } = propertyData
  
@@ -69,22 +79,22 @@ export function RoomClient({
               
 
 
-              <Link
-                href="/address"
+              <p
+                
                 className="block text-sm font-semibold underline"
               >
                 {country},{state},{city}
-              </Link>
+              </p>
             </div>
 
             <div className="flex items-center gap-x-3">
-              <button className="flex items-center gap-1 rounded-lg p-1 hover:bg-hoverColor ">
+             {!(is_Admin||user=='owner')&&<button className="flex items-center gap-1 rounded-lg p-1 hover:bg-hoverColor ">
                 <Wish active={inWishList} id={_id!} user={user}/>
                 <span className="text-sm font-semibold underline">Save</span>
-              </button>
+              </button>}
 
               {user == 'owner' && (
-                <Link href="#" className="text-sm font-semibold underline">
+                <Link href="/Home/Account/listings" className="text-sm font-semibold underline">
                   Edit
                 </Link>
               )}
@@ -102,13 +112,13 @@ export function RoomClient({
             <div className=" flex  my-3 w-full items-center justify-between">
               <div>
                 <h3 className=" text-md md:text-lg font-semibold">
-                  {_.startCase(propertyType)} Hosted by {(userId as IUserKyc).userName}
+                  {_.startCase(propertyType)} Hosted by {(userId as FetchedMe).userName}
                 </h3>
               </div>
 
-              <Link href={`/Home/user/${(userId as IUserKyc)._id}`} className="block" target='_blank'>
+              <Link href={`/Home/user/${(userId as FetchedMe)._id}`} className="block" target='_blank'>
                 <img
-                src={`${(userId as IUserKyc).profileImg!.imgUrl}`}
+                src={`${(userId as FetchedMe).profileImg!.imgUrl}`}
                   alt="userProfile"
                   className="h-14 w-14 rounded-full  border-2 border-gray-300"
                 />
@@ -163,9 +173,10 @@ export function RoomClient({
               <p className="text-sm sm:text-md text-gray-700">{_.startCase(rules!)}</p>
             </div>
           </div>
+
           {/* interactive component for contacting owner */}
 
-          {!is_Admin&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
+         {!is_Admin&&!isBanned!.status!&&isVerified!.status&&<BookProperty reservations={reservations} user={user} propertyData={propertyData} is_Admin={is_Admin} />}
         </div>
 
         <hr className="my-8 border-gray-200" /> 
@@ -174,9 +185,11 @@ export function RoomClient({
           Review Section
         </div>
           
+
+        {/* only render if user is tennant  */}
         {user=='tennant'&&<div>
         
-          <ReviewInput rating={1} Review='' userData={(userId as IUserKyc)} propertyId={_id!} edit={false}/>
+          <ReviewInput rating={1} Review='' userData={(userId as FetchedMe)} propertyId={_id!} edit={false}/>
           
         </div>}
        
@@ -192,7 +205,7 @@ export function RoomClient({
           </div>
 
          
-          {/* grid block */}
+          {/* grid block simply map reviews*/}
           <div className="grid-1 grid w-full gap-7 md:grid-cols-2 ">
             {reviews.map((data,index) => {
               return (

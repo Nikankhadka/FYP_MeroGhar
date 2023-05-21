@@ -59,7 +59,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
      
 
             <Link
-              href="/Account"
+              href="/Admin"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
               <svg
@@ -193,7 +193,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
            
 
 
-           { props.is_Admin&&<Link
+           {/* { props.is_Admin&&<Link
               href="#"
               className=" my-2 group flex items-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-hoverColor dark:text-white dark:hover:bg-slate-500"
             >
@@ -201,7 +201,7 @@ const  SideBar=forwardRef<Ref,props>((props,ref):JSX.Element=>{
               <span className="ml-3 dark:text-gray-300 dark:group-hover:text-white">
                 Add Admin
               </span>
-            </Link>}
+            </Link>} */}
 
             <hr className=" my-5 border-gray-400" />
             

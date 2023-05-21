@@ -53,7 +53,7 @@ export default  async function KycRequest(){
 
     
      
-    <div className="mx-auto my-2 grid gap-x-2 gap-y-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3  ">
+    <div className="mx-auto my-2 grid  gap-y-4 grid-cols-1 sm:grid-cols-2  lg:grid-cols-3  ">
     <ClientComp>
     {
       KycRequests.map((data,index)=>{

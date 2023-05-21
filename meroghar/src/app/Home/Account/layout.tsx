@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { checkSession } from '../../../api/server/auth';
-import { cookies } from 'next/headers';
+import { PrimaryFooter } from '../../../components/footer';
 
 
 
@@ -24,6 +24,8 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         <div className={`mx-auto  rounded-lg  w-[98%] sm:w-[90%] lg:w-[85%]`}  >
           {children}
         </div>
+
+        <PrimaryFooter />
       </main>
     
   )

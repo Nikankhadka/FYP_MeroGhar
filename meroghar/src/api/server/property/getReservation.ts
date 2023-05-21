@@ -4,6 +4,7 @@ import Api from "../../client/axios";
 
 import { getAccessToken } from "../auth";
   
+
 export default async function getReservations(propertyId:string,user:string,page?:number,limit?:number){
     try {
       
@@ -56,7 +57,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }
 
 
-
+//get bookings made on property for calender use
   export async function getPropertyBookings(id:string):Promise<Partial<IBooking>[]>{
     try{
       
@@ -82,6 +83,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }}
 
 
+  //bookings made by me
   export async function getMyBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
     try{
       
@@ -107,6 +109,7 @@ export default async function getReservations(propertyId:string,user:string,page
   }}
 
 
+  //get bookings made on my property
 export async function getOnBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
     try{
       
@@ -134,7 +137,7 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
 
 
 
-  //for user exclusive 
+  //for admin exclusive to check bookgin
 
   export async function getAllBookings(page:number,limit:number):Promise<Partial<IBooking>[]>{
     try{

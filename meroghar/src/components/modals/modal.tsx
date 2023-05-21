@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import useModal from "../../customHoooks/useModal";
 import { createRef } from "react";
+import {AiOutlineLoading3Quarters} from 'react-icons/ai'
+
 
 interface modalProps{
     isOpen?:string
@@ -12,6 +14,7 @@ interface modalProps{
 
 function Modal({isOpen,children}:modalProps) {
   const modal=useModal();
+
   const [showModal, setShowModal] = useState(isOpen);
   const modalRef=createRef<HTMLDivElement>();
 
@@ -69,7 +72,7 @@ function Modal({isOpen,children}:modalProps) {
          flex
          items-center
          justify-center
-         border-2 border-red-500
+        
          translate
             duration-300
           
@@ -79,12 +82,13 @@ function Modal({isOpen,children}:modalProps) {
           
           
         >
-
+        
+      { modal.isLoading&&<AiOutlineLoading3Quarters className="absolute bottom-10  animate-spin h-8 w-8 fill-themeColor" />}
      
       {/* this modal container is perfect for all conditio try to make the child component width fixed for md and for smaller full according to parent div */}
 
     {/* container for modal with ref to not close and have size of modal */}
-     <div ref={modalRef} className=" border-2 border-red-500 w-[95%] h-fit  sm:w-[80%] md:w-fit">
+     <div ref={modalRef} className=" w-[95%] h-fit  sm:w-[80%] md:w-fit">
      {children}
      </div>
 

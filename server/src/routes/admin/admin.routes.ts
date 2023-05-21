@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { banUnbanUserC, getAllBookingsC, getAllPropertiesC, getAllUsersC, getKycRequestsC, getPropertyRequestsC, getUserKycC, registerAdminC, verifyKycRequestsC, verifyPropertyRequestsC } from "../../controllers/admin/admin.controller";
+import { banUnbanPropertyC, banUnbanUserC, getAllBookingsC, getAllPropertiesC, getAllUsersC, getDashBoardDataC, getKycRequestsC, getPropertyRequestsC, getUserKycC, registerAdminC, verifyKycRequestsC, verifyPropertyRequestsC } from "../../controllers/admin/admin.controller";
 import { verifyaccessToken, verifyRole } from "../../middlewares/auth.middleware";
 import { validateInput } from "../../middlewares/inputvalidation";
 
@@ -16,6 +16,9 @@ router.get("/allProperties",getAllPropertiesC)
 
 router.get("/allBookings",getAllBookingsC)
 
+router.get("/dashBoardData",getDashBoardDataC)
+
+
 //will fetch users private information 
 router.get("/getUser/:id",getUserKycC)
 
@@ -24,6 +27,13 @@ router.get("/getUser/:id",getUserKycC)
 router.patch('/banUnbanUser/:id',banUnbanUserC)
 
 //now last ban unban for property then finished
+
+router.patch('/banUnbanProperty/:id',banUnbanPropertyC)
+
+
+//search api only left
+
+
 
 
 router.post("/registerAdmin",validateInput,registerAdminC)

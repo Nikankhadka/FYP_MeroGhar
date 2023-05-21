@@ -4,6 +4,8 @@ import { FetchedMe, FetchedUserData } from "../../../interface/response";
 import Api from "../../client/axios"
 import { getAccessToken } from '../auth';
 
+
+//get user 
 export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
@@ -124,6 +126,7 @@ export interface kycRequests{
   about:string
 }
 
+//for admin get kyc requests
 export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
   try{
     

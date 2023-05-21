@@ -1,13 +1,23 @@
 import { Request,Response } from "express";
-import { getKycRequestsS, getPropertyRequestsS,getAllUserS, getUserKycS,registerAdminS, verifyKycRequestsS,verifyPropertyRequestsS, getAllPropertiesS, getAllBookingS, banUnbanUserS} from "../../services/admin/admin.service";
+import { getKycRequestsS, getPropertyRequestsS,getAllUserS, banUnbanPropertyS,getUserKycS,registerAdminS, verifyKycRequestsS,verifyPropertyRequestsS, getAllPropertiesS, getAllBookingS, banUnbanUserS, getDashBoardDataS} from "../../services/admin/admin.service";
 import joi from "joi"
 
 
 
+export const getDashBoardDataC=async(req:Request,res:Response)=>{
+    try{
+        const data=await getDashBoardDataS();
+        if(data)return res.status(200).json({success:true,data})
+    }catch(e:any){
+        console.log(e);
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
 
 export const getAllUsersC=async(req:Request,res:Response)=>{
     try{
-        const users=await getAllUserS(req.query.page as string,req.query.limit as string);
+        const users=await getAllUserS(req.query.page as string,req.query.limit as string,req.query.search?(req.query.search as string):'');
         if(users)return res.status(200).json({success:true,users})
     }catch(e:any){
         console.log(e);
@@ -17,7 +27,7 @@ export const getAllUsersC=async(req:Request,res:Response)=>{
 
 export const getAllPropertiesC=async(req:Request,res:Response)=>{
     try{
-        const properties=await getAllPropertiesS(req.query.page as string,req.query.limit as string);
+        const properties=await getAllPropertiesS(req.query.page as string,req.query.limit as string,req.query.search?(req.query.search as string):'');
         if(properties)return res.status(200).json({success:true,properties})
     }catch(e:any){
         console.log(e);
@@ -50,6 +60,26 @@ export const banUnbanUserC=async(req:Request,res:Response)=>{
 
         const banunBanUser=await banUnbanUserS(req.params.id,req.body.ban,req.body.message);
         if(banunBanUser) return res.status(200).json({success:true,message:`${req.body.ban?'user Banned SuccessFully':"User UnBanned Successfully"}`})
+
+    }catch(e:any){
+        console.log(e)
+        res.status(400).json({success:false,error:e.message})
+    }
+}
+
+
+export const banUnbanPropertyC=async(req:Request,res:Response)=>{
+    try{
+        const banSchema=joi.object({
+            ban:joi.boolean().required(),
+            message:joi.string().allow('').optional()
+        }).required()
+
+        const {error,value}=banSchema.validate(req.body,{abortEarly:false});
+        if(error) return res.status(422).json({success:false,error:error.message})
+
+        const banunBanUser=await banUnbanPropertyS(req.params.id,req.body.ban,req.body.message);
+        if(banunBanUser) return res.status(200).json({success:true,message:`${req.body.ban?'Property Banned SuccessFully':"Property UnBanned Successfully"}`})
 
     }catch(e:any){
         console.log(e)

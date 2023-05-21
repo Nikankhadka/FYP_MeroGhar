@@ -56,7 +56,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             const userdocument=await userModel.findOne({_id:userId});
 
 
-            const propertyData=await propertyModel.findOne({_id:id}).select("-isBanned -isVerified").populate('userId','_id userName profileImg createdAt').populate("tennants",'_id  userName profileImg');
+            const propertyData=await propertyModel.findOne({_id:id}).populate('userId','_id userName profileImg createdAt').populate("tennants",'_id  userName profileImg');
             if(!propertyData) throw new Error("No property with the given id")
             
             console.log("propertyData",propertyData)
@@ -90,7 +90,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
             
         }
         console.log("no user inside service")
-        const propertyData=await propertyModel.findOne({_id:id}).select("-tennants  -isBanned  -isVerified").populate('userId','_id userName profileImg createdAt');
+        const propertyData=await propertyModel.findOne({_id:id}).populate('userId','_id userName profileImg createdAt');
         if(!propertyData) throw new Error("Proper data fetching failed")
         return {property:propertyData,user:"",inWishList:false};
         
@@ -101,7 +101,7 @@ export const getPropertyByIdS=async(id:string,userId:string):Promise<{property:P
 }
 
 
-//get properties for a  userid
+//get properties for a  userid while viewing profile or my own properties
 export const getMyPropertiesS=async(page:string,limit:string,userId:string):Promise<Property[]>=>{
     try{
         //since all admin have access to this simply fetch unverified property set in pending
@@ -120,7 +120,7 @@ export const getMyPropertiesS=async(page:string,limit:string,userId:string):Prom
 
 
 
-
+//get properties in home page and also support search
 export const getPropertiesS=async(page:string,limit:string,queryParams:queryParams):Promise<Property[]>=>{
     try{
         //since all admin have access to this simply fetch unverified property set in pending
@@ -132,12 +132,10 @@ export const getPropertiesS=async(page:string,limit:string,queryParams:queryPara
         // Define the query conditions based on the provided inputs
         let matchConditions:any = {};
         
-        if (queryParams.minRate>0) {
+        if (queryParams.maxRate>0) {
 
-            if(queryParams.maxRate>queryParams.minRate){
-            matchConditions.rate = { $gte: queryParams.minRate, $lte: queryParams.maxRate };
-            }
-            matchConditions.rate = { $gte: queryParams.minRate};
+
+            matchConditions.rate = { $gte: queryParams.minRate,$lte: queryParams.maxRate};
         }
         
         if (queryParams.propertyType&&queryParams.propertyType !='') {
@@ -164,13 +162,16 @@ export const getPropertiesS=async(page:string,limit:string,queryParams:queryPara
           matchConditions.amenities = { $all: queryParams.amenities };
         }
         
+        
+
       
+
         console.log('match conditian',matchConditions)
         // Calculate the skip value for pagination
         const skip = (newPage - 1) * newLimit;
         
        // Perform the query using Mongoose
-            const properties = await propertyModel.find(matchConditions)
+            const properties = await propertyModel.find({...matchConditions,'isBanned.status':false,'isVerified.status':true})
             .sort({ avgRating: -1, ratingCount: -1, createdAt: -1 })
             .select('-tennants')
             .limit(newLimit)
@@ -235,6 +236,7 @@ export const deletePropertyS=async(userId:string,propertyId:string):Promise<bool
         const currentDate = new Date();
         const bookingExist=await bookingModel.findOne({
             propertyId,
+            status:"Booked",
             $or: [
                 {
                     startDate: {$gt: currentDate},

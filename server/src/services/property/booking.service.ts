@@ -106,7 +106,7 @@ export const postBookingS=async(propId:string,userId:string,bookingDetail:Partia
     }
 }
 
-
+//get bookings for property calender
 export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
     try{
       //   console.log("ins serbce") userId:string,page?:number,limit?:number
@@ -132,11 +132,12 @@ export const getBookingS=async(propId:string):Promise<Partial<IBooking>[]>=>{
     }
 }
 
+//bookings i did
 export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
     try{
       console.log("inside my bookings service")
         const reservations=await bookingModel.find({userId}).skip((page! - 1) * limit!)
-        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('userId','_id userName profileImg userId').sort({createdtAt:-1}).exec()
+        .limit(limit!).populate('propertyId','-tennants').populate('paymentId').populate('hostId','_id userName profileImg userId').sort({createdtAt:-1}).exec()
         if(!reservations) throw new Error("Failed to Fetch reservation for user");
         return reservations;
      
@@ -146,6 +147,8 @@ export const getMyBookingS=async(userId:string,page?:number,limit?:number):Promi
     }
 }
 
+
+//bookings on my property
 export const getOnBookingS=async(hostId:string,page?:number,limit?:number):Promise<Partial<IBooking>[]>=>{
   try{
       const reservations=await bookingModel.find({hostId}).skip((page! - 1) * limit!)

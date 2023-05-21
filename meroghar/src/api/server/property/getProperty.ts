@@ -86,7 +86,7 @@ export async function getPropertyById(id:string):Promise<{property:Partial<Prope
 
 
 
-
+//home page and search 
 export async function getProperties(page:number,limit:number,queryParams:SearchForm):Promise<Partial<Property>[]>{
         try{
           
@@ -128,7 +128,7 @@ export async function getProperties(page:number,limit:number,queryParams:SearchF
 
 
 
-///for admin exclusive to fetch all properties information 
+///for admin exclusive to fetch all properties information shown in admin list
 
 export async function getAllProperties(page:number,limit:number,):Promise<Partial<Property>[]>{
   try{

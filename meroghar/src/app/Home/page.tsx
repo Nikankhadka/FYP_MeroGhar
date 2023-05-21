@@ -30,7 +30,7 @@ export default async function Home({searchParams}:HomeProps){
     )
 
   
-    //user exclusive
+    //user exclusiven wishlist which needs to be checked
     const wishList=await getFavourites(1,20);
    
     return(

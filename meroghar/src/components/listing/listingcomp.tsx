@@ -57,9 +57,9 @@ export default function ListingComp({is_Admin,properties,kycVerified}:Props) {
               onClick={(e)=>{
                 e.preventDefault();
 
-                // if(!kycVerified){
-                //   return toast.error("Please Verify Kyc to List Property!")
-                // }
+                if(!kycVerified){
+                  return toast.error("Please Verify Kyc to List Property!")
+                }
 
 
                 list.onList("list")

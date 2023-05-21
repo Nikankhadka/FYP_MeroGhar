@@ -45,6 +45,7 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
           onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckIn/${id}`,{},{withCredentials:true}).then(()=>{
             console.log("user checkedIn");
             toast.success("Checked In Successfully!");
+             modal.onClose()
             return router.refresh();
           })
           .catch(()=>{
@@ -67,6 +68,7 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
           onAction:()=>{ Api.patch(`/property/v1/booking/confirmCheckOut/${id}`,{},{withCredentials:true}).then(()=>{
             console.log("user checkedIn");
             toast.success("Checked Out Successfully!");
+            modal.onClose()
             return router.refresh();
           })
           .catch(()=>{
@@ -213,11 +215,11 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
                 </td>
 
              
-              <td className="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-900 dark:text-gray-400 xl:max-w-xs">
+           { !trips&& <td className="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-900 dark:text-gray-400 xl:max-w-xs">
               <Link href={`/Home/user/${data.userId?._id}`} className='underline'>  {lodash.capitalize(data.userId?.userName)}</Link>  
-               </td>
+               </td>}
 
-{            is_Admin&& <td className="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-900 dark:text-gray-400 xl:max-w-xs">
+{            is_Admin||trips&& <td className="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-900 dark:text-gray-400 xl:max-w-xs">
               <Link href={`/Home/user/${data.hostId?._id}`} className='underline'>  {lodash.capitalize(data.hostId?.userName)}</Link>  
                </td>}
 
@@ -232,7 +234,7 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
                 </td>
 
               
-             {!is_Admin&& <div>
+             {!is_Admin&& <td>
                  {/* for owner */}
                  {(!trips&&!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
                   <button
@@ -256,16 +258,16 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
 
                 {/* for tennant */}
                 {trips&&(!data.checkInStatus)&&data.status=='Booked'&&<td className="space-x-2 whitespace-nowrap p-4">
-                  <button
-                    type="button"
-                    className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
-                   
-          
+                {/* <button
+                  type="button"
+                  className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
+                  
+        
 
-                  >
-                    <BiCalendarEdit className="mr-2 h-5 w-5" />
-                    Edit
-                  </button>
+                >
+                  <BiCalendarEdit className="mr-2 h-5 w-5" />
+                  Edit
+                </button> */}
 
                   <button
                     type="button"
@@ -316,7 +318,7 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
                   </td>
                 }
 
-              </div>}
+              </td>}
                
 
               </tr>

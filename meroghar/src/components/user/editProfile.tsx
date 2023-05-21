@@ -72,6 +72,10 @@ export function EditBasic({userName,about,img}:Prop) {
         
         const onSubmit=async()=>{
           try{
+
+            //open loading 
+            confirmModal.setLoading(true);
+
             let profileData:EditProfile={
               userName:formdata.userName,
               about:formdata.about,
@@ -100,24 +104,25 @@ export function EditBasic({userName,about,img}:Prop) {
               profileData.profileImg.imgUrl=upload.imgUrl
             }
             }
-  
-  
-            
+
   
             console.log(profileData);
             const updateProfile=await Api.patch('/user/v1/updateProfile',{...profileData},{withCredentials:true});
             if(updateProfile.data.success){
                toast.success("User profile Data SuccessFully Updated");
                 account.onClose()
+                confirmModal.setLoading(false)
                confirmModal.onClose();
                return router.refresh();
             }
+            confirmModal.setLoading(false)
             confirmModal.onClose();
-             toast.error("Profile Upload Failed")
+            toast.error("Profile Upload Failed")
               
   
           }catch(e){
               console.log(e)
+              confirmModal.setLoading(false)
             confirmModal.onClose();
              return toast.error("Profile Upload Failed")
             

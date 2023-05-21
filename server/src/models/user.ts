@@ -143,7 +143,10 @@ export const userSchema=new Schema({
             // },
             // banStart:Date,
             // banEnd:Date,
-            status:Boolean,
+            status:{
+                type:Boolean,
+                default:false
+            },
             message:String
         },
         viewedProperty:{

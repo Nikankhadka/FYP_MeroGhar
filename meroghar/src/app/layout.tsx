@@ -2,7 +2,7 @@
 import '../styles/globals.css'
 
 
-import  { PrimaryFooter} from '../components/footer'
+
 
 import { Nunito } from 'next/font/google'
 import ClientComp from '../components/clientComp';
@@ -55,7 +55,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         
         {/* this children represents each page component  that is rendered */}
         {children}
-        <PrimaryFooter />
+      
         
         
       </body>

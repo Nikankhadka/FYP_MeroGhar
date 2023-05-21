@@ -1,6 +1,7 @@
 import { Request,Response } from "express"
 import joi from "joi"
 import {addEmailS,getMeS, verifyEmailS,updateProfileS,postKycS, getUserS, getPhoneS,postPhoneS} from "../../services/user/user.service"
+import { refreshTokenC } from "../auth/auth.controller";
 
 
 
@@ -58,12 +59,16 @@ export const verifyEmailC=async(req:Request,res:Response)=>{
 } 
 
 
-
+//just to change profile when user updates the profile i am going to refresh 
 export const updateProfileC=async(req:Request,res:Response)=>{
     try{
-        console.log('inside controller')
+        console.log('inside controller',req.cookies.session)
+        
         const profileUpdated=await updateProfileS(req.userData.userId,req.body);
-        if(profileUpdated) return res.status(200).json({success:true,message:"Profile data successfully updated"})
+        if(profileUpdated){
+           return refreshTokenC(req,res)
+        }
+        return res.status(400).json({success:false,message:"Profile update failed"})
 
     }catch(e:any){
         console.log(e)
@@ -73,6 +78,7 @@ export const updateProfileC=async(req:Request,res:Response)=>{
 
 
 export const postKycC=async(req:Request,res:Response)=>{
+
     try{
         const kycPosted=await postKycS(req.userData.userId,req.body);
         if(kycPosted) return res.status(200).json({success:true,message:"User Kyc infromation successfully added wait for admin verification"})

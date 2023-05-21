@@ -100,6 +100,7 @@ useEffect(()=>{
 
     const submitAction=async()=>{
 
+      confirmModal.setLoading(true)
       //create new object  to be passed into api request
       //data which is not passed will not replce or update existing data in db so careful what u pass
       let kycdata: KycData = {
@@ -144,10 +145,12 @@ useEffect(()=>{
       const kyc=await postKyc(kycdata)
       if(!kyc){
         toast.error("Failed to Post/Update Kyc")
+        confirmModal.setLoading(false)
         return confirmModal.onClose()
       }
   
       toast.success('kyc posted/Updated successfuly')
+      confirmModal.setLoading(false)
       confirmModal.onClose()
       setopenKyc('close')
       return router.refresh();
@@ -162,12 +165,15 @@ useEffect(()=>{
       actionBtn:"Submit",
       onAction:submitAction
     })
+    
+
     confirmModal.onOpen('confirm')
     }catch(e:any){
       console.log(e);
       return toast.error(e.message)
     }
 
+   
 
   }
 

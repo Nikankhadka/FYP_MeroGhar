@@ -120,7 +120,8 @@ export interface wishlist{
       message: string;
       approvedBy: string;
     };
-  
+  createdAt:Date,
+  updatedAt:Date
   
 }
 

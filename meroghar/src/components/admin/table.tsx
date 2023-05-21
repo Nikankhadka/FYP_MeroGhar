@@ -11,6 +11,9 @@ import Link from "next/link"
 import * as lodash from 'lodash'
 import useReject from "../../customHoooks/useReject"
 import useModal from "../../customHoooks/useModal"
+import { toast } from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import useConfirm from "../../customHoooks/useConfirm"
 
 interface AdminTable{
     use?:string,
@@ -22,40 +25,146 @@ interface AdminTable{
 
 export default function AdminTable({use,users,properties,bookings}:AdminTable) {
 
-        // const [stateBookings,setStateBookings]=useState()
-        // const [stateUsers,setStateUsers]=useState(users)
-        // const [stateProperties,setStateProperties]=useState(properties)
+        
+        const [stateUsers,setStateUsers]=useState(users)
+        const [stateProperties,setStateProperties]=useState(properties)
         const [search,setSearch]=useState('')
         const modal=useModal()
         const reject=useReject()
-
+        const confirm=useConfirm()
+        const router=useRouter()
+       
         
+      
+      
+
+
+     
+     
+
 
         useEffect(()=>{
 
 
             const onSearch=async()=>{
-                Api.get
+                if(use=='user'){
+                 return  Api.get(`/admin/v1/allUsers/?search=${search}`,{withCredentials:true}).then((res)=>setStateUsers(res.data.users))
+                  .catch((e)=>{
+                    setStateUsers(users)
+                  })
+                }
+
+                //for product search
+               return  Api.get(`/admin/v1/allProperties/?search=${search}`,{withCredentials:true}).then((res)=>setStateProperties(res.data.properties))
+                .catch((e)=>{
+                  setStateProperties(properties)
+                })
             }
 
 
-            onSearch();
-        },[search])
+            const debouncedSearch = lodash.debounce(onSearch, 300); // Adjust the debounce delay as needed
+
+            debouncedSearch();
+            return () => {
+              debouncedSearch.cancel(); // Cancel the debounced function on cleanup
+            };
+
+     },[search])
 
         
-        const banUser=(userId:string)=>{
-            console.log('ban')
+
+
+
+    const banUnbanUser=(id:string,ban:boolean)=>{
+            console.log('ban',id)
             // first set content
-            reject.setbtn('BanUser');
-            reject.onContent({
-                onReject:(message:string)=>{
-                    
-                }
-            })
+            if(ban){
+              reject.setbtn('BanUser');
+              reject.onContent({
+                  onReject:(message:string)=>{
+                      Api.patch(`/admin/v1/banUnbanUser/${id}`,{ban,message},{withCredentials:true})
+                      .then((res)=>{
+                        toast.success("User successfullyt Banned")
+                        modal.onClose()
+                       return  window.location.reload()
+                       
+                      }).catch((e)=>{
+                        toast.error("User Banned Failed!")
+                      })
+                  }
+              })
 
-            return modal.onOpen('reject')
-        }
+              return modal.onOpen('reject')
+          }
 
+          //for unban
+          confirm.onContent({
+            header:"Are You Sure to UnBan User",
+            actionBtn:"UnBan User",
+            onAction:()=>{
+              Api.patch(`/admin/v1/banUnbanUser/${id}`,{ban},{withCredentials:true})
+                      .then((res)=>{
+                        toast.success("User successfully unBanned")
+                        modal.onClose()
+                        return  window.location.reload()
+                      }).catch((e)=>{
+                        toast.error("User unBanned Failed!")
+                    })
+            }
+          })
+           
+
+        return modal.onOpen("confirm")
+
+          
+        
+    }
+
+
+    const banUnbanProperty=(id:string,ban:boolean)=>{
+      console.log('ban',id)
+      // first set content
+      if(ban){
+        reject.setbtn('BanProperty');
+        reject.onContent({
+            onReject:(message:string)=>{
+                Api.patch(`/admin/v1/banUnbanProperty/${id}`,{ban,message},{withCredentials:true})
+                .then((res)=>{
+                  toast.success("Property successfully Banned")
+                  modal.onClose()
+                  return  window.location.reload()
+                
+                }).catch((e)=>{
+                  toast.error("Property Banned Failed!")
+                })
+            }
+        })
+
+        return modal.onOpen('reject')
+    }
+
+    //for unban
+    confirm.onContent({
+      header:"Are You Sure to UnBan Property",
+      actionBtn:"UnBan Property",
+      onAction:()=>{
+        Api.patch(`/admin/v1/banUnbanProperty/${id}`,{ban},{withCredentials:true})
+                .then((res)=>{
+                  toast.success("Property successfully unBanned")
+                   modal.onClose()
+                   return  window.location.reload()
+                }).catch((e)=>{
+                  toast.error("Property unBanned Failed!")
+              })
+      }
+    })
+     
+
+  return modal.onOpen("confirm")
+
+    
+  
+}
 
 
 
@@ -87,7 +196,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                   <input
                     type="text"
                   
-                  
+                    onChange={(e)=>setSearch(e.target.value)}
                     className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
                     placeholder="Search "
                   />
@@ -150,7 +259,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
 
         {
         
-        use=='property'&& properties!.map((data,index)=>{
+        use=='property'&& stateProperties!.map((data,index)=>{
             console.log(data);
             return(
               <tbody key={index} className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -184,8 +293,8 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                 <td className="space-x-2 whitespace-nowrap p-4">
                  { !data.isBanned?.status&&<button
                     type="button"
-                    
-                    className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
+                    className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+                   onClick={(e)=>banUnbanProperty(data._id!,true)}
                  >
                 <BsFillHouseSlashFill className="mr-2 h-5 w-5" />
                     BanProperty
@@ -193,8 +302,8 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
 
                   {data.isBanned?.status&&<button
                     type="button"
-                    className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-                   
+                    onClick={(e)=>banUnbanProperty(data._id!,false)}
+                    className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
                     >
                 <BsFillHouseCheckFill className="mr-2 h-5 w-5" />
                   UnBan Property
@@ -210,7 +319,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
         }
 
           {
-            use=='user'&& users!.map((data,index)=>{
+            use=='user'&& stateUsers!.map((data,index)=>{
                 console.log(data);
                 return(
                   <tbody key={index} className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -221,7 +330,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                     </td>
                     
                     <Link href={`/Home/user/${data._id}` } target='_space' ><td className="mr-12 flex items-center space-x-3 whitespace-nowrap p-4">
-                      <img className="h-16 w-16 rounded-full" src={data.profileImg!.imgUrl==''?'/user.png':data.profileImg!.imgUrl} />
+                      <img className="h-12 w-12 rounded-full" src={data.profileImg!.imgUrl==''?'/user.png':data.profileImg!.imgUrl} />
     
                       <div className="text-base font-semibold  text-gray-800 dark:text-white">
                         {data.userName}
@@ -244,7 +353,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                     <td className="space-x-2 whitespace-nowrap p-4">
                       {data.isBanned?.status&&<button
                         type="button"
-                        
+                        onClick={(e)=>banUnbanUser(data._id!,false)}
                         className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-themeColor px-3 py-2 text-center text-sm font-medium text-white hover:bg-mainColor focus:ring-4"
                      >
                         <FaUserCheck className="mr-2 h-5 w-5" />
@@ -254,7 +363,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                    { !data.isBanned?.status&&<button
                         type="button"
                         className="ml-2 inline-flex  items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-                        onClick={(e)=>banUser(data.userId!)}
+                        onClick={(e)=>banUnbanUser(data._id!,true)}
                         >
                     <FaUserTimes className="mr-2 h-5 w-5" />
                       Ban User

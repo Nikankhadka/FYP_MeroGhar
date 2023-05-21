@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import {AiFillStar} from 'react-icons/ai'
 import { ErrorText } from './random';
-import { FetchedMe, IUserKyc } from '../interface/response';
+import { FetchedMe} from '../interface/response';
 import Api from '../api/client/axios';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import useConfirm from '../customHoooks/useConfirm';
 import useModal from '../customHoooks/useModal';
-import moment from 'moment';
+
 
 interface Props{
-  userData:Partial<IUserKyc>,
+  userData:Partial<FetchedMe>,
   propertyId:string,
   reviewId?:string,
   setEdit?:React.Dispatch<React.SetStateAction<string>>;

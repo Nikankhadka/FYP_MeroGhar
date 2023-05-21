@@ -108,6 +108,7 @@ export default function PostPropertyForm({
   const onSubmit: SubmitHandler<PropertyForm> = async (formdata) => {
 
     const postConfirmation = async () => {
+      modal.setLoading(true)
       const amenities = formdata.amenities.filter((item) => item != '')
 
       const { name, country,state,city, discription, rate, propertyType, rules } =
@@ -152,11 +153,13 @@ export default function PostPropertyForm({
           toast.success('Property Posted Successfully')
           modal.onClose()
           list.onList('close')
+          modal.setLoading(false)
           return router.refresh()
         }
       } catch (e: any) {
         console.log(e)
         toast.error(`property Post Failed/${e.message}`)
+        modal.setLoading(false)
         modal.onClose()
       }
     }
@@ -164,6 +167,8 @@ export default function PostPropertyForm({
     //now for update property
 
     const updateConfirmation = async () => {
+
+      modal.setLoading(true)
       const amenities = formdata.amenities.filter((item) => item != '')
 
       const { name, country,state,city, discription, rate, propertyType, rules } =
@@ -217,11 +222,13 @@ export default function PostPropertyForm({
           toast.success('Property updated Successfully/Needs Reverification')
           modal.onClose()
           list.onList('close')
+          modal.setLoading(false)
           return router.refresh()
         }
       } catch (e: any) {
         console.log(e)
         toast.error(`property update Failed/${e.message}`)
+        modal.setLoading(false)
         modal.onClose()
       }
     }

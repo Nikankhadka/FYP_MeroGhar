@@ -51,7 +51,7 @@ export default async function MyTrips(){
            }
            
            {
-            trips.length!=0&&<main className="border-2 border-red-500">
+            trips.length!=0&&<main >
                                 <ClientComp>
                                     <TripBookingClient trips={false} bookings={trips} />
                                 </ClientComp>

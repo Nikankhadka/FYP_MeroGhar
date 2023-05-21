@@ -4,13 +4,72 @@ import { IBooking, IUser, Property } from "../../interfaces/dbInterface";
 import { verifyKyc } from "../../interfaces/admin";
 import { propertyModel } from "../../models/property";
 import { sendMail } from "../../utils/zohoMailer";
-import { adminPropTemplate, verifyKycTemplate } from "../../configs/mailtemplate";
+import { adminPropTemplate, banUnbanPropTemplate, banUnbanUserTemplate, verifyKycTemplate } from "../../configs/mailtemplate";
 import { bookingModel } from "../../models/booking";
 
 
-// paginated kyc requests
-export const getAllUserS=async(page:string,limit:string):Promise<IUser[]>=>{
+interface Dash{
+    totalUsers:number,
+    activeUsers:number,
+    totalProperties:number,
+    activeProperties:number,
+    totalBookings:number,
+    activeBookings:number,
+    properties:Partial<Property>[]
+}
+
+export const getDashBoardDataS=async():Promise<Dash>=>{
     try{
+        const [totalUsers, activeUsers, totalProperties,activeProperties, totalBookings,activeBookings,properties] = await Promise.all([
+            userModel.countDocuments({is_Admin:false}),
+            userModel.countDocuments({ 'isBanned.status': false,is_Admin:false }),
+            propertyModel.countDocuments({}),
+            propertyModel.countDocuments({'isBanned.status':false,'isVerified.status':true}),
+            bookingModel.countDocuments({}),
+            bookingModel.countDocuments({status:{ $nin: ['ownerCancelled', 'tenantCancelled'] }}),
+            propertyModel.find({'isBanned.status':false}).select("_id userId images name rate ratingCount tennants").populate('userId','_id userName').sort({avgRating:-1,ratingCount:-1})
+          ])
+
+          //
+
+          return {
+            totalUsers,
+            activeUsers,
+            totalProperties,
+            activeProperties,
+            totalBookings,
+            activeBookings,
+            properties
+            
+          }
+
+          
+
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+// paginated kyc requests and also saerch 
+export const getAllUserS=async(page:string,limit:string,search?:string):Promise<IUser[]>=>{
+    try{
+
+        if(search! !==''){
+            const users=await userModel.find({userName:{$regex:search,$options:'i'},is_Admin:false}).select('userName _id profileImg about isBanned');
+            return users;
+        }
 
         const newlimit=parseInt(limit)
         const newpage=parseInt(page)
@@ -28,14 +87,20 @@ export const getAllUserS=async(page:string,limit:string):Promise<IUser[]>=>{
 
 
 // paginated kyc requests
-export const getAllPropertiesS=async(page:string,limit:string):Promise<Property[]>=>{
+export const getAllPropertiesS=async(page:string,limit:string,search?:string):Promise<Property[]>=>{
     try{
 
+        if(search! !==''){
+            const properties=await propertyModel.find({name:{$regex:search,$options:'i'},'isVerified.status':true}).select('name userId images avgRating isBanned').populate('userId','userName _id profileImg').sort({createdAt:-1,avgRating:-1 ,ratingCount:-1});
+            return properties;
+        }
+
+        
         const newlimit=parseInt(limit)
         const newpage=parseInt(page)
 
         //since all admin have access to this simply fetch unverified property set in pending  .limit(newlimit*1).skip((newpage-1)*newlimit).sort({userId:"asc"}).
-        const properties=await propertyModel.find({'isVerified.status':true}).select('name userId images avgRating isBanned').populate('userId','userName _id profileImg') .sort({createdAt:-1,userName:'asc',avgRating:-1 ,ratingCount:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
+        const properties=await propertyModel.find({'isVerified.status':true}).select('name userId images avgRating isBanned').populate('userId','userName _id profileImg').sort({createdAt:-1,userName:'asc',avgRating:-1 ,ratingCount:-1}).skip((newpage-1)*newlimit).limit(newlimit*1);
         if(!properties) throw new Error("No properties Found")
         return properties
 
@@ -77,16 +142,20 @@ export const banUnbanUserS=async(id:string,ban:boolean,message?:string)=>{
             await userExist.save()
 
             //now ban users all property
-            const banProperties=await propertyModel.findOneAndUpdate({userId:id},{
+            const banProperties=await propertyModel.updateMany({userId:id},{
                 $set:{
                     'isBanned.status':true,
                     'isBanned.message':message
                 }
             },{new:true});
 
-            if(!banProperties) throw new Error("Property Banning Failed")
             
 
+            //send mail indicating user has been banned
+           if(userExist.email.isVerified){
+            const mail=sendMail(banUnbanUserTemplate(userExist.userName,userExist.email.mail,true,message!))
+
+           }
             //also freeze ban all bookings
 
             // const banBookings=await bookingModel.findOneAndUpdate({})
@@ -99,15 +168,19 @@ export const banUnbanUserS=async(id:string,ban:boolean,message?:string)=>{
             await userExist.save()
 
             //now ban users all property
-            const unbanProperties=await propertyModel.findOneAndUpdate({userId:id},{
+            const unbanProperties=await propertyModel.updateMany({userId:id},{
                 $set:{
                     'isBanned.status':false,
                     'isBanned.message':''
                 }
             },{new:true});
 
-            if(!unbanProperties) throw new Error("Property unBanning Failed")
+            if(!unbanProperties) throw new Error("user unBanning Failed")
             
+            if(userExist.email.isVerified){
+                const mail=sendMail(banUnbanUserTemplate(userExist.userName,userExist.email.mail,false))
+    
+            }
 
             //also freeze ban all bookings
 
@@ -121,6 +194,60 @@ export const banUnbanUserS=async(id:string,ban:boolean,message?:string)=>{
         throw e;
     }
 }
+
+
+
+export const banUnbanPropertyS=async(id:string,ban:boolean,message?:string)=>{
+    try{
+
+        const propertyExist=await propertyModel.findOne({_id:id,'isVerified.status':true});
+        if(!propertyExist) throw new Error("User Does not Exist");
+
+        //get host information 
+        const host=await userModel.findOne({_id:propertyExist.userId});
+        if(!host) throw new Error("No Host for the property")
+
+        if(ban){
+            propertyExist.isBanned.status=true;
+            propertyExist.isBanned.message=message!;
+            await propertyExist.save()
+
+            //send mail 
+            if(host.email.isVerified){
+                const mail =sendMail(banUnbanPropTemplate(host.userName,host.email.mail,true,id,propertyExist.images[0].imgUrl,message))
+            }
+           
+
+            //should i also freeze booking
+
+
+            return true;
+        }
+
+            propertyExist.isBanned.status=false;
+            propertyExist.isBanned.message='';
+            await propertyExist.save()
+
+            if(host.email.isVerified){
+                const mail =sendMail(banUnbanPropTemplate(host.userName,host.email.mail,false,id,propertyExist.images[0].imgUrl,message))
+            }
+          
+
+            //also freeze ban all bookings
+
+            // const banBookings=await bookingModel.findOneAndUpdate({})
+
+            return true;
+
+
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+
 
 export const registerAdminS=async(userId:string,password:string):Promise<boolean>=>{
     try{
@@ -203,9 +330,11 @@ export const verifyKycRequestsS=async(adminId:string,id:string,kycData:verifyKyc
             },{new:true})
             if(!verifyUser) throw new Error("user not able to verify")
 
-            if(!verifyUser.email.isVerified) throw new Error("Email not Verified/Failed to Verifu User");
-
+            if(verifyUser.email.isVerified){
             const notifyUser=sendMail(verifyKycTemplate(verifyUser.userName,verifyUser.email.mail,true))
+            }
+
+           
 
             
           

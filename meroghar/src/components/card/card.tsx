@@ -40,7 +40,7 @@ export default function Card({ use, data, key,wish,user,index}: props) {
   const [img,setimg] = useState(0);
   
  
-  const {images,_id,avgRating,country,city,rate,name,isVerified,isBooked } = data!
+  const {images,_id,avgRating,country,city,rate,name,isVerified,isBanned } = data!
 
   const modal = useModal()
   const confirm = useConfirm()
@@ -51,9 +51,9 @@ export default function Card({ use, data, key,wish,user,index}: props) {
   return (
     <div>
       
-  {use=='userlisting'&&isVerified!.message!==''&&(!isVerified!.status)&&<div className=' mx-auto border-2 rounded-lg w-[97%] p-2 '>
+  {/* {use=='userlisting'&&isVerified!.message!==''&&(!isVerified!.status)&&<div className=' mx-auto border-2 rounded-lg w-[97%] p-2 '>
     <span className='flex items-center gap-x-1 text-red-500'>{isVerified?.message}</span>
-    </div>}
+    </div>} */}
 
 
     <div key={key} className="mx-auto  my-auto h-fit w-[98%] rounded-xl border-[1px] border-gray-100 bg-white duration-300  overflow-hidden shadow-md  hover:shadow-xl">
@@ -65,7 +65,8 @@ export default function Card({ use, data, key,wish,user,index}: props) {
       className="w-full h-56 object-cover "
     />
   </Link>
-  <div className="absolute inset-0 left-2 right-2  flex items-center justify-between pointer-events-none">
+
+ 
     <button
       onClick={(e) => {
         e.preventDefault()
@@ -74,10 +75,11 @@ export default function Card({ use, data, key,wish,user,index}: props) {
         }
         return setimg(img - 1)
       }}
-      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+      className=" absolute top-[45%]  rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
     >
       <img src="/left.png" alt="arrow" height={9} width={9} />
     </button>
+
     <button
       onClick={() => {
         
@@ -86,10 +88,12 @@ export default function Card({ use, data, key,wish,user,index}: props) {
         }
         return setimg(img + 1)
       }}
-      className="rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
+      className="absolute top-[45%] right-0 rounded-full opacity-0 group-hover:opacity-100 bg-gray-100 bg-opacity-70 p-3 transition-all hover:bg-white hover:bg-opacity-100 hover:drop-shadow-lg"
     >
       <img src="/arrow.png" alt="arrow" height={9} width={9} />
     </button>
+
+
     <div className="absolute bottom-2 flex justify-center w-full">
       <div className="flex items-center space-x-1">
         {[...Array(images?.length || 0)].map((_, index) => (
@@ -106,14 +110,17 @@ export default function Card({ use, data, key,wish,user,index}: props) {
         ))}
       </div>
     </div>
-    <div className="absolute top-3 right-1">
+
+
+
+    <div className="absolute top-3 right-2">
       {use=='card' && (
         <div className="relative">
           <Wish active={wish!} id={_id!} user={user} />
         </div>
       )}
     </div>
-  </div>
+
 </div>
 
 
@@ -128,15 +135,28 @@ export default function Card({ use, data, key,wish,user,index}: props) {
           </div>
         </div>
         
+    
      { use=='adminlisting'||use=='userlisting'&&<div className='my-2' >
-        <p className='text-sm text-gray-600 font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
-        {isVerified?.pending&&'Pending'} {isVerified?.pending==isVerified?.status&&"Rejected"}{isVerified?.status&&'Verified'}
-        {isVerified?.pending&&  <AiFillHourglass className='h-5 w-5' />} {isVerified?.pending==isVerified?.status&&<RxCrossCircled className='h-5 w-5 '/>}{isVerified?.status&&<AiFillCheckCircle className='h-5 w-5'/>}
+
+     {!isBanned!.status&&<p className='text-sm text-gray-600 font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
+      {isVerified?.pending&&'Pending'} {isVerified?.pending==isVerified?.status&&"Rejected"}{isVerified?.status&&'Verified'}
+      {isVerified?.pending&&  <AiFillHourglass className='h-5 w-5' />} {isVerified?.pending==isVerified?.status&&<RxCrossCircled className='h-5 w-5 '/>}{isVerified?.status&&<AiFillCheckCircle className='h-5 w-5'/>}
+    
+        </span>
+      </p>}
+
+
+      {
+       isBanned!.status&& <p className='text-sm text-gray-600 font-semibold flex gap-x-1'>Status:  <span className='flex items-center gap-x-1 '>
+        Banned
+        <RxCrossCircled className='h-5 w-5 '/>
       
           </span>
-      </p>
+        </p>
+      }
 
-      </div> }
+    </div> }
+    
 
       <p className='text-sm mb-2 font-semibold text-gray-600 underline'>{country},{city}</p>
 

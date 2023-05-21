@@ -8,6 +8,7 @@ import { jsPDF } from 'jspdf';
 import toast from 'react-hot-toast'
 import Api from '../../api/client/axios';
 import moment from 'moment';
+import { useRouter } from 'next/navigation';
 
 interface InvoiceProps {
     tennantId: string;
@@ -39,6 +40,9 @@ const Invoice =(props:InvoiceProps) => {
 
     const bookingStore=useBookingStore()
     const billref=createRef<HTMLDivElement>()
+
+    const router=useRouter();
+
 
   useEffect(()=>{
     const action=async()=>{
@@ -81,12 +85,13 @@ const Invoice =(props:InvoiceProps) => {
     }
     
     toast.success(`Booking successfull/bill has been sent`);
-
+    return router.refresh();
   
     
     }catch(e:any){
     
     toast.error("This booking conflicts with an existing booking/Error occurred.");
+    router.refresh();
     return bookingStore.setError(true)
     }
     }

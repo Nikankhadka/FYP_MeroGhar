@@ -142,6 +142,7 @@ export function BookingModal(){
                         
                         toast.success("Payment Successfull");
                         
+                        router.refresh();
                        return  bookingModal.onOpen('bill')
                         
                     });

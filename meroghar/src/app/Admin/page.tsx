@@ -1,11 +1,21 @@
 
+import getDashBoardData from '../../api/server/property/getdashboard';
 
-export default function Dashboard(){
+import ClientComp from '../../components/clientComp';
+import DashClient from './dashClient';
 
+
+
+export default async  function Dashboard(){
+    const {totalUsers,activeUsers,totalBookings,totalProperties,activeBookings,activeProperties,properties}=await getDashBoardData()
 
     return(
-        <main>
-            hello this is admin 
-        </main>
+      <main className='w-full'>
+
+        <ClientComp>
+        <DashClient totalBookings={totalBookings} totalProperties={totalProperties} totalUsers={totalUsers} activeBookings={activeBookings} activeProperties={activeProperties} activeUsers={activeUsers} properties={properties} />
+        </ClientComp>
+
+      </main>
     )
 }

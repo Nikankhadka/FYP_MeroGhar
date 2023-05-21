@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-//this same modal store can be used for any other modal through out the application
+//this is used for profile/account view where the account state is controlled edit profile,account,passsowrd 
 
 interface ModalStore {
   openComponent: string;

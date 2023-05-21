@@ -40,10 +40,10 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           
           
       }
-      toast.error("Login Failed/Invalid Credential")
-     return  router.push('/Home')
+      toast.error(res.data.error)
+      return  router.push('/Home')
       }catch(e){
-        toast.error("Login Failed/Invalid Credential")
+        toast.error("Login Failed/Invalid Credential/UserBanned")
         return  router.push('/Home')
       }
       

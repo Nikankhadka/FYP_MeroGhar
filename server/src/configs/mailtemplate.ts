@@ -135,6 +135,53 @@ export const verifyKycTemplate=(userName:string,userEmail:string,state:boolean,m
     }
 }
 
+
+export const banUnbanUserTemplate=(userName:string,userEmail:string,state:boolean,message?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"Ban Activity",
+        text:"",
+        html:state?`<h1> U Have Been Banned</h1>
+        <h3>due to some reasons such as  ${message} u have been banned ur properties posting has also been banned </h3>
+        
+         `:
+
+        `<h1> U Have Been unBanned</h1>
+        <h3>Hope U dont do the same mistakes again </h3>
+         `
+    }
+}
+
+export const banUnbanPropTemplate=(userName:string,userEmail:string,state:boolean,propId:string,img?:string,message?:string):mailBody=>{
+    return {
+        to:userEmail,
+        from:"nikantest@zohomail.com",
+        subject:"Ban Activity",
+        text:"",
+        html:state?`<h1> Your Property Has been banned ${userName}</h1>
+        <h2>${propId}</h2>
+        <img src=${img} />
+        <h3>due to misconduct${message} can only be unbanned by admin </h3>
+      
+         `:
+
+         `<h1> Your Property Has been unbanned ${userName}</h1>
+         <h2>${propId}</h2>
+         <img src=${img} />
+         <h3>do not repeat the same mistakes again </h3>
+          `
+    }
+}
+
+
+
+
+
+
+
+
+
 export const userPropTemplate=(userName:string,userEmail:string,state:boolean,propId:string,img?:string):mailBody=>{
     return {
         to:userEmail,
