@@ -9,7 +9,7 @@ import { getAccessToken } from '../auth';
 export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
-            `http://localhost:2900/user/v1/getUser/${userId}`,
+            `https://meroghar-rf5q.onrender.com/user/v1/getUser/${userId}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -36,7 +36,7 @@ export async function getMe():Promise<FetchedMe>{
     
       
       const userData = await fetch(
-          `http://localhost:2900/user/v1/getMe`,
+          `https://meroghar-rf5q.onrender.com/user/v1/getMe`,
           {
             method: 'GET',
             credentials: 'include',
@@ -64,7 +64,7 @@ export async function getAllUsers(page:number,limit:number,):Promise<Partial<Fet
     
       
       const userData = await fetch(
-          `http://localhost:2900/admin/v1/allUsers/?page=${page}&limit=${limit}`,
+          `https://meroghar-rf5q.onrender.com/admin/v1/allUsers/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -93,7 +93,7 @@ export async function getUserKyc(userId:string):Promise<FetchedMe>{
     
       
       const userData = await fetch(
-          `http://localhost:2900/admin/v1/getUser/${userId}`,
+          `https://meroghar-rf5q.onrender.com/admin/v1/getUser/${userId}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -132,7 +132,7 @@ export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
     
       
       const kycRequests = await fetch(
-          `http://localhost:2900/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
+          `https://meroghar-rf5q.onrender.com/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',

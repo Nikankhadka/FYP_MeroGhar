@@ -63,7 +63,7 @@ export default async function getReservations(propertyId:string,user:string,page
       
        
         const res = await fetch(
-            `http://localhost:2900/property/v1/booking/propertyBooking/${id}`,
+            `https://meroghar-rf5q.onrender.com/property/v1/booking/propertyBooking/${id}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -89,7 +89,7 @@ export default async function getReservations(propertyId:string,user:string,page
       
        
         const res = await fetch(
-            `http://localhost:2900/property/v1/booking/myBookings?page=${page}&limit=${limit}`,
+            `https://meroghar-rf5q.onrender.com/property/v1/booking/myBookings?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -115,7 +115,7 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
       
        
         const res = await fetch(
-            `http://localhost:2900/property/v1/booking/onBookings`,
+            `https://meroghar-rf5q.onrender.com/property/v1/booking/onBookings`,
             {
               method: 'GET',
               credentials: 'include',
@@ -144,7 +144,7 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
       
         
         const bookings = await fetch(
-            `http://localhost:2900/admin/v1/allBookings/?page=${page}&limit=${limit}`,
+            `https://meroghar-rf5q.onrender.com/admin/v1/allBookings/?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',

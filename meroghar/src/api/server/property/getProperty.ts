@@ -12,7 +12,7 @@ export async function getPropertyRequests(page:number,limit:number):Promise<Part
       
         
         const res = await fetch(
-            `http://localhost:2900/admin/v1/propertyRequests?page=${page}&limit=${limit}`,
+            `https://meroghar-rf5q.onrender.com/admin/v1/propertyRequests?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -39,7 +39,7 @@ export async function getMyProperties(userId:string,page:number,limit:number):Pr
       
         
         const res = await fetch(
-            `http://localhost:2900/property/v1/myProperties/${userId}?page=${page}&limit=${limit}`,
+            `https://meroghar-rf5q.onrender.com/property/v1/myProperties/${userId}?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -65,7 +65,7 @@ export async function getPropertyById(id:string):Promise<{property:Partial<Prope
         
           console.log(getAccessToken());
           const res = await fetch(
-              `http://localhost:2900/property/v1/getProperty/${id}`,
+              `https://meroghar-rf5q.onrender.com/property/v1/getProperty/${id}`,
               {
                 method: 'GET',
                 credentials: 'include',
@@ -93,7 +93,7 @@ export async function getProperties(page:number,limit:number,queryParams:SearchF
           //check transform query params into url string 
          
           const url = qs.stringifyUrl({
-            url: 'http://localhost:2900/property/v1/getProperty',
+            url: 'https://meroghar-rf5q.onrender.com/property/v1/getProperty',
             query:{page,limit,...queryParams},
           }, { skipNull: true });
 
@@ -135,7 +135,7 @@ export async function getAllProperties(page:number,limit:number,):Promise<Partia
     
       
       const propertyData = await fetch(
-          `http://localhost:2900/admin/v1/allProperties/?page=${page}&limit=${limit}`,
+          `https://meroghar-rf5q.onrender.com/admin/v1/allProperties/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',
