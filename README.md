@@ -10,11 +10,15 @@ Make sure you have the following software installed on your machine:
 
 Node.js (version 14 or above)
 MongoDB
+
+
 Step 1: Clone the repository
 Clone this repository to your local machine using Git:
 
 
 git clone <repository-url>
+  
+  
 Step 2: Install dependencies
 Navigate to the server directory and install the server-side dependencies:
 
@@ -26,6 +30,8 @@ Next, go to the client directory and install the client-side dependencies:
 
 cd meroghar
 npm install
+  
+  
 Step 3: Configure the environment variables
 Create a .env file in the project root directory and provide the following variables:
 
