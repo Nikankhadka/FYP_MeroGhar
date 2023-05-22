@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Api= axios.create({
-  baseURL: `http://localhost:2900`
+  baseURL: `https://meroghar-rf5q.onrender.com`
 });
 
 

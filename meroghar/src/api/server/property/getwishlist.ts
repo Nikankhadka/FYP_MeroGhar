@@ -6,7 +6,7 @@ export async function getFavourites(page:number,limit:number):Promise<wishlist>{
       
        
         const res = await fetch(
-            `http://localhost:2900/property/v1/wishList?page=${page}&limit=${limit}`,
+            `https://meroghar-rf5q.onrender.com/property/v1/wishList?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
