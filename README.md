@@ -1,5 +1,4 @@
-# FYP_MeroGhar
-
+FYP_MeroGhar
 MERN Stack Application
 This is a basic MERN (MongoDB, Express.js, Next.js, Node.js) stack application.
 
@@ -17,7 +16,8 @@ Clone this repository to your local machine using Git:
 
 git clone <repository-url>
 Step 2: Install dependencies
-Navigate to the project directory and install the server-side dependencies:
+Navigate to the server directory and install the server-side dependencies:
+
 
 cd server
 npm install
@@ -27,11 +27,10 @@ Next, go to the client directory and install the client-side dependencies:
 cd meroghar
 npm install
 Step 3: Configure the environment variables
-  
-  
 Create a .env file in the project root directory and provide the following variables:
 
-makefile
+dotenv
+Copy code
 sessionSecret=
 saltRounds=
 accessToken=
@@ -48,20 +47,20 @@ pass=
 mailSecret=
 Replace <your-mongodb-connection-string> with the connection string for your MongoDB database.
 
-  
 Step 4: Start the application
 Start the server by running the following command in the project root directory:
 
 
- #for server
 npm start
 This will start the server at http://localhost:2900.
 
-In a separate terminal, navigate to the client directory and start the next development server:
+In a separate terminal, navigate to the client directory and start the Next.js development server:
 
-  
+
 cd meroghar
-npm run dev --for development  npm run buil, npm run start for production
+npm run dev # for development
+npm run build # for production
+npm run start # for production
 This will start the client application at http://localhost:3000.
 
 You can now access the application in your web browser.
