@@ -26,7 +26,7 @@ export default async function checkAuth(req: NextRequest) {
 
   } catch (e) {
     console.log(e)
-    NextResponse.redirect('http://localhost:3000/Home/login')
+    NextResponse.redirect('/Home/login')
   }
 }
 
@@ -45,7 +45,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
     //since cookie accessed does not match the format of cookie passed in header modify it then pass as cookie so it can be parse by cookie parser
     const cookies=`refreshToken=${refreshToken}`
     console.log('sessionin middleware',session)
-    if(!refreshToken) return NextResponse.redirect('http://localhost:3000/Home/login')
+    if(!refreshToken) return NextResponse.redirect('/Home/login')
     if(session){
     return res;  
     }
@@ -57,7 +57,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       //if user has refresh token then send api request to verify the token data
       console.log('refresh request')
       const jsonData = await fetch(
-        'http://localhost:2900/auth/v1/refreshToken',
+        'https://meroghar-rf5q.onrender.com/auth/v1/refreshToken',
         {
           method: 'POST',
           credentials: 'include',
@@ -69,7 +69,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       if (!jsonData.success){
         //clear cookie in client side since token is refresh is failed the old token will be unauthorized
         await res.cookies.delete('accessToken').delete('refreshToken').delete('session')
-        return NextResponse.redirect('http://localhost:3000/Home/login')
+        return NextResponse.redirect('/Home/login')
       }
        
 
@@ -94,6 +94,6 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
   }catch(e){
     console.log(e)
-    return NextResponse.redirect('http://localhost:3000/Home/login')
+    return NextResponse.redirect('/Home/login')
   }
 }
