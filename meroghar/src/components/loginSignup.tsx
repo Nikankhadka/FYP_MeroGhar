@@ -11,6 +11,7 @@ import {useState} from 'react'
 import { useRouter } from 'next/navigation'
 import useModal from '../customHoooks/useModal'
 import { toast } from 'react-hot-toast'
+import Api from '../api/client/axios'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -29,7 +30,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
     const {userId,password}=data
     if(login){
       try{
-        const res=await axios.post("http://localhost:2900/auth/v1/login",{userId,password},{withCredentials:true})
+        const res=await Api.post("/auth/v1/login",{userId,password},{withCredentials:true})
       if(res.data.success){
         console.log('login succesful')
         // if(res.data.user.is_Admin){}
@@ -51,7 +52,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
 
     //for signup
     try{
-    const res=await axios.post("http://localhost:2900/auth/v1/registerUser",{userId,password},{withCredentials:true})
+    const res=await Api.post("/auth/v1/registerUser",{userId,password},{withCredentials:true})
     if(res.data.success){
      
       toast.success("User Registeres Successfully!")
@@ -148,12 +149,12 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
 
           <SocialLogin
             placeholder="Continue with Google"
-            url="http://localhost:2900/auth/v1/google-login"
+            url="https://meroghar-rf5q.onrender.com/auth/v1/google-login"
             img="/google.png"
           />
           <SocialLogin
             placeholder="Continue with Facebook"
-            url="http://localhost:2900/auth/v1/facebook-login"
+            url="https://meroghar-rf5q.onrender.com/auth/v1/facebook-login"
             img="/facebook.png"
           />
           <div className="my-1  flex w-full items-center justify-center">
@@ -162,8 +163,8 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
 {      !modal  &&      <Link
                 href={
                   login
-                    ? 'http://localhost:3000/signup'
-                    : 'http://localhost:3000/login'
+                    ? '/signup'
+                    : '/login'
                 }
                 className="text-md text-mainColor hover:underline"
               >
