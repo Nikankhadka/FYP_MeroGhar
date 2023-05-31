@@ -20,15 +20,15 @@ const nextConfig = {
    },
 
   //  redirect handling for routes
-   async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/Home',
-        permanent: true,
-      },
-    ];
-  },
+  //  async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/Home',
+  //       permanent: true,
+  //     },
+  //   ];
+  // },
   
 }
 
