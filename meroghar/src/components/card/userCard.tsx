@@ -4,12 +4,12 @@ import Link from "next/link"
 import { GoVerified} from "react-icons/go"
 import { MdCancel } from "react-icons/md"
 import { kycRequests } from "../../api/server/user/getUser"
-import useModal from "../../customHoooks/useModal"
-import useConfirm from "../../customHoooks/useConfirm"
+import useModal from "../../store/useModal"
+import useConfirm from "../../store/useConfirm"
 import { verifyKyc } from "../../api/client/admin"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import useReject from "../../customHoooks/useReject"
+import useReject from "../../store/useReject"
 import * as _ from 'lodash'
 
 interface UserProps{

@@ -1,12 +1,12 @@
 'use client'
 
-import useRandom from "../../customHoooks/randomStore"
+import useRandom from "../../store/randomStore"
 import { useForm, SubmitHandler } from 'react-hook-form'
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 import { ErrorText } from "../random"
 import { inputStyle } from "../../styles/variants"
 import { propertyOptions } from "../../configs/constant"
-import useCountry from "../../customHoooks/useCountry"
+import useCountry from "../../store/useCountry"
 import { useState } from "react"
 import { ICountry } from "country-state-city"
 import { amenities } from "../../configs/constant"

@@ -6,7 +6,7 @@ import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai'
 import PostPropertyForm from '../postproperty'
 import { Property } from '../../interface/response'
 import Card from '../card/card'
-import useRandom from '../../customHoooks/randomStore'
+import useRandom from '../../store/randomStore'
 import { toast } from 'react-hot-toast'
 
 

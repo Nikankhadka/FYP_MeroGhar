@@ -3,7 +3,7 @@
 import {createRef, useEffect} from 'react'
 import html2canvas from 'html2canvas';
 
-import useBookingStore from '../../customHoooks/bookingStore';
+import useBookingStore from '../../store/bookingStore';
 import { jsPDF } from 'jspdf';
 import toast from 'react-hot-toast'
 import Api from '../../api/client/axios';

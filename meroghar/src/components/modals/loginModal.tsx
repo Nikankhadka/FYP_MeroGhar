@@ -2,7 +2,7 @@
 
 
 
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 import LoginSignup from "../loginSignup"
 
 import Modal from "./modal"

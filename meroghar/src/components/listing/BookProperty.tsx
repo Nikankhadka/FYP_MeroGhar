@@ -6,9 +6,9 @@ import Link from 'next/link'
 import { ErrorText } from '../random'
 
 import moment from 'moment'
-import useModal from '../../customHoooks/useModal'
+import useModal from '../../store/useModal'
 import { Property } from '../../interface/response'
-import useBookingStore from '../../customHoooks/bookingStore'
+import useBookingStore from '../../store/bookingStore'
 import { AiFillStar } from 'react-icons/ai'
 import { toast } from 'react-hot-toast'
 

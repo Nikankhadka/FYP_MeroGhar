@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { forwardRef} from "react"
 
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 import Api from "../../api/client/axios"
 import { toast } from "react-hot-toast"
 import { useRouter} from 'next/navigation'

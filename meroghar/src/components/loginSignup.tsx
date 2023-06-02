@@ -9,7 +9,7 @@ import axios from 'axios'
 import Link from 'next/link'
 import {useState} from 'react'
 import { useRouter } from 'next/navigation'
-import useModal from '../customHoooks/useModal'
+import useModal from '../store/useModal'
 import { toast } from 'react-hot-toast'
 import Api from '../api/client/axios'
 

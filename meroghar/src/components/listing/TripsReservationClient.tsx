@@ -17,8 +17,8 @@ import moment from 'moment'
 import Api from '../../api/client/axios'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import useConfirm from '../../customHoooks/useConfirm'
-import useModal from '../../customHoooks/useModal'
+import useConfirm from '../../store/useConfirm'
+import useModal from '../../store/useModal'
 import * as lodash from 'lodash'
 
 

@@ -10,7 +10,7 @@ import Link from 'next/link'
 import Card from '../card/card'
 import { FetchedMe, Property } from '../../interface/response'
 import { bg } from '../../styles/variants'
-import useAccount from '../../customHoooks/AccountState'
+import useAccount from '../../store/AccountState'
 import AccountComponent from './account'
 import Password from './pasword'
 interface ProfileProps {

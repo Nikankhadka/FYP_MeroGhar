@@ -1,6 +1,6 @@
 'use client'
 
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 import PasswordReset from "../fogotpassword"
 
 

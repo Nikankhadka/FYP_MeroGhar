@@ -1,8 +1,8 @@
 'use client'
 
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 
-import useConfirm from "../../customHoooks/useConfirm";
+import useConfirm from "../../store/useConfirm";
 
 import { RxCross1 } from "react-icons/rx";
 

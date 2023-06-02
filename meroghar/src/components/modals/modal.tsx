@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import useModal from "../../customHoooks/useModal";
+import useModal from "../../store/useModal";
 import { createRef } from "react";
 import {AiOutlineLoading3Quarters} from 'react-icons/ai'
 

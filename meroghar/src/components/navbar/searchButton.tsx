@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { differenceInDays } from 'date-fns';
-import useModal from '../../customHoooks/useModal';
+import useModal from '../../store/useModal';
 
 
 const Search = () => {

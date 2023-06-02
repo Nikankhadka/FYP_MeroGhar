@@ -11,19 +11,19 @@ import {
 import { IBooking, Property } from '../../interface/response'
 // hover:-translate-y-1 hover:scale-105
 import { useState } from 'react'
-import useModal from '../../customHoooks/useModal'
-import useConfirm from '../../customHoooks/useConfirm'
-import useVerify from '../../customHoooks/useReject'
+import useModal from '../../store/useModal'
+import useConfirm from '../../store/useConfirm'
+import useVerify from '../../store/useReject'
 import { toast } from 'react-hot-toast'
 import { verifyProperty } from '../../api/client/admin'
 import { useRouter } from 'next/navigation'
-import useRandom from '../../customHoooks/randomStore'
+import useRandom from '../../store/randomStore'
 import Api from '../../api/client/axios'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import{AiFillStar ,AiFillHourglass,AiFillCheckCircle,AiOutlineCheckCircle} from 'react-icons/ai'
 import { RxCrossCircled } from 'react-icons/rx'
 import { Payment } from '../../interface/response'
-import useReject from '../../customHoooks/useReject'
+import useReject from '../../store/useReject'
 
 //admin card
 interface props {

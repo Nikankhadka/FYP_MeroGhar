@@ -12,12 +12,12 @@ const nextConfig = {
   },
 
 
-  typescript: {
+  // typescript: {
     
-      // Dangerously allow production builds to successfully complete even if
-      // your project has type errors.
-      ignoreBuildErrors: true,
-   },
+  //     // Dangerously allow production builds to successfully complete even if
+  //     // your project has type errors.
+  //     ignoreBuildErrors: true,
+  //  },
 
   //  redirect handling for routes
   //  async redirects() {

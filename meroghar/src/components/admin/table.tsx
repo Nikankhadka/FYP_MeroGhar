@@ -9,11 +9,11 @@ import {BsFillHouseCheckFill,BsFillHouseSlashFill} from 'react-icons/bs'
 import{FaUserCheck,FaUserTimes} from 'react-icons/fa'
 import Link from "next/link"
 import * as lodash from 'lodash'
-import useReject from "../../customHoooks/useReject"
-import useModal from "../../customHoooks/useModal"
+import useReject from "../../store/useReject"
+import useModal from "../../store/useModal"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import useConfirm from "../../customHoooks/useConfirm"
+import useConfirm from "../../store/useConfirm"
 
 interface AdminTable{
     use?:string,

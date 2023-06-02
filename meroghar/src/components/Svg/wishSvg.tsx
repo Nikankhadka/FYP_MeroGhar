@@ -10,7 +10,7 @@ import { useState } from "react"
 import Api from "../../api/client/axios"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 
 export default function Wish({active,id,user}:WishProps){
     const[isActive,setIsActive]=useState(active)

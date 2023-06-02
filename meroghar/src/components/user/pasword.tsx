@@ -4,11 +4,11 @@ import {useState} from 'react'
 import {useForm,SubmitHandler} from 'react-hook-form'
 
 import toast from 'react-hot-toast'
-import useAccount from '../../customHoooks/AccountState';
-import useConfirm from '../../customHoooks/useConfirm';
+import useAccount from '../../store/AccountState';
+import useConfirm from '../../store/useConfirm';
 import Api from '../../api/client/axios';
 import { useRouter } from 'next/navigation';
-import useModal from '../../customHoooks/useModal';
+import useModal from '../../store/useModal';
 import { bg } from '../../styles/variants';
 import { ErrorText } from '../random';
 interface passwordform{

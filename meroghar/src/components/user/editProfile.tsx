@@ -6,10 +6,10 @@ import {useState} from 'react'
 import { uploadImage } from '../../api/client/uploadImag'
 import {  toast } from 'react-hot-toast'
 import Api from '../../api/client/axios'
-import useConfirm from '../../customHoooks/useConfirm'
-import useModal from '../../customHoooks/useModal'
+import useConfirm from '../../store/useConfirm'
+import useModal from '../../store/useModal'
 import { useRouter } from 'next/navigation'
-import useAccount from '../../customHoooks/AccountState'
+import useAccount from '../../store/AccountState'
 interface EditProfile {
   userName?: string
   profileImg?: any|{

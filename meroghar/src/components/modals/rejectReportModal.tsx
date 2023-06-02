@@ -1,6 +1,6 @@
 'use client'
 
-import useModal from "../../customHoooks/useModal"
+import useModal from "../../store/useModal"
 
 
 
@@ -10,7 +10,7 @@ import { inputStyle } from "../../styles/variants"
 import { useForm,  } from 'react-hook-form'
 import { ErrorText } from "../random"
 
-import useReject from "../../customHoooks/useReject"
+import useReject from "../../store/useReject"
 
 import { useRouter } from "next/navigation"
 interface formProps{

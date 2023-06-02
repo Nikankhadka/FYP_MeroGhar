@@ -3,8 +3,8 @@
 
 // used for both booking modal and also renders the bill once the booking and payment is completed
 
-import useBookingStore from "../../customHoooks/bookingStore"
-import useModal from "../../customHoooks/useModal"
+import useBookingStore from "../../store/bookingStore"
+import useModal from "../../store/useModal"
 import {AiFillStar} from 'react-icons/ai'
 const style1='bg-white border-2 border-gray-200 flex  flex-col items-center justify-center rounded-lg shadow-lg md:w-[540px]'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
