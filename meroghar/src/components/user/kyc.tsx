@@ -24,6 +24,7 @@ import { useEffect } from 'react'
 import useCountry from '../../store/useCountry'
 import { ICountry, IState, ICity } from 'country-state-city'
 import { FetchedMe } from '../../interface/response'
+import Image from 'next/image'
 
 interface form {
   firstName: string
@@ -282,15 +283,20 @@ useEffect(()=>{
         <div className="w-full my-6">
           <div className="my-2 flex  w-full flex-col items-center gap-y-3">
             {/* initially the value default does not read file casuing to return empty string */}
-            <img
-              src={imageUrl()}
-              alt="ImagePreviewHere"
-              className={
+              <div   className={
                 imageUrl() == ''
                   ? 'hidden'
                   : 'h-[200px] w-full rounded-lg  sm:h-[270px] md:h-[300px] md:w-[80%] lg:h-[350px]'
-              }
+              }>
+
+            <Image
+              fill={true}
+              src={imageUrl()}
+              alt="ImagePreviewHere"
+            
             />
+            </div>
+          
 
             {/* for input and label */}
             <div className="flex w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 p-[6px] shadow-md md:w-[60%] md:flex-row md:items-center">

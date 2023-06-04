@@ -16,6 +16,7 @@ import { ErrorText } from '../random'
 import { PhoneComp } from './phone'
 import EmailComp from './emailcomp'
 import { RxCrossCircled } from 'react-icons/rx'
+import Image from 'next/image'
 interface props {
   userId?:string
   userData: Partial<FetchedMe>,
@@ -159,11 +160,15 @@ export default function AccountComponent({ userData,is_Admin,userId}: props) {
               <div className=" flex items-center justify-between p-3">
                 <p>
                   <h1 className="my-2 font-semibold">Id</h1>
-                  <img
+                  <div className="my-2 block h-auto  w-[85%] rounded-lg sm:w-[60%]">
+                  <Image
+                    fill={true}
                     src={kycInfo!.img.imgUrl}
                     alt="imghere"
-                    className="my-2 block h-auto  w-[85%] rounded-lg sm:w-[60%]"
+                    
                   />
+                  </div>
+                  
                 </p>
               </div>
             )}

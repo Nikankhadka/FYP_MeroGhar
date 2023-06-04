@@ -2,6 +2,7 @@
  
 
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
  
@@ -21,7 +22,8 @@ export default function Error({
     <div className='w-full'>
      <div className="flex flex-col justify-center items-center px-6 mx-auto h-screen xl:px-0 dark:bg-gray-900">
     <div className="block md:max-w-lg">
-        <img src="/images/illustrations/404.svg" alt="astronaut image"/>
+      
+        <Image height={400} width={500} src="/images/illustrations/404.svg" alt="astronaut image"/>
     </div>
     <div className="text-center xl:max-w-4xl">
         <h1 className="mb-3 text-2xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl dark:text-white">Page not found/SomeThing Went Wrong!</h1>

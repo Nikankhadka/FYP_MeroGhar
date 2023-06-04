@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import useModal from '../store/useModal'
 import { toast } from 'react-hot-toast'
 import Api from '../api/client/axios'
+import Image from 'next/image'
 
 
 //since this component will be used multiple places always check the page before rendering the component
@@ -88,7 +89,7 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
           e.preventDefault();
           loginSignupModal.onClose()
         }}>
-          <img src="/close.png" alt="cros" className="h-4 w-4 " />
+          <Image height={14} width={16} src="/close.png" alt="cros" className="h-4 w-4 " />
         </button>}
       </div>
 

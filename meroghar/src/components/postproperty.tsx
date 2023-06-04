@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { Property } from '../interface/response'
 import useRandom from '../store/randomStore'
 import { uploadImage } from '../api/client/uploadImag'
+import Image from 'next/image'
 
 //checck image function
 
@@ -264,16 +265,21 @@ export default function PostPropertyForm({
                 className="my-1 flex  w-full flex-col items-center gap-2 "
                 key={field.id}
               >
+                
                 {/* initially the value default does not read file casuing to return empty string */}
-                <img
-                  src={imageUrl(index)}
-                  alt='Image Here'
-                  className={
+                <div  className={
                     imageUrl(index) == ''
                       ? 'hidden'
                       : 'h-[200px] w-full rounded-lg  sm:h-[270px] md:h-[320px] md:w-[80%] lg:h-[400px]'
-                  }
+                  }>
+                <Image
+                  fill={true}
+                  src={imageUrl(index)!}
+                  alt='Image Here'
+                 
                 />
+                </div>
+               
 
                 {/* for input and label */}
                 <div className="flex  w-full flex-col items-start justify-around rounded-lg border-2 border-gray-300 bg-white p-[6px] shadow-md md:w-[60%] md:flex-row md:items-center">

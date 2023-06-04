@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import {useState} from 'react'
 interface Props{
     images:{
@@ -18,7 +19,7 @@ export default function Carousel({images}:Props){
     <div className="relative h-[250px] sm:h-[324px] overflow-hidden rounded-lg md:h-96 ">
         
         <div className="duration-700 ease-in-out " >
-            <img src={images[img]!.imgUrl} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
+            <Image fill={true} src={images[img]!.imgUrl} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
         </div>
     </div>
    

@@ -2,7 +2,7 @@
 
 import {createRef, useEffect} from 'react'
 import html2canvas from 'html2canvas';
-
+import Image from 'next/image'
 import useBookingStore from '../../store/bookingStore';
 import { jsPDF } from 'jspdf';
 import toast from 'react-hot-toast'
@@ -109,7 +109,7 @@ const Invoice =(props:InvoiceProps) => {
     <div className="w-full flex items-center justify-between">
       <div className="w-full">
         <div className='flex items-center justify-between'>
-          <img src="/airbnb.png" alt=""  className='h-14 w-14'/>
+          <Image src="/airbnb.png" alt="airbnb" height={56} width={56}  />
         <div className='flex items-center gap-x-1'>
         <div className="font-semibold ">Date:</div>
         <div>{moment().format("MM/DD/YYYY")}</div>

@@ -10,6 +10,7 @@ import useConfirm from '../../store/useConfirm'
 import useModal from '../../store/useModal'
 import { useRouter } from 'next/navigation'
 import useAccount from '../../store/AccountState'
+import Image from 'next/image'
 interface EditProfile {
   userName?: string
   profileImg?: any|{
@@ -149,7 +150,9 @@ export function EditBasic({userName,about,img}:Prop) {
           className="my-4 flex  w-full flex-col  gap-y-4   " >
             <label className=" block text-sm text-black font-semibold">Profile Image</label>
           {/* initially the value default does not read file casuing to return empty string */}
-          <img
+          <Image
+          width={160}
+          height={160}
             src={imageUrl()}
             alt="ImagePreviewHere"
             className={

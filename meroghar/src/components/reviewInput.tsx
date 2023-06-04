@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import useConfirm from '../store/useConfirm';
 import useModal from '../store/useModal';
+import Image from 'next/image';
 
 
 interface Props{
@@ -35,7 +36,7 @@ export default function ReviewInput({userData,propertyId,edit,rating,Review,setE
     <main className="my-3">
       <div>
         <div className="flex w-full items-center gap-x-3 ">
-          <img src={userData.profileImg?.imgUrl==''?"/user.png":userData.profileImg?.imgUrl} alt="User" className={`block h-12 w-12 ${edit? 'rounded-lg':'rounded-full'}`} />
+          <Image height={48} width={48} src={userData.profileImg!.imgUrl==''?"/user.png":userData.profileImg!.imgUrl} alt="User" className={`block h-12 w-12 ${edit? 'rounded-lg':'rounded-full'}`} />
           <p>
             <span className="text-md block font-semibold">{userData.userName}</span>
             <span className="text-sm text-gray-700 ">{new Date(userData.createdAt!).getFullYear()}</span>

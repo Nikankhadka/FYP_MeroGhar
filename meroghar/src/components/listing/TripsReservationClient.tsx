@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import useConfirm from '../../store/useConfirm'
 import useModal from '../../store/useModal'
 import * as lodash from 'lodash'
+import Image from 'next/image'
 
 
 
@@ -203,7 +204,7 @@ export default function TripBookingClient({trips,bookings,is_Admin}:Props) {
                 </td>
                 
                 <Link href={`/Home/rooms/${data.propertyId?._id}` } target='_space' ><td className="mr-12 flex items-center space-x-3 whitespace-nowrap p-4">
-                  <img className="h-16 w-20 rounded-lg" src={data.propertyId?.images![0]!.imgUrl} />
+                  <Image alt='propertyimage' height={64} width={80} className=" rounded-lg" src={data.propertyId!.images![0]!.imgUrl} />
 
                   <div className="text-base font-semibold  text-gray-800 dark:text-white">
                     {data.propertyId?.name}

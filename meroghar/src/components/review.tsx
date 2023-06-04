@@ -18,6 +18,7 @@ import useModal from '../store/useModal'
 import Api from '../api/client/axios'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface Props {
   reviewData: IReview
@@ -39,13 +40,15 @@ export default function Review({ reviewData, currentUser,key}: Props) {
                 href={`/Home/user/${reviewData.userId._id}`}
                 target="_space"
               >
-                <img
+                <Image
                   src={
                     reviewData.userId.profileImg?.imgUrl == ''
                       ? '/user.png'
-                      : reviewData.userId.profileImg?.imgUrl
+                      : reviewData.userId.profileImg!.imgUrl
                   }
                   alt="User"
+                  height={48}
+                  width={48}
                   className="b-2 block h-12 w-12 rounded-lg border-gray-300"
                 />
               </Link>
@@ -111,7 +114,7 @@ export default function Review({ reviewData, currentUser,key}: Props) {
 
           {currentUser == reviewData.hostId && (
             <button className="mr-4 flex items-center gap-x-2 underline">
-              <img src="/flag.png" alt="flag" className="block h-5 w-5" />
+              <Image height={20}  width={20} src="/flag.png" alt="flag" className="block h-5 w-5" />
               <span className="block text-sm font-semibold text-gray-500 hover:text-black">
                 Report Review
               </span>

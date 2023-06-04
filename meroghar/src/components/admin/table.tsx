@@ -5,6 +5,7 @@ import { FetchedMe, IBooking, Property } from "../../interface/response"
 import Api from "../../api/client/axios"
 import TripBookingClient from "../listing/TripsReservationClient"
 import {BsFillHouseCheckFill,BsFillHouseSlashFill} from 'react-icons/bs'
+import Image from 'next/image'
 
 import{FaUserCheck,FaUserTimes} from 'react-icons/fa'
 import Link from "next/link"
@@ -270,7 +271,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                 </td>
                 
                 <Link href={`/Home/rooms/${data._id}` } target='_space' ><td className="mr-12 flex items-center space-x-3 whitespace-nowrap p-4">
-                  <img className="h-16 w-20 rounded-lg" src={data.images![0]!.imgUrl} />
+                  <Image alt="RoomImage" fill={false} height={64} width={80}  className="rounded-lg" src={data.images![0]!.imgUrl} />
 
                   <div className="text-base font-semibold  text-gray-800 dark:text-white">
                     {data.name}
@@ -330,7 +331,7 @@ export default function AdminTable({use,users,properties,bookings}:AdminTable) {
                     </td>
                     
                     <Link href={`/Home/user/${data._id}` } target='_space' ><td className="mr-12 flex items-center space-x-3 whitespace-nowrap p-4">
-                      <img className="h-12 w-12 rounded-full" src={data.profileImg!.imgUrl==''?'/user.png':data.profileImg!.imgUrl} />
+                      <Image  alt='ProfileImage' height={48} width={48} className="rounded-full" src={data.profileImg!.imgUrl==''?'/user.png':data.profileImg!.imgUrl} />
     
                       <div className="text-base font-semibold  text-gray-800 dark:text-white">
                         {data.userName}

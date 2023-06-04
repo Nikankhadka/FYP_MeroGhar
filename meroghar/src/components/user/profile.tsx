@@ -6,7 +6,7 @@ import { HiStar, HiMinus } from 'react-icons/hi'
 import { HiCheck } from 'react-icons/hi'
 import { EditBasic } from './editProfile'
 
-import Link from 'next/link'
+import Image from 'next/image'
 import Card from '../card/card'
 import { FetchedMe, Property } from '../../interface/response'
 import { bg } from '../../styles/variants'
@@ -47,7 +47,9 @@ export default function Profile({ userId, profileData,listings,is_Admin}: Profil
               Joined in {new Date(createdAt!).getFullYear()}{' '}
             </p>
           </div>
-          <img
+          <Image
+            height={150}
+            width={150}
             src={profileImg!.imgUrl == '' ? '/user.png' : profileImg!.imgUrl}
             alt="user"
             className="my-2 h-[100px] w-[100px] rounded-full border-2 border-gray-300 p-1 shadow-lg md:h-[150px] md:w-[150px]"

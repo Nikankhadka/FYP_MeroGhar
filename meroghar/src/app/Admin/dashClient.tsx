@@ -5,6 +5,7 @@
 import Link from 'next/link';
 import {BsFillHouseCheckFill} from 'react-icons/bs'
 import { dashData } from "../../api/server/property/getdashboard";
+import Image from 'next/image';
 
 export default  function DashClient({totalBookings,totalProperties,totalUsers,activeBookings,activeProperties,activeUsers,properties}:dashData){
 
@@ -17,7 +18,7 @@ export default  function DashClient({totalBookings,totalProperties,totalUsers,ac
         <div className="w-[95%] mx-auto gap-x-5 flex items-center justify-center overflow-x-auto">
 
          <div className="border-2 w-[200px] h-[170px] border-gray-300 shadow-lg p-4 rounded-lg">
-          <img src='./user.png' className='h-14 w-14 mx-auto ' />
+          <Image alt='hello' width={56} height={56} src='./user.png' className='h-14 w-14 mx-auto ' />
 
           <div className='my-2  flex items-center'>
           <p className='font-semibold text-md'>Total Users:</p>
@@ -32,7 +33,7 @@ export default  function DashClient({totalBookings,totalProperties,totalUsers,ac
          </div>
 
           <div className="border-2 w-[200px] h-[170px] border-gray-300 shadow-lg p-4 rounded-lg">
-          <img src='./airbnb.png' className='h-14 w-14 mx-auto ' />
+          <Image alt='hello' width={56} height={56} src='./airbnb.png' className='h-14 w-14 mx-auto ' />
 
           <div className='my-2 flex items-center'>
           <p className='font-semibold text-md'>Total Properties:</p>

@@ -6,7 +6,7 @@ import { createRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Search from './searchButton'
-
+import Image from 'next/image'
 
 
 interface NavProps {
@@ -57,7 +57,7 @@ const NavBar = ({authState,img,is_Admin}: NavProps): JSX.Element => {
           href="/"
           className="block items-center gap-2 md:flex "
         >
-          <img src="/airbnb.png" alt="logo" className="block h-10 w-10" />
+          <Image width={40} height={40} src="/airbnb.png" alt="logo" className="block " />
         </Link>
 
         <Link
@@ -88,8 +88,8 @@ const NavBar = ({authState,img,is_Admin}: NavProps): JSX.Element => {
             className="flex items-center gap-1  rounded-lg border-2 border-gray-200  px-2 py-1 hover:border-themeColor dark:bg-slate-300 "
             onClick={(e) => setopen(!open)}
           >
-            <img src="/menu.png" alt="user" className="h-5 w-5 " />
-            <img src={img==''? '/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
+            <Image width={20} height={20} src="/menu.png" alt="user" />
+            <Image width={32} height={32} src={img==''? '/user.png':img} alt="user" className="h-8 w-8 rounded-full " />
           </button>
 
           {open && <InititailModalC authState={authState} ref={menuRef} is_Admin={is_Admin} />}
