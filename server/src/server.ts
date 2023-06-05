@@ -11,7 +11,7 @@ import cors from "cors"
 import passport from "passport"
 import morgan from "morgan"
 import swaggerUi from "swagger-ui-express"
-
+import axios from "axios"
 import YAML from "yamljs"
 
 
@@ -92,12 +92,8 @@ rule.minute=10;
 const scheduleJob=cron.scheduleJob(rule,async()=>{
     try{
         console.log("cron job started api calling ")
-        const res=fetch('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',
-        {
-            method:"GET",
-            credentials: 'include',
-            cache:'no-store',
-        }).then(res=>res.json()).catch(e=>console.log(e))
+        const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true})
+        .then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
 
         console.log("cron job end api called successfully")
 
