@@ -21,17 +21,17 @@ import indexRouter from "./routes/index.routes"
 import { clearUser } from "./middlewares/auth.middleware"
 import dbConnect from "./configs/db"
 import cron from 'node-schedule'
-import helmet from 'helmet'
+// import helmet from 'helmet'
 
 
 //app level middleware setup
 dotenv.config() 
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json({limit:'10mb'}));
 app.use(express.urlencoded({extended:true,limit:'10mb'}))
 app.use(cors({
     //defines the origin of the request
-    origin:["https://meroghar.vercel.app","https://meroghar-rf5q.onrender.com","http://localhost:3000"],
+    origin:["https://meroghar.vercel.app","https://meroghar-rf5q.onrender.com"],
     //headers can be accessed and modified else cant
     credentials:true
 }))
