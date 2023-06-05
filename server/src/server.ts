@@ -21,6 +21,7 @@ import indexRouter from "./routes/index.routes"
 import { clearUser } from "./middlewares/auth.middleware"
 import dbConnect from "./configs/db"
 import cron from 'node-schedule'
+import nodeCron from 'node-cron'
 // import helmet from 'helmet'
 
 
@@ -89,11 +90,10 @@ app.use(indexRouter)
 const rule=new cron.RecurrenceRule();
 rule.minute=10;
 
-const scheduleJob=cron.scheduleJob(rule,async()=>{
+const scheduleJob=cron.scheduleJob(rule,()=>{
     try{
         console.log("cron job started api calling ")
-        const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true})
-        .then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
+        const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true}).then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
 
         console.log("cron job end api called successfully")
 
@@ -106,7 +106,21 @@ const scheduleJob=cron.scheduleJob(rule,async()=>{
 })
 
 
+// run this cron job every 8 minutes
+nodeCron.schedule('*/8 * * * *', () => {
+    try{
+        console.log("cron job started api calling ")
+        const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true}).then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
 
+        console.log("cron job end api called successfully")
+
+        
+
+    }catch(e){
+        console.log(e);
+        
+    }
+});
 
 //listen to server on ports
 app.listen(2900,
