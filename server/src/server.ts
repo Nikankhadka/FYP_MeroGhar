@@ -20,6 +20,7 @@ import YAML from "yamljs"
 import indexRouter from "./routes/index.routes"
 import { clearUser } from "./middlewares/auth.middleware"
 import dbConnect from "./configs/db"
+import cron from 'node-schedule'
 
 
 
@@ -79,6 +80,27 @@ app.use(clearUser)
 //routes registration  before defning any routes 
 //define prefix else nothing but the routepath should be uniqe
 app.use(indexRouter)
+
+
+//setup cron task scheduling using node schedle 
+const rule=new cron.RecurrenceRule();
+rule.minute=10;
+
+const scheduleJob=cron.scheduleJob(rule,async()=>{
+    try{
+
+        const res=fetch('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',
+        {
+            method:"GET",
+            credentials: 'include',
+            cache:'no-store',
+        }).then(res=>res.json()).catch(e=>console.log(e))
+
+    }catch(e){
+        console.log(e);
+        
+    }
+})
 
 
 
