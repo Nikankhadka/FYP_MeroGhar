@@ -11,6 +11,7 @@ import cors from "cors"
 import passport from "passport"
 import morgan from "morgan"
 import swaggerUi from "swagger-ui-express"
+import helmet from  'helmet'
 import axios from "axios"
 import YAML from "yamljs"
 
@@ -23,6 +24,10 @@ import dbConnect from "./configs/db"
 import cron from 'node-schedule'
 import nodeCron from 'node-cron'
 // import helmet from 'helmet'
+
+
+//helemt 
+app.use(helmet());
 
 
 //app level middleware setup
@@ -92,10 +97,10 @@ rule.minute=10;
 
 const scheduleJob=cron.scheduleJob(rule,()=>{
     try{
-        console.log("cron job started api calling ")
+        console.log("cron job started api calling using scheduleJob ")
         const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true}).then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
 
-        console.log("cron job end api called successfully")
+        console.log("cron job end api called successfully using scheduleJob")
 
 
 
@@ -109,10 +114,10 @@ const scheduleJob=cron.scheduleJob(rule,()=>{
 // run this cron job every 8 minutes
 nodeCron.schedule('*/8 * * * *', () => {
     try{
-        console.log("cron job started api calling ")
+        console.log("cron job started api calling using nodecron ")
         const res=axios.get('https://meroghar-rf5q.onrender.com/property/v1/getProperty?limit=10&page=1',{withCredentials:true}).then(res=>console.log("response ayo hai")).catch(e=>console.log(e))
 
-        console.log("cron job end api called successfully")
+        console.log("cron job end api called successfully using nodecron")
 
         
 
