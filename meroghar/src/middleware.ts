@@ -44,9 +44,10 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
     //since cookie accessed does not match the format of cookie passed in header modify it then pass as cookie so it can be parse by cookie parser
     const cookies=`refreshToken=${refreshToken}`
-    console.log('sessionin middleware',session)
+    console.log('session in middleware',session)
     if(!refreshToken) return NextResponse.redirect('/Home/login')
     if(session){
+      console.log("We have token and session both")
     return res;  
     }
    
