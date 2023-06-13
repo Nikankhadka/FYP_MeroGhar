@@ -101,11 +101,11 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
-      .status(StatusCodes.OK).redirect("http://localhost:3000/Home")
+      .status(StatusCodes.OK).redirect("https://meroghar.vercel.app/Home")
 
     }catch(e:any){
         console.log(e);
-        res.status(401).redirect("http://localhost:3000/Home")
+        res.status(401).redirect("https://meroghar.vercel.app/Home")
     }
 
 }
@@ -118,11 +118,11 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken,user}=await facebookLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
       .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
-      .status(200).redirect("http://localhost:3000/Home")
+      .status(200).redirect("https://meroghar.vercel.app/Home")
 
     }catch(e:any){
         console.log(e);
-        res.status(401).redirect("http://localhost:3000/Home")
+        res.status(401).redirect("https://meroghar.vercel.app/Home")
     }
 
 }
@@ -159,7 +159,7 @@ export const forgotPasswordPatchC=async(req:Request,res:Response)=>{
     try{
         const passwordChanged=await forgotPasswordPatchS(req.params.token);
         if(!passwordChanged) res.status(400).json({success:false,error:"Invalid Input Failed to Verify Email"});
-        res.status(200).redirect('http://localhost:3000/Home/login')
+        res.status(200).redirect('https://meroghar.vercel.app/Home/login')
     }catch(e:any){
         console.log(e)
         res.status(400).json({success:false,error:e.message});
