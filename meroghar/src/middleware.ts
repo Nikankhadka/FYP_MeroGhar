@@ -58,7 +58,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       //if user has refresh token then send api request to verify the token data
       console.log('refresh request')
       const jsonData = await fetch(
-        'https://meroghar-rf5q.onrender.com/auth/v1/refreshToken',
+        '${process.env.api}/auth/v1/refreshToken',
         {
           method: 'POST',
           credentials: 'include',

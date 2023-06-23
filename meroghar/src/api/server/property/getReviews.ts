@@ -4,7 +4,7 @@ import { getAccessToken } from "../auth";
 export async function getReviews(propertyId:string,page:number,limit:number):Promise<IReview[]>{
     try{
         const res = await fetch(
-            `https://meroghar-rf5q.onrender.com/property/v1/review/${propertyId}/?page=${page}&limit=${limit}`,
+            `${process.env.api}/property/v1/review/${propertyId}/?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',

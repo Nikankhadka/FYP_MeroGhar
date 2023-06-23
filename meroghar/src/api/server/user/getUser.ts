@@ -9,7 +9,7 @@ import { getAccessToken } from '../auth';
 export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
-            `https://meroghar-rf5q.onrender.com/user/v1/getUser/${userId}`,
+            `${process.env.api}/user/v1/getUser/${userId}`,
             {
               method: 'GET',
               credentials: 'include',

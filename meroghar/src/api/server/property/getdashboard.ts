@@ -14,7 +14,7 @@ export interface dashData{
 
 export default async function getDashBoardData():Promise<dashData>{
     try{
-        const res=await fetch('https://meroghar-rf5q.onrender.com/admin/v1/dashBoardData',{
+        const res=await fetch(`${process.env.api}/admin/v1/dashBoardData`,{
             method:"GET",
             credentials:'include',
             headers:{cookie:getAccessToken()},
