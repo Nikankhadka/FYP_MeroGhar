@@ -39,15 +39,20 @@ export interface sessionData{
   session:boolean,
   userData:SessionUser
 }
+
+
 //for common routes can only be accessed by user/non user
 export const checkSession=async():Promise<sessionData>=>{
   const cookieStore=cookies();
   const session=await cookieStore.get("session")?.value;
     if(!session){
+      console.log("no session")
       return {session:false,userData:{userId:"",is_Admin:false,img:'',docId:"",kycVerified:false}}  
     }
+
+
     const sessionObj=await JSON.parse(session!)
-    console.log("poagesobj",sessionObj)
+    console.log("session checked session obj: ",sessionObj)
 
     // role mismatched so unauthorized throw custom un authorized erorr 
     // if(sessionObj.is_Admin!==is_Admin){
@@ -61,6 +66,8 @@ export const checkSession=async():Promise<sessionData>=>{
 
 
 
+
+// used for server side auth data fetching
 export const getAccessToken=()=>{
   try{
     const cookieStore = cookies();

@@ -78,7 +78,7 @@ export const refreshTokenC=async(req:Request,res:Response)=>{
     
       //if client side request then set else use response data to set in Nextjs middleware
       res.cookie("accessToken",tokens.newaccessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
+      .cookie("refreshToken",tokens.newrefreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true})
       .status(200).json({success:true, message:"user successfully verified",accessToken:tokens.newaccessToken,refreshToken:tokens.newrefreshToken,user});
 
 
@@ -100,7 +100,7 @@ export const googleLoginC=async(req:Request,res:Response)=>{
         const {accessToken,refreshToken,user}=await googleLoginS(req.user)
         
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true})
       .status(StatusCodes.OK).redirect("https://meroghar.vercel.app/Home")
 
     }catch(e:any){
@@ -117,7 +117,7 @@ export const facebookLoginC=async(req:Request,res:Response)=>{
         console.log(req.user);
         const {accessToken,refreshToken,user}=await facebookLoginS(req.user)
         res.cookie("accessToken",accessToken,{maxAge:1800000,httpOnly:true})
-      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true,sameSite:"strict"})
+      .cookie("refreshToken",refreshToken,{maxAge:604800000,httpOnly:true}).cookie("session",JSON.stringify(user),{maxAge:1500000,httpOnly:true})
       .status(200).redirect("https://meroghar.vercel.app/Home")
 
     }catch(e:any){

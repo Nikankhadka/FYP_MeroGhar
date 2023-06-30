@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-
+import { api } from './api/api'
 //setup conditional middleware for admin and user Routes
 export default async function checkAuth(req: NextRequest) {
   try {
@@ -44,9 +44,10 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
     //since cookie accessed does not match the format of cookie passed in header modify it then pass as cookie so it can be parse by cookie parser
     const cookies=`refreshToken=${refreshToken}`
-    console.log('sessionin middleware',session)
+    console.log('session in middleware',session)
     if(!refreshToken) return NextResponse.redirect('/Home/login')
     if(session){
+      console.log("We have token and session both")
     return res;  
     }
    
@@ -57,7 +58,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       //if user has refresh token then send api request to verify the token data
       console.log('refresh request')
       const jsonData = await fetch(
-        'https://meroghar-rf5q.onrender.com/auth/v1/refreshToken',
+        '${api}/auth/v1/refreshToken',
         {
           method: 'POST',
           credentials: 'include',
