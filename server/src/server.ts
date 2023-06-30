@@ -37,7 +37,7 @@ app.use(express.json({limit:'10mb'}));
 app.use(express.urlencoded({extended:true,limit:'10mb'}))
 app.use(cors({
     //defines the origin of the request
-    origin:["https://meroghar.vercel.app","https://meroghar-rf5q.onrender.com"],
+    origin:["https://meroghar.vercel.app","https://meroghar-rf5q.onrender.com","http://localhost:3000","fyp_meroghar.railway.internal"],
     //headers can be accessed and modified else cant
     credentials:true
 }))

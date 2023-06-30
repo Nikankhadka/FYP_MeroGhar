@@ -1,3 +1,4 @@
+import { api } from "@/api/api";
 import { Property } from "../../../interface/response";
 import { getAccessToken } from "../auth";
 
@@ -14,7 +15,7 @@ export interface dashData{
 
 export default async function getDashBoardData():Promise<dashData>{
     try{
-        const res=await fetch(`${process.env.api}/admin/v1/dashBoardData`,{
+        const res=await fetch(`${api}/admin/v1/dashBoardData`,{
             method:"GET",
             credentials:'include',
             headers:{cookie:getAccessToken()},

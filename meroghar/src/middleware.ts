@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-
+import { api } from './api/api'
 //setup conditional middleware for admin and user Routes
 export default async function checkAuth(req: NextRequest) {
   try {
@@ -58,7 +58,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       //if user has refresh token then send api request to verify the token data
       console.log('refresh request')
       const jsonData = await fetch(
-        '${process.env.api}/auth/v1/refreshToken',
+        '${api}/auth/v1/refreshToken',
         {
           method: 'POST',
           credentials: 'include',

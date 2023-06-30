@@ -1,10 +1,11 @@
+import { api } from "@/api/api";
 import { IReview } from "../../../interface/response";
 import { getAccessToken } from "../auth";
 
 export async function getReviews(propertyId:string,page:number,limit:number):Promise<IReview[]>{
     try{
         const res = await fetch(
-            `${process.env.api}/property/v1/review/${propertyId}/?page=${page}&limit=${limit}`,
+            `${api}/property/v1/review/${propertyId}/?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',

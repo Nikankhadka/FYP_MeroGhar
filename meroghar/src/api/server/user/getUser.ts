@@ -3,13 +3,14 @@ import { cookies } from 'next/headers';
 import { FetchedMe, FetchedUserData } from "../../../interface/response";
 import Api from "../../client/axios"
 import { getAccessToken } from '../auth';
+import { api } from '@/api/api';
 
 
 //get user 
 export async function getUser(userId:string):Promise<Partial<FetchedMe>>{
     try{
         const userData = await fetch(
-            `${process.env.api}/user/v1/getUser/${userId}`,
+            `${api}/user/v1/getUser/${userId}`,
             {
               method: 'GET',
               credentials: 'include',

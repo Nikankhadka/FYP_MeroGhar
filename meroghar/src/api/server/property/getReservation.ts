@@ -1,3 +1,4 @@
+import { api } from "@/api/api";
 import { IBooking } from "../../../interface/response";
 import Api from "../../client/axios";
 
@@ -63,7 +64,7 @@ export default async function getReservations(propertyId:string,user:string,page
       
        
         const res = await fetch(
-            `${process.env.api}/property/v1/booking/propertyBooking/${id}`,
+            `${api}/property/v1/booking/propertyBooking/${id}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -89,7 +90,7 @@ export default async function getReservations(propertyId:string,user:string,page
       
        
         const res = await fetch(
-            `${process.env.api}/property/v1/booking/myBookings?page=${page}&limit=${limit}`,
+            `${api}/property/v1/booking/myBookings?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
@@ -115,7 +116,7 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
       
        
         const res = await fetch(
-            `${process.env.api}/property/v1/booking/onBookings`,
+            `${api}/property/v1/booking/onBookings`,
             {
               method: 'GET',
               credentials: 'include',
@@ -144,7 +145,7 @@ export async function getOnBookings(page:number,limit:number):Promise<Partial<IB
       
         
         const bookings = await fetch(
-            `${process.env.api}/admin/v1/allBookings/?page=${page}&limit=${limit}`,
+            `${api}/admin/v1/allBookings/?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',

@@ -12,7 +12,16 @@ const nextConfig = {
   //     // your project has type errors.
   //     ignoreBuildErrors: true,
   //  },
-
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/account123/**',
+      },
+    ],
+  },
   //  redirect handling for routes
    async redirects() {
     return [

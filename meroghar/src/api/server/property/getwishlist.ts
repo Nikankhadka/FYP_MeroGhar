@@ -1,3 +1,4 @@
+import { api } from "@/api/api";
 import { wishlist } from "../../../interface/response";
 import { getAccessToken } from "../auth";
 
@@ -6,7 +7,7 @@ export async function getFavourites(page:number,limit:number):Promise<wishlist>{
       
        
         const res = await fetch(
-            `${process.env.api}/property/v1/wishList?page=${page}&limit=${limit}`,
+            `${api}/property/v1/wishList?page=${page}&limit=${limit}`,
             {
               method: 'GET',
               credentials: 'include',
