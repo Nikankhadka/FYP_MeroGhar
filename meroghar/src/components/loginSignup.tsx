@@ -150,12 +150,12 @@ export default function LoginSignup({ login,modal }: loginSignupModal): JSX.Elem
 
           <SocialLogin
             placeholder="Continue with Google"
-            url="https://meroghar-rf5q.onrender.com/auth/v1/google-login"
+            url="https://fyp-sever.onrender.com/auth/v1/google-login"
             img="/google.png"
           />
           <SocialLogin
             placeholder="Continue with Facebook"
-            url="https://meroghar-rf5q.onrender.com/auth/v1/facebook-login"
+            url="https://fyp-sever.onrender.com/auth/v1/facebook-login"
             img="/facebook.png"
           />
           <div className="my-1  flex w-full items-center justify-center">
