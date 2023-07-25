@@ -1,5 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
+import { httpOnlyCookie } from './configs/constant'
 import { api } from './api/api'
 //setup conditional middleware for admin and user Routes
 export default async function checkAuth(req: NextRequest) {
@@ -82,13 +83,13 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       //verified token and also send new tokens access and refresh token
       await res.cookies.set('accessToken', jsonData.accessToken, {
         maxAge: 1800,
-        httpOnly: true,
+        httpOnly: httpOnlyCookie,
       })
       await res.cookies.set('refreshToken', jsonData.refreshToken, {
         maxAge: 604800,
-        httpOnly: true,
+        httpOnly: httpOnlyCookie,
       })
-      await res.cookies.set('session',JSON.stringify(jsonData.user), { maxAge: 1500, httpOnly: true })
+      await res.cookies.set('session',JSON.stringify(jsonData.user), { maxAge: 1500, httpOnly: httpOnlyCookie })
 
       return res  
     
