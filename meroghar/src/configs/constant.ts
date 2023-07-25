@@ -35,3 +35,6 @@ export const amenities = [
     "Studio",
     "Beach Resort"
   ];
+
+
+  export const httpOnlyCookie=false
