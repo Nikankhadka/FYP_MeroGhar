@@ -50,7 +50,7 @@ export const checkSession=async():Promise<sessionData>=>{
       return {session:false,userData:{userId:"",is_Admin:false,img:'',docId:"",kycVerified:false}}  
     }
 
-
+   
     const sessionObj=await JSON.parse(session!)
     console.log("session checked session obj: ",sessionObj)
 

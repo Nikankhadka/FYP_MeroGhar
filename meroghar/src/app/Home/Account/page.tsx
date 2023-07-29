@@ -12,6 +12,7 @@ import { getMyProperties } from "../../../api/server/property/getProperty";
 
 export default async function AccountSetting(){
 
+  console.log("Welcome to admin page")
   const {session,userData}=await checkSession();
 
   const user= await getMe();
