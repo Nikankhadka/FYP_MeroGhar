@@ -136,7 +136,7 @@ export async function getAllProperties(page:number,limit:number,):Promise<Partia
     
       
       const propertyData = await fetch(
-          `${process.env.api}/admin/v1/allProperties/?page=${page}&limit=${limit}`,
+          `${api}/admin/v1/allProperties/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',

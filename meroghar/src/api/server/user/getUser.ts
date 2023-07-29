@@ -37,7 +37,7 @@ export async function getMe():Promise<FetchedMe>{
     
       
       const userData = await fetch(
-          `https://meroghar-rf5q.onrender.com/user/v1/getMe`,
+          `${api}/user/v1/getMe`,
           {
             method: 'GET',
             credentials: 'include',
@@ -65,7 +65,7 @@ export async function getAllUsers(page:number,limit:number,):Promise<Partial<Fet
     
       
       const userData = await fetch(
-          `https://meroghar-rf5q.onrender.com/admin/v1/allUsers/?page=${page}&limit=${limit}`,
+          `${api}/admin/v1/allUsers/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -94,7 +94,7 @@ export async function getUserKyc(userId:string):Promise<FetchedMe>{
     
       
       const userData = await fetch(
-          `https://meroghar-rf5q.onrender.com/admin/v1/getUser/${userId}`,
+          `${api}/admin/v1/getUser/${userId}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -133,7 +133,7 @@ export async function getKycs(page:number,limit:number):Promise<kycRequests[]>{
     
       
       const kycRequests = await fetch(
-          `https://meroghar-rf5q.onrender.com/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
+          `${api}/admin/v1/kycRequests/?page=${page}&limit=${limit}`,
           {
             method: 'GET',
             credentials: 'include',

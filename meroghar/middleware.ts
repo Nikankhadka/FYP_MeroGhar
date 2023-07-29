@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-import { httpOnlyCookie } from './configs/constant'
-import { api } from './api/api'
+import { httpOnlyCookie } from './src/configs/constant'
+import { api } from './src/api/api'
 //setup conditional middleware for admin and user Routes
 export default async function checkAuth(req: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export default async function checkAuth(req: NextRequest) {
 
   } catch (e) {
    
-    NextResponse.redirect('/Home/login')
+    NextResponse.redirect('http://localhost:3000/Home/login')
   }
 }
 
@@ -71,7 +71,7 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
       if (!jsonData.success){
         //clear cookie in client side since token is refresh is failed the old token will be unauthorized
         await res.cookies.delete('accessToken').delete('refreshToken').delete('session')
-        return NextResponse.redirect('/Home/login')
+        return NextResponse.redirect('http://localhost:3000/Home/login')
       }
        
 
@@ -96,6 +96,6 @@ const refreshTokenS=async(req:NextRequest,res:NextResponse)=>{
 
   }catch(e){
    
-    return NextResponse.redirect('/Home/login')
+    return NextResponse.redirect('http://localhost:3000/Home/login')
   }
 }
